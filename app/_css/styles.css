@@ -1,0 +1,37 @@
+/* 
+*
+*	XL RPG
+*	XL Gaming/Declan Tyson
+*	v0.0.4
+*	23/12/2016
+*
+*/
+/* Defaults */
+html, body {
+  margin: 0;
+  font-family: 'Helvetica Neue',  sans-serif; }
+
+.clear, .clearfix {
+  clear: both; }
+  .clear.padout, .clearfix.padout {
+    padding: 20px 0; }
+
+.col {
+  float: left;
+  margin-right: 1%;
+  width: 99%; }
+  .col.col-66 {
+    width: 65%; }
+  .col.col-50 {
+    width: 49%; }
+  .col.col-33 {
+    width: 32%; }
+
+canvas {
+  border: solid 1px #cdcdcd;
+  margin: 40px;
+  float: left; }
+
+/* Mixins */
+
+/*# sourceMappingURL=styles.css.map */

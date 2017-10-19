@@ -1,0 +1,119 @@
+/* 
+*
+*	XL RPG
+*	XL Gaming/Declan Tyson
+*	v0.0.4
+*	23/12/2016
+*
+*/
+
+/* Defaults */
+
+html, body {
+	margin: 0;
+	font-family: 'Helvetica Neue',  sans-serif;
+}
+
+.clear, .clearfix {
+	clear: both;
+	&.padout {
+		padding: 20px 0;
+	}
+}
+
+.col {
+	float: left;
+	margin-right: 1%;
+	width: 99%;
+	&.col-66 {
+		width: 65%;
+	}
+	&.col-50 {
+		width: 49%;
+	}
+	&.col-33 {
+		width: 32%;
+	}
+}
+
+canvas {
+	border: solid 1px #cdcdcd;
+	margin: 40px;
+	float: left;
+}
+
+
+/* Mixins */
+
+@mixin transform($val) {
+	-webkit-transform: $val;
+	-moz-transform: $val;
+	-ms-transform: $val;
+	transform: $val;
+}
+
+@mixin borderRadius($val) {
+	-webkit-border-radius: $val;
+	-moz-border-radius: $val;
+	border-radius: $val;
+}
+
+@mixin transition($val) {
+	-webkit-transition: $val;
+	-moz-transition: $val;
+	-o-transition: $val;
+	transition: $val;
+}
+
+@mixin boxShadow($val) {
+	-webkit-box-shadow: $val;
+	box-shadow: $val;
+}
+
+@function opposite-direction($directions) {
+	$opposite-directions: ();
+	$direction-map: (
+			'top':    'bottom',
+			'right':  'left',
+			'bottom': 'top',
+			'left':   'right',
+			'center': 'center',
+			'ltr':    'rtl',
+			'rtl':    'ltr'
+	);
+
+	@each $direction in $directions {
+		$direction: to-lower-case($direction);
+
+		@if map-has-key($direction-map, $direction) {
+			$opposite-directions: append($opposite-directions, unquote(map-get($direction-map, $direction)));
+		} @else {
+			@warn "No opposite direction can be found for `#{$direction}`. Direction omitted.";
+		}
+	}
+
+	@return $opposite-directions;
+}
+
+@mixin triangle($direction, $color, $size) {
+	@if not index(top right bottom left, $direction) {
+		@error "Direction must be either `top`, `right`, `bottom` or `left`.";
+	}
+
+	width: 0;
+	height: 0;
+	content: '';
+	z-index: 2;
+	border-#{opposite-direction($direction)}: ($size * 1.5) solid $color;
+	border-#{$direction}-width: 0px;
+
+	$perpendicular-borders: $size solid transparent;
+
+	@if $direction == top or $direction == bottom {
+		border-left:   $perpendicular-borders;
+		border-right:  $perpendicular-borders;
+	} @else if $direction == right or $direction == left {
+		border-bottom: $perpendicular-borders;
+		border-top:    $perpendicular-borders;
+	}
+}
