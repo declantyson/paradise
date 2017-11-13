@@ -2,7 +2,7 @@
  *
  *  XL RPG/Constants
  *  XL Gaming/Declan Tyson
- *  v0.0.10
+ *  v0.0.11
  *  13/11/2017
  *
  */
@@ -11,7 +11,10 @@ export const colours = {
     black : "#000000",
     white: "#FFFFFF",
     green: "#00AA00",
-    blue: "#0000AA"
+    blue: "#0000AA",
+    brown: "#4f1f0b",
+    darkbrown: "#291006",
+    grey: "#cdcdcd"
 };
 
 export const tileSize = 20;
@@ -38,3 +41,4 @@ export const genders = {
     female : "F",
     alien  : "A"
 };
+export const inhabitanceSize = 2;

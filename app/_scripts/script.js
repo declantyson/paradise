@@ -8,7 +8,7 @@ Object.defineProperty(exports, "__esModule", {
  *
  *  XL RPG/Constants
  *  XL Gaming/Declan Tyson
- *  v0.0.10
+ *  v0.0.11
  *  13/11/2017
  *
  */
@@ -17,7 +17,10 @@ var colours = exports.colours = {
     black: "#000000",
     white: "#FFFFFF",
     green: "#00AA00",
-    blue: "#0000AA"
+    blue: "#0000AA",
+    brown: "#4f1f0b",
+    darkbrown: "#291006",
+    grey: "#cdcdcd"
 };
 
 var tileSize = exports.tileSize = 20;
@@ -43,6 +46,7 @@ var genders = exports.genders = {
     female: "F",
     alien: "A"
 };
+var inhabitanceSize = exports.inhabitanceSize = 2;
 
 
 },{}],2:[function(require,module,exports){
@@ -211,7 +215,7 @@ function _classCallCheck(instance, Constructor) {
    *
    *  XL RPG/Game
    *  XL Gaming/Declan Tyson
-   *  v0.0.10
+   *  v0.0.11
    *  13/11/2017
    *
    */
@@ -220,11 +224,11 @@ window.startGame = function () {
 
     clearInterval(window.drawScene);
 
-    var locale = (0, _availablelocales.chooseLocale)(),
+    var locale = _availablelocales.locales[(0, _availablelocales.chooseLocale)()],
         people = (0, _availablepeople.choosePeople)(),
         player = new _player.Player(),
         scene = new _worldmap.WorldMap(player),
-        start = new _availablelocales.locales[locale](player),
+        start = new locale(player, people),
         renderer = new Renderer("world", _constants.canvasProperties.width, _constants.canvasProperties.height);
 
     window.game = new Game(renderer, scene, _constants.canvasProperties.centerPoint);
@@ -365,7 +369,7 @@ function _interopRequireWildcard(obj) {
 }
 
 var locales = exports.locales = {
-    "Village": _village.Village,
+    // "Village" : Village,
     "Islands": _islands.Islands
 }; /*
     *
@@ -387,11 +391,12 @@ var chooseLocale = exports.chooseLocale = function chooseLocale() {
 
 
 },{"../util":27,"./islands":9,"./village":10}],8:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.Inhabitance = exports.Locale = undefined;
 
 var _createClass = function () {
     function defineProperties(target, props) {
@@ -401,7 +406,18 @@ var _createClass = function () {
     }return function (Constructor, protoProps, staticProps) {
         if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
     };
-}();
+}(); /*
+      *
+      *  XL RPG/Locales/Base
+      *  XL Gaming/Declan Tyson
+      *  v0.0.11
+      *  13/11/2017
+      *
+      */
+
+var _constants = require('../constants');
+
+var _availablepeople = require('../people/availablepeople');
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -409,44 +425,41 @@ function _classCallCheck(instance, Constructor) {
     }
 }
 
-/*
- *
- *  XL RPG/Locales/Base
- *  XL Gaming/Declan Tyson
- *  v0.0.9
- *  13/11/2017
- *
- */
-
 var Locale = function () {
-    function Locale(player) {
+    function Locale(player, people) {
         _classCallCheck(this, Locale);
 
         this.player = player;
+        this.people = people;
         this.entryPoints = {};
+        this.inhabitances = [];
     }
 
     _createClass(Locale, [{
-        key: "initialise",
+        key: 'initialise',
         value: function initialise(width, height) {
             var map = [],
-                enc = [];
+                enc = [],
+                ent = [];
             for (var i = 0; i < width; i++) {
                 map.push([]);
                 enc.push([]);
+                ent.push([]);
                 for (var j = 0; j < height; j++) {
                     map[i].push(["Blank"]);
                     enc[i].push(false);
+                    ent[i].push(false);
                 }
             }
 
             this.map = map;
             this.encounters = enc;
+            this.entrances = ent;
             this.width = width;
             this.height = height;
         }
     }, {
-        key: "terrainPaint",
+        key: 'terrainPaint',
         value: function terrainPaint(startX, startY, width, height, terrain) {
             for (var x = startX; x < startX + width; x++) {
                 for (var y = startY; y < startY + height; y++) {
@@ -455,7 +468,7 @@ var Locale = function () {
             }
         }
     }, {
-        key: "randomEncounterPatch",
+        key: 'randomEncounterPatch',
         value: function randomEncounterPatch(startX, startY, width, height, rate, enemies) {
             for (var x = startX; x < startX + width; x++) {
                 for (var y = startY; y < startY + height; y++) {
@@ -467,19 +480,72 @@ var Locale = function () {
             }
         }
     }, {
-        key: "enterLocaleAt",
+        key: 'addInhabitance',
+        value: function addInhabitance(startX, startY, width, height, inhabitance) {
+            var doorway = inhabitance.doorway;
+            this.terrainPaint(startX, startY, width, height, "Inhabitance");
+            this.terrainPaint(doorway.x, doorway.y, 1, 1, "Doorway");
+            this.entrances[doorway.x][doorway.y] = {
+                inhabitance: inhabitance
+            };
+        }
+    }, {
+        key: 'enterLocaleAt',
         value: function enterLocaleAt(entryPoint) {
             this.player.setPlacement(this.entryPoints[entryPoint].x, this.entryPoints[entryPoint].y);
+        }
+    }, {
+        key: 'drawInhabitances',
+        value: function drawInhabitances() {
+            for (var i = 0; i < this.inhabitances.length; i++) {
+                var inhabitance = this.inhabitances[i];
+                this.addInhabitance(inhabitance.x, inhabitance.y, _constants.inhabitanceSize, _constants.inhabitanceSize, inhabitance);
+            }
+        }
+    }, {
+        key: 'assignPeopleToInhabitances',
+        value: function assignPeopleToInhabitances() {
+            if (this.inhabitances.length === 0 || this.people.length === 0) return;
+
+            for (var i = 0; i < this.people.length; i++) {
+                var person = this.people[i],
+                    index = Math.floor(Math.random() * this.inhabitances.length),
+                    inhabitance = this.inhabitances[index];
+
+                inhabitance.addInhabitant(person);
+            }
         }
     }]);
 
     return Locale;
 }();
 
+var Inhabitance = function () {
+    function Inhabitance(x, y, name, doorway) {
+        _classCallCheck(this, Inhabitance);
+
+        this.x = x;
+        this.y = y;
+        this.name = name;
+        this.doorway = doorway;
+        this.inhabitants = [];
+    }
+
+    _createClass(Inhabitance, [{
+        key: 'addInhabitant',
+        value: function addInhabitant(person) {
+            this.inhabitants.push(person);
+        }
+    }]);
+
+    return Inhabitance;
+}();
+
 exports.Locale = Locale;
+exports.Inhabitance = Inhabitance;
 
 
-},{}],9:[function(require,module,exports){
+},{"../constants":1,"../people/availablepeople":11}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -509,7 +575,7 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Locales/City
    *  XL Gaming/Declan Tyson
-   *  v0.0.9
+   *  v0.0.11
    *  13/11/2017
    *
    */
@@ -517,18 +583,24 @@ function _inherits(subClass, superClass) {
 var Islands = function (_Locale) {
     _inherits(Islands, _Locale);
 
-    function Islands(player) {
+    function Islands(player, people) {
         _classCallCheck(this, Islands);
 
-        var _this = _possibleConstructorReturn(this, (Islands.__proto__ || Object.getPrototypeOf(Islands)).call(this, player));
+        var _this = _possibleConstructorReturn(this, (Islands.__proto__ || Object.getPrototypeOf(Islands)).call(this, player, people));
 
-        _this.entryPoints.beginningOfGame = { x: 58, y: 20 };
+        _this.entryPoints.beginningOfGame = { x: 55, y: 17 };
 
         _this.initialise(300, 300);
 
         _this.terrainPaint(0, 0, 300, 300, "Water");
         _this.terrainPaint(52, 17, 10, 20, "Grass");
         _this.terrainPaint(42, 35, 2, 8, "Grass");
+        _this.terrainPaint(55, 17, 2, 20, "Road");
+
+        _this.inhabitances.push(new _baselocale.Inhabitance(53, 19, "1 Grove Street", { x: 54, y: 20 }), new _baselocale.Inhabitance(57, 19, "2 Grove Street", { x: 57, y: 20 }), new _baselocale.Inhabitance(53, 22, "3 Grove Street", { x: 54, y: 23 }), new _baselocale.Inhabitance(57, 22, "4 Grove Street", { x: 57, y: 23 }));
+
+        _this.drawInhabitances();
+        _this.assignPeopleToInhabitances();
         return _this;
     }
 
@@ -576,10 +648,10 @@ function _inherits(subClass, superClass) {
 var Village = function (_Locale) {
     _inherits(Village, _Locale);
 
-    function Village(player) {
+    function Village(player, people) {
         _classCallCheck(this, Village);
 
-        var _this = _possibleConstructorReturn(this, (Village.__proto__ || Object.getPrototypeOf(Village)).call(this, player));
+        var _this = _possibleConstructorReturn(this, (Village.__proto__ || Object.getPrototypeOf(Village)).call(this, player, people));
 
         _this.entryPoints.beginningOfGame = { x: 30, y: 30 };
 
@@ -1426,6 +1498,10 @@ var _get = function get(object, property, receiver) {
     }
 };
 
+var _util = require("../util");
+
+var util = _interopRequireWildcard(_util);
+
 var _constants = require("../constants");
 
 var _terrain = require("../terrain");
@@ -1433,6 +1509,18 @@ var _terrain = require("../terrain");
 var _scene = require("./scene");
 
 var _encounter = require("./encounter");
+
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) {
+        return obj;
+    } else {
+        var newObj = {};if (obj != null) {
+            for (var key in obj) {
+                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+            }
+        }newObj.default = obj;return newObj;
+    }
+}
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -1454,8 +1542,8 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Scene-WorldMap
    *  XL Gaming/Declan Tyson
-   *  v0.0.8
-   *  23/12/2016
+   *  v0.0.11
+   *  13/11/2017
    *
    */
 
@@ -1483,6 +1571,7 @@ var WorldMap = function (_Scene) {
 
             if (!action) return;
             this.checkForRandomEncounters();
+            this.checkForEntrance();
         }
     }, {
         key: "moveUp",
@@ -1553,7 +1642,6 @@ var WorldMap = function (_Scene) {
             if (!potentialRandomEncounter) return;
 
             var chance = Math.ceil(Math.random() * potentialRandomEncounter.rate);
-            console.log(chance);
             if (chance === potentialRandomEncounter.rate) {
                 this.startRandomEncounter(potentialRandomEncounter.enemies);
             }
@@ -1562,6 +1650,24 @@ var WorldMap = function (_Scene) {
         key: "startRandomEncounter",
         value: function startRandomEncounter(enemies) {
             this.game.setScene(new _encounter.Encounter(enemies));
+        }
+    }, {
+        key: "checkForEntrance",
+        value: function checkForEntrance() {
+            var entrance = this.locale.entrances[this.player.x][this.player.y],
+                inhabitants = '';
+            if (!entrance) return;
+
+            if (entrance.inhabitance.inhabitants.length > 0) {
+                inhabitants = ", home of " + entrance.inhabitance.inhabitants;
+            }
+
+            util.log("Entering " + entrance.inhabitance.name + inhabitants);
+        }
+    }, {
+        key: "enterInhabitance",
+        value: function enterInhabitance(interior) {
+            this.game.setScene(new Interior(interior));
         }
     }, {
         key: "setCurrentLocale",
@@ -1591,7 +1697,7 @@ var WorldMap = function (_Scene) {
 exports.WorldMap = WorldMap;
 
 
-},{"../constants":1,"../terrain":26,"./encounter":23,"./scene":24}],26:[function(require,module,exports){
+},{"../constants":1,"../terrain":26,"../util":27,"./encounter":23,"./scene":24}],26:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () {
@@ -1606,8 +1712,8 @@ var _createClass = function () {
       *
       *  XL RPG/Terrain
       *  XL Gaming/Declan Tyson
-      *  v0.0.1
-      *  21/12/2016
+      *  v0.0.11
+      *  13/11/2017
       *
       */
 
@@ -1701,7 +1807,55 @@ var Water = function (_Terrain3) {
     return Water;
 }(Terrain);
 
-window.terrains = { Blank: Blank, Grass: Grass, Water: Water };
+var Road = function (_Terrain4) {
+    _inherits(Road, _Terrain4);
+
+    function Road() {
+        _classCallCheck(this, Road);
+
+        var _this4 = _possibleConstructorReturn(this, (Road.__proto__ || Object.getPrototypeOf(Road)).call(this));
+
+        _this4.passable = true;
+        _this4.colour = _constants.colours.grey;
+        return _this4;
+    }
+
+    return Road;
+}(Terrain);
+
+var Inhabitance = function (_Terrain5) {
+    _inherits(Inhabitance, _Terrain5);
+
+    function Inhabitance() {
+        _classCallCheck(this, Inhabitance);
+
+        var _this5 = _possibleConstructorReturn(this, (Inhabitance.__proto__ || Object.getPrototypeOf(Inhabitance)).call(this));
+
+        _this5.passable = false;
+        _this5.colour = _constants.colours.brown;
+        return _this5;
+    }
+
+    return Inhabitance;
+}(Terrain);
+
+var Doorway = function (_Terrain6) {
+    _inherits(Doorway, _Terrain6);
+
+    function Doorway() {
+        _classCallCheck(this, Doorway);
+
+        var _this6 = _possibleConstructorReturn(this, (Doorway.__proto__ || Object.getPrototypeOf(Doorway)).call(this));
+
+        _this6.passable = true;
+        _this6.colour = _constants.colours.darkbrown;
+        return _this6;
+    }
+
+    return Doorway;
+}(Terrain);
+
+window.terrains = { Blank: Blank, Grass: Grass, Water: Water, Road: Road, Inhabitance: Inhabitance, Doorway: Doorway };
 
 
 },{"./constants":1}],27:[function(require,module,exports){

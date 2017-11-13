@@ -2,31 +2,40 @@
  *
  *  XL RPG/Locales/Base
  *  XL Gaming/Declan Tyson
- *  v0.0.9
+ *  v0.0.11
  *  13/11/2017
  *
  */
 
+import { inhabitanceSize } from '../constants';
+import { people } from '../people/availablepeople';
+
 class Locale {
-    constructor(player) {
+    constructor(player, people) {
         this.player = player;
+        this.people = people;
         this.entryPoints = {};
+        this.inhabitances = [];
     }
 
     initialise(width, height) {
         let map = [],
-            enc = [];
+            enc = [],
+            ent = [];
         for(let i = 0; i < width; i++) {
             map.push([]);
             enc.push([]);
+            ent.push([]);
             for(let j = 0; j < height; j++) {
                 map[i].push(["Blank"]);
                 enc[i].push(false);
+                ent[i].push(false);
             }
         }
 
         this.map = map;
         this.encounters = enc;
+        this.entrances = ent;
         this.width = width;
         this.height = height;
     }
@@ -50,9 +59,51 @@ class Locale {
         }
     }
 
+    addInhabitance(startX, startY, width, height, inhabitance) {
+        let doorway = inhabitance.doorway;
+        this.terrainPaint(startX, startY, width, height, "Inhabitance");
+        this.terrainPaint(doorway.x, doorway.y, 1, 1, "Doorway");
+        this.entrances[doorway.x][doorway.y] = {
+            inhabitance: inhabitance
+        };
+    }
+
     enterLocaleAt(entryPoint) {
         this.player.setPlacement(this.entryPoints[entryPoint].x, this.entryPoints[entryPoint].y);
     }
+
+    drawInhabitances() {
+        for(let i = 0; i < this.inhabitances.length; i++) {
+            let inhabitance = this.inhabitances[i];
+            this.addInhabitance(inhabitance.x, inhabitance.y, inhabitanceSize, inhabitanceSize, inhabitance);
+        }
+    }
+
+    assignPeopleToInhabitances() {
+        if(this.inhabitances.length === 0 || this.people.length === 0) return;
+
+        for(let i = 0; i < this.people.length; i++) {
+            let person = this.people[i],
+                index = Math.floor(Math.random() * this.inhabitances.length),
+                inhabitance = this.inhabitances[index];
+
+            inhabitance.addInhabitant(person);
+        }
+    }
 }
 
-export { Locale };
+class Inhabitance {
+    constructor(x, y, name, doorway) {
+        this.x = x;
+        this.y = y;
+        this.name = name;
+        this.doorway = doorway;
+        this.inhabitants = [];
+    }
+
+    addInhabitant(person) {
+        this.inhabitants.push(person);
+    }
+}
+
+export { Locale, Inhabitance };

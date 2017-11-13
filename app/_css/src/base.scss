@@ -2,8 +2,8 @@
 *
 *	XL RPG
 *	XL Gaming/Declan Tyson
-*	v0.0.4
-*	23/12/2016
+*	v0.0.11
+*	13/11/2017
 *
 */
 
@@ -39,6 +39,10 @@ html, body {
 canvas {
 	border: solid 1px #cdcdcd;
 	margin: 40px;
+	float: left;
+}
+
+#log {
 	float: left;
 }
 

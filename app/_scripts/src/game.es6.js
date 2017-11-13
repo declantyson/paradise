@@ -2,7 +2,7 @@
  *
  *  XL RPG/Game
  *  XL Gaming/Declan Tyson
- *  v0.0.10
+ *  v0.0.11
  *  13/11/2017
  *
  */
@@ -17,11 +17,11 @@ window.startGame = () => {
 
     clearInterval(window.drawScene);
 
-    let locale = chooseLocale(),
+    let locale = locales[chooseLocale()],
         people = choosePeople(),
         player = new Player(),
         scene = new WorldMap(player),
-        start = new locales[locale](player),
+        start = new locale(player, people),
         renderer = new Renderer("world", canvasProperties.width, canvasProperties.height);
 
     window.game = new Game(renderer, scene, canvasProperties.centerPoint);

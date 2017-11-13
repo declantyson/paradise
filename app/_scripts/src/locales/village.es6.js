@@ -10,8 +10,8 @@
 import { Locale } from "./baselocale"
 
 class Village extends Locale {
-    constructor(player) {
-        super(player);
+    constructor(player, people) {
+        super(player, people);
 
         this.entryPoints.beginningOfGame = { x: 30, y: 30 };
 

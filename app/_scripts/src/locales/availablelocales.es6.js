@@ -15,7 +15,7 @@ import { Village } from './village';
 import { Islands } from './islands';
 
 export const locales = {
-    "Village" : Village,
+    // "Village" : Village,
     "Islands" : Islands
 };
 

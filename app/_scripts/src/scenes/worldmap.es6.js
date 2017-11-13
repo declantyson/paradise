@@ -2,10 +2,12 @@
  *
  *  XL RPG/Scene-WorldMap
  *  XL Gaming/Declan Tyson
- *  v0.0.8
- *  23/12/2016
+ *  v0.0.11
+ *  13/11/2017
  *
  */
+
+import * as util from '../util';
 
 import { colours, tileSize, tilesWide as viewportWidth, tilesHigh as viewportHeight } from "../constants";
 import { Grass, Water } from "../terrain";
@@ -28,6 +30,7 @@ class WorldMap extends Scene {
 
         if(!action) return;
         this.checkForRandomEncounters();
+        this.checkForEntrance();
     }
 
     moveUp() {
@@ -90,7 +93,6 @@ class WorldMap extends Scene {
         if(!potentialRandomEncounter) return;
 
         let chance = Math.ceil(Math.random() * potentialRandomEncounter.rate);
-        console.log(chance);
         if(chance === potentialRandomEncounter.rate) {
             this.startRandomEncounter(potentialRandomEncounter.enemies);
         }
@@ -98,6 +100,22 @@ class WorldMap extends Scene {
 
     startRandomEncounter(enemies) {
         this.game.setScene(new Encounter(enemies));
+    }
+
+    checkForEntrance() {
+        let entrance = this.locale.entrances[this.player.x][this.player.y],
+            inhabitants = '';
+        if(!entrance) return;
+
+        if(entrance.inhabitance.inhabitants.length > 0) {
+            inhabitants = `, home of ${entrance.inhabitance.inhabitants}`;
+        }
+
+        util.log(`Entering ${entrance.inhabitance.name}${inhabitants}`);
+    }
+
+    enterInhabitance(interior) {
+        this.game.setScene(new Interior(interior))
     }
 
     setCurrentLocale(locale) {
