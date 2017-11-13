@@ -2,21 +2,23 @@
  *
  *  XL RPG/Game
  *  XL Gaming/Declan Tyson
- *  v0.0.8
- *  23/12/2016
+ *  v0.0.9
+ *  13/11/2017
  *
  */
 
 import { Player } from "./player";
 import { WorldMap } from "./scenes/worldmap";
-import { RouteOne } from "./locales/route1";
 import { tileSize, canvasProperties, fps, actionTimeoutLimit } from "./constants";
+import { pickRandomProperty } from './util';
+import { availableLocales } from './locales/availablelocales';
 
 window.onload = function() {
-    let renderer = new Renderer("world", canvasProperties.width, canvasProperties.height),
+    let locale = pickRandomProperty(availableLocales),
+        renderer = new Renderer("world", canvasProperties.width, canvasProperties.height),
         player = new Player(),
         scene = new WorldMap(player),
-        start = new RouteOne(player);
+        start = new availableLocales[locale](player);
 
     window.game = new Game(renderer, scene, canvasProperties.centerPoint);
     window.game.scene.setCurrentLocale(start);

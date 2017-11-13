@@ -1,15 +1,15 @@
 /*
  *
- *  XL RPG/Locales/Route 1
+ *  XL RPG/Locales/Village
  *  XL Gaming/Declan Tyson
- *  v0.0.8
- *  23/12/2016
+ *  v0.0.9
+ *  13/11/2017
  *
  */
 
-import { Locale } from "./locales"
+import { Locale } from "./baselocale"
 
-class RouteOne extends Locale {
+class Village extends Locale {
     constructor(player) {
         super(player);
 
@@ -25,4 +25,4 @@ class RouteOne extends Locale {
     }
 }
 
-export { RouteOne };
+export { Village };

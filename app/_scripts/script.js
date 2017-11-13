@@ -190,9 +190,11 @@ var _player = require("./player");
 
 var _worldmap = require("./scenes/worldmap");
 
-var _route = require("./locales/route1");
-
 var _constants = require("./constants");
+
+var _util = require("./util");
+
+var _availablelocales = require("./locales/availablelocales");
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -202,16 +204,17 @@ function _classCallCheck(instance, Constructor) {
    *
    *  XL RPG/Game
    *  XL Gaming/Declan Tyson
-   *  v0.0.8
-   *  23/12/2016
+   *  v0.0.9
+   *  13/11/2017
    *
    */
 
 window.onload = function () {
-    var renderer = new Renderer("world", _constants.canvasProperties.width, _constants.canvasProperties.height),
+    var locale = (0, _util.pickRandomProperty)(_availablelocales.availableLocales),
+        renderer = new Renderer("world", _constants.canvasProperties.width, _constants.canvasProperties.height),
         player = new _player.Player(),
         scene = new _worldmap.WorldMap(player),
-        start = new _route.RouteOne(player);
+        start = new _availablelocales.availableLocales[locale](player);
 
     window.game = new Game(renderer, scene, _constants.canvasProperties.centerPoint);
     window.game.scene.setCurrentLocale(start);
@@ -290,7 +293,7 @@ var Game = function () {
 }();
 
 
-},{"./constants":1,"./locales/route1":8,"./player":9,"./scenes/worldmap":13}],6:[function(require,module,exports){
+},{"./constants":1,"./locales/availablelocales":7,"./player":11,"./scenes/worldmap":15,"./util":17}],6:[function(require,module,exports){
 "use strict";
 
 /*
@@ -322,6 +325,35 @@ window.addEventListener("keyup", function (e) {
 
 
 },{}],7:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.availableLocales = undefined;
+
+var _village = require('./village');
+
+var _islands = require('./islands');
+
+/*
+ *
+ *  XL RPG/Locales
+ *  XL Gaming/Declan Tyson
+ *  v0.0.9
+ *  13/11/2016
+ *
+ */
+
+// Locales
+
+var availableLocales = exports.availableLocales = {
+  "Village": _village.Village,
+  "Islands": _islands.Islands
+};
+
+
+},{"./islands":9,"./village":10}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -346,10 +378,10 @@ function _classCallCheck(instance, Constructor) {
 
 /*
  *
- *  XL RPG/Locales
+ *  XL RPG/Locales/Base
  *  XL Gaming/Declan Tyson
- *  v0.0.8
- *  23/12/2016
+ *  v0.0.9
+ *  13/11/2017
  *
  */
 
@@ -414,15 +446,15 @@ var Locale = function () {
 exports.Locale = Locale;
 
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.RouteOne = undefined;
+exports.Islands = undefined;
 
-var _locales = require("./locales");
+var _baselocale = require("./baselocale");
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -442,20 +474,79 @@ function _inherits(subClass, superClass) {
     }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 } /*
    *
-   *  XL RPG/Locales/Route 1
+   *  XL RPG/Locales/City
    *  XL Gaming/Declan Tyson
-   *  v0.0.8
-   *  23/12/2016
+   *  v0.0.9
+   *  13/11/2017
    *
    */
 
-var RouteOne = function (_Locale) {
-    _inherits(RouteOne, _Locale);
+var Islands = function (_Locale) {
+    _inherits(Islands, _Locale);
 
-    function RouteOne(player) {
-        _classCallCheck(this, RouteOne);
+    function Islands(player) {
+        _classCallCheck(this, Islands);
 
-        var _this = _possibleConstructorReturn(this, (RouteOne.__proto__ || Object.getPrototypeOf(RouteOne)).call(this, player));
+        var _this = _possibleConstructorReturn(this, (Islands.__proto__ || Object.getPrototypeOf(Islands)).call(this, player));
+
+        _this.entryPoints.beginningOfGame = { x: 58, y: 20 };
+
+        _this.initialise(300, 300);
+
+        _this.terrainPaint(0, 0, 300, 300, "Water");
+        _this.terrainPaint(52, 17, 10, 20, "Grass");
+        _this.terrainPaint(42, 35, 2, 8, "Grass");
+        return _this;
+    }
+
+    return Islands;
+}(_baselocale.Locale);
+
+exports.Islands = Islands;
+
+
+},{"./baselocale":8}],10:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Village = undefined;
+
+var _baselocale = require("./baselocale");
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  XL RPG/Locales/Village
+   *  XL Gaming/Declan Tyson
+   *  v0.0.9
+   *  13/11/2017
+   *
+   */
+
+var Village = function (_Locale) {
+    _inherits(Village, _Locale);
+
+    function Village(player) {
+        _classCallCheck(this, Village);
+
+        var _this = _possibleConstructorReturn(this, (Village.__proto__ || Object.getPrototypeOf(Village)).call(this, player));
 
         _this.entryPoints.beginningOfGame = { x: 30, y: 30 };
 
@@ -469,13 +560,13 @@ var RouteOne = function (_Locale) {
         return _this;
     }
 
-    return RouteOne;
-}(_locales.Locale);
+    return Village;
+}(_baselocale.Locale);
 
-exports.RouteOne = RouteOne;
+exports.Village = Village;
 
 
-},{"./locales":7}],9:[function(require,module,exports){
+},{"./baselocale":8}],11:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -529,7 +620,7 @@ var Player = function () {
 exports.Player = Player;
 
 
-},{"./constants":1}],10:[function(require,module,exports){
+},{"./constants":1}],12:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -585,7 +676,7 @@ var Scene = function () {
 exports.Scene = Scene;
 
 
-},{"./constants":1}],11:[function(require,module,exports){
+},{"./constants":1}],13:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -665,7 +756,7 @@ var Encounter = function (_Scene) {
 exports.Encounter = Encounter;
 
 
-},{"../constants":1,"../enemies/enemydirectory":3,"./scene":12}],12:[function(require,module,exports){
+},{"../constants":1,"../enemies/enemydirectory":3,"./scene":14}],14:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -740,7 +831,7 @@ var Scene = function () {
 exports.Scene = Scene;
 
 
-},{"../constants":1}],13:[function(require,module,exports){
+},{"../constants":1}],15:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -939,7 +1030,7 @@ var WorldMap = function (_Scene) {
 exports.WorldMap = WorldMap;
 
 
-},{"../constants":1,"../terrain":14,"./encounter":11,"./scene":12}],14:[function(require,module,exports){
+},{"../constants":1,"../terrain":16,"./encounter":13,"./scene":14}],16:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () {
@@ -1052,7 +1143,34 @@ var Water = function (_Terrain3) {
 window.terrains = { Blank: Blank, Grass: Grass, Water: Water };
 
 
-},{"./constants":1}],15:[function(require,module,exports){
+},{"./constants":1}],17:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.pickRandomProperty = pickRandomProperty;
+/*
+ *
+ *  XL RPG/Util
+ *  XL Gaming/Declan Tyson
+ *  v0.0.9
+ *  13/11/2017
+ *
+ */
+
+function pickRandomProperty(obj) {
+    var result = void 0,
+        count = 0;
+
+    for (var prop in obj) {
+        if (Math.random() < 1 / ++count) result = prop;
+    }
+    return result;
+}
+
+
+},{}],18:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1212,4 +1330,4 @@ var WorldMap = function (_Scene) {
 exports.WorldMap = WorldMap;
 
 
-},{"./constants":1,"./scene":10,"./terrain":14}]},{},[1,5,6,9,10,14,15]);
+},{"./constants":1,"./scene":12,"./terrain":16}]},{},[1,5,6,11,12,16,17,18]);
