@@ -12,7 +12,7 @@ import * as util from '../util';
 import { colours, tileSize, tilesWide as viewportWidth, tilesHigh as viewportHeight } from "../constants";
 import { Grass, Water } from "../terrain";
 import { Scene } from "./scene";
-import { Encounter } from "./encounter";
+import { Interior } from "./interior";
 
 class WorldMap extends Scene {
     constructor(player) {
@@ -112,10 +112,11 @@ class WorldMap extends Scene {
         }
 
         util.log(`Entering ${entrance.inhabitance.name}${inhabitants}`);
+        this.enterInhabitance(entrance.inhabitance);
     }
 
     enterInhabitance(interior) {
-        this.game.setScene(new Interior(interior))
+        this.game.setScene(new Interior(interior));
     }
 
     setCurrentLocale(locale) {
