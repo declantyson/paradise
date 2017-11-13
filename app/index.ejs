@@ -7,10 +7,12 @@
 <body>
 
 	<pre>
-	The game starts
+
+
+	The game starts	<button onclick="window.startGame()">Start</button>
 
 	a WORLD is chosen &#10004;
-	six (or more) PEOPLE are chosen
+	six (or more) PEOPLE are chosen &#10004;
 	PEOPLE are given a LOCATION of inhabitance
 	a VICTIM is selected at random
 	a MURDER WEAPON is chosen at random
@@ -23,7 +25,12 @@
 	PEOPLE will give different responses depending on their MOOD, RELATIONSHIP and guiltiness
 	</pre>
 
-	<canvas id="world"></canvas>
+
+	<pre id="log">
+
+	</pre>
+
+	<canvas id="world" style="display: none;"></canvas>
 	<script type="text/javascript" src="/scripts/script.js"></script>
 </body>
 </html>

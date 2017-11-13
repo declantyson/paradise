@@ -2,8 +2,8 @@
  *
  *  XL RPG/Constants
  *  XL Gaming/Declan Tyson
- *  v0.0.7
- *  23/12/2016
+ *  v0.0.10
+ *  13/11/2017
  *
  */
 
@@ -30,3 +30,11 @@ export const canvasProperties = {
 
 export const fps = 60;
 export const actionTimeoutLimit = 2;
+
+
+export const personCount = 4;
+export const genders = {
+    male   : "M",
+    female : "F",
+    alien  : "A"
+};

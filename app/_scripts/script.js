@@ -8,8 +8,8 @@ Object.defineProperty(exports, "__esModule", {
  *
  *  XL RPG/Constants
  *  XL Gaming/Declan Tyson
- *  v0.0.7
- *  23/12/2016
+ *  v0.0.10
+ *  13/11/2017
  *
  */
 
@@ -36,6 +36,13 @@ var canvasProperties = exports.canvasProperties = {
 
 var fps = exports.fps = 60;
 var actionTimeoutLimit = exports.actionTimeoutLimit = 2;
+
+var personCount = exports.personCount = 4;
+var genders = exports.genders = {
+    male: "M",
+    female: "F",
+    alien: "A"
+};
 
 
 },{}],2:[function(require,module,exports){
@@ -192,9 +199,9 @@ var _worldmap = require("./scenes/worldmap");
 
 var _constants = require("./constants");
 
-var _util = require("./util");
-
 var _availablelocales = require("./locales/availablelocales");
+
+var _availablepeople = require("./people/availablepeople");
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -204,17 +211,21 @@ function _classCallCheck(instance, Constructor) {
    *
    *  XL RPG/Game
    *  XL Gaming/Declan Tyson
-   *  v0.0.9
+   *  v0.0.10
    *  13/11/2017
    *
    */
 
-window.onload = function () {
-    var locale = (0, _util.pickRandomProperty)(_availablelocales.availableLocales),
-        renderer = new Renderer("world", _constants.canvasProperties.width, _constants.canvasProperties.height),
+window.startGame = function () {
+
+    clearInterval(window.drawScene);
+
+    var locale = (0, _availablelocales.chooseLocale)(),
+        people = (0, _availablepeople.choosePeople)(),
         player = new _player.Player(),
         scene = new _worldmap.WorldMap(player),
-        start = new _availablelocales.availableLocales[locale](player);
+        start = new _availablelocales.locales[locale](player),
+        renderer = new Renderer("world", _constants.canvasProperties.width, _constants.canvasProperties.height);
 
     window.game = new Game(renderer, scene, _constants.canvasProperties.centerPoint);
     window.game.scene.setCurrentLocale(start);
@@ -228,6 +239,7 @@ var Renderer = function Renderer(element, width, height) {
     this.canvas = document.getElementById(element);
     this.canvas.style.width = width;
     this.canvas.style.height = height;
+    this.canvas.style.display = "block";
     this.canvas.width = width;
     this.canvas.height = height;
     this.fps = _constants.fps;
@@ -293,7 +305,7 @@ var Game = function () {
 }();
 
 
-},{"./constants":1,"./locales/availablelocales":7,"./player":11,"./scenes/worldmap":15,"./util":17}],6:[function(require,module,exports){
+},{"./constants":1,"./locales/availablelocales":7,"./people/availablepeople":11,"./player":21,"./scenes/worldmap":25}],6:[function(require,module,exports){
 "use strict";
 
 /*
@@ -328,32 +340,53 @@ window.addEventListener("keyup", function (e) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
-exports.availableLocales = undefined;
+exports.chooseLocale = exports.locales = undefined;
+
+var _util = require('../util');
+
+var util = _interopRequireWildcard(_util);
 
 var _village = require('./village');
 
 var _islands = require('./islands');
 
-/*
- *
- *  XL RPG/Locales
- *  XL Gaming/Declan Tyson
- *  v0.0.9
- *  13/11/2016
- *
- */
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) {
+        return obj;
+    } else {
+        var newObj = {};if (obj != null) {
+            for (var key in obj) {
+                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+            }
+        }newObj.default = obj;return newObj;
+    }
+}
+
+var locales = exports.locales = {
+    "Village": _village.Village,
+    "Islands": _islands.Islands
+}; /*
+    *
+    *  XL RPG/Locales
+    *  XL Gaming/Declan Tyson
+    *  v0.0.10
+    *  13/11/2016
+    *
+    */
 
 // Locales
 
-var availableLocales = exports.availableLocales = {
-  "Village": _village.Village,
-  "Islands": _islands.Islands
+var chooseLocale = exports.chooseLocale = function chooseLocale() {
+    var locale = util.pickRandomProperty(locales);
+    util.log('Choosing locale...');
+    util.log('Locale is ' + locale + '.');
+    return locale;
 };
 
 
-},{"./islands":9,"./village":10}],8:[function(require,module,exports){
+},{"../util":27,"./islands":9,"./village":10}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -567,6 +600,534 @@ exports.Village = Village;
 
 
 },{"./baselocale":8}],11:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.choosePeople = exports.people = undefined;
+
+var _util = require('../util');
+
+var util = _interopRequireWildcard(_util);
+
+var _constants = require('../constants');
+
+var _evelyn = require('./evelyn');
+
+var _jill = require('./jill');
+
+var _john = require('./john');
+
+var _neil = require('./neil');
+
+var _pauline = require('./pauline');
+
+var _petey = require('./petey');
+
+var _quazar = require('./quazar');
+
+var _zenith = require('./zenith');
+
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) {
+        return obj;
+    } else {
+        var newObj = {};if (obj != null) {
+            for (var key in obj) {
+                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+            }
+        }newObj.default = obj;return newObj;
+    }
+}
+
+/*
+ *
+ *  XL RPG/People
+ *  XL Gaming/Declan Tyson
+ *  v0.0.10
+ *  13/11/2016
+ *
+ */
+
+// People
+
+var people = exports.people = {
+    "Evelyn": _evelyn.Evelyn,
+    "Jill": _jill.Jill,
+    "John": _john.John,
+    "Neil": _neil.Neil,
+    "Pauline": _pauline.Pauline,
+    "Petey": _petey.Petey,
+    "Quazar": _quazar.Quazar,
+    "Zenith": _zenith.Zenith
+};
+
+var choosePeople = exports.choosePeople = function choosePeople() {
+    var chosenPeople = [];
+    util.log('Choosing ' + _constants.personCount + ' people...');
+    var person = void 0;
+    while (chosenPeople.length < _constants.personCount) {
+        person = util.pickRandomProperty(people);
+        if (chosenPeople.indexOf(person) === -1) {
+            chosenPeople.push(person);
+            util.log(person + ' has been chosen.');
+        }
+    }
+
+    return chosenPeople;
+};
+
+
+},{"../constants":1,"../util":27,"./evelyn":13,"./jill":14,"./john":15,"./neil":16,"./pauline":17,"./petey":18,"./quazar":19,"./zenith":20}],12:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+/*
+ *
+ *  XL RPG/Person
+ *  XL Gaming/Declan Tyson
+ *  v0.0.10
+ *  13/11/2017
+ *
+ */
+
+var Person = function Person(name, gender) {
+    _classCallCheck(this, Person);
+
+    this.name = name;
+    this.gender = gender;
+};
+
+exports.Person = Person;
+
+
+},{}],13:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Evelyn = undefined;
+
+var _baseperson = require('./baseperson');
+
+var _constants = require('../constants');
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  XL RPG/Person/Evelyn
+   *  XL Gaming/Declan Tyson
+   *  v0.0.10
+   *  13/11/2017
+   *
+   */
+
+var Evelyn = function (_Person) {
+    _inherits(Evelyn, _Person);
+
+    function Evelyn() {
+        _classCallCheck(this, Evelyn);
+
+        return _possibleConstructorReturn(this, (Evelyn.__proto__ || Object.getPrototypeOf(Evelyn)).call(this, "Evelyn", _constants.genders.female));
+    }
+
+    return Evelyn;
+}(_baseperson.Person);
+
+exports.Evelyn = Evelyn;
+
+
+},{"../constants":1,"./baseperson":12}],14:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Jill = undefined;
+
+var _baseperson = require('./baseperson');
+
+var _constants = require('../constants');
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  XL RPG/Person/Jill
+   *  XL Gaming/Declan Tyson
+   *  v0.0.10
+   *  13/11/2017
+   *
+   */
+
+var Jill = function (_Person) {
+    _inherits(Jill, _Person);
+
+    function Jill() {
+        _classCallCheck(this, Jill);
+
+        return _possibleConstructorReturn(this, (Jill.__proto__ || Object.getPrototypeOf(Jill)).call(this, "Jill", _constants.genders.female));
+    }
+
+    return Jill;
+}(_baseperson.Person);
+
+exports.Jill = Jill;
+
+
+},{"../constants":1,"./baseperson":12}],15:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.John = undefined;
+
+var _baseperson = require('./baseperson');
+
+var _constants = require('../constants');
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  XL RPG/Person/John
+   *  XL Gaming/Declan Tyson
+   *  v0.0.10
+   *  13/11/2017
+   *
+   */
+
+var John = function (_Person) {
+    _inherits(John, _Person);
+
+    function John() {
+        _classCallCheck(this, John);
+
+        return _possibleConstructorReturn(this, (John.__proto__ || Object.getPrototypeOf(John)).call(this, "John", _constants.genders.male));
+    }
+
+    return John;
+}(_baseperson.Person);
+
+exports.John = John;
+
+
+},{"../constants":1,"./baseperson":12}],16:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Neil = undefined;
+
+var _baseperson = require('./baseperson');
+
+var _constants = require('../constants');
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  XL RPG/Person/Neil
+   *  XL Gaming/Declan Tyson
+   *  v0.0.10
+   *  13/11/2017
+   *
+   */
+
+var Neil = function (_Person) {
+    _inherits(Neil, _Person);
+
+    function Neil() {
+        _classCallCheck(this, Neil);
+
+        return _possibleConstructorReturn(this, (Neil.__proto__ || Object.getPrototypeOf(Neil)).call(this, "Neil", _constants.genders.male));
+    }
+
+    return Neil;
+}(_baseperson.Person);
+
+exports.Neil = Neil;
+
+
+},{"../constants":1,"./baseperson":12}],17:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Pauline = undefined;
+
+var _baseperson = require('./baseperson');
+
+var _constants = require('../constants');
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  XL RPG/Person/Pauline
+   *  XL Gaming/Declan Tyson
+   *  v0.0.10
+   *  13/11/2017
+   *
+   */
+
+var Pauline = function (_Person) {
+    _inherits(Pauline, _Person);
+
+    function Pauline() {
+        _classCallCheck(this, Pauline);
+
+        return _possibleConstructorReturn(this, (Pauline.__proto__ || Object.getPrototypeOf(Pauline)).call(this, "Pauline", _constants.genders.female));
+    }
+
+    return Pauline;
+}(_baseperson.Person);
+
+exports.Pauline = Pauline;
+
+
+},{"../constants":1,"./baseperson":12}],18:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Petey = undefined;
+
+var _baseperson = require('./baseperson');
+
+var _constants = require('../constants');
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  XL RPG/Person/Petey
+   *  XL Gaming/Declan Tyson
+   *  v0.0.10
+   *  13/11/2017
+   *
+   */
+
+var Petey = function (_Person) {
+    _inherits(Petey, _Person);
+
+    function Petey() {
+        _classCallCheck(this, Petey);
+
+        return _possibleConstructorReturn(this, (Petey.__proto__ || Object.getPrototypeOf(Petey)).call(this, "Petey", _constants.genders.male));
+    }
+
+    return Petey;
+}(_baseperson.Person);
+
+exports.Petey = Petey;
+
+
+},{"../constants":1,"./baseperson":12}],19:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Zenith = undefined;
+
+var _baseperson = require('./baseperson');
+
+var _constants = require('../constants');
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  XL RPG/Person/Zenith
+   *  XL Gaming/Declan Tyson
+   *  v0.0.10
+   *  13/11/2017
+   *
+   */
+
+var Zenith = function (_Person) {
+    _inherits(Zenith, _Person);
+
+    function Zenith() {
+        _classCallCheck(this, Zenith);
+
+        return _possibleConstructorReturn(this, (Zenith.__proto__ || Object.getPrototypeOf(Zenith)).call(this, "Zenith", _constants.genders.alien));
+    }
+
+    return Zenith;
+}(_baseperson.Person);
+
+exports.Zenith = Zenith;
+
+
+},{"../constants":1,"./baseperson":12}],20:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Quazar = undefined;
+
+var _baseperson = require('./baseperson');
+
+var _constants = require('../constants');
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  XL RPG/Person/Quazar
+   *  XL Gaming/Declan Tyson
+   *  v0.0.10
+   *  13/11/2017
+   *
+   */
+
+var Quazar = function (_Person) {
+    _inherits(Quazar, _Person);
+
+    function Quazar() {
+        _classCallCheck(this, Quazar);
+
+        return _possibleConstructorReturn(this, (Quazar.__proto__ || Object.getPrototypeOf(Quazar)).call(this, "Quazar", _constants.genders.alien));
+    }
+
+    return Quazar;
+}(_baseperson.Person);
+
+exports.Quazar = Quazar;
+
+
+},{"../constants":1,"./baseperson":12}],21:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -620,7 +1181,7 @@ var Player = function () {
 exports.Player = Player;
 
 
-},{"./constants":1}],12:[function(require,module,exports){
+},{"./constants":1}],22:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -676,7 +1237,7 @@ var Scene = function () {
 exports.Scene = Scene;
 
 
-},{"./constants":1}],13:[function(require,module,exports){
+},{"./constants":1}],23:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -756,7 +1317,7 @@ var Encounter = function (_Scene) {
 exports.Encounter = Encounter;
 
 
-},{"../constants":1,"../enemies/enemydirectory":3,"./scene":14}],14:[function(require,module,exports){
+},{"../constants":1,"../enemies/enemydirectory":3,"./scene":24}],24:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -831,7 +1392,7 @@ var Scene = function () {
 exports.Scene = Scene;
 
 
-},{"../constants":1}],15:[function(require,module,exports){
+},{"../constants":1}],25:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1030,7 +1591,7 @@ var WorldMap = function (_Scene) {
 exports.WorldMap = WorldMap;
 
 
-},{"../constants":1,"../terrain":16,"./encounter":13,"./scene":14}],16:[function(require,module,exports){
+},{"../constants":1,"../terrain":26,"./encounter":23,"./scene":24}],26:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () {
@@ -1143,23 +1704,22 @@ var Water = function (_Terrain3) {
 window.terrains = { Blank: Blank, Grass: Grass, Water: Water };
 
 
-},{"./constants":1}],17:[function(require,module,exports){
-"use strict";
+},{"./constants":1}],27:[function(require,module,exports){
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.pickRandomProperty = pickRandomProperty;
 /*
  *
  *  XL RPG/Util
  *  XL Gaming/Declan Tyson
- *  v0.0.9
+ *  v0.0.10
  *  13/11/2017
  *
  */
 
-function pickRandomProperty(obj) {
+var pickRandomProperty = exports.pickRandomProperty = function pickRandomProperty(obj) {
     var result = void 0,
         count = 0;
 
@@ -1167,10 +1727,14 @@ function pickRandomProperty(obj) {
         if (Math.random() < 1 / ++count) result = prop;
     }
     return result;
-}
+};
+
+var log = exports.log = function log(str) {
+    document.getElementById('log').innerHTML += '\n\t' + str;
+};
 
 
-},{}],18:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1330,4 +1894,4 @@ var WorldMap = function (_Scene) {
 exports.WorldMap = WorldMap;
 
 
-},{"./constants":1,"./scene":12,"./terrain":16}]},{},[1,5,6,11,12,16,17,18]);
+},{"./constants":1,"./scene":22,"./terrain":26}]},{},[1,5,6,21,22,26,27,28]);

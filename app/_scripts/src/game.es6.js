@@ -2,7 +2,7 @@
  *
  *  XL RPG/Game
  *  XL Gaming/Declan Tyson
- *  v0.0.9
+ *  v0.0.10
  *  13/11/2017
  *
  */
@@ -10,15 +10,19 @@
 import { Player } from "./player";
 import { WorldMap } from "./scenes/worldmap";
 import { tileSize, canvasProperties, fps, actionTimeoutLimit } from "./constants";
-import { pickRandomProperty } from './util';
-import { availableLocales } from './locales/availablelocales';
+import { chooseLocale, locales } from './locales/availablelocales';
+import { choosePeople, people } from './people/availablepeople';
 
-window.onload = function() {
-    let locale = pickRandomProperty(availableLocales),
-        renderer = new Renderer("world", canvasProperties.width, canvasProperties.height),
+window.startGame = () => {
+
+    clearInterval(window.drawScene);
+
+    let locale = chooseLocale(),
+        people = choosePeople(),
         player = new Player(),
         scene = new WorldMap(player),
-        start = new availableLocales[locale](player);
+        start = new locales[locale](player),
+        renderer = new Renderer("world", canvasProperties.width, canvasProperties.height);
 
     window.game = new Game(renderer, scene, canvasProperties.centerPoint);
     window.game.scene.setCurrentLocale(start);
@@ -31,6 +35,7 @@ class Renderer {
         this.canvas = document.getElementById(element);
         this.canvas.style.width = width;
         this.canvas.style.height = height;
+        this.canvas.style.display = "block";
         this.canvas.width = width;
         this.canvas.height = height;
         this.fps = fps;
