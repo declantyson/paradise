@@ -2,8 +2,8 @@
  *
  *  XL RPG/Locales/Base
  *  XL Gaming/Declan Tyson
- *  v0.0.11
- *  13/11/2017
+ *  v0.0.12
+ *  14/11/2017
  *
  */
 
@@ -92,11 +92,19 @@ class Locale {
     }
 }
 
+class Interior extends Locale {
+    constructor(player, people, inhabitance) {
+        super(player, people);
+        this.inhabitance = inhabitance;
+    }
+}
+
 class Inhabitance {
-    constructor(x, y, name, doorway) {
+    constructor(id, name, x, y, doorway) {
+        this.id = id;
+        this.name = name;
         this.x = x;
         this.y = y;
-        this.name = name;
         this.doorway = doorway;
         this.inhabitants = [];
     }
@@ -106,4 +114,4 @@ class Inhabitance {
     }
 }
 
-export { Locale, Inhabitance };
+export { Locale, Interior, Inhabitance };

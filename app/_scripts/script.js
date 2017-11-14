@@ -174,7 +174,7 @@ var Game = function () {
 }();
 
 
-},{"./constants":1,"./locales/availablelocales":4,"./people/availablepeople":8,"./player":18,"./scenes/worldmap":22}],3:[function(require,module,exports){
+},{"./constants":1,"./locales/availablelocales":4,"./people/availablepeople":9,"./player":19,"./scenes/worldmap":22}],3:[function(require,module,exports){
 "use strict";
 
 /*
@@ -211,7 +211,7 @@ window.addEventListener("keyup", function (e) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.chooseLocale = exports.locales = undefined;
+exports.chooseLocale = exports.interiors = exports.locales = undefined;
 
 var _util = require('../util');
 
@@ -220,6 +220,8 @@ var util = _interopRequireWildcard(_util);
 var _village = require('./village');
 
 var _islands = require('./islands');
+
+var _grovestreet = require('./interiors/1grovestreet');
 
 function _interopRequireWildcard(obj) {
     if (obj && obj.__esModule) {
@@ -233,19 +235,25 @@ function _interopRequireWildcard(obj) {
     }
 }
 
-var locales = exports.locales = {
-    // "Village" : Village,
-    "Islands": _islands.Islands
-}; /*
-    *
-    *  XL RPG/Locales
-    *  XL Gaming/Declan Tyson
-    *  v0.0.10
-    *  13/11/2016
-    *
-    */
+/*
+ *
+ *  XL RPG/Locales
+ *  XL Gaming/Declan Tyson
+ *  v0.0.10
+ *  13/11/2016
+ *
+ */
 
 // Locales
+
+var locales = exports.locales = {
+    "Village": _village.Village,
+    "Islands": _islands.Islands
+};
+
+var interiors = exports.interiors = {
+    "GroveStreet1": _grovestreet.GroveStreet1
+};
 
 var chooseLocale = exports.chooseLocale = function chooseLocale() {
     var locale = util.pickRandomProperty(locales);
@@ -255,13 +263,13 @@ var chooseLocale = exports.chooseLocale = function chooseLocale() {
 };
 
 
-},{"../util":24,"./islands":6,"./village":7}],5:[function(require,module,exports){
+},{"../util":24,"./interiors/1grovestreet":6,"./islands":7,"./village":8}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.Inhabitance = exports.Locale = undefined;
+exports.Inhabitance = exports.Interior = exports.Locale = undefined;
 
 var _createClass = function () {
     function defineProperties(target, props) {
@@ -275,14 +283,26 @@ var _createClass = function () {
       *
       *  XL RPG/Locales/Base
       *  XL Gaming/Declan Tyson
-      *  v0.0.11
-      *  13/11/2017
+      *  v0.0.12
+      *  14/11/2017
       *
       */
 
 var _constants = require('../constants');
 
 var _availablepeople = require('../people/availablepeople');
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -385,13 +405,29 @@ var Locale = function () {
     return Locale;
 }();
 
+var Interior = function (_Locale) {
+    _inherits(Interior, _Locale);
+
+    function Interior(player, people, inhabitance) {
+        _classCallCheck(this, Interior);
+
+        var _this = _possibleConstructorReturn(this, (Interior.__proto__ || Object.getPrototypeOf(Interior)).call(this, player, people));
+
+        _this.inhabitance = inhabitance;
+        return _this;
+    }
+
+    return Interior;
+}(Locale);
+
 var Inhabitance = function () {
-    function Inhabitance(x, y, name, doorway) {
+    function Inhabitance(id, name, x, y, doorway) {
         _classCallCheck(this, Inhabitance);
 
+        this.id = id;
+        this.name = name;
         this.x = x;
         this.y = y;
-        this.name = name;
         this.doorway = doorway;
         this.inhabitants = [];
     }
@@ -407,10 +443,71 @@ var Inhabitance = function () {
 }();
 
 exports.Locale = Locale;
+exports.Interior = Interior;
 exports.Inhabitance = Inhabitance;
 
 
-},{"../constants":1,"../people/availablepeople":8}],6:[function(require,module,exports){
+},{"../constants":1,"../people/availablepeople":9}],6:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.GroveStreet1 = undefined;
+
+var _baselocale = require("../baselocale");
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  XL RPG/Locales/1 Grove Street
+   *  XL Gaming/Declan Tyson
+   *  v0.0.12
+   *  14/11/2017
+   *
+   */
+
+var GroveStreet1 = function (_Interior) {
+    _inherits(GroveStreet1, _Interior);
+
+    function GroveStreet1(player, people, inhabitance) {
+        _classCallCheck(this, GroveStreet1);
+
+        var _this = _possibleConstructorReturn(this, (GroveStreet1.__proto__ || Object.getPrototypeOf(GroveStreet1)).call(this, player, people, inhabitance));
+
+        _this.entryPoints.beginningOfGame = { x: 55, y: 17 };
+
+        _this.initialise(300, 300);
+
+        _this.terrainPaint(0, 0, 300, 300, "Water");
+        _this.terrainPaint(52, 17, 10, 20, "Grass");
+        _this.terrainPaint(42, 35, 2, 8, "Grass");
+        _this.terrainPaint(55, 17, 2, 20, "Road");
+        return _this;
+    }
+
+    return GroveStreet1;
+}(_baselocale.Interior);
+
+exports.GroveStreet1 = GroveStreet1;
+
+
+},{"../baselocale":5}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -462,7 +559,7 @@ var Islands = function (_Locale) {
         _this.terrainPaint(42, 35, 2, 8, "Grass");
         _this.terrainPaint(55, 17, 2, 20, "Road");
 
-        _this.inhabitances.push(new _baselocale.Inhabitance(53, 19, "1 Grove Street", { x: 54, y: 20 }), new _baselocale.Inhabitance(57, 19, "2 Grove Street", { x: 57, y: 20 }), new _baselocale.Inhabitance(53, 22, "3 Grove Street", { x: 54, y: 23 }), new _baselocale.Inhabitance(57, 22, "4 Grove Street", { x: 57, y: 23 }));
+        _this.inhabitances.push(new _baselocale.Inhabitance("GroveStreet1", "1 Grove Street", 53, 19, { x: 54, y: 20 }), new _baselocale.Inhabitance("GroveStreet2", "2 Grove Street", 57, 19, { x: 57, y: 20 }), new _baselocale.Inhabitance("GroveStreet3", "3 Grove Street", 53, 22, { x: 54, y: 23 }), new _baselocale.Inhabitance("GroveStreet4", "4 Grove Street", 57, 22, { x: 57, y: 23 }));
 
         _this.drawInhabitances();
         _this.assignPeopleToInhabitances();
@@ -475,7 +572,7 @@ var Islands = function (_Locale) {
 exports.Islands = Islands;
 
 
-},{"./baselocale":5}],7:[function(require,module,exports){
+},{"./baselocale":5}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -536,7 +633,7 @@ var Village = function (_Locale) {
 exports.Village = Village;
 
 
-},{"./baselocale":5}],8:[function(require,module,exports){
+},{"./baselocale":5}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -616,7 +713,7 @@ var choosePeople = exports.choosePeople = function choosePeople() {
 };
 
 
-},{"../constants":1,"../util":24,"./evelyn":10,"./jill":11,"./john":12,"./neil":13,"./pauline":14,"./petey":15,"./quazar":16,"./zenith":17}],9:[function(require,module,exports){
+},{"../constants":1,"../util":24,"./evelyn":11,"./jill":12,"./john":13,"./neil":14,"./pauline":15,"./petey":16,"./quazar":17,"./zenith":18}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -648,7 +745,7 @@ var Person = function Person(name, gender) {
 exports.Person = Person;
 
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -700,7 +797,7 @@ var Evelyn = function (_Person) {
 exports.Evelyn = Evelyn;
 
 
-},{"../constants":1,"./baseperson":9}],11:[function(require,module,exports){
+},{"../constants":1,"./baseperson":10}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -752,7 +849,7 @@ var Jill = function (_Person) {
 exports.Jill = Jill;
 
 
-},{"../constants":1,"./baseperson":9}],12:[function(require,module,exports){
+},{"../constants":1,"./baseperson":10}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -804,7 +901,7 @@ var John = function (_Person) {
 exports.John = John;
 
 
-},{"../constants":1,"./baseperson":9}],13:[function(require,module,exports){
+},{"../constants":1,"./baseperson":10}],14:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -856,7 +953,7 @@ var Neil = function (_Person) {
 exports.Neil = Neil;
 
 
-},{"../constants":1,"./baseperson":9}],14:[function(require,module,exports){
+},{"../constants":1,"./baseperson":10}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -908,7 +1005,7 @@ var Pauline = function (_Person) {
 exports.Pauline = Pauline;
 
 
-},{"../constants":1,"./baseperson":9}],15:[function(require,module,exports){
+},{"../constants":1,"./baseperson":10}],16:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -960,7 +1057,7 @@ var Petey = function (_Person) {
 exports.Petey = Petey;
 
 
-},{"../constants":1,"./baseperson":9}],16:[function(require,module,exports){
+},{"../constants":1,"./baseperson":10}],17:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1012,7 +1109,7 @@ var Zenith = function (_Person) {
 exports.Zenith = Zenith;
 
 
-},{"../constants":1,"./baseperson":9}],17:[function(require,module,exports){
+},{"../constants":1,"./baseperson":10}],18:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1064,7 +1161,7 @@ var Quazar = function (_Person) {
 exports.Quazar = Quazar;
 
 
-},{"../constants":1,"./baseperson":9}],18:[function(require,module,exports){
+},{"../constants":1,"./baseperson":10}],19:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1118,7 +1215,7 @@ var Player = function () {
 exports.Player = Player;
 
 
-},{"./constants":1}],19:[function(require,module,exports){
+},{"./constants":1}],20:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1174,98 +1271,7 @@ var Scene = function () {
 exports.Scene = Scene;
 
 
-},{"./constants":1}],20:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.Interior = undefined;
-
-var _createClass = function () {
-    function defineProperties(target, props) {
-        for (var i = 0; i < props.length; i++) {
-            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
-        }
-    }return function (Constructor, protoProps, staticProps) {
-        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
-    };
-}();
-
-var _util = require("../util");
-
-var util = _interopRequireWildcard(_util);
-
-var _scene = require("./scene");
-
-var _constants = require("../constants");
-
-function _interopRequireWildcard(obj) {
-    if (obj && obj.__esModule) {
-        return obj;
-    } else {
-        var newObj = {};if (obj != null) {
-            for (var key in obj) {
-                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
-            }
-        }newObj.default = obj;return newObj;
-    }
-}
-
-function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-        throw new TypeError("Cannot call a class as a function");
-    }
-}
-
-function _possibleConstructorReturn(self, call) {
-    if (!self) {
-        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
-}
-
-function _inherits(subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-} /*
-   *
-   *  XL RPG/Scene-Interior
-   *  XL Gaming/Declan Tyson
-   *  v0.0.11
-   *  13/11/2017
-   *
-   */
-
-var Interior = function (_Scene) {
-    _inherits(Interior, _Scene);
-
-    function Interior(inhabitance) {
-        _classCallCheck(this, Interior);
-
-        var _this = _possibleConstructorReturn(this, (Interior.__proto__ || Object.getPrototypeOf(Interior)).call(this));
-
-        _this.inhabitance = inhabitance;
-        util.log(inhabitance.name);
-        return _this;
-    }
-
-    _createClass(Interior, [{
-        key: "draw",
-        value: function draw(ctx) {
-            ctx.strokeStyle = _constants.colours.green;
-            ctx.rect(0, 0, _constants.canvasProperties.width, _constants.canvasProperties.height);
-            ctx.fill();
-        }
-    }]);
-
-    return Interior;
-}(_scene.Scene);
-
-exports.Interior = Interior;
-
-
-},{"../constants":1,"../util":24,"./scene":21}],21:[function(require,module,exports){
+},{"./constants":1}],21:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1384,7 +1390,7 @@ var _terrain = require("../terrain");
 
 var _scene = require("./scene");
 
-var _interior = require("./interior");
+var _availablelocales = require("../locales/availablelocales");
 
 function _interopRequireWildcard(obj) {
     if (obj && obj.__esModule) {
@@ -1418,8 +1424,8 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Scene-WorldMap
    *  XL Gaming/Declan Tyson
-   *  v0.0.11
-   *  13/11/2017
+   *  v0.0.12
+   *  14/11/2017
    *
    */
 
@@ -1543,8 +1549,9 @@ var WorldMap = function (_Scene) {
         }
     }, {
         key: "enterInhabitance",
-        value: function enterInhabitance(interior) {
-            this.game.setScene(new _interior.Interior(interior));
+        value: function enterInhabitance(inhabitance) {
+            var locale = _availablelocales.interiors[inhabitance.id];
+            this.setCurrentLocale(new locale(this.locale.player, this.locale.people, inhabitance));
         }
     }, {
         key: "setCurrentLocale",
@@ -1558,6 +1565,8 @@ var WorldMap = function (_Scene) {
         key: "rasterizeLocaleMap",
         value: function rasterizeLocaleMap() {
             if (!this.locale) return;
+
+            console.log(this.locale);
 
             for (var x = 0; x < this.locale.width; x++) {
                 for (var y = 0; y < this.locale.height; y++) {
@@ -1574,7 +1583,7 @@ var WorldMap = function (_Scene) {
 exports.WorldMap = WorldMap;
 
 
-},{"../constants":1,"../terrain":23,"../util":24,"./interior":20,"./scene":21}],23:[function(require,module,exports){
+},{"../constants":1,"../locales/availablelocales":4,"../terrain":23,"../util":24,"./scene":21}],23:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () {
@@ -1925,4 +1934,4 @@ var WorldMap = function (_Scene) {
 exports.WorldMap = WorldMap;
 
 
-},{"./constants":1,"./scene":19,"./terrain":23}]},{},[1,2,3,18,19,23,24,25]);
+},{"./constants":1,"./scene":20,"./terrain":23}]},{},[1,2,3,19,20,23,24,25]);

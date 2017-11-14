@@ -2,8 +2,8 @@
  *
  *  XL RPG/Scene-WorldMap
  *  XL Gaming/Declan Tyson
- *  v0.0.11
- *  13/11/2017
+ *  v0.0.12
+ *  14/11/2017
  *
  */
 
@@ -12,7 +12,7 @@ import * as util from '../util';
 import { colours, tileSize, tilesWide as viewportWidth, tilesHigh as viewportHeight } from "../constants";
 import { Grass, Water } from "../terrain";
 import { Scene } from "./scene";
-import { Interior } from "./interior";
+import { locales, interiors } from '../locales/availablelocales';
 
 class WorldMap extends Scene {
     constructor(player) {
@@ -115,8 +115,9 @@ class WorldMap extends Scene {
         this.enterInhabitance(entrance.inhabitance);
     }
 
-    enterInhabitance(interior) {
-        this.game.setScene(new Interior(interior));
+    enterInhabitance(inhabitance) {
+        let locale = interiors[inhabitance.id];
+        this.setCurrentLocale(new locale(this.locale.player, this.locale.people, inhabitance));
     }
 
     setCurrentLocale(locale) {
@@ -128,6 +129,8 @@ class WorldMap extends Scene {
 
     rasterizeLocaleMap() {
         if(!this.locale) return;
+
+        console.log(this.locale);
 
         for(let x = 0; x < this.locale.width; x++) {
             for (let y = 0; y < this.locale.height; y++) {

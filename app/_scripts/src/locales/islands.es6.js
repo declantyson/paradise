@@ -23,10 +23,10 @@ class Islands extends Locale {
         this.terrainPaint(55, 17, 2, 20, "Road");
 
         this.inhabitances.push(
-            new Inhabitance(53, 19, "1 Grove Street", { x: 54, y: 20 }),
-            new Inhabitance(57, 19, "2 Grove Street", { x: 57, y: 20 }),
-            new Inhabitance(53, 22, "3 Grove Street", { x: 54, y: 23 }),
-            new Inhabitance(57, 22, "4 Grove Street", { x: 57, y: 23 })
+            new Inhabitance("GroveStreet1", "1 Grove Street", 53, 19, { x: 54, y: 20 }),
+            new Inhabitance("GroveStreet2", "2 Grove Street", 57, 19, { x: 57, y: 20 }),
+            new Inhabitance("GroveStreet3", "3 Grove Street", 53, 22, { x: 54, y: 23 }),
+            new Inhabitance("GroveStreet4", "4 Grove Street", 57, 22, { x: 57, y: 23 })
         );
 
         this.drawInhabitances();

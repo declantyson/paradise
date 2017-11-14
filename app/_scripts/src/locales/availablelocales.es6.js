@@ -13,10 +13,15 @@ import * as util from '../util';
 
 import { Village } from './village';
 import { Islands } from './islands';
+import { GroveStreet1 } from './interiors/1grovestreet';
 
 export const locales = {
-    // "Village" : Village,
+    "Village" : Village,
     "Islands" : Islands
+};
+
+export const interiors = {
+    "GroveStreet1" : GroveStreet1
 };
 
 export const chooseLocale = () => {
