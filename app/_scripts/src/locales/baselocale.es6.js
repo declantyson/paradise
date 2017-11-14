@@ -61,7 +61,7 @@ class Locale {
 
     addInhabitance(startX, startY, width, height, inhabitance) {
         let doorway = inhabitance.doorway;
-        this.terrainPaint(startX, startY, width, height, "Inhabitance");
+        this.terrainPaint(startX, startY, width, height, "Wall");
         this.terrainPaint(doorway.x, doorway.y, 1, 1, "Doorway");
         this.entrances[doorway.x][doorway.y] = {
             inhabitance: inhabitance

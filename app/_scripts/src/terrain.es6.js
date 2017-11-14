@@ -2,8 +2,8 @@
  *
  *  XL RPG/Terrain
  *  XL Gaming/Declan Tyson
- *  v0.0.11
- *  13/11/2017
+ *  v0.0.13
+ *  14/11/2017
  *
  */
 
@@ -55,7 +55,7 @@ class Road extends Terrain {
     }
 }
 
-class Inhabitance extends Terrain {
+class Wall extends Terrain {
     constructor() {
         super();
         this.passable = false;
@@ -71,4 +71,12 @@ class Doorway extends Terrain {
     }
 }
 
-window.terrains = { Blank, Grass, Water, Road, Inhabitance, Doorway };
+class WoodenFloor extends Terrain {
+    constructor() {
+        super();
+        this.passable = true;
+        this.colour = colours.darkbrown;
+    }
+}
+
+window.terrains = { Blank, Grass, Water, Road, Wall, Doorway, WoodenFloor };

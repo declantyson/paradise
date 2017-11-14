@@ -2,8 +2,8 @@
  *
  *  XL RPG/Locales/City
  *  XL Gaming/Declan Tyson
- *  v0.0.11
- *  13/11/2017
+ *  v0.0.13
+ *  14/11/2017
  *
  */
 

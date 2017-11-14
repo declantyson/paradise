@@ -13,14 +13,18 @@ class GroveStreet1 extends Interior {
     constructor(player, people, inhabitance) {
         super(player, people, inhabitance);
 
-        this.entryPoints.beginningOfGame = { x: 55, y: 17 };
+        this.entryPoints.frontDoor = { x: 48, y: 48 };
 
-        this.initialise(300, 300);
+        this.initialise(100, 100);
 
-        this.terrainPaint(0, 0, 300, 300, "Water");
-        this.terrainPaint(52, 17, 10, 20, "Grass");
-        this.terrainPaint(42, 35, 2, 8, "Grass");
-        this.terrainPaint(55, 17, 2, 20, "Road");
+        this.terrainPaint(0, 0, 100, 100, "Blank");
+        this.terrainPaint(25, 25, 25, 25, "Wall");
+        this.terrainPaint(26, 26, 11, 23, "WoodenFloor");
+        this.terrainPaint(38, 26, 11, 23, "WoodenFloor");
+        this.terrainPaint(37, 37, 1, 1, "WoodenFloor");
+        this.terrainPaint(49, 48, 1, 1, "WoodenFloor");
+
+        this.enterLocaleAt("frontDoor");
     }
 }
 

@@ -368,7 +368,7 @@ var Locale = function () {
         key: 'addInhabitance',
         value: function addInhabitance(startX, startY, width, height, inhabitance) {
             var doorway = inhabitance.doorway;
-            this.terrainPaint(startX, startY, width, height, "Inhabitance");
+            this.terrainPaint(startX, startY, width, height, "Wall");
             this.terrainPaint(doorway.x, doorway.y, 1, 1, "Doorway");
             this.entrances[doorway.x][doorway.y] = {
                 inhabitance: inhabitance
@@ -490,14 +490,18 @@ var GroveStreet1 = function (_Interior) {
 
         var _this = _possibleConstructorReturn(this, (GroveStreet1.__proto__ || Object.getPrototypeOf(GroveStreet1)).call(this, player, people, inhabitance));
 
-        _this.entryPoints.beginningOfGame = { x: 55, y: 17 };
+        _this.entryPoints.frontDoor = { x: 48, y: 48 };
 
-        _this.initialise(300, 300);
+        _this.initialise(100, 100);
 
-        _this.terrainPaint(0, 0, 300, 300, "Water");
-        _this.terrainPaint(52, 17, 10, 20, "Grass");
-        _this.terrainPaint(42, 35, 2, 8, "Grass");
-        _this.terrainPaint(55, 17, 2, 20, "Road");
+        _this.terrainPaint(0, 0, 100, 100, "Blank");
+        _this.terrainPaint(25, 25, 25, 25, "Wall");
+        _this.terrainPaint(26, 26, 11, 23, "WoodenFloor");
+        _this.terrainPaint(38, 26, 11, 23, "WoodenFloor");
+        _this.terrainPaint(37, 37, 1, 1, "WoodenFloor");
+        _this.terrainPaint(49, 48, 1, 1, "WoodenFloor");
+
+        _this.enterLocaleAt("frontDoor");
         return _this;
     }
 
@@ -537,8 +541,8 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Locales/City
    *  XL Gaming/Declan Tyson
-   *  v0.0.11
-   *  13/11/2017
+   *  v0.0.13
+   *  14/11/2017
    *
    */
 
@@ -1386,8 +1390,6 @@ var util = _interopRequireWildcard(_util);
 
 var _constants = require("../constants");
 
-var _terrain = require("../terrain");
-
 var _scene = require("./scene");
 
 var _availablelocales = require("../locales/availablelocales");
@@ -1424,7 +1426,7 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Scene-WorldMap
    *  XL Gaming/Declan Tyson
-   *  v0.0.12
+   *  v0.0.13
    *  14/11/2017
    *
    */
@@ -1583,7 +1585,7 @@ var WorldMap = function (_Scene) {
 exports.WorldMap = WorldMap;
 
 
-},{"../constants":1,"../locales/availablelocales":4,"../terrain":23,"../util":24,"./scene":21}],23:[function(require,module,exports){
+},{"../constants":1,"../locales/availablelocales":4,"../util":24,"./scene":21}],23:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () {
@@ -1598,8 +1600,8 @@ var _createClass = function () {
       *
       *  XL RPG/Terrain
       *  XL Gaming/Declan Tyson
-      *  v0.0.11
-      *  13/11/2017
+      *  v0.0.13
+      *  14/11/2017
       *
       */
 
@@ -1709,20 +1711,20 @@ var Road = function (_Terrain4) {
     return Road;
 }(Terrain);
 
-var Inhabitance = function (_Terrain5) {
-    _inherits(Inhabitance, _Terrain5);
+var Wall = function (_Terrain5) {
+    _inherits(Wall, _Terrain5);
 
-    function Inhabitance() {
-        _classCallCheck(this, Inhabitance);
+    function Wall() {
+        _classCallCheck(this, Wall);
 
-        var _this5 = _possibleConstructorReturn(this, (Inhabitance.__proto__ || Object.getPrototypeOf(Inhabitance)).call(this));
+        var _this5 = _possibleConstructorReturn(this, (Wall.__proto__ || Object.getPrototypeOf(Wall)).call(this));
 
         _this5.passable = false;
         _this5.colour = _constants.colours.brown;
         return _this5;
     }
 
-    return Inhabitance;
+    return Wall;
 }(Terrain);
 
 var Doorway = function (_Terrain6) {
@@ -1741,7 +1743,23 @@ var Doorway = function (_Terrain6) {
     return Doorway;
 }(Terrain);
 
-window.terrains = { Blank: Blank, Grass: Grass, Water: Water, Road: Road, Inhabitance: Inhabitance, Doorway: Doorway };
+var WoodenFloor = function (_Terrain7) {
+    _inherits(WoodenFloor, _Terrain7);
+
+    function WoodenFloor() {
+        _classCallCheck(this, WoodenFloor);
+
+        var _this7 = _possibleConstructorReturn(this, (WoodenFloor.__proto__ || Object.getPrototypeOf(WoodenFloor)).call(this));
+
+        _this7.passable = true;
+        _this7.colour = _constants.colours.darkbrown;
+        return _this7;
+    }
+
+    return WoodenFloor;
+}(Terrain);
+
+window.terrains = { Blank: Blank, Grass: Grass, Water: Water, Road: Road, Wall: Wall, Doorway: Doorway, WoodenFloor: WoodenFloor };
 
 
 },{"./constants":1}],24:[function(require,module,exports){

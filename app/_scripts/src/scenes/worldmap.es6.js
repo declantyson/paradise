@@ -2,7 +2,7 @@
  *
  *  XL RPG/Scene-WorldMap
  *  XL Gaming/Declan Tyson
- *  v0.0.12
+ *  v0.0.13
  *  14/11/2017
  *
  */
@@ -10,7 +10,6 @@
 import * as util from '../util';
 
 import { colours, tileSize, tilesWide as viewportWidth, tilesHigh as viewportHeight } from "../constants";
-import { Grass, Water } from "../terrain";
 import { Scene } from "./scene";
 import { locales, interiors } from '../locales/availablelocales';
 
