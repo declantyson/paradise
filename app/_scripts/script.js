@@ -172,7 +172,7 @@ var Game = function () {
 }();
 
 
-},{"./constants":1,"./locales/availablelocales":4,"./people/availablepeople":9,"./player":19,"./scenes/worldmap":22}],3:[function(require,module,exports){
+},{"./constants":1,"./locales/availablelocales":4,"./people/availablepeople":12,"./player":22,"./scenes/worldmap":25}],3:[function(require,module,exports){
 "use strict";
 
 /*
@@ -221,6 +221,12 @@ var _islands = require('./islands');
 
 var _grovestreet = require('./interiors/1grovestreet');
 
+var _grovestreet2 = require('./interiors/2grovestreet');
+
+var _grovestreet3 = require('./interiors/3grovestreet');
+
+var _grovestreet4 = require('./interiors/4grovestreet');
+
 function _interopRequireWildcard(obj) {
     if (obj && obj.__esModule) {
         return obj;
@@ -233,26 +239,26 @@ function _interopRequireWildcard(obj) {
     }
 }
 
-/*
- *
- *  XL RPG/Locales
- *  XL Gaming/Declan Tyson
- *  v0.0.14
- *  15/11/2016
- *
- */
+var startingMaps = exports.startingMaps = {
+    "Islands": _islands.Islands
+}; /*
+    *
+    *  XL RPG/Locales
+    *  XL Gaming/Declan Tyson
+    *  v0.0.15
+    *  15/11/2016
+    *
+    */
 
 // Locales
-
-var startingMaps = exports.startingMaps = {
-    "Village": _village.Village,
-    "Islands": _islands.Islands
-};
 
 var locales = exports.locales = {
     "Village": _village.Village,
     "Islands": _islands.Islands,
-    "GroveStreet1": _grovestreet.GroveStreet1
+    "GroveStreet1": _grovestreet.GroveStreet1,
+    "GroveStreet2": _grovestreet2.GroveStreet2,
+    "GroveStreet3": _grovestreet3.GroveStreet3,
+    "GroveStreet4": _grovestreet4.GroveStreet4
 };
 
 var chooseStartingMap = exports.chooseStartingMap = function chooseStartingMap() {
@@ -263,7 +269,7 @@ var chooseStartingMap = exports.chooseStartingMap = function chooseStartingMap()
 };
 
 
-},{"../util":24,"./interiors/1grovestreet":6,"./islands":7,"./village":8}],5:[function(require,module,exports){
+},{"../util":27,"./interiors/1grovestreet":6,"./interiors/2grovestreet":7,"./interiors/3grovestreet":8,"./interiors/4grovestreet":9,"./islands":10,"./village":11}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -449,7 +455,7 @@ exports.Interior = Interior;
 exports.Inhabitance = Inhabitance;
 
 
-},{"../constants":1,"../people/availablepeople":9}],6:[function(require,module,exports){
+},{"../constants":1,"../people/availablepeople":12}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -519,7 +525,217 @@ var GroveStreet1 = function (_Interior) {
 exports.GroveStreet1 = GroveStreet1;
 
 
-},{"../baselocale":5,"../islands":7}],7:[function(require,module,exports){
+},{"../baselocale":5,"../islands":10}],7:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.GroveStreet2 = undefined;
+
+var _baselocale = require("../baselocale");
+
+var _islands = require("../islands");
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  XL RPG/Locales/1 Grove Street
+   *  XL Gaming/Declan Tyson
+   *  v0.0.15
+   *  15/11/2017
+   *
+   */
+
+var GroveStreet2 = function (_Interior) {
+    _inherits(GroveStreet2, _Interior);
+
+    function GroveStreet2(player, people, inhabitance) {
+        _classCallCheck(this, GroveStreet2);
+
+        var _this = _possibleConstructorReturn(this, (GroveStreet2.__proto__ || Object.getPrototypeOf(GroveStreet2)).call(this, player, people, inhabitance));
+
+        _this.id = "2GroveStreet";
+        _this.entryPoints.frontDoor = { x: 26, y: 48 };
+
+        _this.initialise(100, 100);
+
+        _this.entrances[25][48] = {
+            locale: new _islands.Islands(player, people),
+            entryPoint: "groveStreet2"
+        };
+
+        _this.terrainPaint(0, 0, 100, 100, "Blank");
+        _this.terrainPaint(25, 25, 25, 25, "Wall");
+        _this.terrainPaint(26, 26, 11, 23, "WoodenFloor");
+        _this.terrainPaint(38, 26, 11, 23, "WoodenFloor");
+        _this.terrainPaint(37, 37, 1, 1, "WoodenFloor");
+        _this.terrainPaint(25, 48, 1, 1, "WoodenFloor");
+        return _this;
+    }
+
+    return GroveStreet2;
+}(_baselocale.Interior);
+
+exports.GroveStreet2 = GroveStreet2;
+
+
+},{"../baselocale":5,"../islands":10}],8:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.GroveStreet3 = undefined;
+
+var _baselocale = require("../baselocale");
+
+var _islands = require("../islands");
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  XL RPG/Locales/1 Grove Street
+   *  XL Gaming/Declan Tyson
+   *  v0.0.15
+   *  15/11/2017
+   *
+   */
+
+var GroveStreet3 = function (_Interior) {
+    _inherits(GroveStreet3, _Interior);
+
+    function GroveStreet3(player, people, inhabitance) {
+        _classCallCheck(this, GroveStreet3);
+
+        var _this = _possibleConstructorReturn(this, (GroveStreet3.__proto__ || Object.getPrototypeOf(GroveStreet3)).call(this, player, people, inhabitance));
+
+        _this.id = "3GroveStreet";
+        _this.entryPoints.frontDoor = { x: 48, y: 48 };
+
+        _this.initialise(100, 100);
+
+        _this.entrances[49][48] = {
+            locale: new _islands.Islands(player, people),
+            entryPoint: "groveStreet3"
+        };
+
+        _this.terrainPaint(0, 0, 100, 100, "Blank");
+        _this.terrainPaint(25, 25, 25, 25, "Wall");
+        _this.terrainPaint(26, 26, 11, 23, "WoodenFloor");
+        _this.terrainPaint(38, 26, 11, 23, "WoodenFloor");
+        _this.terrainPaint(37, 37, 1, 1, "WoodenFloor");
+        _this.terrainPaint(49, 48, 1, 1, "WoodenFloor");
+        return _this;
+    }
+
+    return GroveStreet3;
+}(_baselocale.Interior);
+
+exports.GroveStreet3 = GroveStreet3;
+
+
+},{"../baselocale":5,"../islands":10}],9:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.GroveStreet4 = undefined;
+
+var _baselocale = require("../baselocale");
+
+var _islands = require("../islands");
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  XL RPG/Locales/4 Grove Street
+   *  XL Gaming/Declan Tyson
+   *  v0.0.15
+   *  15/11/2017
+   *
+   */
+
+var GroveStreet4 = function (_Interior) {
+    _inherits(GroveStreet4, _Interior);
+
+    function GroveStreet4(player, people, inhabitance) {
+        _classCallCheck(this, GroveStreet4);
+
+        var _this = _possibleConstructorReturn(this, (GroveStreet4.__proto__ || Object.getPrototypeOf(GroveStreet4)).call(this, player, people, inhabitance));
+
+        _this.id = "4GroveStreet";
+        _this.entryPoints.frontDoor = { x: 26, y: 48 };
+
+        _this.initialise(100, 100);
+
+        _this.entrances[25][48] = {
+            locale: new _islands.Islands(player, people),
+            entryPoint: "groveStreet4"
+        };
+
+        _this.terrainPaint(0, 0, 100, 100, "Blank");
+        _this.terrainPaint(25, 25, 25, 25, "Wall");
+        _this.terrainPaint(26, 26, 11, 23, "WoodenFloor");
+        _this.terrainPaint(38, 26, 11, 23, "WoodenFloor");
+        _this.terrainPaint(37, 37, 1, 1, "WoodenFloor");
+        _this.terrainPaint(25, 48, 1, 1, "WoodenFloor");
+        return _this;
+    }
+
+    return GroveStreet4;
+}(_baselocale.Interior);
+
+exports.GroveStreet4 = GroveStreet4;
+
+
+},{"../baselocale":5,"../islands":10}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -547,10 +763,10 @@ function _inherits(subClass, superClass) {
     }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 } /*
    *
-   *  XL RPG/Locales/City
+   *  XL RPG/Locales/Islands
    *  XL Gaming/Declan Tyson
-   *  v0.0.13
-   *  14/11/2017
+   *  v0.0.15
+   *  15/11/2017
    *
    */
 
@@ -563,17 +779,24 @@ var Islands = function (_Locale) {
         var _this = _possibleConstructorReturn(this, (Islands.__proto__ || Object.getPrototypeOf(Islands)).call(this, player, people));
 
         _this.id = "Islands";
-        _this.entryPoints.beginningOfGame = { x: 55, y: 17 };
+        _this.entryPoints.beginningOfGame = { x: 56, y: 17 };
         _this.entryPoints.groveStreet1 = { x: 55, y: 20 };
+        _this.entryPoints.groveStreet2 = { x: 58, y: 20 };
+        _this.entryPoints.groveStreet3 = { x: 55, y: 23 };
+        _this.entryPoints.groveStreet4 = { x: 58, y: 23 };
 
         _this.initialise(300, 300);
 
         _this.terrainPaint(0, 0, 300, 300, "Water");
         _this.terrainPaint(52, 17, 10, 20, "Grass");
         _this.terrainPaint(42, 35, 2, 8, "Grass");
-        _this.terrainPaint(55, 17, 2, 20, "Road");
+        _this.terrainPaint(56, 17, 2, 20, "Road");
+        _this.terrainPaint(55, 20, 1, 1, "Road");
+        _this.terrainPaint(58, 20, 1, 1, "Road");
+        _this.terrainPaint(55, 23, 1, 1, "Road");
+        _this.terrainPaint(58, 23, 1, 1, "Road");
 
-        _this.inhabitances.push(new _baselocale.Inhabitance("GroveStreet1", "1 Grove Street", 53, 19, { x: 54, y: 20 }), new _baselocale.Inhabitance("GroveStreet2", "2 Grove Street", 57, 19, { x: 57, y: 20 }), new _baselocale.Inhabitance("GroveStreet3", "3 Grove Street", 53, 22, { x: 54, y: 23 }), new _baselocale.Inhabitance("GroveStreet4", "4 Grove Street", 57, 22, { x: 57, y: 23 }));
+        _this.inhabitances.push(new _baselocale.Inhabitance("GroveStreet1", "1 Grove Street", 53, 19, { x: 54, y: 20 }), new _baselocale.Inhabitance("GroveStreet2", "2 Grove Street", 59, 19, { x: 59, y: 20 }), new _baselocale.Inhabitance("GroveStreet3", "3 Grove Street", 53, 22, { x: 54, y: 23 }), new _baselocale.Inhabitance("GroveStreet4", "4 Grove Street", 59, 22, { x: 59, y: 23 }));
 
         _this.drawInhabitances();
         _this.assignPeopleToInhabitances();
@@ -586,7 +809,7 @@ var Islands = function (_Locale) {
 exports.Islands = Islands;
 
 
-},{"./baselocale":5}],8:[function(require,module,exports){
+},{"./baselocale":5}],11:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -647,7 +870,7 @@ var Village = function (_Locale) {
 exports.Village = Village;
 
 
-},{"./baselocale":5}],9:[function(require,module,exports){
+},{"./baselocale":5}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -727,7 +950,7 @@ var choosePeople = exports.choosePeople = function choosePeople() {
 };
 
 
-},{"../constants":1,"../util":24,"./evelyn":11,"./jill":12,"./john":13,"./neil":14,"./pauline":15,"./petey":16,"./quazar":17,"./zenith":18}],10:[function(require,module,exports){
+},{"../constants":1,"../util":27,"./evelyn":14,"./jill":15,"./john":16,"./neil":17,"./pauline":18,"./petey":19,"./quazar":20,"./zenith":21}],13:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -759,7 +982,7 @@ var Person = function Person(name, gender) {
 exports.Person = Person;
 
 
-},{}],11:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -811,7 +1034,7 @@ var Evelyn = function (_Person) {
 exports.Evelyn = Evelyn;
 
 
-},{"../constants":1,"./baseperson":10}],12:[function(require,module,exports){
+},{"../constants":1,"./baseperson":13}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -863,7 +1086,7 @@ var Jill = function (_Person) {
 exports.Jill = Jill;
 
 
-},{"../constants":1,"./baseperson":10}],13:[function(require,module,exports){
+},{"../constants":1,"./baseperson":13}],16:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -915,7 +1138,7 @@ var John = function (_Person) {
 exports.John = John;
 
 
-},{"../constants":1,"./baseperson":10}],14:[function(require,module,exports){
+},{"../constants":1,"./baseperson":13}],17:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -967,7 +1190,7 @@ var Neil = function (_Person) {
 exports.Neil = Neil;
 
 
-},{"../constants":1,"./baseperson":10}],15:[function(require,module,exports){
+},{"../constants":1,"./baseperson":13}],18:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1019,7 +1242,7 @@ var Pauline = function (_Person) {
 exports.Pauline = Pauline;
 
 
-},{"../constants":1,"./baseperson":10}],16:[function(require,module,exports){
+},{"../constants":1,"./baseperson":13}],19:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1071,7 +1294,7 @@ var Petey = function (_Person) {
 exports.Petey = Petey;
 
 
-},{"../constants":1,"./baseperson":10}],17:[function(require,module,exports){
+},{"../constants":1,"./baseperson":13}],20:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1123,7 +1346,7 @@ var Zenith = function (_Person) {
 exports.Zenith = Zenith;
 
 
-},{"../constants":1,"./baseperson":10}],18:[function(require,module,exports){
+},{"../constants":1,"./baseperson":13}],21:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1175,7 +1398,7 @@ var Quazar = function (_Person) {
 exports.Quazar = Quazar;
 
 
-},{"../constants":1,"./baseperson":10}],19:[function(require,module,exports){
+},{"../constants":1,"./baseperson":13}],22:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1229,7 +1452,7 @@ var Player = function () {
 exports.Player = Player;
 
 
-},{"./constants":1}],20:[function(require,module,exports){
+},{"./constants":1}],23:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1285,7 +1508,7 @@ var Scene = function () {
 exports.Scene = Scene;
 
 
-},{"./constants":1}],21:[function(require,module,exports){
+},{"./constants":1}],24:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1360,7 +1583,7 @@ var Scene = function () {
 exports.Scene = Scene;
 
 
-},{"../constants":1}],22:[function(require,module,exports){
+},{"../constants":1}],25:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1588,7 +1811,7 @@ var WorldMap = function (_Scene) {
 exports.WorldMap = WorldMap;
 
 
-},{"../constants":1,"../locales/availablelocales":4,"../util":24,"./scene":21}],23:[function(require,module,exports){
+},{"../constants":1,"../locales/availablelocales":4,"../util":27,"./scene":24}],26:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () {
@@ -1765,7 +1988,7 @@ var WoodenFloor = function (_Terrain7) {
 window.terrains = { Blank: Blank, Grass: Grass, Water: Water, Road: Road, Wall: Wall, Doorway: Doorway, WoodenFloor: WoodenFloor };
 
 
-},{"./constants":1}],24:[function(require,module,exports){
+},{"./constants":1}],27:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1795,7 +2018,7 @@ var log = exports.log = function log(str) {
 };
 
 
-},{}],25:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1955,4 +2178,4 @@ var WorldMap = function (_Scene) {
 exports.WorldMap = WorldMap;
 
 
-},{"./constants":1,"./scene":20,"./terrain":23}]},{},[1,2,3,19,20,23,24,25]);
+},{"./constants":1,"./scene":23,"./terrain":26}]},{},[1,2,3,22,23,26,27,28]);
