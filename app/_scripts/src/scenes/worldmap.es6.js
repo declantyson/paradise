@@ -2,7 +2,7 @@
  *
  *  XL RPG/Scene-WorldMap
  *  XL Gaming/Declan Tyson
- *  v0.0.14
+ *  v0.0.16
  *  15/11/2017
  *
  */
@@ -22,6 +22,8 @@ class WorldMap extends Scene {
         this.actions.down = this.moveDown.bind(this);
         this.actions.left = this.moveLeft.bind(this);
         this.actions.right = this.moveRight.bind(this);
+
+        this.visitedLocales = {};
     }
 
     doActions(action) {
@@ -109,16 +111,25 @@ class WorldMap extends Scene {
     }
 
     enter(entrance) {
-        let locale = locales[entrance.locale.id];
-        this.setCurrentLocale(new locale(this.locale.player, this.locale.people, entrance.locale), entrance.entryPoint);
+        if(typeof this.visitedLocales[entrance.locale.id] !== 'undefined') {
+            this.setCurrentLocale(this.visitedLocales[entrance.locale.id], entrance.entryPoint, false);
+            return;
+        }
+
+        let localeId = locales[entrance.locale.id],
+            locale = new localeId(this.locale.player, this.locale.people, entrance.locale);
+
+        this.setCurrentLocale(locale, entrance.entryPoint);
     }
 
-    setCurrentLocale(locale, entryPoint) {
+    setCurrentLocale(locale, entryPoint, rasterize = true) {
+        this.visitedLocales[locale.id] = locale;
+
         this.locale = locale;
         this.localeMap = locale.map;
-
-        this.rasterizeLocaleMap();
         locale.enterLocaleAt(entryPoint);
+
+        if(rasterize) this.rasterizeLocaleMap();
     }
 
     rasterizeLocaleMap() {
@@ -127,6 +138,7 @@ class WorldMap extends Scene {
         for(let x = 0; x < this.locale.width; x++) {
             for (let y = 0; y < this.locale.height; y++) {
                 let terrainType = this.locale.map[x][y];
+
                 this.localeMap[x][y] = new window.terrains[terrainType]();
             }
         }

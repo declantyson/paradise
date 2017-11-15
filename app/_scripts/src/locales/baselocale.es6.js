@@ -2,11 +2,12 @@
  *
  *  XL RPG/Locales/Base
  *  XL Gaming/Declan Tyson
- *  v0.0.14
+ *  v0.0.16
  *  15/11/2017
  *
  */
 
+import * as util from '../util';
 import { inhabitanceSize } from '../constants';
 import { people } from '../people/availablepeople';
 
@@ -70,7 +71,6 @@ class Locale {
     }
 
     enterLocaleAt(entryPoint) {
-        console.log(this.entryPoints, entryPoint);
         this.player.setPlacement(this.entryPoints[entryPoint].x, this.entryPoints[entryPoint].y);
     }
 
@@ -98,6 +98,11 @@ class Interior extends Locale {
     constructor(player, people, inhabitance) {
         super(player, people);
         this.inhabitance = inhabitance;
+
+        for(let i = 0; i < inhabitance.inhabitants.length; i++) {
+            let inhabitant = inhabitance.inhabitants[i];;
+            util.log(`${inhabitant} lives here.`);
+        }
     }
 }
 

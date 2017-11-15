@@ -2,8 +2,8 @@
  *
  *  XL RPG/Constants
  *  XL Gaming/Declan Tyson
- *  v0.0.11
- *  13/11/2017
+ *  v0.0.16
+ *  15/11/2017
  *
  */
 
@@ -17,10 +17,10 @@ export const colours = {
     grey: "#cdcdcd"
 };
 
-export const tileSize = 20;
+export const tileSize = 10;
 
-export const tilesWide = 40,
-      tilesHigh = 30;
+export const tilesWide = 64,
+      tilesHigh = 36;
 
 export const canvasProperties = {
     width: tileSize * tilesWide,
@@ -31,7 +31,7 @@ export const canvasProperties = {
     }
 };
 
-export const fps = 60;
+export const fps = 45;
 export const actionTimeoutLimit = 2;
 
 

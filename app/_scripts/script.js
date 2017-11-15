@@ -8,8 +8,8 @@ Object.defineProperty(exports, "__esModule", {
  *
  *  XL RPG/Constants
  *  XL Gaming/Declan Tyson
- *  v0.0.11
- *  13/11/2017
+ *  v0.0.16
+ *  15/11/2017
  *
  */
 
@@ -23,10 +23,10 @@ var colours = exports.colours = {
     grey: "#cdcdcd"
 };
 
-var tileSize = exports.tileSize = 20;
+var tileSize = exports.tileSize = 10;
 
-var tilesWide = exports.tilesWide = 40,
-    tilesHigh = exports.tilesHigh = 30;
+var tilesWide = exports.tilesWide = 64,
+    tilesHigh = exports.tilesHigh = 36;
 
 var canvasProperties = exports.canvasProperties = {
     width: tileSize * tilesWide,
@@ -37,7 +37,7 @@ var canvasProperties = exports.canvasProperties = {
     }
 };
 
-var fps = exports.fps = 60;
+var fps = exports.fps = 45;
 var actionTimeoutLimit = exports.actionTimeoutLimit = 2;
 
 var personCount = exports.personCount = 4;
@@ -289,14 +289,30 @@ var _createClass = function () {
       *
       *  XL RPG/Locales/Base
       *  XL Gaming/Declan Tyson
-      *  v0.0.14
+      *  v0.0.16
       *  15/11/2017
       *
       */
 
+var _util = require('../util');
+
+var util = _interopRequireWildcard(_util);
+
 var _constants = require('../constants');
 
 var _availablepeople = require('../people/availablepeople');
+
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) {
+        return obj;
+    } else {
+        var newObj = {};if (obj != null) {
+            for (var key in obj) {
+                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+            }
+        }newObj.default = obj;return newObj;
+    }
+}
 
 function _possibleConstructorReturn(self, call) {
     if (!self) {
@@ -384,7 +400,6 @@ var Locale = function () {
     }, {
         key: 'enterLocaleAt',
         value: function enterLocaleAt(entryPoint) {
-            console.log(this.entryPoints, entryPoint);
             this.player.setPlacement(this.entryPoints[entryPoint].x, this.entryPoints[entryPoint].y);
         }
     }, {
@@ -422,6 +437,11 @@ var Interior = function (_Locale) {
         var _this = _possibleConstructorReturn(this, (Interior.__proto__ || Object.getPrototypeOf(Interior)).call(this, player, people));
 
         _this.inhabitance = inhabitance;
+
+        for (var i = 0; i < inhabitance.inhabitants.length; i++) {
+            var inhabitant = inhabitance.inhabitants[i];;
+            util.log(inhabitant + ' lives here.');
+        }
         return _this;
     }
 
@@ -455,7 +475,7 @@ exports.Interior = Interior;
 exports.Inhabitance = Inhabitance;
 
 
-},{"../constants":1,"../people/availablepeople":12}],6:[function(require,module,exports){
+},{"../constants":1,"../people/availablepeople":12,"../util":27}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1659,7 +1679,7 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Scene-WorldMap
    *  XL Gaming/Declan Tyson
-   *  v0.0.14
+   *  v0.0.16
    *  15/11/2017
    *
    */
@@ -1678,6 +1698,8 @@ var WorldMap = function (_Scene) {
         _this.actions.down = _this.moveDown.bind(_this);
         _this.actions.left = _this.moveLeft.bind(_this);
         _this.actions.right = _this.moveRight.bind(_this);
+
+        _this.visitedLocales = {};
         return _this;
     }
 
@@ -1779,17 +1801,28 @@ var WorldMap = function (_Scene) {
     }, {
         key: "enter",
         value: function enter(entrance) {
-            var locale = _availablelocales.locales[entrance.locale.id];
-            this.setCurrentLocale(new locale(this.locale.player, this.locale.people, entrance.locale), entrance.entryPoint);
+            if (typeof this.visitedLocales[entrance.locale.id] !== 'undefined') {
+                this.setCurrentLocale(this.visitedLocales[entrance.locale.id], entrance.entryPoint, false);
+                return;
+            }
+
+            var localeId = _availablelocales.locales[entrance.locale.id],
+                locale = new localeId(this.locale.player, this.locale.people, entrance.locale);
+
+            this.setCurrentLocale(locale, entrance.entryPoint);
         }
     }, {
         key: "setCurrentLocale",
         value: function setCurrentLocale(locale, entryPoint) {
+            var rasterize = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+
+            this.visitedLocales[locale.id] = locale;
+
             this.locale = locale;
             this.localeMap = locale.map;
-
-            this.rasterizeLocaleMap();
             locale.enterLocaleAt(entryPoint);
+
+            if (rasterize) this.rasterizeLocaleMap();
         }
     }, {
         key: "rasterizeLocaleMap",
@@ -1799,6 +1832,7 @@ var WorldMap = function (_Scene) {
             for (var x = 0; x < this.locale.width; x++) {
                 for (var y = 0; y < this.locale.height; y++) {
                     var terrainType = this.locale.map[x][y];
+
                     this.localeMap[x][y] = new window.terrains[terrainType]();
                 }
             }
