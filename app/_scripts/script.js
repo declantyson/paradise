@@ -89,7 +89,7 @@ window.startGame = function () {
 
     clearInterval(window.drawScene);
 
-    var locale = _availablelocales.locales[(0, _availablelocales.chooseLocale)()],
+    var locale = _availablelocales.startingMaps[(0, _availablelocales.chooseStartingMap)()],
         people = (0, _availablepeople.choosePeople)(),
         player = new _player.Player(),
         scene = new _worldmap.WorldMap(player),
@@ -97,9 +97,7 @@ window.startGame = function () {
         renderer = new Renderer("world", _constants.canvasProperties.width, _constants.canvasProperties.height);
 
     window.game = new Game(renderer, scene, _constants.canvasProperties.centerPoint);
-    window.game.scene.setCurrentLocale(start);
-
-    start.enterLocaleAt("beginningOfGame");
+    window.game.scene.setCurrentLocale(start, "beginningOfGame");
 };
 
 var Renderer = function Renderer(element, width, height) {
@@ -211,7 +209,7 @@ window.addEventListener("keyup", function (e) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.chooseLocale = exports.interiors = exports.locales = undefined;
+exports.chooseStartingMap = exports.locales = exports.startingMaps = undefined;
 
 var _util = require('../util');
 
@@ -239,26 +237,28 @@ function _interopRequireWildcard(obj) {
  *
  *  XL RPG/Locales
  *  XL Gaming/Declan Tyson
- *  v0.0.10
- *  13/11/2016
+ *  v0.0.14
+ *  15/11/2016
  *
  */
 
 // Locales
 
-var locales = exports.locales = {
+var startingMaps = exports.startingMaps = {
     "Village": _village.Village,
     "Islands": _islands.Islands
 };
 
-var interiors = exports.interiors = {
+var locales = exports.locales = {
+    "Village": _village.Village,
+    "Islands": _islands.Islands,
     "GroveStreet1": _grovestreet.GroveStreet1
 };
 
-var chooseLocale = exports.chooseLocale = function chooseLocale() {
-    var locale = util.pickRandomProperty(locales);
-    util.log('Choosing locale...');
-    util.log('Locale is ' + locale + '.');
+var chooseStartingMap = exports.chooseStartingMap = function chooseStartingMap() {
+    var locale = util.pickRandomProperty(startingMaps);
+    util.log('Choosing starting map...');
+    util.log('Map is ' + locale + '.');
     return locale;
 };
 
@@ -283,8 +283,8 @@ var _createClass = function () {
       *
       *  XL RPG/Locales/Base
       *  XL Gaming/Declan Tyson
-      *  v0.0.12
-      *  14/11/2017
+      *  v0.0.14
+      *  15/11/2017
       *
       */
 
@@ -371,12 +371,14 @@ var Locale = function () {
             this.terrainPaint(startX, startY, width, height, "Wall");
             this.terrainPaint(doorway.x, doorway.y, 1, 1, "Doorway");
             this.entrances[doorway.x][doorway.y] = {
-                inhabitance: inhabitance
+                locale: inhabitance,
+                entryPoint: "frontDoor"
             };
         }
     }, {
         key: 'enterLocaleAt',
         value: function enterLocaleAt(entryPoint) {
+            console.log(this.entryPoints, entryPoint);
             this.player.setPlacement(this.entryPoints[entryPoint].x, this.entryPoints[entryPoint].y);
         }
     }, {
@@ -457,6 +459,8 @@ exports.GroveStreet1 = undefined;
 
 var _baselocale = require("../baselocale");
 
+var _islands = require("../islands");
+
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
         throw new TypeError("Cannot call a class as a function");
@@ -477,8 +481,8 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Locales/1 Grove Street
    *  XL Gaming/Declan Tyson
-   *  v0.0.12
-   *  14/11/2017
+   *  v0.0.14
+   *  15/11/2017
    *
    */
 
@@ -490,9 +494,15 @@ var GroveStreet1 = function (_Interior) {
 
         var _this = _possibleConstructorReturn(this, (GroveStreet1.__proto__ || Object.getPrototypeOf(GroveStreet1)).call(this, player, people, inhabitance));
 
+        _this.id = "1GroveStreet";
         _this.entryPoints.frontDoor = { x: 48, y: 48 };
 
         _this.initialise(100, 100);
+
+        _this.entrances[49][48] = {
+            locale: new _islands.Islands(player, people),
+            entryPoint: "groveStreet1"
+        };
 
         _this.terrainPaint(0, 0, 100, 100, "Blank");
         _this.terrainPaint(25, 25, 25, 25, "Wall");
@@ -500,8 +510,6 @@ var GroveStreet1 = function (_Interior) {
         _this.terrainPaint(38, 26, 11, 23, "WoodenFloor");
         _this.terrainPaint(37, 37, 1, 1, "WoodenFloor");
         _this.terrainPaint(49, 48, 1, 1, "WoodenFloor");
-
-        _this.enterLocaleAt("frontDoor");
         return _this;
     }
 
@@ -511,7 +519,7 @@ var GroveStreet1 = function (_Interior) {
 exports.GroveStreet1 = GroveStreet1;
 
 
-},{"../baselocale":5}],7:[function(require,module,exports){
+},{"../baselocale":5,"../islands":7}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -554,7 +562,9 @@ var Islands = function (_Locale) {
 
         var _this = _possibleConstructorReturn(this, (Islands.__proto__ || Object.getPrototypeOf(Islands)).call(this, player, people));
 
+        _this.id = "Islands";
         _this.entryPoints.beginningOfGame = { x: 55, y: 17 };
+        _this.entryPoints.groveStreet1 = { x: 55, y: 20 };
 
         _this.initialise(300, 300);
 
@@ -1426,8 +1436,8 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Scene-WorldMap
    *  XL Gaming/Declan Tyson
-   *  v0.0.13
-   *  14/11/2017
+   *  v0.0.14
+   *  15/11/2017
    *
    */
 
@@ -1538,37 +1548,30 @@ var WorldMap = function (_Scene) {
     }, {
         key: "checkForEntrance",
         value: function checkForEntrance() {
-            var entrance = this.locale.entrances[this.player.x][this.player.y],
-                inhabitants = '';
+            var entrance = this.locale.entrances[this.player.x][this.player.y];
             if (!entrance) return;
 
-            if (entrance.inhabitance.inhabitants.length > 0) {
-                inhabitants = ", home of " + entrance.inhabitance.inhabitants;
-            }
-
-            util.log("Entering " + entrance.inhabitance.name + inhabitants);
-            this.enterInhabitance(entrance.inhabitance);
+            this.enter(entrance);
         }
     }, {
-        key: "enterInhabitance",
-        value: function enterInhabitance(inhabitance) {
-            var locale = _availablelocales.interiors[inhabitance.id];
-            this.setCurrentLocale(new locale(this.locale.player, this.locale.people, inhabitance));
+        key: "enter",
+        value: function enter(entrance) {
+            var locale = _availablelocales.locales[entrance.locale.id];
+            this.setCurrentLocale(new locale(this.locale.player, this.locale.people, entrance.locale), entrance.entryPoint);
         }
     }, {
         key: "setCurrentLocale",
-        value: function setCurrentLocale(locale) {
+        value: function setCurrentLocale(locale, entryPoint) {
             this.locale = locale;
             this.localeMap = locale.map;
 
             this.rasterizeLocaleMap();
+            locale.enterLocaleAt(entryPoint);
         }
     }, {
         key: "rasterizeLocaleMap",
         value: function rasterizeLocaleMap() {
             if (!this.locale) return;
-
-            console.log(this.locale);
 
             for (var x = 0; x < this.locale.width; x++) {
                 for (var y = 0; y < this.locale.height; y++) {

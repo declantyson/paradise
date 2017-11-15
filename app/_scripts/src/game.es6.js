@@ -10,14 +10,14 @@
 import { Player } from "./player";
 import { WorldMap } from "./scenes/worldmap";
 import { tileSize, canvasProperties, fps, actionTimeoutLimit } from "./constants";
-import { chooseLocale, locales } from './locales/availablelocales';
+import { chooseStartingMap, startingMaps } from './locales/availablelocales';
 import { choosePeople, people } from './people/availablepeople';
 
 window.startGame = () => {
 
     clearInterval(window.drawScene);
 
-    let locale = locales[chooseLocale()],
+    let locale = startingMaps[chooseStartingMap()],
         people = choosePeople(),
         player = new Player(),
         scene = new WorldMap(player),
@@ -25,9 +25,7 @@ window.startGame = () => {
         renderer = new Renderer("world", canvasProperties.width, canvasProperties.height);
 
     window.game = new Game(renderer, scene, canvasProperties.centerPoint);
-    window.game.scene.setCurrentLocale(start);
-
-    start.enterLocaleAt("beginningOfGame");
+    window.game.scene.setCurrentLocale(start, "beginningOfGame");
 };
 
 class Renderer {

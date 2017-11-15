@@ -2,8 +2,8 @@
  *
  *  XL RPG/Locales/Base
  *  XL Gaming/Declan Tyson
- *  v0.0.12
- *  14/11/2017
+ *  v0.0.14
+ *  15/11/2017
  *
  */
 
@@ -64,11 +64,13 @@ class Locale {
         this.terrainPaint(startX, startY, width, height, "Wall");
         this.terrainPaint(doorway.x, doorway.y, 1, 1, "Doorway");
         this.entrances[doorway.x][doorway.y] = {
-            inhabitance: inhabitance
+            locale : inhabitance,
+            entryPoint : "frontDoor"
         };
     }
 
     enterLocaleAt(entryPoint) {
+        console.log(this.entryPoints, entryPoint);
         this.player.setPlacement(this.entryPoints[entryPoint].x, this.entryPoints[entryPoint].y);
     }
 

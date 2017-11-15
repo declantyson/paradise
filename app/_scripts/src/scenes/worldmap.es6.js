@@ -2,8 +2,8 @@
  *
  *  XL RPG/Scene-WorldMap
  *  XL Gaming/Declan Tyson
- *  v0.0.13
- *  14/11/2017
+ *  v0.0.14
+ *  15/11/2017
  *
  */
 
@@ -11,7 +11,7 @@ import * as util from '../util';
 
 import { colours, tileSize, tilesWide as viewportWidth, tilesHigh as viewportHeight } from "../constants";
 import { Scene } from "./scene";
-import { locales, interiors } from '../locales/availablelocales';
+import { locales } from '../locales/availablelocales';
 
 class WorldMap extends Scene {
     constructor(player) {
@@ -102,34 +102,27 @@ class WorldMap extends Scene {
     }
 
     checkForEntrance() {
-        let entrance = this.locale.entrances[this.player.x][this.player.y],
-            inhabitants = '';
+        let entrance = this.locale.entrances[this.player.x][this.player.y];
         if(!entrance) return;
 
-        if(entrance.inhabitance.inhabitants.length > 0) {
-            inhabitants = `, home of ${entrance.inhabitance.inhabitants}`;
-        }
-
-        util.log(`Entering ${entrance.inhabitance.name}${inhabitants}`);
-        this.enterInhabitance(entrance.inhabitance);
+        this.enter(entrance);
     }
 
-    enterInhabitance(inhabitance) {
-        let locale = interiors[inhabitance.id];
-        this.setCurrentLocale(new locale(this.locale.player, this.locale.people, inhabitance));
+    enter(entrance) {
+        let locale = locales[entrance.locale.id];
+        this.setCurrentLocale(new locale(this.locale.player, this.locale.people, entrance.locale), entrance.entryPoint);
     }
 
-    setCurrentLocale(locale) {
+    setCurrentLocale(locale, entryPoint) {
         this.locale = locale;
         this.localeMap = locale.map;
 
         this.rasterizeLocaleMap();
+        locale.enterLocaleAt(entryPoint);
     }
 
     rasterizeLocaleMap() {
         if(!this.locale) return;
-
-        console.log(this.locale);
 
         for(let x = 0; x < this.locale.width; x++) {
             for (let y = 0; y < this.locale.height; y++) {

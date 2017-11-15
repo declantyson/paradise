@@ -13,7 +13,9 @@ class Islands extends Locale {
     constructor(player, people) {
         super(player, people);
 
+        this.id = "Islands";
         this.entryPoints.beginningOfGame = { x: 55, y: 17 };
+        this.entryPoints.groveStreet1 = { x: 55, y: 20 };
 
         this.initialise(300, 300);
 
