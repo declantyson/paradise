@@ -2,8 +2,8 @@
  *
  *  XL RPG/Util
  *  XL Gaming/Declan Tyson
- *  v0.0.10
- *  13/11/2017
+ *  v0.0.17
+ *  05/02/2018
  *
  */
 
@@ -15,6 +15,12 @@ export const pickRandomProperty = (obj)  => {
         if (Math.random() < 1 / ++count) result = prop;
     }
     return result;
+};
+
+export const pickRandomIndex = (arr, indexOnly = false)  => {
+    let index = Math.floor(Math.random() * (arr.length-1));
+    if(indexOnly) return index;
+    return arr[index];
 };
 
 export const log = (str) => {

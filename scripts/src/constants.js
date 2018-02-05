@@ -2,8 +2,8 @@
  *
  *  XL RPG/Constants
  *  XL Gaming/Declan Tyson
- *  v0.0.16
- *  15/11/2017
+ *  v0.0.17
+ *  05/02/2018
  *
  */
 
@@ -39,5 +39,10 @@ export const genders = {
     male   : "M",
     female : "F",
     alien  : "A"
+};
+export const pronouns = {
+    M   : "his",
+    F   : "her",
+    A   : "xleir"
 };
 export const inhabitanceSize = 2;

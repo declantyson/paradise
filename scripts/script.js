@@ -8,8 +8,8 @@ Object.defineProperty(exports, "__esModule", {
  *
  *  XL RPG/Constants
  *  XL Gaming/Declan Tyson
- *  v0.0.16
- *  15/11/2017
+ *  v0.0.17
+ *  05/02/2018
  *
  */
 
@@ -46,6 +46,11 @@ var genders = exports.genders = {
     female: "F",
     alien: "A"
 };
+var pronouns = exports.pronouns = {
+    M: "his",
+    F: "her",
+    A: "xleir"
+};
 var inhabitanceSize = exports.inhabitanceSize = 2;
 
 
@@ -80,18 +85,21 @@ function _classCallCheck(instance, Constructor) {
    *
    *  XL RPG/Game
    *  XL Gaming/Declan Tyson
-   *  v0.0.11
-   *  13/11/2017
+   *  v0.0.17
+   *  05/02/2018
    *
    */
 
-window.startGame = function () {
+window.startGame = function (locale, people, victim, murderer) {
 
     clearInterval(window.drawScene);
 
-    var locale = _availablelocales.startingMaps[(0, _availablelocales.chooseStartingMap)()],
-        people = (0, _availablepeople.choosePeople)(),
-        player = new _player.Player(),
+    locale = _availablelocales.startingMaps[locale] || _availablelocales.startingMaps[(0, _availablelocales.chooseStartingMap)()];
+    people = people || (0, _availablepeople.choosePeople)();
+    victim = victim || (0, _availablepeople.chooseVictim)(people);
+    murderer = murderer || (0, _availablepeople.chooseMurderer)(victim, people);
+
+    var player = new _player.Player(),
         scene = new _worldmap.WorldMap(player),
         start = new locale(player, people),
         renderer = new Renderer("world", _constants.canvasProperties.width, _constants.canvasProperties.height);
@@ -240,6 +248,7 @@ function _interopRequireWildcard(obj) {
 }
 
 var startingMaps = exports.startingMaps = {
+    "Village": _village.Village,
     "Islands": _islands.Islands
 }; /*
     *
@@ -896,7 +905,7 @@ exports.Village = Village;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.choosePeople = exports.people = undefined;
+exports.chooseMurderer = exports.chooseVictim = exports.choosePeople = exports.people = undefined;
 
 var _util = require('../util');
 
@@ -936,8 +945,8 @@ function _interopRequireWildcard(obj) {
  *
  *  XL RPG/People
  *  XL Gaming/Declan Tyson
- *  v0.0.10
- *  13/11/2016
+ *  v0.0.17
+ *  05/02/2018
  *
  */
 
@@ -962,20 +971,101 @@ var choosePeople = exports.choosePeople = function choosePeople() {
         person = util.pickRandomProperty(people);
         if (chosenPeople.indexOf(person) === -1) {
             chosenPeople.push(person);
-            util.log(person + ' has been chosen.');
+            //util.log(`${person} has been chosen.`);
         }
     }
 
     return chosenPeople;
 };
 
+var chooseVictim = exports.chooseVictim = function chooseVictim(chosenPeople) {
+    var victim = util.pickRandomIndex(chosenPeople);
+    util.log(victim + ' is the unlucky one.');
+    return victim;
+};
+
+var chooseMurderer = exports.chooseMurderer = function chooseMurderer(victimName, chosenPeople) {
+    var trueRandom = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
+    var victim = new people[victimName]();
+    chosenPeople.forEach(function (person) {
+        if (victim.name === person.name) return;
+        if (!(person in victim.relationships)) victim.addAcquaintanceRelationship(person);
+    });
+
+    if (trueRandom) v.randomizeRelationships();
+
+    /*
+     * Each relationship has a score of 0-99 (x)
+     * We loop through each relationship, taking (x) away from 100
+     * We then assign a random number between 1 and 100
+     * If the random number is in the range of 100-(x), that's our murderer
+     */
+
+    /* jshint ignore:start */
+    var murderer = null,
+        relationship = null;
+    while (murderer === null) {
+        Object.keys(victim.relationships).forEach(function (name) {
+            if (murderer !== null) return;
+            if (name === victim.name) return;
+
+            relationship = victim.relationships[name];
+            var limit = 100 - relationship.value,
+                test = Math.floor(Math.random() * 100);
+
+            console.log(test, limit);
+            if (test < limit) murderer = name;
+        });
+    }
+    /* jshint ignore:end */
+
+    util.log(victim.name + '\'s murderer is ' + _constants.pronouns[victim.gender] + ' ' + relationship.description + ', ' + murderer + '!!!');
+};
+
 
 },{"../constants":1,"../util":27,"./evelyn":14,"./jill":15,"./john":16,"./neil":17,"./pauline":18,"./petey":19,"./quazar":20,"./zenith":21}],13:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.Person = undefined;
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}(); /*
+      *
+      *  XL RPG/Person
+      *  XL Gaming/Declan Tyson
+      *  v0.0.17
+      *  05/02/2018
+      *
+      */
+
+var _util = require('../util');
+
+var util = _interopRequireWildcard(_util);
+
+var _constants = require('../constants');
+
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) {
+        return obj;
+    } else {
+        var newObj = {};if (obj != null) {
+            for (var key in obj) {
+                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+            }
+        }newObj.default = obj;return newObj;
+    }
+}
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -983,26 +1073,47 @@ function _classCallCheck(instance, Constructor) {
     }
 }
 
-/*
- *
- *  XL RPG/Person
- *  XL Gaming/Declan Tyson
- *  v0.0.10
- *  13/11/2017
- *
- */
+var Person = function () {
+    function Person(name, gender) {
+        _classCallCheck(this, Person);
 
-var Person = function Person(name, gender) {
-    _classCallCheck(this, Person);
+        this.name = name;
+        this.gender = gender;
 
-    this.name = name;
-    this.gender = gender;
-};
+        this.relationships = {};
+    }
+
+    _createClass(Person, [{
+        key: 'randomizeRelationships',
+        value: function randomizeRelationships() {
+            var _this = this;
+
+            Object.keys(this.relationships).forEach(function (name) {
+                var relationship = _this.relationships[name],
+                    oldValue = relationship.value,
+                    newValue = Math.floor(Math.random() * 99);
+
+                util.log(_this.name + '\'s relationship with ' + _constants.pronouns[_this.gender] + ' ' + relationship.description + ', ' + name + ', goes from ' + oldValue + ' to ' + newValue + '.');
+                _this.relationships[name].value = newValue;
+            });
+        }
+    }, {
+        key: 'addAcquaintanceRelationship',
+        value: function addAcquaintanceRelationship(person) {
+            this.relationships[person] = {
+                description: "Acquaintance",
+                value: 50
+            };
+        }
+    }]);
+
+    return Person;
+}();
 
 exports.Person = Person;
 
 
-},{}],14:[function(require,module,exports){
+},{"../constants":1,"../util":27}],14:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1320,7 +1431,7 @@ exports.Petey = Petey;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.Zenith = undefined;
+exports.Quazar = undefined;
 
 var _baseperson = require('./baseperson');
 
@@ -1346,24 +1457,32 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Person/Zenith
    *  XL Gaming/Declan Tyson
-   *  v0.0.10
-   *  13/11/2017
+   *  v0.0.17
+   *  05/02/2018
    *
    */
 
-var Zenith = function (_Person) {
-    _inherits(Zenith, _Person);
+var Quazar = function (_Person) {
+    _inherits(Quazar, _Person);
 
-    function Zenith() {
-        _classCallCheck(this, Zenith);
+    function Quazar() {
+        _classCallCheck(this, Quazar);
 
-        return _possibleConstructorReturn(this, (Zenith.__proto__ || Object.getPrototypeOf(Zenith)).call(this, "Zenith", _constants.genders.alien));
+        var _this = _possibleConstructorReturn(this, (Quazar.__proto__ || Object.getPrototypeOf(Quazar)).call(this, "Quazar", _constants.genders.alien));
+
+        _this.relationships = {
+            "Zenith": {
+                description: "Brother",
+                value: 85
+            }
+        };
+        return _this;
     }
 
-    return Zenith;
+    return Quazar;
 }(_baseperson.Person);
 
-exports.Zenith = Zenith;
+exports.Quazar = Quazar;
 
 
 },{"../constants":1,"./baseperson":13}],21:[function(require,module,exports){
@@ -1372,7 +1491,7 @@ exports.Zenith = Zenith;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.Quazar = undefined;
+exports.Zenith = undefined;
 
 var _baseperson = require('./baseperson');
 
@@ -1398,24 +1517,24 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Person/Quazar
    *  XL Gaming/Declan Tyson
-   *  v0.0.10
-   *  13/11/2017
+   *  v0.0.17
+   *  05/02/2018
    *
    */
 
-var Quazar = function (_Person) {
-    _inherits(Quazar, _Person);
+var Zenith = function (_Person) {
+    _inherits(Zenith, _Person);
 
-    function Quazar() {
-        _classCallCheck(this, Quazar);
+    function Zenith() {
+        _classCallCheck(this, Zenith);
 
-        return _possibleConstructorReturn(this, (Quazar.__proto__ || Object.getPrototypeOf(Quazar)).call(this, "Quazar", _constants.genders.alien));
+        return _possibleConstructorReturn(this, (Zenith.__proto__ || Object.getPrototypeOf(Zenith)).call(this, "Zenith", _constants.genders.alien));
     }
 
-    return Quazar;
+    return Zenith;
 }(_baseperson.Person);
 
-exports.Quazar = Quazar;
+exports.Zenith = Zenith;
 
 
 },{"../constants":1,"./baseperson":13}],22:[function(require,module,exports){
@@ -2032,8 +2151,8 @@ Object.defineProperty(exports, "__esModule", {
  *
  *  XL RPG/Util
  *  XL Gaming/Declan Tyson
- *  v0.0.10
- *  13/11/2017
+ *  v0.0.17
+ *  05/02/2018
  *
  */
 
@@ -2045,6 +2164,14 @@ var pickRandomProperty = exports.pickRandomProperty = function pickRandomPropert
         if (Math.random() < 1 / ++count) result = prop;
     }
     return result;
+};
+
+var pickRandomIndex = exports.pickRandomIndex = function pickRandomIndex(arr) {
+    var indexOnly = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+    var index = Math.floor(Math.random() * (arr.length - 1));
+    if (indexOnly) return index;
+    return arr[index];
 };
 
 var log = exports.log = function log(str) {

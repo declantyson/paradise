@@ -19,6 +19,7 @@ import { GroveStreet3 } from './interiors/3grovestreet';
 import { GroveStreet4 } from './interiors/4grovestreet';
 
 export const startingMaps = {
+    "Village" : Village,
     "Islands" : Islands
 };
 

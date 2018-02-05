@@ -2,15 +2,39 @@
  *
  *  XL RPG/Person
  *  XL Gaming/Declan Tyson
- *  v0.0.10
- *  13/11/2017
+ *  v0.0.17
+ *  05/02/2018
  *
  */
+
+import * as util from '../util';
+import { pronouns } from '../constants';
+
 
 class Person {
     constructor(name, gender) {
         this.name = name;
         this.gender = gender;
+
+        this.relationships = {};
+    }
+
+    randomizeRelationships() {
+        Object.keys(this.relationships).forEach((name) => {
+            let relationship = this.relationships[name],
+                oldValue = relationship.value,
+                newValue = Math.floor(Math.random() * 99);
+
+            util.log(`${this.name}'s relationship with ${pronouns[this.gender]} ${relationship.description}, ${name}, goes from ${oldValue} to ${newValue}.`);
+            this.relationships[name].value = newValue;
+        });
+    }
+
+    addAcquaintanceRelationship(person) {
+       this.relationships[person] = {
+           description : "Acquaintance",
+           value: 50
+       };
     }
 }
 

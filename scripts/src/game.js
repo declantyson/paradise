@@ -2,8 +2,8 @@
  *
  *  XL RPG/Game
  *  XL Gaming/Declan Tyson
- *  v0.0.11
- *  13/11/2017
+ *  v0.0.17
+ *  05/02/2018
  *
  */
 
@@ -11,15 +11,18 @@ import { Player } from "./player";
 import { WorldMap } from "./scenes/worldmap";
 import { tileSize, canvasProperties, fps, actionTimeoutLimit } from "./constants";
 import { chooseStartingMap, startingMaps } from './locales/availablelocales';
-import { choosePeople, people } from './people/availablepeople';
+import { choosePeople, chooseVictim, chooseMurderer } from './people/availablepeople';
 
-window.startGame = () => {
+window.startGame = (locale, people, victim, murderer) => {
 
     clearInterval(window.drawScene);
 
-    let locale = startingMaps[chooseStartingMap()],
-        people = choosePeople(),
-        player = new Player(),
+    locale = startingMaps[locale] || startingMaps[chooseStartingMap()];
+    people = people || choosePeople();
+    victim = victim || chooseVictim(people);
+    murderer = murderer || chooseMurderer(victim, people);
+
+    let player = new Player(),
         scene = new WorldMap(player),
         start = new locale(player, people),
         renderer = new Renderer("world", canvasProperties.width, canvasProperties.height);
