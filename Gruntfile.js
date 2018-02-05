@@ -6,8 +6,8 @@ module.exports = function(grunt) {
                 banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
             },
             build: {
-                src: ['app/_scripts/script.js'],
-                dest: 'app/_scripts/script.min.js'
+                src: ['scripts/script.js'],
+                dest: 'scripts/script.min.js'
             }
         },
         browserify: {
@@ -16,20 +16,20 @@ module.exports = function(grunt) {
                     transform: [["babelify"]]
                 },
                 files: {
-                    "app/_scripts/script.js": "app/_scripts/compiled/*.js"
+                    "scripts/script.js": "scripts/compiled/*.js"
                 }
             }
         },
         watch : {
             scripts: {
-                files: ['app/_scripts/src/**/*.js',  '!**/*.min.js'],
+                files: ['scripts/src/**/*.js',  '!**/*.min.js'],
                 tasks: ['jshint', 'babel', 'browserify'],
                 options: {
 
                 }
             },
             styles : {
-                files: ['app/_css/src/*.scss'],
+                files: ['css/src/*.scss'],
                 tasks: ['sass', 'cssmin'],
                 options: {
 
@@ -42,7 +42,7 @@ module.exports = function(grunt) {
 
                 },
                 files : {
-                    'app/_css/styles.css': 'app/_css/src/*.scss'
+                    'css/styles.css': 'css/src/*.scss'
                 }
             }
         },
@@ -53,9 +53,9 @@ module.exports = function(grunt) {
             target: {
                 files : [{
                     expand: true,
-                    cwd: 'app/_css',
+                    cwd: 'css',
                     src: ['*.css', '!*.min.css'],
-                    dest: 'app/_css',
+                    dest: 'css',
                     ext: '.min.css'
                 }]
             }
@@ -66,9 +66,9 @@ module.exports = function(grunt) {
             },
             all: [
                 'Gruntfile.js',
-                'app/_scripts/src/*.js',
-                'app/_tests/*.js',
-                '!app/_scripts/*.min.js'
+                'scripts/src/*.js',
+                'scripts/src/**/*.js',
+                '!scripts/*.min.js'
             ]
         },
         babel: {
@@ -79,9 +79,9 @@ module.exports = function(grunt) {
             dist: {
                 files: [{
                     expand: true,
-                    cwd: 'app/_scripts/src/',
-                    src: ['**/*.es6.js'],
-                    dest: 'app/_scripts/compiled/',
+                    cwd: 'scripts/src/',
+                    src: ['**/*.js'],
+                    dest: 'scripts/compiled/',
                     ext: '.js'
                 }]
             }

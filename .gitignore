@@ -1,4 +1,7 @@
 node_modules
 .sass-cache
 .idea
-app/_scripts/compiled
+scripts/compiled
+scripts/script.js
+scripts/script.min.js
+.DS_Store

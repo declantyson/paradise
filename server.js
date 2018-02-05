@@ -5,14 +5,13 @@ var http = require('http'),
     app = express();
 
 
-app.use("/css", express.static('app/_css'));
-app.use("/data", express.static('app/_data'));
-app.use("/libs", express.static('app/_libs'));
-app.use("/scripts", express.static('app/_scripts'));
+app.use("/css", express.static('css'));
+app.use("/data", express.static('data'));
+app.use("/scripts", express.static('scripts'));
 
 app.get('/', function(req,res) {
     res.writeHead(200, {'Content-Type': 'text/html'});
-    fs.readFile('app/index.ejs', 'utf-8', function (err, content) {
+    fs.readFile('index.ejs', 'utf-8', function (err, content) {
         if (err) {
             throw err;
         }

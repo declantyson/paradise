@@ -7,8 +7,8 @@
  *
  */
 
-import { Interior } from "../baselocale"
-import { Islands } from "../islands"
+import { Interior } from "../baselocale";
+import { Islands } from "../islands";
 
 class GroveStreet3 extends Interior {
     constructor(player, people, inhabitance) {

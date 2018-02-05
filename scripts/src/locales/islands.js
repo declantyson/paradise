@@ -7,7 +7,7 @@
  *
  */
 
-import { Locale, Inhabitance } from "./baselocale"
+import { Locale, Inhabitance } from "./baselocale";
 
 class Islands extends Locale {
     constructor(player, people) {

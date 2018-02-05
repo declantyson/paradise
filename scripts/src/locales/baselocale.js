@@ -100,7 +100,7 @@ class Interior extends Locale {
         this.inhabitance = inhabitance;
 
         for(let i = 0; i < inhabitance.inhabitants.length; i++) {
-            let inhabitant = inhabitance.inhabitants[i];;
+            let inhabitant = inhabitance.inhabitants[i];
             util.log(`${inhabitant} lives here.`);
         }
     }

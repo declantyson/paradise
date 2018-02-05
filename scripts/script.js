@@ -439,7 +439,7 @@ var Interior = function (_Locale) {
         _this.inhabitance = inhabitance;
 
         for (var i = 0; i < inhabitance.inhabitants.length; i++) {
-            var inhabitant = inhabitance.inhabitants[i];;
+            var inhabitant = inhabitance.inhabitants[i];
             util.log(inhabitant + ' lives here.');
         }
         return _this;

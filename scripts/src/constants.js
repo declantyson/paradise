@@ -34,7 +34,6 @@ export const canvasProperties = {
 export const fps = 45;
 export const actionTimeoutLimit = 2;
 
-
 export const personCount = 4;
 export const genders = {
     male   : "M",
