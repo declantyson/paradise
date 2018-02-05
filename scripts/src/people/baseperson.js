@@ -8,13 +8,14 @@
  */
 
 import * as util from '../util';
-import { pronouns } from '../constants';
+import { colours, pronouns } from '../constants';
 
 
 class Person {
     constructor(name, gender) {
         this.name = name;
         this.gender = gender;
+        this.colour = colours.black;
 
         this.relationships = {};
     }

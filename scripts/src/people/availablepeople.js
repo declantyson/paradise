@@ -2,7 +2,7 @@
  *
  *  XL RPG/People
  *  XL Gaming/Declan Tyson
- *  v0.0.17
+ *  v0.0.18
  *  05/02/2018
  *
  */
@@ -40,7 +40,7 @@ export const choosePeople = () => {
         person = util.pickRandomProperty(people);
         if(chosenPeople.indexOf(person) === -1) {
             chosenPeople.push(person);
-            //util.log(`${person} has been chosen.`);
+            util.log(`${person} has been chosen.`);
         }
     }
 
@@ -81,7 +81,6 @@ export const chooseMurderer = (victimName, chosenPeople, trueRandom = false) => 
             let limit = 100 - relationship.value,
                 test = Math.floor(Math.random() * 100);
 
-            console.log(test, limit);
             if(test < limit) murderer = name;
         });
     }

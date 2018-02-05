@@ -180,7 +180,7 @@ var Game = function () {
 }();
 
 
-},{"./constants":1,"./locales/availablelocales":4,"./people/availablepeople":12,"./player":22,"./scenes/worldmap":25}],3:[function(require,module,exports){
+},{"./constants":1,"./locales/availablelocales":4,"./people/availablepeople":13,"./player":23,"./scenes/worldmap":26}],3:[function(require,module,exports){
 "use strict";
 
 /*
@@ -278,7 +278,7 @@ var chooseStartingMap = exports.chooseStartingMap = function chooseStartingMap()
 };
 
 
-},{"../util":27,"./interiors/1grovestreet":6,"./interiors/2grovestreet":7,"./interiors/3grovestreet":8,"./interiors/4grovestreet":9,"./islands":10,"./village":11}],5:[function(require,module,exports){
+},{"../util":28,"./interiors/1grovestreet":6,"./interiors/2grovestreet":7,"./interiors/3grovestreet":8,"./interiors/4grovestreet":9,"./islands":11,"./village":12}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -298,8 +298,8 @@ var _createClass = function () {
       *
       *  XL RPG/Locales/Base
       *  XL Gaming/Declan Tyson
-      *  v0.0.16
-      *  15/11/2017
+      *  v0.0.18
+      *  05/02/2018
       *
       */
 
@@ -308,8 +308,6 @@ var _util = require('../util');
 var util = _interopRequireWildcard(_util);
 
 var _constants = require('../constants');
-
-var _availablepeople = require('../people/availablepeople');
 
 function _interopRequireWildcard(obj) {
     if (obj && obj.__esModule) {
@@ -348,6 +346,7 @@ var Locale = function () {
         this.player = player;
         this.people = people;
         this.entryPoints = {};
+        this.spawnPoints = [];
         this.inhabitances = [];
     }
 
@@ -446,6 +445,7 @@ var Interior = function (_Locale) {
         var _this = _possibleConstructorReturn(this, (Interior.__proto__ || Object.getPrototypeOf(Interior)).call(this, player, people));
 
         _this.inhabitance = inhabitance;
+        util.log('Welcome to ' + inhabitance.name + '.');
 
         for (var i = 0; i < inhabitance.inhabitants.length; i++) {
             var inhabitant = inhabitance.inhabitants[i];
@@ -484,7 +484,7 @@ exports.Interior = Interior;
 exports.Inhabitance = Inhabitance;
 
 
-},{"../constants":1,"../people/availablepeople":12,"../util":27}],6:[function(require,module,exports){
+},{"../constants":1,"../util":28}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -492,9 +492,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.GroveStreet1 = undefined;
 
-var _baselocale = require("../baselocale");
-
 var _islands = require("../islands");
+
+var _grovestreethouse = require("./grovestreethouse");
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -516,13 +516,13 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Locales/1 Grove Street
    *  XL Gaming/Declan Tyson
-   *  v0.0.14
-   *  15/11/2017
+   *  v0.0.18
+   *  05/02/2018
    *
    */
 
-var GroveStreet1 = function (_Interior) {
-    _inherits(GroveStreet1, _Interior);
+var GroveStreet1 = function (_GroveStreetTemplate) {
+    _inherits(GroveStreet1, _GroveStreetTemplate);
 
     function GroveStreet1(player, people, inhabitance) {
         _classCallCheck(this, GroveStreet1);
@@ -532,29 +532,22 @@ var GroveStreet1 = function (_Interior) {
         _this.id = "1GroveStreet";
         _this.entryPoints.frontDoor = { x: 48, y: 48 };
 
-        _this.initialise(100, 100);
-
         _this.entrances[49][48] = {
             locale: new _islands.Islands(player, people),
             entryPoint: "groveStreet1"
         };
 
-        _this.terrainPaint(0, 0, 100, 100, "Blank");
-        _this.terrainPaint(25, 25, 25, 25, "Wall");
-        _this.terrainPaint(26, 26, 11, 23, "WoodenFloor");
-        _this.terrainPaint(38, 26, 11, 23, "WoodenFloor");
-        _this.terrainPaint(37, 37, 1, 1, "WoodenFloor");
         _this.terrainPaint(49, 48, 1, 1, "WoodenFloor");
         return _this;
     }
 
     return GroveStreet1;
-}(_baselocale.Interior);
+}(_grovestreethouse.GroveStreetTemplate);
 
 exports.GroveStreet1 = GroveStreet1;
 
 
-},{"../baselocale":5,"../islands":10}],7:[function(require,module,exports){
+},{"../islands":11,"./grovestreethouse":10}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -562,9 +555,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.GroveStreet2 = undefined;
 
-var _baselocale = require("../baselocale");
-
 var _islands = require("../islands");
+
+var _grovestreethouse = require("./grovestreethouse");
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -586,13 +579,13 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Locales/1 Grove Street
    *  XL Gaming/Declan Tyson
-   *  v0.0.15
-   *  15/11/2017
+   *  v0.0.18
+   *  05/02/2018
    *
    */
 
-var GroveStreet2 = function (_Interior) {
-    _inherits(GroveStreet2, _Interior);
+var GroveStreet2 = function (_GroveStreetTemplate) {
+    _inherits(GroveStreet2, _GroveStreetTemplate);
 
     function GroveStreet2(player, people, inhabitance) {
         _classCallCheck(this, GroveStreet2);
@@ -602,29 +595,22 @@ var GroveStreet2 = function (_Interior) {
         _this.id = "2GroveStreet";
         _this.entryPoints.frontDoor = { x: 26, y: 48 };
 
-        _this.initialise(100, 100);
-
         _this.entrances[25][48] = {
             locale: new _islands.Islands(player, people),
             entryPoint: "groveStreet2"
         };
 
-        _this.terrainPaint(0, 0, 100, 100, "Blank");
-        _this.terrainPaint(25, 25, 25, 25, "Wall");
-        _this.terrainPaint(26, 26, 11, 23, "WoodenFloor");
-        _this.terrainPaint(38, 26, 11, 23, "WoodenFloor");
-        _this.terrainPaint(37, 37, 1, 1, "WoodenFloor");
         _this.terrainPaint(25, 48, 1, 1, "WoodenFloor");
         return _this;
     }
 
     return GroveStreet2;
-}(_baselocale.Interior);
+}(_grovestreethouse.GroveStreetTemplate);
 
 exports.GroveStreet2 = GroveStreet2;
 
 
-},{"../baselocale":5,"../islands":10}],8:[function(require,module,exports){
+},{"../islands":11,"./grovestreethouse":10}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -632,9 +618,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.GroveStreet3 = undefined;
 
-var _baselocale = require("../baselocale");
-
 var _islands = require("../islands");
+
+var _grovestreethouse = require("./grovestreethouse");
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -656,13 +642,13 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Locales/1 Grove Street
    *  XL Gaming/Declan Tyson
-   *  v0.0.15
-   *  15/11/2017
+   *  v0.0.18
+   *  05/02/2018
    *
    */
 
-var GroveStreet3 = function (_Interior) {
-    _inherits(GroveStreet3, _Interior);
+var GroveStreet3 = function (_GroveStreetTemplate) {
+    _inherits(GroveStreet3, _GroveStreetTemplate);
 
     function GroveStreet3(player, people, inhabitance) {
         _classCallCheck(this, GroveStreet3);
@@ -672,29 +658,22 @@ var GroveStreet3 = function (_Interior) {
         _this.id = "3GroveStreet";
         _this.entryPoints.frontDoor = { x: 48, y: 48 };
 
-        _this.initialise(100, 100);
-
         _this.entrances[49][48] = {
             locale: new _islands.Islands(player, people),
             entryPoint: "groveStreet3"
         };
 
-        _this.terrainPaint(0, 0, 100, 100, "Blank");
-        _this.terrainPaint(25, 25, 25, 25, "Wall");
-        _this.terrainPaint(26, 26, 11, 23, "WoodenFloor");
-        _this.terrainPaint(38, 26, 11, 23, "WoodenFloor");
-        _this.terrainPaint(37, 37, 1, 1, "WoodenFloor");
         _this.terrainPaint(49, 48, 1, 1, "WoodenFloor");
         return _this;
     }
 
     return GroveStreet3;
-}(_baselocale.Interior);
+}(_grovestreethouse.GroveStreetTemplate);
 
 exports.GroveStreet3 = GroveStreet3;
 
 
-},{"../baselocale":5,"../islands":10}],9:[function(require,module,exports){
+},{"../islands":11,"./grovestreethouse":10}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -702,9 +681,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.GroveStreet4 = undefined;
 
-var _baselocale = require("../baselocale");
-
 var _islands = require("../islands");
+
+var _grovestreethouse = require("./grovestreethouse");
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -726,45 +705,102 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Locales/4 Grove Street
    *  XL Gaming/Declan Tyson
-   *  v0.0.15
-   *  15/11/2017
+   *  v0.0.18
+   *  05/02/2018
    *
    */
 
-var GroveStreet4 = function (_Interior) {
-    _inherits(GroveStreet4, _Interior);
+var GroveStreet4 = function (_GroveStreetTemplate) {
+    _inherits(GroveStreet4, _GroveStreetTemplate);
 
     function GroveStreet4(player, people, inhabitance) {
         _classCallCheck(this, GroveStreet4);
 
         var _this = _possibleConstructorReturn(this, (GroveStreet4.__proto__ || Object.getPrototypeOf(GroveStreet4)).call(this, player, people, inhabitance));
 
-        _this.id = "4GroveStreet";
+        _this.id = "2GroveStreet";
         _this.entryPoints.frontDoor = { x: 26, y: 48 };
-
-        _this.initialise(100, 100);
 
         _this.entrances[25][48] = {
             locale: new _islands.Islands(player, people),
-            entryPoint: "groveStreet4"
+            entryPoint: "groveStreet2"
         };
+
+        _this.terrainPaint(25, 48, 1, 1, "WoodenFloor");
+        return _this;
+    }
+
+    return GroveStreet4;
+}(_grovestreethouse.GroveStreetTemplate);
+
+exports.GroveStreet4 = GroveStreet4;
+
+
+},{"../islands":11,"./grovestreethouse":10}],10:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.GroveStreetTemplate = undefined;
+
+var _baselocale = require("../baselocale");
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  XL RPG/Locales/Grove Street House Template
+   *  XL Gaming/Declan Tyson
+   *  v0.0.18
+   *  05/02/2018
+   *
+   */
+
+var GroveStreetTemplate = function (_Interior) {
+    _inherits(GroveStreetTemplate, _Interior);
+
+    function GroveStreetTemplate(player, people, inhabitance) {
+        _classCallCheck(this, GroveStreetTemplate);
+
+        var _this = _possibleConstructorReturn(this, (GroveStreetTemplate.__proto__ || Object.getPrototypeOf(GroveStreetTemplate)).call(this, player, people, inhabitance));
+
+        _this.initialise(100, 100);
+
+        _this.spawnPoints.push({ x: 33, y: 35 });
+        _this.spawnPoints.push({ x: 39, y: 36 });
+        _this.spawnPoints.push({ x: 45, y: 32 });
+        _this.spawnPoints.push({ x: 28, y: 33 });
 
         _this.terrainPaint(0, 0, 100, 100, "Blank");
         _this.terrainPaint(25, 25, 25, 25, "Wall");
         _this.terrainPaint(26, 26, 11, 23, "WoodenFloor");
         _this.terrainPaint(38, 26, 11, 23, "WoodenFloor");
         _this.terrainPaint(37, 37, 1, 1, "WoodenFloor");
-        _this.terrainPaint(25, 48, 1, 1, "WoodenFloor");
         return _this;
     }
 
-    return GroveStreet4;
+    return GroveStreetTemplate;
 }(_baselocale.Interior);
 
-exports.GroveStreet4 = GroveStreet4;
+exports.GroveStreetTemplate = GroveStreetTemplate;
 
 
-},{"../baselocale":5,"../islands":10}],10:[function(require,module,exports){
+},{"../baselocale":5}],11:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -838,7 +874,7 @@ var Islands = function (_Locale) {
 exports.Islands = Islands;
 
 
-},{"./baselocale":5}],11:[function(require,module,exports){
+},{"./baselocale":5}],12:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -899,7 +935,7 @@ var Village = function (_Locale) {
 exports.Village = Village;
 
 
-},{"./baselocale":5}],12:[function(require,module,exports){
+},{"./baselocale":5}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -945,7 +981,7 @@ function _interopRequireWildcard(obj) {
  *
  *  XL RPG/People
  *  XL Gaming/Declan Tyson
- *  v0.0.17
+ *  v0.0.18
  *  05/02/2018
  *
  */
@@ -971,7 +1007,7 @@ var choosePeople = exports.choosePeople = function choosePeople() {
         person = util.pickRandomProperty(people);
         if (chosenPeople.indexOf(person) === -1) {
             chosenPeople.push(person);
-            //util.log(`${person} has been chosen.`);
+            util.log(person + ' has been chosen.');
         }
     }
 
@@ -1014,7 +1050,6 @@ var chooseMurderer = exports.chooseMurderer = function chooseMurderer(victimName
             var limit = 100 - relationship.value,
                 test = Math.floor(Math.random() * 100);
 
-            console.log(test, limit);
             if (test < limit) murderer = name;
         });
     }
@@ -1024,7 +1059,7 @@ var chooseMurderer = exports.chooseMurderer = function chooseMurderer(victimName
 };
 
 
-},{"../constants":1,"../util":27,"./evelyn":14,"./jill":15,"./john":16,"./neil":17,"./pauline":18,"./petey":19,"./quazar":20,"./zenith":21}],13:[function(require,module,exports){
+},{"../constants":1,"../util":28,"./evelyn":15,"./jill":16,"./john":17,"./neil":18,"./pauline":19,"./petey":20,"./quazar":21,"./zenith":22}],14:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1079,6 +1114,7 @@ var Person = function () {
 
         this.name = name;
         this.gender = gender;
+        this.colour = _constants.colours.black;
 
         this.relationships = {};
     }
@@ -1113,7 +1149,7 @@ var Person = function () {
 exports.Person = Person;
 
 
-},{"../constants":1,"../util":27}],14:[function(require,module,exports){
+},{"../constants":1,"../util":28}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1165,7 +1201,7 @@ var Evelyn = function (_Person) {
 exports.Evelyn = Evelyn;
 
 
-},{"../constants":1,"./baseperson":13}],15:[function(require,module,exports){
+},{"../constants":1,"./baseperson":14}],16:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1217,7 +1253,7 @@ var Jill = function (_Person) {
 exports.Jill = Jill;
 
 
-},{"../constants":1,"./baseperson":13}],16:[function(require,module,exports){
+},{"../constants":1,"./baseperson":14}],17:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1269,7 +1305,7 @@ var John = function (_Person) {
 exports.John = John;
 
 
-},{"../constants":1,"./baseperson":13}],17:[function(require,module,exports){
+},{"../constants":1,"./baseperson":14}],18:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1321,7 +1357,7 @@ var Neil = function (_Person) {
 exports.Neil = Neil;
 
 
-},{"../constants":1,"./baseperson":13}],18:[function(require,module,exports){
+},{"../constants":1,"./baseperson":14}],19:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1373,7 +1409,7 @@ var Pauline = function (_Person) {
 exports.Pauline = Pauline;
 
 
-},{"../constants":1,"./baseperson":13}],19:[function(require,module,exports){
+},{"../constants":1,"./baseperson":14}],20:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1425,7 +1461,7 @@ var Petey = function (_Person) {
 exports.Petey = Petey;
 
 
-},{"../constants":1,"./baseperson":13}],20:[function(require,module,exports){
+},{"../constants":1,"./baseperson":14}],21:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1457,7 +1493,7 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Person/Zenith
    *  XL Gaming/Declan Tyson
-   *  v0.0.17
+   *  v0.0.18
    *  05/02/2018
    *
    */
@@ -1470,6 +1506,7 @@ var Quazar = function (_Person) {
 
         var _this = _possibleConstructorReturn(this, (Quazar.__proto__ || Object.getPrototypeOf(Quazar)).call(this, "Quazar", _constants.genders.alien));
 
+        _this.colour = _constants.colours.green;
         _this.relationships = {
             "Zenith": {
                 description: "Brother",
@@ -1485,7 +1522,7 @@ var Quazar = function (_Person) {
 exports.Quazar = Quazar;
 
 
-},{"../constants":1,"./baseperson":13}],21:[function(require,module,exports){
+},{"../constants":1,"./baseperson":14}],22:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1517,7 +1554,7 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Person/Quazar
    *  XL Gaming/Declan Tyson
-   *  v0.0.17
+   *  v0.0.18
    *  05/02/2018
    *
    */
@@ -1528,7 +1565,16 @@ var Zenith = function (_Person) {
     function Zenith() {
         _classCallCheck(this, Zenith);
 
-        return _possibleConstructorReturn(this, (Zenith.__proto__ || Object.getPrototypeOf(Zenith)).call(this, "Zenith", _constants.genders.alien));
+        var _this = _possibleConstructorReturn(this, (Zenith.__proto__ || Object.getPrototypeOf(Zenith)).call(this, "Zenith", _constants.genders.alien));
+
+        _this.colours = _constants.colours.green;
+        _this.relationships = {
+            "Quazar": {
+                description: "Brother",
+                value: 85
+            }
+        };
+        return _this;
     }
 
     return Zenith;
@@ -1537,7 +1583,7 @@ var Zenith = function (_Person) {
 exports.Zenith = Zenith;
 
 
-},{"../constants":1,"./baseperson":13}],22:[function(require,module,exports){
+},{"../constants":1,"./baseperson":14}],23:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1591,7 +1637,7 @@ var Player = function () {
 exports.Player = Player;
 
 
-},{"./constants":1}],23:[function(require,module,exports){
+},{"./constants":1}],24:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1647,7 +1693,7 @@ var Scene = function () {
 exports.Scene = Scene;
 
 
-},{"./constants":1}],24:[function(require,module,exports){
+},{"./constants":1}],25:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1722,7 +1768,7 @@ var Scene = function () {
 exports.Scene = Scene;
 
 
-},{"../constants":1}],25:[function(require,module,exports){
+},{"../constants":1}],26:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1766,6 +1812,8 @@ var _scene = require("./scene");
 
 var _availablelocales = require("../locales/availablelocales");
 
+var _availablepeople = require("../people/availablepeople");
+
 function _interopRequireWildcard(obj) {
     if (obj && obj.__esModule) {
         return obj;
@@ -1798,8 +1846,8 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Scene-WorldMap
    *  XL Gaming/Declan Tyson
-   *  v0.0.16
-   *  15/11/2017
+   *  v0.0.18
+   *  05/02/2018
    *
    */
 
@@ -1819,6 +1867,7 @@ var WorldMap = function (_Scene) {
         _this.actions.right = _this.moveRight.bind(_this);
 
         _this.visitedLocales = {};
+        _this.presentPeople = [];
         return _this;
     }
 
@@ -1854,8 +1903,14 @@ var WorldMap = function (_Scene) {
     }, {
         key: "draw",
         value: function draw(ctx) {
+            this.offsetX = this.player.x * _constants.tileSize - this.game.centerPoint.x;
+            this.offsetY = this.player.y * _constants.tileSize - this.game.centerPoint.y;
+            this.viewportStartX = this.player.x - _constants.tilesWide / 2;
+            this.viewportStartY = this.player.y - _constants.tilesHigh / 2;
+
             this.drawLocale(ctx);
             this.drawPlayer(ctx);
+            this.drawPeople(ctx);
         }
     }, {
         key: "drawPlayer",
@@ -1864,17 +1919,16 @@ var WorldMap = function (_Scene) {
 
             ctx.beginPath();
             ctx.rect(this.game.centerPoint.x, this.game.centerPoint.y, _constants.tileSize, _constants.tileSize);
-            ctx.fillStyle = _constants.colours.black;
+            ctx.fillStyle = this.player.colour;
             ctx.fill();
         }
     }, {
         key: "drawLocale",
         value: function drawLocale(ctx) {
             if (!this.locale) return;
-            var offsetX = this.player.x * _constants.tileSize - this.game.centerPoint.x,
-                offsetY = this.player.y * _constants.tileSize - this.game.centerPoint.y,
-                viewportStartX = this.player.x - _constants.tilesWide / 2,
-                viewportStartY = this.player.y - _constants.tilesHigh / 2;
+
+            var viewportStartX = this.viewportStartX,
+                viewportStartY = this.viewportStartY;
 
             if (viewportStartX < 0) viewportStartX = 0;
             if (viewportStartY < 0) viewportStartY = 0;
@@ -1887,11 +1941,29 @@ var WorldMap = function (_Scene) {
                     ctx.beginPath();
                     ctx.fillStyle = terrain.colour;
                     ctx.strokeStyle = terrain.colour;
-                    ctx.rect(x * _constants.tileSize - offsetX, y * _constants.tileSize - offsetY, _constants.tileSize, _constants.tileSize);
+                    ctx.rect(x * _constants.tileSize - this.offsetX, y * _constants.tileSize - this.offsetY, _constants.tileSize, _constants.tileSize);
                     ctx.fill();
                     ctx.stroke();
                 }
             }
+        }
+    }, {
+        key: "drawPeople",
+        value: function drawPeople(ctx) {
+            var _this2 = this;
+
+            if (this.presentPeople.length === 0) return;
+
+            this.presentPeople.forEach(function (person) {
+                ctx.beginPath();
+                ctx.rect(person.x * _constants.tileSize - _this2.offsetX, person.y * _constants.tileSize - _this2.offsetY, _constants.tileSize, _constants.tileSize);
+                ctx.strokeStyle = person.colour;
+                ctx.fillStyle = person.colour;
+                ctx.fill();
+                ctx.stroke();
+
+                _this2.localeMap[person.x][person.y].passable = false;
+            });
         }
     }, {
         key: "checkForRandomEncounters",
@@ -1920,6 +1992,8 @@ var WorldMap = function (_Scene) {
     }, {
         key: "enter",
         value: function enter(entrance) {
+            this.presentPeople = [];
+
             if (typeof this.visitedLocales[entrance.locale.id] !== 'undefined') {
                 this.setCurrentLocale(this.visitedLocales[entrance.locale.id], entrance.entryPoint, false);
                 return;
@@ -1929,6 +2003,24 @@ var WorldMap = function (_Scene) {
                 locale = new localeId(this.locale.player, this.locale.people, entrance.locale);
 
             this.setCurrentLocale(locale, entrance.entryPoint);
+            this.spawnPeople();
+        }
+    }, {
+        key: "spawnPeople",
+        value: function spawnPeople() {
+            var _this3 = this;
+
+            if (this.locale.inhabitance === undefined) return;
+
+            this.locale.inhabitance.inhabitants.forEach(function (inhabitant, index) {
+                var spawnPoint = _this3.locale.spawnPoints[index];
+                if (spawnPoint !== undefined) {
+                    var person = new _availablepeople.people[inhabitant]();
+                    person.x = spawnPoint.x;
+                    person.y = spawnPoint.y;
+                    _this3.presentPeople.push(person);
+                }
+            });
         }
     }, {
         key: "setCurrentLocale",
@@ -1964,7 +2056,7 @@ var WorldMap = function (_Scene) {
 exports.WorldMap = WorldMap;
 
 
-},{"../constants":1,"../locales/availablelocales":4,"../util":27,"./scene":24}],26:[function(require,module,exports){
+},{"../constants":1,"../locales/availablelocales":4,"../people/availablepeople":13,"../util":28,"./scene":25}],27:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () {
@@ -2141,7 +2233,7 @@ var WoodenFloor = function (_Terrain7) {
 window.terrains = { Blank: Blank, Grass: Grass, Water: Water, Road: Road, Wall: Wall, Doorway: Doorway, WoodenFloor: WoodenFloor };
 
 
-},{"./constants":1}],27:[function(require,module,exports){
+},{"./constants":1}],28:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2179,7 +2271,7 @@ var log = exports.log = function log(str) {
 };
 
 
-},{}],28:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2339,4 +2431,4 @@ var WorldMap = function (_Scene) {
 exports.WorldMap = WorldMap;
 
 
-},{"./constants":1,"./scene":23,"./terrain":26}]},{},[1,2,3,22,23,26,27,28]);
+},{"./constants":1,"./scene":24,"./terrain":27}]},{},[1,2,3,23,24,27,28,29]);
