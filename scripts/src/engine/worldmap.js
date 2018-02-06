@@ -2,15 +2,15 @@
  *
  *  XL RPG/Scene-WorldMap
  *  XL Gaming/Declan Tyson
- *  v0.0.19
+ *  v0.0.20
  *  06/02/2018
  *
  */
 
-import * as util from './util';
 import * as terrain from './terrain';
-import { colours, tileSize, tilesWide as viewportWidth, tilesHigh as viewportHeight } from "./constants";
+import { colours, tileSize, tilesWide as viewportWidth, tilesHigh as viewportHeight, directions } from "./constants";
 import { Scene } from "./scene";
+import { Interaction } from "./interaction";
 import { locales } from '../locales/availablelocales';
 import { people } from '../people/availablepeople';
 
@@ -23,6 +23,7 @@ class WorldMap extends Scene {
         this.actions.down = this.moveDown.bind(this);
         this.actions.left = this.moveLeft.bind(this);
         this.actions.right = this.moveRight.bind(this);
+        this.actions.action = this.checkForInteraction.bind(this);
 
         this.visitedLocales = {};
         this.presentPeople = [];
@@ -38,18 +39,22 @@ class WorldMap extends Scene {
 
     moveUp() {
         if(this.localeMap[this.player.x][this.player.y - 1].isPassable()) this.player.setPlacement(this.player.x, this.player.y - 1);
+        this.player.direction = directions.up;
     }
 
     moveDown() {
         if(this.localeMap[this.player.x][this.player.y + 1].isPassable()) this.player.setPlacement(this.player.x, this.player.y + 1);
+        this.player.direction = directions.down;
     }
 
     moveLeft() {
         if(this.localeMap[this.player.x - 1][this.player.y].isPassable()) this.player.setPlacement(this.player.x - 1, this.player.y);
+        this.player.direction = directions.left;
     }
 
     moveRight() {
         if(this.localeMap[this.player.x + 1][this.player.y].isPassable()) this.player.setPlacement(this.player.x + 1, this.player.y);
+        this.player.direction = directions.right;
     }
 
     draw(ctx) {
@@ -108,6 +113,7 @@ class WorldMap extends Scene {
             ctx.stroke();
 
             this.localeMap[person.x][person.y].passable = false;
+            this.localeMap[person.x][person.y].person = person;
         });
     }
 
@@ -123,6 +129,32 @@ class WorldMap extends Scene {
 
     startRandomEncounter(enemies) {
         this.game.setScene(new Encounter(enemies));
+    }
+
+    checkForInteraction() {
+        let x = this.player.x,
+            y = this.player.y;
+
+        switch(this.player.direction) {
+            case 'up':
+                y--;
+                break;
+            case 'down':
+                y++;
+                break;
+            case 'left':
+                x--;
+                break;
+            case 'right':
+                x++;
+                break;
+        }
+
+        this.startInteraction(this.localeMap[x][y].person);
+    }
+
+    startInteraction(person) {
+        this.game.setScene(new Interaction(person));
     }
 
     checkForEntrance() {

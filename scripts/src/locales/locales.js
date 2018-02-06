@@ -2,12 +2,14 @@
  *
  *  XL RPG/Locales
  *  XL Gaming/Declan Tyson
- *  v0.0.19
+ *  v0.0.20
  *  06/02/2018
  *
  */
 
 // Locales
+
+import * as util from '../engine/util';
 
 import { Village } from './village';
 import { Islands } from './islands';
@@ -28,4 +30,11 @@ export const locales = {
     "GroveStreet2" : GroveStreet2,
     "GroveStreet3" : GroveStreet3,
     "GroveStreet4" : GroveStreet4
+};
+
+export const chooseStartingMap = () => {
+    let locale = util.pickRandomProperty(startingMaps);
+    util.log('Choosing starting map...');
+    util.log(`Map is ${locale}.`);
+    return locale;
 };

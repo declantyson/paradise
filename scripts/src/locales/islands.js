@@ -2,7 +2,7 @@
  *
  *  XL RPG/Locales/Islands
  *  XL Gaming/Declan Tyson
- *  v0.0.19
+ *  v0.0.20
  *  15/11/2017
  *
  */

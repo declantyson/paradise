@@ -224,7 +224,7 @@ var _createClass = function () {
       *
       *  XL RPG/Person
       *  XL Gaming/Declan Tyson
-      *  v0.0.19
+      *  v0.0.20
       *  05/02/2018
       *
       */
@@ -304,7 +304,7 @@ Object.defineProperty(exports, "__esModule", {
  *
  *  XL RPG/Constants
  *  XL Gaming/Declan Tyson
- *  v0.0.19
+ *  v0.0.20
  *  05/02/2018
  *
  */
@@ -317,6 +317,13 @@ var colours = exports.colours = {
     brown: "#4f1f0b",
     darkbrown: "#291006",
     grey: "#cdcdcd"
+};
+
+var directions = exports.directions = {
+    up: 'up',
+    down: 'down',
+    left: 'left',
+    right: 'right'
 };
 
 var tileSize = exports.tileSize = 10;
@@ -368,23 +375,15 @@ var _createClass = function () {
     };
 }();
 
-var _inputs = require('./inputs');
-
-var input = _interopRequireWildcard(_inputs);
-
 var _player = require('./player');
 
 var _worldmap = require('./worldmap');
 
 var _constants = require('./constants');
 
-var _locales = require('./locales');
+var _inputs = require('./inputs');
 
-var _availablelocales = require('../locales/availablelocales');
-
-var _people = require('./people');
-
-var _availablepeople = require('../people/availablepeople');
+var input = _interopRequireWildcard(_inputs);
 
 function _interopRequireWildcard(obj) {
     if (obj && obj.__esModule) {
@@ -406,26 +405,23 @@ function _classCallCheck(instance, Constructor) {
    *
    *  XL RPG/Game
    *  XL Gaming/Declan Tyson
-   *  v0.0.19
+   *  v0.0.20
    *  06/02/2018
    *
    */
 
-var StartGame = exports.StartGame = function StartGame(locale, people, victim, murderer) {
+var StartGame = exports.StartGame = function StartGame(locale, people) {
     clearInterval(window.drawScene);
-
-    locale = _availablelocales.startingMaps[locale] || _availablelocales.startingMaps[(0, _locales.chooseStartingMap)()];
-    people = people || (0, _people.choosePeople)();
-    victim = victim || (0, _availablepeople.chooseVictim)(people);
-    murderer = murderer || (0, _availablepeople.chooseMurderer)(victim, people);
 
     var player = new _player.Player(),
         scene = new _worldmap.WorldMap(player),
         start = new locale(player, people),
-        renderer = new Renderer('world', _constants.canvasProperties.width, _constants.canvasProperties.height);
+        renderer = new Renderer('world', _constants.canvasProperties.width, _constants.canvasProperties.height),
+        game = new Game(renderer, scene, _constants.canvasProperties.centerPoint);
 
-    window.game = new Game(renderer, scene, _constants.canvasProperties.centerPoint);
-    window.game.scene.setCurrentLocale(start, 'beginningOfGame');
+    game.scene.setCurrentLocale(start, 'beginningOfGame');
+
+    return game;
 };
 
 var Renderer = function Renderer(element, width, height) {
@@ -500,14 +496,14 @@ var Game = function () {
 }();
 
 
-},{"../locales/availablelocales":13,"../people/availablepeople":22,"./constants":3,"./inputs":5,"./locales":6,"./people":7,"./player":8,"./worldmap":12}],5:[function(require,module,exports){
+},{"./constants":3,"./inputs":5,"./player":8,"./worldmap":12}],5:[function(require,module,exports){
 "use strict";
 
 /*
  *
  *  XL RPG/Inputs
  *  XL Gaming/Declan Tyson
- *  v0.0.19
+ *  v0.0.20
  *  06/02/2018
  *
  */
@@ -532,29 +528,80 @@ window.addEventListener("keyup", function (e) {
 
 
 },{}],6:[function(require,module,exports){
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
-/*
- *
- *  XL RPG/Locales
- *  XL Gaming/Declan Tyson
- *  v0.0.19
- *  06/02/2018
- *
- */
+exports.Interaction = undefined;
 
-var chooseStartingMap = exports.chooseStartingMap = function chooseStartingMap() {
-  var locale = util.pickRandomProperty(startingMaps);
-  util.log('Choosing starting map...');
-  util.log('Map is ' + locale + '.');
-  return locale;
-};
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
+
+var _scene = require("./scene");
+
+var _constants = require("./constants");
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  XL RPG/Scene-Interaction
+   *  XL Gaming/Declan Tyson
+   *  v0.0.20
+   *  06/02/2018
+   *
+   */
+
+var Interaction = function (_Scene) {
+    _inherits(Interaction, _Scene);
+
+    function Interaction(person) {
+        _classCallCheck(this, Interaction);
+
+        var _this = _possibleConstructorReturn(this, (Interaction.__proto__ || Object.getPrototypeOf(Interaction)).call(this));
+
+        console.log(person);
+        return _this;
+    }
+
+    _createClass(Interaction, [{
+        key: "draw",
+        value: function draw(ctx) {
+            ctx.strokeStyle = _constants.colours.black;
+            ctx.rect(0, 0, _constants.canvasProperties.width, _constants.canvasProperties.height);
+            ctx.fill();
+        }
+    }]);
+
+    return Interaction;
+}(_scene.Scene);
+
+exports.Interaction = Interaction;
 
 
-},{}],7:[function(require,module,exports){
+},{"./constants":3,"./scene":9}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -599,13 +646,13 @@ var choosePeople = exports.choosePeople = function choosePeople() {
     *
     *  XL RPG/People
     *  XL Gaming/Declan Tyson
-    *  v0.0.19
+    *  v0.0.20
     *  06/02/2018
     *
     */
 
 
-},{"../people/availablepeople":22,"./constants":3,"./util":11}],8:[function(require,module,exports){
+},{"../people/availablepeople":23,"./constants":3,"./util":11}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -625,7 +672,7 @@ var _createClass = function () {
       *
       *  XL RPG/Player
       *  XL Gaming/Declan Tyson
-      *  v0.0.19
+      *  v0.0.20
       *  06/02/2018
       *
       */
@@ -643,6 +690,7 @@ var Player = function () {
         _classCallCheck(this, Player);
 
         this.colour = _constants.colours.black;
+        this.direction = _constants.directions.down;
     }
 
     _createClass(Player, [{
@@ -679,7 +727,7 @@ var _createClass = function () {
       *
       *  XL RPG/Scene
       *  XL Gaming/Declan Tyson
-      *  v0.0.19
+      *  v0.0.20
       *  06/02/2018
       *
       */
@@ -754,7 +802,7 @@ var _createClass = function () {
       *
       *  XL RPG/Terrain
       *  XL Gaming/Declan Tyson
-      *  v0.0.19
+      *  v0.0.20
       *  06/02/2018
       *
       */
@@ -932,7 +980,7 @@ Object.defineProperty(exports, "__esModule", {
  *
  *  XL RPG/Util
  *  XL Gaming/Declan Tyson
- *  v0.0.19
+ *  v0.0.20
  *  05/02/2018
  *
  */
@@ -961,7 +1009,7 @@ var log = exports.log = function log(str) {
 
 
 },{}],12:[function(require,module,exports){
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -994,21 +1042,19 @@ var _get = function get(object, property, receiver) {
     }
 };
 
-var _util = require('./util');
-
-var util = _interopRequireWildcard(_util);
-
-var _terrain2 = require('./terrain');
+var _terrain2 = require("./terrain");
 
 var terrain = _interopRequireWildcard(_terrain2);
 
-var _constants = require('./constants');
+var _constants = require("./constants");
 
-var _scene = require('./scene');
+var _scene = require("./scene");
 
-var _availablelocales = require('../locales/availablelocales');
+var _interaction = require("./interaction");
 
-var _availablepeople = require('../people/availablepeople');
+var _availablelocales = require("../locales/availablelocales");
+
+var _availablepeople = require("../people/availablepeople");
 
 function _interopRequireWildcard(obj) {
     if (obj && obj.__esModule) {
@@ -1042,7 +1088,7 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Scene-WorldMap
    *  XL Gaming/Declan Tyson
-   *  v0.0.19
+   *  v0.0.20
    *  06/02/2018
    *
    */
@@ -1061,6 +1107,7 @@ var WorldMap = function (_Scene) {
         _this.actions.down = _this.moveDown.bind(_this);
         _this.actions.left = _this.moveLeft.bind(_this);
         _this.actions.right = _this.moveRight.bind(_this);
+        _this.actions.action = _this.checkForInteraction.bind(_this);
 
         _this.visitedLocales = {};
         _this.presentPeople = [];
@@ -1068,36 +1115,40 @@ var WorldMap = function (_Scene) {
     }
 
     _createClass(WorldMap, [{
-        key: 'doActions',
+        key: "doActions",
         value: function doActions(action) {
-            _get(WorldMap.prototype.__proto__ || Object.getPrototypeOf(WorldMap.prototype), 'doActions', this).call(this, action);
+            _get(WorldMap.prototype.__proto__ || Object.getPrototypeOf(WorldMap.prototype), "doActions", this).call(this, action);
 
             if (!action) return;
             this.checkForRandomEncounters();
             this.checkForEntrance();
         }
     }, {
-        key: 'moveUp',
+        key: "moveUp",
         value: function moveUp() {
             if (this.localeMap[this.player.x][this.player.y - 1].isPassable()) this.player.setPlacement(this.player.x, this.player.y - 1);
+            this.player.direction = _constants.directions.up;
         }
     }, {
-        key: 'moveDown',
+        key: "moveDown",
         value: function moveDown() {
             if (this.localeMap[this.player.x][this.player.y + 1].isPassable()) this.player.setPlacement(this.player.x, this.player.y + 1);
+            this.player.direction = _constants.directions.down;
         }
     }, {
-        key: 'moveLeft',
+        key: "moveLeft",
         value: function moveLeft() {
             if (this.localeMap[this.player.x - 1][this.player.y].isPassable()) this.player.setPlacement(this.player.x - 1, this.player.y);
+            this.player.direction = _constants.directions.left;
         }
     }, {
-        key: 'moveRight',
+        key: "moveRight",
         value: function moveRight() {
             if (this.localeMap[this.player.x + 1][this.player.y].isPassable()) this.player.setPlacement(this.player.x + 1, this.player.y);
+            this.player.direction = _constants.directions.right;
         }
     }, {
-        key: 'draw',
+        key: "draw",
         value: function draw(ctx) {
             this.offsetX = this.player.x * _constants.tileSize - this.game.centerPoint.x;
             this.offsetY = this.player.y * _constants.tileSize - this.game.centerPoint.y;
@@ -1109,7 +1160,7 @@ var WorldMap = function (_Scene) {
             this.drawPeople(ctx);
         }
     }, {
-        key: 'drawPlayer',
+        key: "drawPlayer",
         value: function drawPlayer(ctx) {
             // Player is always at center of screen
 
@@ -1119,7 +1170,7 @@ var WorldMap = function (_Scene) {
             ctx.fill();
         }
     }, {
-        key: 'drawLocale',
+        key: "drawLocale",
         value: function drawLocale(ctx) {
             if (!this.locale) return;
 
@@ -1144,7 +1195,7 @@ var WorldMap = function (_Scene) {
             }
         }
     }, {
-        key: 'drawPeople',
+        key: "drawPeople",
         value: function drawPeople(ctx) {
             var _this2 = this;
 
@@ -1159,10 +1210,11 @@ var WorldMap = function (_Scene) {
                 ctx.stroke();
 
                 _this2.localeMap[person.x][person.y].passable = false;
+                _this2.localeMap[person.x][person.y].person = person;
             });
         }
     }, {
-        key: 'checkForRandomEncounters',
+        key: "checkForRandomEncounters",
         value: function checkForRandomEncounters() {
             var potentialRandomEncounter = this.locale.encounters[this.player.x][this.player.y];
             if (!potentialRandomEncounter) return;
@@ -1173,12 +1225,40 @@ var WorldMap = function (_Scene) {
             }
         }
     }, {
-        key: 'startRandomEncounter',
+        key: "startRandomEncounter",
         value: function startRandomEncounter(enemies) {
             this.game.setScene(new Encounter(enemies));
         }
     }, {
-        key: 'checkForEntrance',
+        key: "checkForInteraction",
+        value: function checkForInteraction() {
+            var x = this.player.x,
+                y = this.player.y;
+
+            switch (this.player.direction) {
+                case 'up':
+                    y--;
+                    break;
+                case 'down':
+                    y++;
+                    break;
+                case 'left':
+                    x--;
+                    break;
+                case 'right':
+                    x++;
+                    break;
+            }
+
+            this.startInteraction(this.localeMap[x][y].person);
+        }
+    }, {
+        key: "startInteraction",
+        value: function startInteraction(person) {
+            this.game.setScene(new _interaction.Interaction(person));
+        }
+    }, {
+        key: "checkForEntrance",
         value: function checkForEntrance() {
             var entrance = this.locale.entrances[this.player.x][this.player.y];
             if (!entrance) return;
@@ -1186,7 +1266,7 @@ var WorldMap = function (_Scene) {
             this.enter(entrance);
         }
     }, {
-        key: 'enter',
+        key: "enter",
         value: function enter(entrance) {
             this.presentPeople = [];
 
@@ -1202,7 +1282,7 @@ var WorldMap = function (_Scene) {
             this.spawnPeople();
         }
     }, {
-        key: 'spawnPeople',
+        key: "spawnPeople",
         value: function spawnPeople() {
             var _this3 = this;
 
@@ -1219,7 +1299,7 @@ var WorldMap = function (_Scene) {
             });
         }
     }, {
-        key: 'setCurrentLocale',
+        key: "setCurrentLocale",
         value: function setCurrentLocale(locale, entryPoint) {
             var rasterize = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
 
@@ -1232,7 +1312,7 @@ var WorldMap = function (_Scene) {
             if (rasterize) this.rasterizeLocaleMap();
         }
     }, {
-        key: 'rasterizeLocaleMap',
+        key: "rasterizeLocaleMap",
         value: function rasterizeLocaleMap() {
             if (!this.locale) return;
 
@@ -1252,7 +1332,7 @@ var WorldMap = function (_Scene) {
 exports.WorldMap = WorldMap;
 
 
-},{"../locales/availablelocales":13,"../people/availablepeople":22,"./constants":3,"./scene":9,"./terrain":10,"./util":11}],13:[function(require,module,exports){
+},{"../locales/availablelocales":13,"../people/availablepeople":23,"./constants":3,"./interaction":6,"./scene":9,"./terrain":10}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1298,7 +1378,7 @@ var locales = exports.locales = {
 };
 
 
-},{"./interiors/1grovestreet":14,"./interiors/2grovestreet":15,"./interiors/3grovestreet":16,"./interiors/4grovestreet":17,"./islands":19,"./village":20}],14:[function(require,module,exports){
+},{"./interiors/1grovestreet":14,"./interiors/2grovestreet":15,"./interiors/3grovestreet":16,"./interiors/4grovestreet":17,"./islands":19,"./village":21}],14:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1330,7 +1410,7 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Locales/1 Grove Street
    *  XL Gaming/Declan Tyson
-   *  v0.0.19
+   *  v0.0.20
    *  05/02/2018
    *
    */
@@ -1393,7 +1473,7 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Locales/1 Grove Street
    *  XL Gaming/Declan Tyson
-   *  v0.0.19
+   *  v0.0.20
    *  05/02/2018
    *
    */
@@ -1456,7 +1536,7 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Locales/1 Grove Street
    *  XL Gaming/Declan Tyson
-   *  v0.0.19
+   *  v0.0.20
    *  05/02/2018
    *
    */
@@ -1519,7 +1599,7 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Locales/4 Grove Street
    *  XL Gaming/Declan Tyson
-   *  v0.0.19
+   *  v0.0.20
    *  05/02/2018
    *
    */
@@ -1580,7 +1660,7 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Locales/Grove Street House Template
    *  XL Gaming/Declan Tyson
-   *  v0.0.19
+   *  v0.0.20
    *  05/02/2018
    *
    */
@@ -1644,7 +1724,7 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Locales/Islands
    *  XL Gaming/Declan Tyson
-   *  v0.0.19
+   *  v0.0.20
    *  15/11/2017
    *
    */
@@ -1689,6 +1769,73 @@ exports.Islands = Islands;
 
 
 },{"../engine/baselocale":1}],20:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.chooseStartingMap = exports.locales = exports.startingMaps = undefined;
+
+var _util = require('../engine/util');
+
+var util = _interopRequireWildcard(_util);
+
+var _village = require('./village');
+
+var _islands = require('./islands');
+
+var _grovestreet = require('./interiors/1grovestreet');
+
+var _grovestreet2 = require('./interiors/2grovestreet');
+
+var _grovestreet3 = require('./interiors/3grovestreet');
+
+var _grovestreet4 = require('./interiors/4grovestreet');
+
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) {
+        return obj;
+    } else {
+        var newObj = {};if (obj != null) {
+            for (var key in obj) {
+                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+            }
+        }newObj.default = obj;return newObj;
+    }
+}
+
+var startingMaps = exports.startingMaps = {
+    "Village": _village.Village,
+    "Islands": _islands.Islands
+}; /*
+    *
+    *  XL RPG/Locales
+    *  XL Gaming/Declan Tyson
+    *  v0.0.20
+    *  06/02/2018
+    *
+    */
+
+// Locales
+
+var locales = exports.locales = {
+    "Village": _village.Village,
+    "Islands": _islands.Islands,
+    "GroveStreet1": _grovestreet.GroveStreet1,
+    "GroveStreet2": _grovestreet2.GroveStreet2,
+    "GroveStreet3": _grovestreet3.GroveStreet3,
+    "GroveStreet4": _grovestreet4.GroveStreet4
+};
+
+var chooseStartingMap = exports.chooseStartingMap = function chooseStartingMap() {
+    var locale = util.pickRandomProperty(startingMaps);
+    util.log('Choosing starting map...');
+    util.log('Map is ' + locale + '.');
+    return locale;
+};
+
+
+},{"../engine/util":11,"./interiors/1grovestreet":14,"./interiors/2grovestreet":15,"./interiors/3grovestreet":16,"./interiors/4grovestreet":17,"./islands":19,"./village":21}],21:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1718,7 +1865,7 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Locales/Village
    *  XL Gaming/Declan Tyson
-   *  v0.0.19
+   *  v0.0.20
    *  13/11/2017
    *
    */
@@ -1749,22 +1896,37 @@ var Village = function (_Locale) {
 exports.Village = Village;
 
 
-},{"../engine/baselocale":1}],21:[function(require,module,exports){
-'use strict';
+},{"../engine/baselocale":1}],22:[function(require,module,exports){
+"use strict";
 
-var _game = require('./engine/game');
+var _game = require("./engine/game");
 
-window.startGame = _game.StartGame; /*
-                                     *
-                                     *  Paradise
-                                     *  XL Gaming/Declan Tyson
-                                     *  v0.0.19
-                                     *  06/02/2018
-                                     *
-                                     */
+var _availablepeople = require("./people/availablepeople");
+
+var _people = require("./engine/people");
+
+var _locales = require("./locales/locales");
+
+/*
+ *
+ *  Paradise
+ *  XL Gaming/Declan Tyson
+ *  v0.0.20
+ *  06/02/2018
+ *
+ */
+
+window.startGame = function (locale, people, victim, murderer) {
+  locale = _locales.startingMaps[locale] || _locales.startingMaps[(0, _locales.chooseStartingMap)()];
+  people = people || (0, _people.choosePeople)();
+  victim = victim || (0, _availablepeople.chooseVictim)(people);
+  murderer = murderer || (0, _availablepeople.chooseMurderer)(victim, people);
+
+  window.game = (0, _game.StartGame)(locale, people);
+};
 
 
-},{"./engine/game":4}],22:[function(require,module,exports){
+},{"./engine/game":4,"./engine/people":7,"./locales/locales":20,"./people/availablepeople":23}],23:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1810,7 +1972,7 @@ function _interopRequireWildcard(obj) {
  *
  *  XL RPG/People
  *  XL Gaming/Declan Tyson
- *  v0.0.19
+ *  v0.0.20
  *  05/02/2018
  *
  */
@@ -1873,7 +2035,7 @@ var chooseMurderer = exports.chooseMurderer = function chooseMurderer(victimName
 };
 
 
-},{"../engine/constants":3,"../engine/util":11,"./evelyn":23,"./jill":24,"./john":25,"./neil":26,"./pauline":27,"./petey":28,"./quazar":29,"./zenith":30}],23:[function(require,module,exports){
+},{"../engine/constants":3,"../engine/util":11,"./evelyn":24,"./jill":25,"./john":26,"./neil":27,"./pauline":28,"./petey":29,"./quazar":30,"./zenith":31}],24:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1905,7 +2067,7 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Person/Evelyn
    *  XL Gaming/Declan Tyson
-   *  v0.0.19
+   *  v0.0.20
    *  13/11/2017
    *
    */
@@ -1925,7 +2087,7 @@ var Evelyn = function (_Person) {
 exports.Evelyn = Evelyn;
 
 
-},{"../engine/baseperson":2,"../engine/constants":3}],24:[function(require,module,exports){
+},{"../engine/baseperson":2,"../engine/constants":3}],25:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1957,7 +2119,7 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Person/Jill
    *  XL Gaming/Declan Tyson
-   *  v0.0.19
+   *  v0.0.20
    *  13/11/2017
    *
    */
@@ -1977,7 +2139,7 @@ var Jill = function (_Person) {
 exports.Jill = Jill;
 
 
-},{"../engine/baseperson":2,"../engine/constants":3}],25:[function(require,module,exports){
+},{"../engine/baseperson":2,"../engine/constants":3}],26:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2009,7 +2171,7 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Person/John
    *  XL Gaming/Declan Tyson
-   *  v0.0.19
+   *  v0.0.20
    *  13/11/2017
    *
    */
@@ -2029,7 +2191,7 @@ var John = function (_Person) {
 exports.John = John;
 
 
-},{"../engine/baseperson":2,"../engine/constants":3}],26:[function(require,module,exports){
+},{"../engine/baseperson":2,"../engine/constants":3}],27:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2061,7 +2223,7 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Person/Neil
    *  XL Gaming/Declan Tyson
-   *  v0.0.19
+   *  v0.0.20
    *  13/11/2017
    *
    */
@@ -2081,7 +2243,7 @@ var Neil = function (_Person) {
 exports.Neil = Neil;
 
 
-},{"../engine/baseperson":2,"../engine/constants":3}],27:[function(require,module,exports){
+},{"../engine/baseperson":2,"../engine/constants":3}],28:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2113,7 +2275,7 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Person/Pauline
    *  XL Gaming/Declan Tyson
-   *  v0.0.19
+   *  v0.0.20
    *  13/11/2017
    *
    */
@@ -2133,7 +2295,7 @@ var Pauline = function (_Person) {
 exports.Pauline = Pauline;
 
 
-},{"../engine/baseperson":2,"../engine/constants":3}],28:[function(require,module,exports){
+},{"../engine/baseperson":2,"../engine/constants":3}],29:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2165,7 +2327,7 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Person/Petey
    *  XL Gaming/Declan Tyson
-   *  v0.0.19
+   *  v0.0.20
    *  13/11/2017
    *
    */
@@ -2185,7 +2347,7 @@ var Petey = function (_Person) {
 exports.Petey = Petey;
 
 
-},{"../engine/baseperson":2,"../engine/constants":3}],29:[function(require,module,exports){
+},{"../engine/baseperson":2,"../engine/constants":3}],30:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2217,7 +2379,7 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Person/Zenith
    *  XL Gaming/Declan Tyson
-   *  v0.0.19
+   *  v0.0.20
    *  05/02/2018
    *
    */
@@ -2246,7 +2408,7 @@ var Quazar = function (_Person) {
 exports.Quazar = Quazar;
 
 
-},{"../engine/baseperson":2,"../engine/constants":3}],30:[function(require,module,exports){
+},{"../engine/baseperson":2,"../engine/constants":3}],31:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2278,7 +2440,7 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Person/Quazar
    *  XL Gaming/Declan Tyson
-   *  v0.0.19
+   *  v0.0.20
    *  05/02/2018
    *
    */
@@ -2307,4 +2469,4 @@ var Zenith = function (_Person) {
 exports.Zenith = Zenith;
 
 
-},{"../engine/baseperson":2,"../engine/constants":3}]},{},[21]);
+},{"../engine/baseperson":2,"../engine/constants":3}]},{},[22]);

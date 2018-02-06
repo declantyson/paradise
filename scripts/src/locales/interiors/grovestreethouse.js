@@ -2,7 +2,7 @@
  *
  *  XL RPG/Locales/Grove Street House Template
  *  XL Gaming/Declan Tyson
- *  v0.0.19
+ *  v0.0.20
  *  05/02/2018
  *
  */

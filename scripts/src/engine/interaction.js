@@ -1,6 +1,6 @@
 /*
  *
- *  XL RPG/Scene-Encounter
+ *  XL RPG/Scene-Interaction
  *  XL Gaming/Declan Tyson
  *  v0.0.20
  *  06/02/2018
@@ -9,17 +9,12 @@
 
 import { Scene } from "./scene";
 import { canvasProperties, colours } from "./constants";
-import "../enemies/enemydirectory";
 
-class Encounter extends Scene {
-    constructor(enemies) {
+class Interaction extends Scene {
+    constructor(person) {
         super();
 
-        this.enemies = [];
-        let self = this;
-        enemies.forEach((enemy) => {
-             self.enemies.push(new window.enemies[enemy]());
-        });
+        console.log(person);
     }
 
     draw(ctx) {
@@ -29,4 +24,4 @@ class Encounter extends Scene {
     }
 }
 
-export { Encounter };
+export { Interaction };

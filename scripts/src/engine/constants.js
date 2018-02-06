@@ -2,7 +2,7 @@
  *
  *  XL RPG/Constants
  *  XL Gaming/Declan Tyson
- *  v0.0.19
+ *  v0.0.20
  *  05/02/2018
  *
  */
@@ -15,6 +15,13 @@ export const colours = {
     brown: "#4f1f0b",
     darkbrown: "#291006",
     grey: "#cdcdcd"
+};
+
+export const directions = {
+    up: 'up',
+    down: 'down',
+    left: 'left',
+    right: 'right'
 };
 
 export const tileSize = 10;
