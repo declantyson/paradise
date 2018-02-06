@@ -2,7 +2,7 @@
  *
  *  CODENAME: Paradise
  *  XL Gaming/Declan Tyson
- *  v0.0.23
+ *  v0.0.24
  *  06/02/2018
  *
  */
@@ -12,15 +12,15 @@ import * as util from './engine/util';
 import { StartGame } from './engine/game';
 import { Player } from './engine/player';
 
-import { ParadiseWorldMap } from "./paradise_worldmap";
+import { ParadiseWorldMap } from './paradise_worldmap';
 
-import { chooseMurderer, chooseVictim } from './people/people';
+import { chooseMotive, chooseMurderer, chooseVictim } from './people/people';
 import { choosePeople } from './engine/people';
 import { chooseStartingMap, startingMaps } from './locales/locales';
 import { chooseEvidence } from './evidence/evidences';
-import { chooseMurderWeapon } from './evidence/murderweapons';
+import {chooseMurderWeapon, murderWeapons} from './evidence/murderweapons';
 
-window.startGame = (locale, people, victim, murderer, weapon) => {
+window.startGame = (locale, people, victim, murderer, weapon, motive) => {
     util.clearLog();
 
     locale = startingMaps[locale] || startingMaps[chooseStartingMap()];
@@ -31,8 +31,9 @@ window.startGame = (locale, people, victim, murderer, weapon) => {
     window.game = StartGame(locale, people, player, worldMap);
 
     window.game.victim = victim || chooseVictim(people);
-    window.game.murderer = murderer || chooseMurderer(victim, people);
+    window.game.murderer = murderer || chooseMurderer(window.game.victim, people);
     window.game.weapon = weapon || chooseMurderWeapon();
+    window.game.motive = motive || chooseMotive(window.game.victim, window.game.murderer);
 
     window.game.evidence = chooseEvidence(game);
 

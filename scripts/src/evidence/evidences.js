@@ -7,10 +7,10 @@
  *
  */
 
-import * as util from "../engine/util";
+import * as util from '../engine/util';
 
-import { murderWeapons } from "./murderweapons";
-import { dieRoll } from "../engine/util";
+import { murderWeapons } from './murderweapons';
+import { dieRoll } from '../engine/util';
 
 export const chooseEvidence = (game) => {
     let evidences = [],

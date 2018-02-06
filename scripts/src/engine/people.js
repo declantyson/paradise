@@ -7,9 +7,9 @@
  *
  */
 
-import { personCount } from "../constants";
-import * as util from "./util";
-import { people } from "../people/people";
+import { personCount } from '../constants';
+import * as util from './util';
+import { people } from '../people/people';
 
 export const choosePeople = () => {
     let chosenPeople = [];

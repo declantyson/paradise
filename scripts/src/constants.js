@@ -14,14 +14,14 @@ export const tilesWide = 96;
 export const tilesHigh = 54;
 
 export const colours = {
-    black : "#000000",
-    white: "#FFFFFF",
-    green: "#00AA00",
-    blue: "#0000AA",
-    brown: "#4f1f0b",
-    darkbrown: "#291006",
-    grey: "#cdcdcd",
-    red: "#ff0000"
+    black : '#000000',
+    white: '#FFFFFF',
+    green: '#00AA00',
+    blue: '#0000AA',
+    brown: '#4f1f0b',
+    darkbrown: '#291006',
+    grey: '#cdcdcd',
+    red: '#ff0000'
 };
 
 export const directions = {
@@ -61,21 +61,21 @@ export const interactionTextArea = {
 };
 
 export const genders = {
-    male   : "M",
-    female : "F",
-    alien  : "A"
+    male   : 'M',
+    female : 'F',
+    alien  : 'A'
 };
 
 export const pronouns = {
-    M   : "him",
-    F   : "her",
-    A   : "xlem"
+    M   : 'him',
+    F   : 'her',
+    A   : 'xlem'
 };
 
 export const posessivePronouns = {
-    M   : "his",
-    F   : "her",
-    A   : "xleir"
+    M   : 'his',
+    F   : 'her',
+    A   : 'xleir'
 };
 
 export const personCount = 4;

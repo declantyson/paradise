@@ -8,7 +8,7 @@
  */
 
 import { Inhabitance } from '../engine/locale';
-import { ParadiseLocale } from "../paradise_locale";
+import { ParadiseLocale } from '../paradise_locale';
 
 class Islands extends ParadiseLocale {
     constructor(player, people) {

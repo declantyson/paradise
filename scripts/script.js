@@ -1,5 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -20,14 +20,14 @@ var tilesWide = exports.tilesWide = 96;
 var tilesHigh = exports.tilesHigh = 54;
 
 var colours = exports.colours = {
-    black: "#000000",
-    white: "#FFFFFF",
-    green: "#00AA00",
-    blue: "#0000AA",
-    brown: "#4f1f0b",
-    darkbrown: "#291006",
-    grey: "#cdcdcd",
-    red: "#ff0000"
+    black: '#000000',
+    white: '#FFFFFF',
+    green: '#00AA00',
+    blue: '#0000AA',
+    brown: '#4f1f0b',
+    darkbrown: '#291006',
+    grey: '#cdcdcd',
+    red: '#ff0000'
 };
 
 var directions = exports.directions = {
@@ -67,21 +67,21 @@ var interactionTextArea = exports.interactionTextArea = {
 };
 
 var genders = exports.genders = {
-    male: "M",
-    female: "F",
-    alien: "A"
+    male: 'M',
+    female: 'F',
+    alien: 'A'
 };
 
 var pronouns = exports.pronouns = {
-    M: "him",
-    F: "her",
-    A: "xlem"
+    M: 'him',
+    F: 'her',
+    A: 'xlem'
 };
 
 var posessivePronouns = exports.posessivePronouns = {
-    M: "his",
-    F: "her",
-    A: "xleir"
+    M: 'his',
+    F: 'her',
+    A: 'xleir'
 };
 
 var personCount = exports.personCount = 4;
@@ -267,7 +267,7 @@ window.addEventListener('keyup', function (e) {
 
 
 },{}],4:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -284,13 +284,13 @@ var _createClass = function () {
     };
 }();
 
-var _util = require("./util");
+var _util = require('./util');
 
 var util = _interopRequireWildcard(_util);
 
-var _scene = require("./scene");
+var _scene = require('./scene');
 
-var _constants = require("../constants");
+var _constants = require('../constants');
 
 function _interopRequireWildcard(obj) {
     if (obj && obj.__esModule) {
@@ -341,19 +341,19 @@ var Interaction = function (_Scene) {
         _this.person = person;
         _this.actions.back = _this.returnToWorldMap.bind(_this);
 
-        util.log("Entering interaction with " + _this.person.name);
+        util.log('Entering interaction with ' + _this.person.name);
         return _this;
     }
 
     _createClass(Interaction, [{
-        key: "draw",
+        key: 'draw',
         value: function draw(ctx) {
             this.drawConversationTextArea(ctx);
             this.drawBadge(ctx);
             this.drawConversation(ctx);
         }
     }, {
-        key: "drawConversationTextArea",
+        key: 'drawConversationTextArea',
         value: function drawConversationTextArea(ctx) {
             ctx.save();
             ctx.rect(0, _constants.canvasProperties.height - _constants.interactionTextArea.height, _constants.interactionTextArea.width, _constants.interactionTextArea.height);
@@ -363,14 +363,14 @@ var Interaction = function (_Scene) {
             ctx.restore();
         }
     }, {
-        key: "drawBadge",
+        key: 'drawBadge',
         value: function drawBadge(ctx) {
             ctx.font = _constants.fonts.large;
             ctx.fillStyle = _constants.colours.white;
             ctx.fillText(this.person.name, _constants.interactionTextArea.badgeOffsetX, _constants.canvasProperties.height - _constants.interactionTextArea.height + _constants.interactionTextArea.badgeOffsetY);
         }
     }, {
-        key: "drawConversation",
+        key: 'drawConversation',
         value: function drawConversation(ctx) {
             var y = _constants.canvasProperties.height - _constants.interactionTextArea.height + _constants.interactionTextArea.badgeOffsetY * 3;
             ctx.font = _constants.fonts.small;
@@ -380,7 +380,7 @@ var Interaction = function (_Scene) {
             });
         }
     }, {
-        key: "returnToWorldMap",
+        key: 'returnToWorldMap',
         value: function returnToWorldMap() {
             if (!this.worldMap) return;
             this.game.setScene(this.worldMap);
@@ -526,7 +526,7 @@ var Locale = function () {
                 enc.push([]);
                 ent.push([]);
                 for (var j = 0; j < height; j++) {
-                    map[i].push(["Blank"]);
+                    map[i].push(['Blank']);
                     enc[i].push(false);
                     ent[i].push(false);
                 }
@@ -563,11 +563,11 @@ var Locale = function () {
         key: 'addInhabitance',
         value: function addInhabitance(startX, startY, width, height, inhabitance) {
             var doorway = inhabitance.doorway;
-            this.terrainPaint(startX, startY, width, height, "Wall");
-            this.terrainPaint(doorway.x, doorway.y, 1, 1, "Doorway");
+            this.terrainPaint(startX, startY, width, height, 'Wall');
+            this.terrainPaint(doorway.x, doorway.y, 1, 1, 'Doorway');
             this.entrances[doorway.x][doorway.y] = {
                 locale: inhabitance,
-                entryPoint: "frontDoor"
+                entryPoint: 'frontDoor'
             };
         }
     }, {
@@ -650,20 +650,20 @@ exports.Inhabitance = Inhabitance;
 
 
 },{"../constants":1,"./util":12}],7:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.choosePeople = undefined;
 
-var _constants = require("../constants");
+var _constants = require('../constants');
 
-var _util = require("./util");
+var _util = require('./util');
 
 var util = _interopRequireWildcard(_util);
 
-var _people = require("../people/people");
+var _people = require('../people/people');
 
 function _interopRequireWildcard(obj) {
     if (obj && obj.__esModule) {
@@ -679,13 +679,13 @@ function _interopRequireWildcard(obj) {
 
 var choosePeople = exports.choosePeople = function choosePeople() {
     var chosenPeople = [];
-    util.log("Choosing " + _constants.personCount + " people...");
+    util.log('Choosing ' + _constants.personCount + ' people...');
     var person = void 0;
     while (chosenPeople.length < _constants.personCount) {
         person = util.pickRandomProperty(_people.people);
         if (chosenPeople.indexOf(person) === -1) {
             chosenPeople.push(person);
-            util.log(person + " has been chosen.");
+            util.log(person + ' has been chosen.');
         }
     }
 
@@ -700,7 +700,7 @@ var choosePeople = exports.choosePeople = function choosePeople() {
     */
 
 
-},{"../constants":1,"../people/people":39,"./util":12}],8:[function(require,module,exports){
+},{"../constants":1,"../people/people":43,"./util":12}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -779,7 +779,7 @@ var Person = function () {
         key: 'addAcquaintanceRelationship',
         value: function addAcquaintanceRelationship(person) {
             this.relationships[person] = {
-                description: "Acquaintance",
+                description: 'Acquaintance',
                 value: 50
             };
         }
@@ -792,7 +792,7 @@ exports.Person = Person;
 
 
 },{"../constants":1,"./util":12}],9:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -816,7 +816,7 @@ var _createClass = function () {
       *
       */
 
-var _constants = require("../constants");
+var _constants = require('../constants');
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -833,7 +833,7 @@ var Player = function () {
     }
 
     _createClass(Player, [{
-        key: "setPlacement",
+        key: 'setPlacement',
         value: function setPlacement(x, y) {
             this.x = x;
             this.y = y;
@@ -847,7 +847,7 @@ exports.Player = Player;
 
 
 },{"../constants":1}],10:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -871,7 +871,7 @@ var _createClass = function () {
       *
       */
 
-var _constants = require("../constants");
+var _constants = require('../constants');
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -894,12 +894,12 @@ var Scene = function () {
     }
 
     _createClass(Scene, [{
-        key: "empty",
+        key: 'empty',
         value: function empty() {
             return null;
         }
     }, {
-        key: "doActions",
+        key: 'doActions',
         value: function doActions(action) {
             if (!this.game || !action) return;
             this.game.triggerActionTimeout();
@@ -907,10 +907,10 @@ var Scene = function () {
             this.actions[action]();
         }
     }, {
-        key: "draw",
+        key: 'draw',
         value: function draw(ctx) {}
     }, {
-        key: "setGame",
+        key: 'setGame',
         value: function setGame(game) {
             this.game = game;
         }
@@ -1152,7 +1152,7 @@ var clearLog = exports.clearLog = function clearLog() {
 
 
 },{}],13:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -1185,19 +1185,19 @@ var _get = function get(object, property, receiver) {
     }
 };
 
-var _terrain2 = require("./terrain");
+var _terrain2 = require('./terrain');
 
 var terrain = _interopRequireWildcard(_terrain2);
 
-var _constants = require("../constants");
+var _constants = require('../constants');
 
-var _scene = require("./scene");
+var _scene = require('./scene');
 
-var _interaction = require("./interaction");
+var _interaction = require('./interaction');
 
-var _locales = require("../locales/locales");
+var _locales = require('../locales/locales');
 
-var _people = require("../people/people");
+var _people = require('../people/people');
 
 function _interopRequireWildcard(obj) {
     if (obj && obj.__esModule) {
@@ -1258,40 +1258,40 @@ var WorldMap = function (_Scene) {
     }
 
     _createClass(WorldMap, [{
-        key: "doActions",
+        key: 'doActions',
         value: function doActions(action) {
-            _get(WorldMap.prototype.__proto__ || Object.getPrototypeOf(WorldMap.prototype), "doActions", this).call(this, action);
+            _get(WorldMap.prototype.__proto__ || Object.getPrototypeOf(WorldMap.prototype), 'doActions', this).call(this, action);
 
             if (!action) return;
             this.checkForRandomEncounters();
             this.checkForEntrance();
         }
     }, {
-        key: "moveUp",
+        key: 'moveUp',
         value: function moveUp() {
             if (this.localeMap[this.player.x][this.player.y - 1].isPassable()) this.player.setPlacement(this.player.x, this.player.y - 1);
             this.player.direction = _constants.directions.up;
         }
     }, {
-        key: "moveDown",
+        key: 'moveDown',
         value: function moveDown() {
             if (this.localeMap[this.player.x][this.player.y + 1].isPassable()) this.player.setPlacement(this.player.x, this.player.y + 1);
             this.player.direction = _constants.directions.down;
         }
     }, {
-        key: "moveLeft",
+        key: 'moveLeft',
         value: function moveLeft() {
             if (this.localeMap[this.player.x - 1][this.player.y].isPassable()) this.player.setPlacement(this.player.x - 1, this.player.y);
             this.player.direction = _constants.directions.left;
         }
     }, {
-        key: "moveRight",
+        key: 'moveRight',
         value: function moveRight() {
             if (this.localeMap[this.player.x + 1][this.player.y].isPassable()) this.player.setPlacement(this.player.x + 1, this.player.y);
             this.player.direction = _constants.directions.right;
         }
     }, {
-        key: "draw",
+        key: 'draw',
         value: function draw(ctx) {
             this.offsetX = this.player.x * _constants.tileSize - this.game.centerPoint.x;
             this.offsetY = this.player.y * _constants.tileSize - this.game.centerPoint.y;
@@ -1303,7 +1303,7 @@ var WorldMap = function (_Scene) {
             this.drawPeople(ctx);
         }
     }, {
-        key: "drawPlayer",
+        key: 'drawPlayer',
         value: function drawPlayer(ctx) {
             // Player is always at center of screen
 
@@ -1313,7 +1313,7 @@ var WorldMap = function (_Scene) {
             ctx.fill();
         }
     }, {
-        key: "drawLocale",
+        key: 'drawLocale',
         value: function drawLocale(ctx) {
             if (!this.locale) return;
 
@@ -1338,7 +1338,7 @@ var WorldMap = function (_Scene) {
             }
         }
     }, {
-        key: "drawPeople",
+        key: 'drawPeople',
         value: function drawPeople(ctx) {
             var _this2 = this;
 
@@ -1357,7 +1357,7 @@ var WorldMap = function (_Scene) {
             });
         }
     }, {
-        key: "checkForRandomEncounters",
+        key: 'checkForRandomEncounters',
         value: function checkForRandomEncounters() {
             var potentialRandomEncounter = this.locale.encounters[this.player.x][this.player.y];
             if (!potentialRandomEncounter) return;
@@ -1368,12 +1368,12 @@ var WorldMap = function (_Scene) {
             }
         }
     }, {
-        key: "startRandomEncounter",
+        key: 'startRandomEncounter',
         value: function startRandomEncounter(enemies) {
             this.game.setScene(new Encounter(enemies));
         }
     }, {
-        key: "checkForInteraction",
+        key: 'checkForInteraction',
         value: function checkForInteraction() {
             var x = this.player.x,
                 y = this.player.y;
@@ -1397,14 +1397,14 @@ var WorldMap = function (_Scene) {
             this.startInteraction(this.localeMap[x][y].person);
         }
     }, {
-        key: "startInteraction",
+        key: 'startInteraction',
         value: function startInteraction(person) {
             var interaction = new _interaction.Interaction(person);
             interaction.worldMap = this;
             this.game.setScene(interaction);
         }
     }, {
-        key: "checkForEntrance",
+        key: 'checkForEntrance',
         value: function checkForEntrance() {
             var entrance = this.locale.entrances[this.player.x][this.player.y];
             if (!entrance) return;
@@ -1412,7 +1412,7 @@ var WorldMap = function (_Scene) {
             this.enter(entrance);
         }
     }, {
-        key: "enter",
+        key: 'enter',
         value: function enter(entrance) {
             this.presentPeople = [];
 
@@ -1427,7 +1427,7 @@ var WorldMap = function (_Scene) {
             this.setCurrentLocale(locale, entrance.entryPoint);
         }
     }, {
-        key: "spawnPeople",
+        key: 'spawnPeople',
         value: function spawnPeople() {
             var _this3 = this;
 
@@ -1444,7 +1444,7 @@ var WorldMap = function (_Scene) {
             });
         }
     }, {
-        key: "setCurrentLocale",
+        key: 'setCurrentLocale',
         value: function setCurrentLocale(locale, entryPoint) {
             var rasterize = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
 
@@ -1459,7 +1459,7 @@ var WorldMap = function (_Scene) {
             this.spawnPeople();
         }
     }, {
-        key: "rasterizeLocaleMap",
+        key: 'rasterizeLocaleMap',
         value: function rasterizeLocaleMap() {
             if (!this.locale) return;
 
@@ -1479,19 +1479,19 @@ var WorldMap = function (_Scene) {
 exports.WorldMap = WorldMap;
 
 
-},{"../constants":1,"../locales/locales":27,"../people/people":39,"./interaction":4,"./scene":10,"./terrain":11}],14:[function(require,module,exports){
-"use strict";
+},{"../constants":1,"../locales/locales":27,"../people/people":43,"./interaction":4,"./scene":10,"./terrain":11}],14:[function(require,module,exports){
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.Evidence = undefined;
 
-var _util = require("../engine/util");
+var _util = require('../engine/util');
 
 var util = _interopRequireWildcard(_util);
 
-var _item = require("../engine/item");
+var _item = require('../engine/item');
 
 function _interopRequireWildcard(obj) {
     if (obj && obj.__esModule) {
@@ -1550,18 +1550,18 @@ exports.Evidence = Evidence;
 
 
 },{"../engine/item":5,"../engine/util":12}],15:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.chooseEvidence = undefined;
 
-var _util = require("../engine/util");
+var _util = require('../engine/util');
 
 var util = _interopRequireWildcard(_util);
 
-var _murderweapons = require("./murderweapons");
+var _murderweapons = require('./murderweapons');
 
 function _interopRequireWildcard(obj) {
     if (obj && obj.__esModule) {
@@ -1874,16 +1874,16 @@ exports.Spoon = Spoon;
 
 
 },{"./murderweapon":18}],21:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.GroveStreet1 = undefined;
 
-var _islands = require("../islands");
+var _islands = require('../islands');
 
-var _grovestreethouse = require("./grovestreethouse");
+var _grovestreethouse = require('./grovestreethouse');
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -1918,15 +1918,15 @@ var GroveStreet1 = function (_GroveStreetTemplate) {
 
         var _this = _possibleConstructorReturn(this, (GroveStreet1.__proto__ || Object.getPrototypeOf(GroveStreet1)).call(this, player, people, inhabitance));
 
-        _this.id = "GroveStreet1";
+        _this.id = 'GroveStreet1';
         _this.entryPoints.frontDoor = { x: 48, y: 48 };
 
         _this.entrances[49][48] = {
             locale: new _islands.Islands(player, people),
-            entryPoint: "groveStreet1"
+            entryPoint: 'groveStreet1'
         };
 
-        _this.terrainPaint(49, 48, 1, 1, "WoodenFloor");
+        _this.terrainPaint(49, 48, 1, 1, 'WoodenFloor');
         return _this;
     }
 
@@ -1937,16 +1937,16 @@ exports.GroveStreet1 = GroveStreet1;
 
 
 },{"../islands":26,"./grovestreethouse":25}],22:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.GroveStreet2 = undefined;
 
-var _islands = require("../islands");
+var _islands = require('../islands');
 
-var _grovestreethouse = require("./grovestreethouse");
+var _grovestreethouse = require('./grovestreethouse');
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -1981,15 +1981,15 @@ var GroveStreet2 = function (_GroveStreetTemplate) {
 
         var _this = _possibleConstructorReturn(this, (GroveStreet2.__proto__ || Object.getPrototypeOf(GroveStreet2)).call(this, player, people, inhabitance));
 
-        _this.id = "GroveStreet2";
+        _this.id = 'GroveStreet2';
         _this.entryPoints.frontDoor = { x: 26, y: 48 };
 
         _this.entrances[25][48] = {
             locale: new _islands.Islands(player, people),
-            entryPoint: "groveStreet2"
+            entryPoint: 'groveStreet2'
         };
 
-        _this.terrainPaint(25, 48, 1, 1, "WoodenFloor");
+        _this.terrainPaint(25, 48, 1, 1, 'WoodenFloor');
         return _this;
     }
 
@@ -2000,16 +2000,16 @@ exports.GroveStreet2 = GroveStreet2;
 
 
 },{"../islands":26,"./grovestreethouse":25}],23:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.GroveStreet3 = undefined;
 
-var _islands = require("../islands");
+var _islands = require('../islands');
 
-var _grovestreethouse = require("./grovestreethouse");
+var _grovestreethouse = require('./grovestreethouse');
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -2044,15 +2044,15 @@ var GroveStreet3 = function (_GroveStreetTemplate) {
 
         var _this = _possibleConstructorReturn(this, (GroveStreet3.__proto__ || Object.getPrototypeOf(GroveStreet3)).call(this, player, people, inhabitance));
 
-        _this.id = "GroveStreet3";
+        _this.id = 'GroveStreet3';
         _this.entryPoints.frontDoor = { x: 48, y: 48 };
 
         _this.entrances[49][48] = {
             locale: new _islands.Islands(player, people),
-            entryPoint: "groveStreet3"
+            entryPoint: 'groveStreet3'
         };
 
-        _this.terrainPaint(49, 48, 1, 1, "WoodenFloor");
+        _this.terrainPaint(49, 48, 1, 1, 'WoodenFloor');
         return _this;
     }
 
@@ -2063,16 +2063,16 @@ exports.GroveStreet3 = GroveStreet3;
 
 
 },{"../islands":26,"./grovestreethouse":25}],24:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.GroveStreet4 = undefined;
 
-var _islands = require("../islands");
+var _islands = require('../islands');
 
-var _grovestreethouse = require("./grovestreethouse");
+var _grovestreethouse = require('./grovestreethouse');
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -2107,15 +2107,15 @@ var GroveStreet4 = function (_GroveStreetTemplate) {
 
         var _this = _possibleConstructorReturn(this, (GroveStreet4.__proto__ || Object.getPrototypeOf(GroveStreet4)).call(this, player, people, inhabitance));
 
-        _this.id = "GroveStreet4";
+        _this.id = 'GroveStreet4';
         _this.entryPoints.frontDoor = { x: 26, y: 48 };
 
         _this.entrances[25][48] = {
             locale: new _islands.Islands(player, people),
-            entryPoint: "groveStreet4"
+            entryPoint: 'groveStreet4'
         };
 
-        _this.terrainPaint(25, 48, 1, 1, "WoodenFloor");
+        _this.terrainPaint(25, 48, 1, 1, 'WoodenFloor');
         return _this;
     }
 
@@ -2126,14 +2126,14 @@ exports.GroveStreet4 = GroveStreet4;
 
 
 },{"../islands":26,"./grovestreethouse":25}],25:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.GroveStreetTemplate = undefined;
 
-var _paradise_locale = require("../../paradise_locale");
+var _paradise_locale = require('../../paradise_locale');
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -2175,11 +2175,11 @@ var GroveStreetTemplate = function (_ParadiseInterior) {
         _this.spawnPoints.push({ x: 45, y: 32 });
         _this.spawnPoints.push({ x: 28, y: 33 });
 
-        _this.terrainPaint(0, 0, 100, 100, "Blank");
-        _this.terrainPaint(25, 25, 25, 25, "Wall");
-        _this.terrainPaint(26, 26, 11, 23, "WoodenFloor");
-        _this.terrainPaint(38, 26, 11, 23, "WoodenFloor");
-        _this.terrainPaint(37, 37, 1, 1, "WoodenFloor");
+        _this.terrainPaint(0, 0, 100, 100, 'Blank');
+        _this.terrainPaint(25, 25, 25, 25, 'Wall');
+        _this.terrainPaint(26, 26, 11, 23, 'WoodenFloor');
+        _this.terrainPaint(38, 26, 11, 23, 'WoodenFloor');
+        _this.terrainPaint(37, 37, 1, 1, 'WoodenFloor');
         return _this;
     }
 
@@ -2189,7 +2189,7 @@ var GroveStreetTemplate = function (_ParadiseInterior) {
 exports.GroveStreetTemplate = GroveStreetTemplate;
 
 
-},{"../../paradise_locale":31}],26:[function(require,module,exports){
+},{"../../paradise_locale":35}],26:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2265,7 +2265,7 @@ var Islands = function (_ParadiseLocale) {
 exports.Islands = Islands;
 
 
-},{"../engine/locale":6,"../paradise_locale":31}],27:[function(require,module,exports){
+},{"../engine/locale":6,"../paradise_locale":35}],27:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2302,8 +2302,8 @@ function _interopRequireWildcard(obj) {
 }
 
 var startingMaps = exports.startingMaps = {
-    "Village": _village.Village,
-    "Islands": _islands.Islands
+    'Village': _village.Village,
+    'Islands': _islands.Islands
 }; /*
     *
     *  XL RPG/Locales
@@ -2316,12 +2316,12 @@ var startingMaps = exports.startingMaps = {
 // Locales
 
 var locales = exports.locales = {
-    "Village": _village.Village,
-    "Islands": _islands.Islands,
-    "GroveStreet1": _grovestreet.GroveStreet1,
-    "GroveStreet2": _grovestreet2.GroveStreet2,
-    "GroveStreet3": _grovestreet3.GroveStreet3,
-    "GroveStreet4": _grovestreet4.GroveStreet4
+    'Village': _village.Village,
+    'Islands': _islands.Islands,
+    'GroveStreet1': _grovestreet.GroveStreet1,
+    'GroveStreet2': _grovestreet2.GroveStreet2,
+    'GroveStreet3': _grovestreet3.GroveStreet3,
+    'GroveStreet4': _grovestreet4.GroveStreet4
 };
 
 var chooseStartingMap = exports.chooseStartingMap = function chooseStartingMap() {
@@ -2333,14 +2333,14 @@ var chooseStartingMap = exports.chooseStartingMap = function chooseStartingMap()
 
 
 },{"../engine/util":12,"./interiors/1grovestreet":21,"./interiors/2grovestreet":22,"./interiors/3grovestreet":23,"./interiors/4grovestreet":24,"./islands":26,"./village":28}],28:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.Village = undefined;
 
-var _paradise_locale = require("../paradise_locale");
+var _paradise_locale = require('../paradise_locale');
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -2379,11 +2379,11 @@ var Village = function (_ParadiseLocale) {
 
         _this.initialise(300, 300);
 
-        _this.terrainPaint(0, 0, 300, 300, "Water");
-        _this.terrainPaint(20, 27, 15, 90, "Grass");
-        _this.terrainPaint(35, 35, 2, 40, "Grass");
-        _this.terrainPaint(37, 37, 2, 36, "Grass");
-        _this.terrainPaint(39, 39, 2, 32, "Grass");
+        _this.terrainPaint(0, 0, 300, 300, 'Water');
+        _this.terrainPaint(20, 27, 15, 90, 'Grass');
+        _this.terrainPaint(35, 35, 2, 40, 'Grass');
+        _this.terrainPaint(37, 37, 2, 36, 'Grass');
+        _this.terrainPaint(39, 39, 2, 32, 'Grass');
         return _this;
     }
 
@@ -2393,7 +2393,247 @@ var Village = function (_ParadiseLocale) {
 exports.Village = Village;
 
 
-},{"../paradise_locale":31}],29:[function(require,module,exports){
+},{"../paradise_locale":35}],29:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.InheritanceScam = undefined;
+
+var _motives = require('./motives');
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  CODENAME: Paradise/Motives/Inheritance Scam
+   *  XL Gaming/Declan Tyson
+   *  v0.0.24
+   *  06/02/2018
+   *
+   */
+
+var InheritanceScam = function (_Motive) {
+    _inherits(InheritanceScam, _Motive);
+
+    function InheritanceScam() {
+        _classCallCheck(this, InheritanceScam);
+
+        var _this = _possibleConstructorReturn(this, (InheritanceScam.__proto__ || Object.getPrototypeOf(InheritanceScam)).call(this, 'Inheritance Scam', 'Removal of a spouse or family member in order to obtain part or all of their inheritance', []));
+
+        _this.addRelationshipBias('Wife', 20);
+        _this.addRelationshipBias('Husband', 20);
+        _this.addRelationshipBias('Brother', 25);
+        _this.addRelationshipBias('Sister', 25);
+        _this.addRelationshipBias('Mother', 30);
+        _this.addRelationshipBias('Father', 30);
+        return _this;
+    }
+
+    return InheritanceScam;
+}(_motives.Motive);
+
+exports.InheritanceScam = InheritanceScam;
+
+
+},{"./motives":30}],30:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+/*
+ *
+ *  CODENAME: Paradise/Motives
+ *  XL Gaming/Declan Tyson
+ *  v0.0.24
+ *  06/02/2018
+ *
+ */
+
+var Motive = function () {
+    function Motive(name, description, evidence) {
+        _classCallCheck(this, Motive);
+
+        this.name = name;
+        this.description = description;
+        this.evidence = evidence;
+
+        this.relationshipBiases = {};
+    }
+
+    _createClass(Motive, [{
+        key: "addRelationshipBias",
+        value: function addRelationshipBias(relationshipName, value) {
+            this.relationshipBiases[relationshipName] = value;
+        }
+    }]);
+
+    return Motive;
+}();
+
+exports.Motive = Motive;
+
+
+},{}],31:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Passion = undefined;
+
+var _motives = require('./motives');
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  CODENAME: Paradise/Motives/Inheritance Scam
+   *  XL Gaming/Declan Tyson
+   *  v0.0.24
+   *  06/02/2018
+   *
+   */
+
+var Passion = function (_Motive) {
+    _inherits(Passion, _Motive);
+
+    function Passion() {
+        _classCallCheck(this, Passion);
+
+        var _this = _possibleConstructorReturn(this, (Passion.__proto__ || Object.getPrototypeOf(Passion)).call(this, 'Crime of Passion', 'Driven by passion to kill a jealous partner or their concubine.', []));
+
+        _this.addRelationshipBias('Wife', 30);
+        _this.addRelationshipBias('Husband', 30);
+        _this.addRelationshipBias('The Other Woman', 40);
+        _this.addRelationshipBias('The Other Man', 40);
+        _this.addRelationshipBias('Mistress', 15);
+        _this.addRelationshipBias('Toyboy', 15);
+        return _this;
+    }
+
+    return Passion;
+}(_motives.Motive);
+
+exports.Passion = Passion;
+
+
+},{"./motives":30}],32:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Psychosis = undefined;
+
+var _motives = require('./motives');
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  CODENAME: Paradise/Motives/Inheritance Scam
+   *  XL Gaming/Declan Tyson
+   *  v0.0.24
+   *  06/02/2018
+   *
+   */
+
+var Psychosis = function (_Motive) {
+    _inherits(Psychosis, _Motive);
+
+    function Psychosis() {
+        _classCallCheck(this, Psychosis);
+
+        var _this = _possibleConstructorReturn(this, (Psychosis.__proto__ || Object.getPrototypeOf(Psychosis)).call(this, 'Psychotic Break', 'A temporary loss of sense leading to murder.', []));
+
+        _this.addRelationshipBias('Wife', 20);
+        _this.addRelationshipBias('Husband', 20);
+        _this.addRelationshipBias('Acquaintance', 20);
+        _this.addRelationshipBias('Friend', 20);
+        _this.addRelationshipBias('Brother', 20);
+        _this.addRelationshipBias('Sister', 20);
+        _this.addRelationshipBias('Mother', 20);
+        _this.addRelationshipBias('Father', 20);
+        _this.addRelationshipBias('Son', 20);
+        _this.addRelationshipBias('Daughter', 20);
+        _this.addRelationshipBias('The Other Woman', 20);
+        _this.addRelationshipBias('The Other Man', 20);
+        _this.addRelationshipBias('Mistress', 20);
+        _this.addRelationshipBias('Toyboy', 20);
+        _this.addRelationshipBias('Student', 20);
+        _this.addRelationshipBias('Teacher', 20);
+        return _this;
+    }
+
+    return Psychosis;
+}(_motives.Motive);
+
+exports.Psychosis = Psychosis;
+
+
+},{"./motives":30}],33:[function(require,module,exports){
 'use strict';
 
 var _util = require('./engine/util');
@@ -2428,7 +2668,7 @@ function _interopRequireWildcard(obj) {
     }
 }
 
-window.startGame = function (locale, people, victim, murderer, weapon) {
+window.startGame = function (locale, people, victim, murderer, weapon, motive) {
     util.clearLog();
 
     locale = _locales.startingMaps[locale] || _locales.startingMaps[(0, _locales.chooseStartingMap)()];
@@ -2439,8 +2679,9 @@ window.startGame = function (locale, people, victim, murderer, weapon) {
     window.game = (0, _game.StartGame)(locale, people, player, worldMap);
 
     window.game.victim = victim || (0, _people.chooseVictim)(people);
-    window.game.murderer = murderer || (0, _people.chooseMurderer)(victim, people);
+    window.game.murderer = murderer || (0, _people.chooseMurderer)(window.game.victim, people);
     window.game.weapon = weapon || (0, _murderweapons.chooseMurderWeapon)();
+    window.game.motive = motive || (0, _people.chooseMotive)(window.game.victim, window.game.murderer);
 
     window.game.evidence = (0, _evidences.chooseEvidence)(game);
 
@@ -2456,14 +2697,14 @@ window.startGame = function (locale, people, victim, murderer, weapon) {
     *
     *  CODENAME: Paradise
     *  XL Gaming/Declan Tyson
-    *  v0.0.23
+    *  v0.0.24
     *  06/02/2018
     *
     */
 
 
-},{"./engine/game":2,"./engine/people":7,"./engine/player":9,"./engine/util":12,"./evidence/evidences":15,"./evidence/murderweapons":19,"./locales/locales":27,"./paradise_worldmap":33,"./people/people":39}],30:[function(require,module,exports){
-"use strict";
+},{"./engine/game":2,"./engine/people":7,"./engine/player":9,"./engine/util":12,"./evidence/evidences":15,"./evidence/murderweapons":19,"./locales/locales":27,"./paradise_worldmap":37,"./people/people":43}],34:[function(require,module,exports){
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -2496,13 +2737,13 @@ var _get = function get(object, property, receiver) {
     }
 };
 
-var _util = require("./engine/util");
+var _util = require('./engine/util');
 
 var util = _interopRequireWildcard(_util);
 
-var _constants = require("./constants");
+var _constants = require('./constants');
 
-var _interaction = require("./engine/interaction");
+var _interaction = require('./engine/interaction');
 
 function _interopRequireWildcard(obj) {
     if (obj && obj.__esModule) {
@@ -2556,10 +2797,10 @@ var ParadiseInteraction = function (_Interaction) {
                 _person = _this.person,
                 weapon = _this.game.weapon;
 
-            lines.push(_person.name + " is dead.");
+            lines.push(_person.name + ' is dead.');
             _person.evidence.forEach(function (evidence) {
                 if (evidence.name === weapon) {
-                    lines.push("Lying next to " + _constants.pronouns[_person.gender] + " is " + evidence.description + ".");
+                    lines.push('Lying next to ' + _constants.pronouns[_person.gender] + ' is ' + evidence.description + '.');
                 }
             });
 
@@ -2571,9 +2812,9 @@ var ParadiseInteraction = function (_Interaction) {
     }
 
     _createClass(ParadiseInteraction, [{
-        key: "drawBadge",
+        key: 'drawBadge',
         value: function drawBadge(ctx) {
-            _get(ParadiseInteraction.prototype.__proto__ || Object.getPrototypeOf(ParadiseInteraction.prototype), "drawBadge", this).call(this, ctx);
+            _get(ParadiseInteraction.prototype.__proto__ || Object.getPrototypeOf(ParadiseInteraction.prototype), 'drawBadge', this).call(this, ctx);
 
             if (this.person.victim) {
                 ctx.font = _constants.fonts.death;
@@ -2582,7 +2823,7 @@ var ParadiseInteraction = function (_Interaction) {
             }
         }
     }, {
-        key: "returnToWorldMap",
+        key: 'returnToWorldMap',
         value: function returnToWorldMap() {
             if (!this.worldMap) return;
             this.game.setScene(this.worldMap);
@@ -2595,19 +2836,19 @@ var ParadiseInteraction = function (_Interaction) {
 exports.ParadiseInteraction = ParadiseInteraction;
 
 
-},{"./constants":1,"./engine/interaction":4,"./engine/util":12}],31:[function(require,module,exports){
-"use strict";
+},{"./constants":1,"./engine/interaction":4,"./engine/util":12}],35:[function(require,module,exports){
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.ParadiseLocale = exports.ParadiseInterior = undefined;
 
-var _util = require("./engine/util");
+var _util = require('./engine/util');
 
 var util = _interopRequireWildcard(_util);
 
-var _locale = require("./engine/locale");
+var _locale = require('./engine/locale');
 
 function _interopRequireWildcard(obj) {
     if (obj && obj.__esModule) {
@@ -2680,19 +2921,19 @@ exports.ParadiseInterior = ParadiseInterior;
 exports.ParadiseLocale = ParadiseLocale;
 
 
-},{"./engine/locale":6,"./engine/util":12}],32:[function(require,module,exports){
-"use strict";
+},{"./engine/locale":6,"./engine/util":12}],36:[function(require,module,exports){
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.ParadisePerson = undefined;
 
-var _util = require("./engine/util");
+var _util = require('./engine/util');
 
 var util = _interopRequireWildcard(_util);
 
-var _person = require("./engine/person");
+var _person = require('./engine/person');
 
 function _interopRequireWildcard(obj) {
     if (obj && obj.__esModule) {
@@ -2749,8 +2990,8 @@ var ParadisePerson = function (_Person) {
 exports.ParadisePerson = ParadisePerson;
 
 
-},{"./engine/person":8,"./engine/util":12}],33:[function(require,module,exports){
-"use strict";
+},{"./engine/person":8,"./engine/util":12}],37:[function(require,module,exports){
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -2767,13 +3008,13 @@ var _createClass = function () {
     };
 }();
 
-var _worldmap = require("./engine/worldmap");
+var _worldmap = require('./engine/worldmap');
 
-var _people = require("./people/people");
+var _people = require('./people/people');
 
-var _paradise_interaction = require("./paradise_interaction");
+var _paradise_interaction = require('./paradise_interaction');
 
-var _util = require("./engine/util");
+var _util = require('./engine/util');
 
 var util = _interopRequireWildcard(_util);
 
@@ -2824,7 +3065,7 @@ var ParadiseWorldMap = function (_WorldMap) {
     }
 
     _createClass(ParadiseWorldMap, [{
-        key: "spawnPeople",
+        key: 'spawnPeople',
         value: function spawnPeople() {
             var _this2 = this;
 
@@ -2849,19 +3090,19 @@ var ParadiseWorldMap = function (_WorldMap) {
             this.plantEvidence(this.locale);
         }
     }, {
-        key: "startInteraction",
+        key: 'startInteraction',
         value: function startInteraction(person) {
             var interaction = new _paradise_interaction.ParadiseInteraction(person, this.game);
             interaction.worldMap = this;
             this.game.setScene(interaction);
         }
     }, {
-        key: "plantEvidence",
+        key: 'plantEvidence',
         value: function plantEvidence(location) {
             this.game.evidence.forEach(function (evidence) {
                 if (location.id === evidence.location) {
                     location.evidence.push(evidence);
-                    util.log(evidence.name + " is hidden here!");
+                    util.log(evidence.name + ' is hidden here!');
                 }
             });
         }
@@ -2873,17 +3114,17 @@ var ParadiseWorldMap = function (_WorldMap) {
 exports.ParadiseWorldMap = ParadiseWorldMap;
 
 
-},{"./engine/util":12,"./engine/worldmap":13,"./paradise_interaction":30,"./people/people":39}],34:[function(require,module,exports){
-"use strict";
+},{"./engine/util":12,"./engine/worldmap":13,"./paradise_interaction":34,"./people/people":43}],38:[function(require,module,exports){
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.Evelyn = undefined;
 
-var _constants = require("../constants");
+var _constants = require('../constants');
 
-var _paradise_person = require("../paradise_person");
+var _paradise_person = require('../paradise_person');
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -2916,7 +3157,7 @@ var Evelyn = function (_ParadisePerson) {
     function Evelyn() {
         _classCallCheck(this, Evelyn);
 
-        return _possibleConstructorReturn(this, (Evelyn.__proto__ || Object.getPrototypeOf(Evelyn)).call(this, "Evelyn", _constants.genders.female));
+        return _possibleConstructorReturn(this, (Evelyn.__proto__ || Object.getPrototypeOf(Evelyn)).call(this, 'Evelyn', _constants.genders.female));
     }
 
     return Evelyn;
@@ -2925,17 +3166,17 @@ var Evelyn = function (_ParadisePerson) {
 exports.Evelyn = Evelyn;
 
 
-},{"../constants":1,"../paradise_person":32}],35:[function(require,module,exports){
-"use strict";
+},{"../constants":1,"../paradise_person":36}],39:[function(require,module,exports){
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.Jill = undefined;
 
-var _constants = require("../constants");
+var _constants = require('../constants');
 
-var _paradise_person = require("../paradise_person");
+var _paradise_person = require('../paradise_person');
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -2957,7 +3198,7 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Person/Jill
    *  XL Gaming/Declan Tyson
-   *  v0.0.23
+   *  v0.0.24
    *  06/02/2018
    *
    */
@@ -2968,7 +3209,15 @@ var Jill = function (_ParadisePerson) {
     function Jill() {
         _classCallCheck(this, Jill);
 
-        return _possibleConstructorReturn(this, (Jill.__proto__ || Object.getPrototypeOf(Jill)).call(this, "Jill", _constants.genders.female));
+        var _this = _possibleConstructorReturn(this, (Jill.__proto__ || Object.getPrototypeOf(Jill)).call(this, 'Jill', _constants.genders.female));
+
+        _this.relationships = {
+            'John': {
+                description: 'Husband',
+                value: 45
+            }
+        };
+        return _this;
     }
 
     return Jill;
@@ -2977,17 +3226,17 @@ var Jill = function (_ParadisePerson) {
 exports.Jill = Jill;
 
 
-},{"../constants":1,"../paradise_person":32}],36:[function(require,module,exports){
-"use strict";
+},{"../constants":1,"../paradise_person":36}],40:[function(require,module,exports){
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.John = undefined;
 
-var _constants = require("../constants");
+var _constants = require('../constants');
 
-var _paradise_person = require("../paradise_person");
+var _paradise_person = require('../paradise_person');
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -3009,7 +3258,7 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Person/John
    *  XL Gaming/Declan Tyson
-   *  v0.0.23
+   *  v0.0.24
    *  06/02/2018
    *
    */
@@ -3020,7 +3269,15 @@ var John = function (_ParadisePerson) {
     function John() {
         _classCallCheck(this, John);
 
-        return _possibleConstructorReturn(this, (John.__proto__ || Object.getPrototypeOf(John)).call(this, "John", _constants.genders.male));
+        var _this = _possibleConstructorReturn(this, (John.__proto__ || Object.getPrototypeOf(John)).call(this, 'John', _constants.genders.male));
+
+        _this.relationships = {
+            'Jill': {
+                description: 'Wife',
+                value: 45
+            }
+        };
+        return _this;
     }
 
     return John;
@@ -3029,17 +3286,17 @@ var John = function (_ParadisePerson) {
 exports.John = John;
 
 
-},{"../constants":1,"../paradise_person":32}],37:[function(require,module,exports){
-"use strict";
+},{"../constants":1,"../paradise_person":36}],41:[function(require,module,exports){
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.Neil = undefined;
 
-var _constants = require("../constants");
+var _constants = require('../constants');
 
-var _paradise_person = require("../paradise_person");
+var _paradise_person = require('../paradise_person');
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -3072,7 +3329,7 @@ var Neil = function (_ParadisePerson) {
     function Neil() {
         _classCallCheck(this, Neil);
 
-        return _possibleConstructorReturn(this, (Neil.__proto__ || Object.getPrototypeOf(Neil)).call(this, "Neil", _constants.genders.male));
+        return _possibleConstructorReturn(this, (Neil.__proto__ || Object.getPrototypeOf(Neil)).call(this, 'Neil', _constants.genders.male));
     }
 
     return Neil;
@@ -3081,17 +3338,17 @@ var Neil = function (_ParadisePerson) {
 exports.Neil = Neil;
 
 
-},{"../constants":1,"../paradise_person":32}],38:[function(require,module,exports){
-"use strict";
+},{"../constants":1,"../paradise_person":36}],42:[function(require,module,exports){
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.Pauline = undefined;
 
-var _constants = require("../constants");
+var _constants = require('../constants');
 
-var _paradise_person = require("../paradise_person");
+var _paradise_person = require('../paradise_person');
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -3124,7 +3381,7 @@ var Pauline = function (_ParadisePerson) {
     function Pauline() {
         _classCallCheck(this, Pauline);
 
-        return _possibleConstructorReturn(this, (Pauline.__proto__ || Object.getPrototypeOf(Pauline)).call(this, "Pauline", _constants.genders.female));
+        return _possibleConstructorReturn(this, (Pauline.__proto__ || Object.getPrototypeOf(Pauline)).call(this, 'Pauline', _constants.genders.female));
     }
 
     return Pauline;
@@ -3133,13 +3390,13 @@ var Pauline = function (_ParadisePerson) {
 exports.Pauline = Pauline;
 
 
-},{"../constants":1,"../paradise_person":32}],39:[function(require,module,exports){
+},{"../constants":1,"../paradise_person":36}],43:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.chooseMurderer = exports.chooseVictim = exports.people = undefined;
+exports.chooseMotive = exports.chooseMurderer = exports.chooseVictim = exports.motives = exports.people = undefined;
 
 var _util = require('../engine/util');
 
@@ -3163,6 +3420,12 @@ var _quazar = require('./quazar');
 
 var _zenith = require('./zenith');
 
+var _inheritancescam = require('../motives/inheritancescam');
+
+var _passion = require('../motives/passion');
+
+var _psychosis = require('../motives/psychosis');
+
 function _interopRequireWildcard(obj) {
     if (obj && obj.__esModule) {
         return obj;
@@ -3175,17 +3438,6 @@ function _interopRequireWildcard(obj) {
     }
 }
 
-/*
- *
- *  CODENAME: Paradise/People
- *  XL Gaming/Declan Tyson
- *  v0.0.23
- *  06/02/2018
- *
- */
-
-// People
-
 var people = exports.people = {
     'Evelyn': _evelyn.Evelyn,
     'Jill': _jill.Jill,
@@ -3195,6 +3447,21 @@ var people = exports.people = {
     'Petey': _petey.Petey,
     'Quazar': _quazar.Quazar,
     'Zenith': _zenith.Zenith
+}; /*
+    *
+    *  CODENAME: Paradise/People
+    *  XL Gaming/Declan Tyson
+    *  v0.0.24
+    *  06/02/2018
+    *
+    */
+
+// People
+
+var motives = exports.motives = {
+    'InheritanceScam': _inheritancescam.InheritanceScam,
+    'Passion': _passion.Passion,
+    'Psychosis': _psychosis.Psychosis
 };
 
 var chooseVictim = exports.chooseVictim = function chooseVictim(chosenPeople) {
@@ -3243,18 +3510,41 @@ var chooseMurderer = exports.chooseMurderer = function chooseMurderer(victimName
     return murderer;
 };
 
+var chooseMotive = exports.chooseMotive = function chooseMotive(victimKey, murderer) {
+    var potentialMotives = [],
+        victim = new people[victimKey]();
 
-},{"../constants":1,"../engine/util":12,"./evelyn":34,"./jill":35,"./john":36,"./neil":37,"./pauline":38,"./petey":40,"./quazar":41,"./zenith":42}],40:[function(require,module,exports){
-"use strict";
+    if (!(murderer in victim.relationships)) victim.addAcquaintanceRelationship(murderer);
+
+    var relationship = victim.relationships[murderer];
+
+    Object.keys(motives).forEach(function (motiveKey) {
+        var motive = new motives[motiveKey]();
+
+        if (relationship.description in motive.relationshipBiases) {
+            for (var i = 0; i < motive.relationshipBiases[relationship.description]; i++) {
+                potentialMotives.push(motive);
+            }
+        }
+    });
+
+    var motive = potentialMotives[util.dieRoll(potentialMotives.length)].name;
+    util.log('The motive was ' + motive + '.');
+    return motive;
+};
+
+
+},{"../constants":1,"../engine/util":12,"../motives/inheritancescam":29,"../motives/passion":31,"../motives/psychosis":32,"./evelyn":38,"./jill":39,"./john":40,"./neil":41,"./pauline":42,"./petey":44,"./quazar":45,"./zenith":46}],44:[function(require,module,exports){
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.Petey = undefined;
 
-var _constants = require("../constants");
+var _constants = require('../constants');
 
-var _paradise_person = require("../paradise_person");
+var _paradise_person = require('../paradise_person');
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -3287,7 +3577,7 @@ var Petey = function (_ParadisePerson) {
     function Petey() {
         _classCallCheck(this, Petey);
 
-        return _possibleConstructorReturn(this, (Petey.__proto__ || Object.getPrototypeOf(Petey)).call(this, "Petey", _constants.genders.male));
+        return _possibleConstructorReturn(this, (Petey.__proto__ || Object.getPrototypeOf(Petey)).call(this, 'Petey', _constants.genders.male));
     }
 
     return Petey;
@@ -3296,17 +3586,17 @@ var Petey = function (_ParadisePerson) {
 exports.Petey = Petey;
 
 
-},{"../constants":1,"../paradise_person":32}],41:[function(require,module,exports){
-"use strict";
+},{"../constants":1,"../paradise_person":36}],45:[function(require,module,exports){
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.Quazar = undefined;
 
-var _constants = require("../constants");
+var _constants = require('../constants');
 
-var _paradise_person = require("../paradise_person");
+var _paradise_person = require('../paradise_person');
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -3339,12 +3629,12 @@ var Quazar = function (_ParadisePerson) {
     function Quazar() {
         _classCallCheck(this, Quazar);
 
-        var _this = _possibleConstructorReturn(this, (Quazar.__proto__ || Object.getPrototypeOf(Quazar)).call(this, "Quazar", _constants.genders.alien));
+        var _this = _possibleConstructorReturn(this, (Quazar.__proto__ || Object.getPrototypeOf(Quazar)).call(this, 'Quazar', _constants.genders.alien));
 
         _this.colour = _constants.colours.green;
         _this.relationships = {
-            "Zenith": {
-                description: "Brother",
+            'Zenith': {
+                description: 'Brother',
                 value: 85
             }
         };
@@ -3357,17 +3647,17 @@ var Quazar = function (_ParadisePerson) {
 exports.Quazar = Quazar;
 
 
-},{"../constants":1,"../paradise_person":32}],42:[function(require,module,exports){
-"use strict";
+},{"../constants":1,"../paradise_person":36}],46:[function(require,module,exports){
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.Zenith = undefined;
 
-var _constants = require("../constants");
+var _constants = require('../constants');
 
-var _paradise_person = require("../paradise_person");
+var _paradise_person = require('../paradise_person');
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -3387,7 +3677,7 @@ function _inherits(subClass, superClass) {
     }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 } /*
    *
-   *  XL RPG/Person/Quazar
+   *  XL RPG/Person/Zenith
    *  XL Gaming/Declan Tyson
    *  v0.0.23
    *  06/02/2018
@@ -3400,12 +3690,12 @@ var Zenith = function (_ParadisePerson) {
     function Zenith() {
         _classCallCheck(this, Zenith);
 
-        var _this = _possibleConstructorReturn(this, (Zenith.__proto__ || Object.getPrototypeOf(Zenith)).call(this, "Zenith", _constants.genders.alien));
+        var _this = _possibleConstructorReturn(this, (Zenith.__proto__ || Object.getPrototypeOf(Zenith)).call(this, 'Zenith', _constants.genders.alien));
 
-        _this.colours = _constants.colours.green;
+        _this.colour = _constants.colours.green;
         _this.relationships = {
-            "Quazar": {
-                description: "Brother",
+            'Quazar': {
+                description: 'Brother',
                 value: 85
             }
         };
@@ -3418,4 +3708,4 @@ var Zenith = function (_ParadisePerson) {
 exports.Zenith = Zenith;
 
 
-},{"../constants":1,"../paradise_person":32}]},{},[1,30,31,32,33,29]);
+},{"../constants":1,"../paradise_person":36}]},{},[1,34,35,36,37,33]);

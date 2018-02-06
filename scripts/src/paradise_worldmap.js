@@ -7,10 +7,10 @@
  *
  */
 
-import { WorldMap } from "./engine/worldmap";
+import { WorldMap } from './engine/worldmap';
 import { people } from './people/people';
-import { ParadiseInteraction } from "./paradise_interaction";
-import * as util from "./engine/util";
+import { ParadiseInteraction } from './paradise_interaction';
+import * as util from './engine/util';
 
 class ParadiseWorldMap extends WorldMap {
     constructor(player) {

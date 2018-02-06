@@ -7,9 +7,9 @@
  *
  */
 
-import { Scene } from "./scene";
-import { canvasProperties, colours } from "../constants";
-import "../enemies/enemydirectory";
+import { Scene } from './scene';
+import { canvasProperties, colours } from '../constants';
+import '../enemies/enemydirectory';
 
 class Encounter extends Scene {
     constructor(enemies) {

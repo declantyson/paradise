@@ -9,11 +9,11 @@
 
 
 import { genders } from '../constants';
-import {ParadisePerson} from "../paradise_person";
+import {ParadisePerson} from '../paradise_person';
 
 class Evelyn extends ParadisePerson {
     constructor() {
-        super("Evelyn", genders.female);
+        super('Evelyn', genders.female);
     }
 }
 

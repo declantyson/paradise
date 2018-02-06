@@ -2,7 +2,7 @@
  *
  *  CODENAME: Paradise/People
  *  XL Gaming/Declan Tyson
- *  v0.0.23
+ *  v0.0.24
  *  06/02/2018
  *
  */
@@ -10,7 +10,7 @@
 // People
 
 import * as util from '../engine/util';
-import { personCount, posessivePronouns } from '../constants';
+import { posessivePronouns } from '../constants';
 
 import { Evelyn } from './evelyn';
 import { Jill } from './jill';
@@ -21,6 +21,10 @@ import { Petey } from './petey';
 import { Quazar } from './quazar';
 import { Zenith } from './zenith';
 
+import { InheritanceScam } from '../motives/inheritancescam';
+import { Passion } from '../motives/passion';
+import { Psychosis } from '../motives/psychosis';
+
 export let people = {
     'Evelyn'  : Evelyn,
     'Jill'    : Jill,
@@ -30,6 +34,12 @@ export let people = {
     'Petey'   : Petey,
     'Quazar'  : Quazar,
     'Zenith'  : Zenith
+};
+
+export let motives = {
+    'InheritanceScam' : InheritanceScam,
+    'Passion' : Passion,
+    'Psychosis' : Psychosis
 };
 
 export const chooseVictim = (chosenPeople) => {
@@ -74,4 +84,27 @@ export const chooseMurderer = (victimName, chosenPeople, trueRandom = false) => 
     util.log(`${victim.name}'s murderer is ${posessivePronouns[victim.gender]} ${relationship.description}, ${murderer}!!!`);
 
     return murderer;
+};
+
+export const chooseMotive = (victimKey, murderer) => {
+    let potentialMotives = [],
+        victim = new people[victimKey]();
+
+    if(!(murderer in victim.relationships)) victim.addAcquaintanceRelationship(murderer);
+
+    let relationship = victim.relationships[murderer];
+
+    Object.keys(motives).forEach((motiveKey) => {
+        let motive = new motives[motiveKey]();
+
+        if(relationship.description in motive.relationshipBiases) {
+            for(let i = 0; i < motive.relationshipBiases[relationship.description]; i++) {
+                potentialMotives.push(motive);
+            }
+        }
+    });
+
+    let motive = potentialMotives[util.dieRoll(potentialMotives.length)].name;
+    util.log(`The motive was ${motive}.`);
+    return motive;
 };

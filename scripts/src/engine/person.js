@@ -33,7 +33,7 @@ class Person {
 
     addAcquaintanceRelationship(person) {
        this.relationships[person] = {
-           description : "Acquaintance",
+           description : 'Acquaintance',
            value: 50
        };
     }

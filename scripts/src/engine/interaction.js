@@ -9,8 +9,8 @@
 
 import * as util from './util';
 
-import { Scene } from "./scene";
-import {canvasProperties, interactionTextArea, fonts, colours, texts} from "../constants";
+import { Scene } from './scene';
+import {canvasProperties, interactionTextArea, fonts, colours, texts} from '../constants';
 
 class Interaction extends Scene {
     constructor(person) {

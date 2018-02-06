@@ -7,7 +7,7 @@
  *
  */
 
-import { ParadiseInterior } from "../../paradise_locale";
+import { ParadiseInterior } from '../../paradise_locale';
 
 class GroveStreetTemplate extends ParadiseInterior {
     constructor(player, people, inhabitance) {
@@ -20,11 +20,11 @@ class GroveStreetTemplate extends ParadiseInterior {
         this.spawnPoints.push({ x: 45, y: 32 });
         this.spawnPoints.push({ x: 28, y: 33 });
 
-        this.terrainPaint(0, 0, 100, 100, "Blank");
-        this.terrainPaint(25, 25, 25, 25, "Wall");
-        this.terrainPaint(26, 26, 11, 23, "WoodenFloor");
-        this.terrainPaint(38, 26, 11, 23, "WoodenFloor");
-        this.terrainPaint(37, 37, 1, 1, "WoodenFloor");
+        this.terrainPaint(0, 0, 100, 100, 'Blank');
+        this.terrainPaint(25, 25, 25, 25, 'Wall');
+        this.terrainPaint(26, 26, 11, 23, 'WoodenFloor');
+        this.terrainPaint(38, 26, 11, 23, 'WoodenFloor');
+        this.terrainPaint(37, 37, 1, 1, 'WoodenFloor');
     }
 }
 

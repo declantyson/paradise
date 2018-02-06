@@ -8,9 +8,9 @@
  */
 
 import * as terrain from './terrain';
-import { colours, tileSize, tilesWide as viewportWidth, tilesHigh as viewportHeight, directions } from "../constants";
-import { Scene } from "./scene";
-import { Interaction } from "./interaction";
+import { colours, tileSize, tilesWide as viewportWidth, tilesHigh as viewportHeight, directions } from '../constants';
+import { Scene } from './scene';
+import { Interaction } from './interaction';
 import { locales } from '../locales/locales';
 import { people } from '../people/people';
 

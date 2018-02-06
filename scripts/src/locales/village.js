@@ -7,7 +7,7 @@
  *
  */
 
-import {ParadiseLocale} from "../paradise_locale";
+import {ParadiseLocale} from '../paradise_locale';
 
 class Village extends ParadiseLocale {
     constructor(player, people) {
@@ -17,11 +17,11 @@ class Village extends ParadiseLocale {
 
         this.initialise(300, 300);
 
-        this.terrainPaint(0, 0, 300, 300, "Water");
-        this.terrainPaint(20, 27, 15, 90, "Grass");
-        this.terrainPaint(35, 35, 2, 40, "Grass");
-        this.terrainPaint(37, 37, 2, 36, "Grass");
-        this.terrainPaint(39, 39, 2, 32, "Grass");
+        this.terrainPaint(0, 0, 300, 300, 'Water');
+        this.terrainPaint(20, 27, 15, 90, 'Grass');
+        this.terrainPaint(35, 35, 2, 40, 'Grass');
+        this.terrainPaint(37, 37, 2, 36, 'Grass');
+        this.terrainPaint(39, 39, 2, 32, 'Grass');
     }
 }
 

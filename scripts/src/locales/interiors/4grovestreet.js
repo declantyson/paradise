@@ -7,22 +7,22 @@
  *
  */
 
-import { Islands } from "../islands";
-import { GroveStreetTemplate } from "./grovestreethouse";
+import { Islands } from '../islands';
+import { GroveStreetTemplate } from './grovestreethouse';
 
 class GroveStreet4 extends GroveStreetTemplate {
     constructor(player, people, inhabitance) {
         super(player, people, inhabitance);
 
-        this.id = "GroveStreet4";
+        this.id = 'GroveStreet4';
         this.entryPoints.frontDoor = { x: 26, y: 48 };
 
         this.entrances[25][48] = {
             locale: new Islands(player, people),
-            entryPoint: "groveStreet4"
+            entryPoint: 'groveStreet4'
         };
 
-        this.terrainPaint(25, 48, 1, 1, "WoodenFloor");
+        this.terrainPaint(25, 48, 1, 1, 'WoodenFloor');
     }
 }
 

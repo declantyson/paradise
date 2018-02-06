@@ -7,7 +7,7 @@
  *
  */
 
-import * as util from "../engine/util";
+import * as util from '../engine/util';
 
 import { Item } from '../engine/item';
 

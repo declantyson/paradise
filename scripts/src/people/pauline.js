@@ -8,11 +8,11 @@
  */
 
 import { genders } from '../constants';
-import { ParadisePerson } from "../paradise_person";
+import { ParadisePerson } from '../paradise_person';
 
 class Pauline extends ParadisePerson {
     constructor() {
-        super("Pauline", genders.female);
+        super('Pauline', genders.female);
     }
 }
 

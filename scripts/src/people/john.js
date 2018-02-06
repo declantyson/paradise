@@ -2,17 +2,24 @@
  *
  *  XL RPG/Person/John
  *  XL Gaming/Declan Tyson
- *  v0.0.23
+ *  v0.0.24
  *  06/02/2018
  *
  */
 
 import { genders } from '../constants';
-import { ParadisePerson } from "../paradise_person";
+import { ParadisePerson } from '../paradise_person';
 
 class John extends ParadisePerson {
     constructor() {
-        super("John", genders.male);
+        super('John', genders.male);
+
+        this.relationships = {
+            'Jill' : {
+                description : 'Wife',
+                value: 45
+            }
+        };
     }
 }
 

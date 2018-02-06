@@ -9,7 +9,7 @@
 
 import * as util from './engine/util';
 
-import { Person } from "./engine/person";
+import { Person } from './engine/person';
 
 class ParadisePerson extends Person {
     constructor(name, gender) {

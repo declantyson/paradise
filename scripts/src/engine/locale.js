@@ -28,7 +28,7 @@ class Locale {
             enc.push([]);
             ent.push([]);
             for(let j = 0; j < height; j++) {
-                map[i].push(["Blank"]);
+                map[i].push(['Blank']);
                 enc[i].push(false);
                 ent[i].push(false);
             }
@@ -62,11 +62,11 @@ class Locale {
 
     addInhabitance(startX, startY, width, height, inhabitance) {
         let doorway = inhabitance.doorway;
-        this.terrainPaint(startX, startY, width, height, "Wall");
-        this.terrainPaint(doorway.x, doorway.y, 1, 1, "Doorway");
+        this.terrainPaint(startX, startY, width, height, 'Wall');
+        this.terrainPaint(doorway.x, doorway.y, 1, 1, 'Doorway');
         this.entrances[doorway.x][doorway.y] = {
             locale : inhabitance,
-            entryPoint : "frontDoor"
+            entryPoint : 'frontDoor'
         };
     }
 

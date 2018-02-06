@@ -7,7 +7,7 @@
  *
  */
 
-import { actionTimeoutLimit } from "../constants";
+import { actionTimeoutLimit } from '../constants';
 
 class Scene {
     constructor() {

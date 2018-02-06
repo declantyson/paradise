@@ -9,8 +9,8 @@
 
 import * as util from './engine/util';
 
-import { canvasProperties, interactionTextArea, fonts, colours, texts, pronouns } from "./constants";
-import { Interaction } from "./engine/interaction";
+import { canvasProperties, interactionTextArea, fonts, colours, texts, pronouns } from './constants';
+import { Interaction } from './engine/interaction';
 
 class ParadiseInteraction extends Interaction {
     constructor(person, game) {

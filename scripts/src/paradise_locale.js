@@ -9,7 +9,7 @@
 
 import * as util from './engine/util';
 
-import { Interior, Locale } from "./engine/locale";
+import { Interior, Locale } from './engine/locale';
 
 class ParadiseLocale extends Locale {
     constructor(player, people) {

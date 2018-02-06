@@ -19,17 +19,17 @@ import { GroveStreet3 } from './interiors/3grovestreet';
 import { GroveStreet4 } from './interiors/4grovestreet';
 
 export const startingMaps = {
-    "Village" : Village,
-    "Islands" : Islands
+    'Village' : Village,
+    'Islands' : Islands
 };
 
 export const locales = {
-    "Village" : Village,
-    "Islands" : Islands,
-    "GroveStreet1" : GroveStreet1,
-    "GroveStreet2" : GroveStreet2,
-    "GroveStreet3" : GroveStreet3,
-    "GroveStreet4" : GroveStreet4
+    'Village' : Village,
+    'Islands' : Islands,
+    'GroveStreet1' : GroveStreet1,
+    'GroveStreet2' : GroveStreet2,
+    'GroveStreet3' : GroveStreet3,
+    'GroveStreet4' : GroveStreet4
 };
 
 export const chooseStartingMap = () => {
