@@ -9,15 +9,28 @@
 
 import * as util from './engine/util';
 
-import { canvasProperties, interactionTextArea, fonts, colours, texts } from "./constants";
+import { canvasProperties, interactionTextArea, fonts, colours, texts, pronouns } from "./constants";
 import { Interaction } from "./engine/interaction";
 
 class ParadiseInteraction extends Interaction {
-    constructor(person) {
+    constructor(person, game) {
         super(person);
 
+        this.game = game;
+
         if(this.person.victim) {
-            util.log(`${this.person.name} is dead.`);
+            let lines = [],
+                person = this.person,
+                weapon = this.game.weapon;
+
+            lines.push(`${person.name} is dead.`);
+            person.evidence.forEach((evidence) => {
+                if(evidence.name === weapon) {
+                    lines.push(`Lying next to ${pronouns[person.gender]} is ${evidence.description}.`);
+                }
+            });
+
+            for(let i = 0; i < lines.length; i++) this.lines.push(lines[i]);
         }
     }
 
@@ -29,10 +42,6 @@ class ParadiseInteraction extends Interaction {
             ctx.fillStyle = colours.red;
             ctx.fillText(texts.dead, interactionTextArea.badgeOffsetX, canvasProperties.height - interactionTextArea.height + (interactionTextArea.badgeOffsetY) * 2);
         }
-    }
-
-    drawConversation(ctx) {
-
     }
 
     returnToWorldMap() {

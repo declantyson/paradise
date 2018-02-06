@@ -11,8 +11,8 @@ import * as terrain from './terrain';
 import { colours, tileSize, tilesWide as viewportWidth, tilesHigh as viewportHeight, directions } from "../constants";
 import { Scene } from "./scene";
 import { Interaction } from "./interaction";
-import { locales } from '../locales/availablelocales';
-import { people } from '../people/availablepeople';
+import { locales } from '../locales/locales';
+import { people } from '../people/people';
 
 class WorldMap extends Scene {
     constructor(player) {
@@ -179,11 +179,9 @@ class WorldMap extends Scene {
             locale = new localeId(this.locale.player, this.locale.people, entrance.locale);
 
         this.setCurrentLocale(locale, entrance.entryPoint);
-        this.spawnPeople();
     }
 
     spawnPeople() {
-        console.log("grrr");
         if(this.locale.inhabitance === undefined) return;
 
         this.locale.inhabitance.inhabitants.forEach((inhabitant, index) => {
@@ -205,6 +203,8 @@ class WorldMap extends Scene {
         locale.enterLocaleAt(entryPoint);
 
         if(rasterize) this.rasterizeLocaleMap();
+
+        this.spawnPeople();
     }
 
     rasterizeLocaleMap() {

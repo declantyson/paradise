@@ -37,6 +37,7 @@ export const texts = {
 
 export const fonts = {
     large: '24px "Roboto Condensed"',
+    small: '16px "Roboto"',
     death: '24px "Permanent Marker"'
 };
 
@@ -55,7 +56,8 @@ export const interactionTextArea = {
     background: colours.black,
     alpha: 0.4,
     badgeOffsetX: 20,
-    badgeOffsetY: 40
+    badgeOffsetY: 40,
+    lineHeight: 18
 };
 
 export const genders = {
@@ -65,6 +67,12 @@ export const genders = {
 };
 
 export const pronouns = {
+    M   : "him",
+    F   : "her",
+    A   : "xlem"
+};
+
+export const posessivePronouns = {
     M   : "his",
     F   : "her",
     A   : "xleir"

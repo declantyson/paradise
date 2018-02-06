@@ -43,6 +43,7 @@ var texts = exports.texts = {
 
 var fonts = exports.fonts = {
     large: '24px "Roboto Condensed"',
+    small: '16px "Roboto"',
     death: '24px "Permanent Marker"'
 };
 
@@ -61,7 +62,8 @@ var interactionTextArea = exports.interactionTextArea = {
     background: colours.black,
     alpha: 0.4,
     badgeOffsetX: 20,
-    badgeOffsetY: 40
+    badgeOffsetY: 40,
+    lineHeight: 18
 };
 
 var genders = exports.genders = {
@@ -71,6 +73,12 @@ var genders = exports.genders = {
 };
 
 var pronouns = exports.pronouns = {
+    M: "him",
+    F: "her",
+    A: "xlem"
+};
+
+var posessivePronouns = exports.posessivePronouns = {
     M: "his",
     F: "her",
     A: "xleir"
@@ -81,82 +89,6 @@ var inhabitanceSize = exports.inhabitanceSize = 2;
 
 
 },{}],2:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-/*
- *
- *  XL RPG/Constants
- *  XL Gaming/Declan Tyson
- *  v0.0.21
- *  06/02/2018
- *
- */
-
-var fps = exports.fps = 45;
-var actionTimeoutLimit = exports.actionTimeoutLimit = 2;
-var tileSize = exports.tileSize = 15;
-var tilesWide = exports.tilesWide = 96;
-var tilesHigh = exports.tilesHigh = 54;
-
-var colours = exports.colours = {
-    black: "#000000",
-    white: "#FFFFFF",
-    green: "#00AA00",
-    blue: "#0000AA",
-    brown: "#4f1f0b",
-    darkbrown: "#291006",
-    grey: "#cdcdcd"
-};
-
-var directions = exports.directions = {
-    up: 'up',
-    down: 'down',
-    left: 'left',
-    right: 'right'
-};
-
-var fonts = exports.fonts = {
-    large: '24px "Roboto Condensed"'
-};
-
-var canvasProperties = exports.canvasProperties = {
-    width: tileSize * tilesWide,
-    height: tileSize * tilesHigh,
-    centerPoint: {
-        x: tileSize * tilesWide / 2 - tileSize / 2,
-        y: tileSize * tilesHigh / 2 - tileSize / 2
-    }
-};
-
-var interactionTextArea = exports.interactionTextArea = {
-    width: canvasProperties.width,
-    height: canvasProperties.height / 3,
-    background: colours.black,
-    alpha: 0.4,
-    badgeOffsetX: 20,
-    badgeOffsetY: 40
-};
-
-var genders = exports.genders = {
-    male: "M",
-    female: "F",
-    alien: "A"
-};
-
-var pronouns = exports.pronouns = {
-    M: "his",
-    F: "her",
-    A: "xleir"
-};
-
-var personCount = exports.personCount = 4;
-var inhabitanceSize = exports.inhabitanceSize = 2;
-
-
-},{}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -302,7 +234,7 @@ var Game = function () {
 }();
 
 
-},{"../constants":1,"./inputs":4,"./player":10,"./util":13,"./worldmap":14}],4:[function(require,module,exports){
+},{"../constants":1,"./inputs":3,"./player":9,"./util":12,"./worldmap":13}],3:[function(require,module,exports){
 'use strict';
 
 /*
@@ -334,7 +266,7 @@ window.addEventListener('keyup', function (e) {
 });
 
 
-},{}],5:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -405,6 +337,7 @@ var Interaction = function (_Scene) {
 
         var _this = _possibleConstructorReturn(this, (Interaction.__proto__ || Object.getPrototypeOf(Interaction)).call(this));
 
+        _this.lines = [];
         _this.person = person;
         _this.actions.back = _this.returnToWorldMap.bind(_this);
 
@@ -417,6 +350,7 @@ var Interaction = function (_Scene) {
         value: function draw(ctx) {
             this.drawConversationTextArea(ctx);
             this.drawBadge(ctx);
+            this.drawConversation(ctx);
         }
     }, {
         key: "drawConversationTextArea",
@@ -437,7 +371,14 @@ var Interaction = function (_Scene) {
         }
     }, {
         key: "drawConversation",
-        value: function drawConversation(ctx) {}
+        value: function drawConversation(ctx) {
+            var y = _constants.canvasProperties.height - _constants.interactionTextArea.height + _constants.interactionTextArea.badgeOffsetY * 3;
+            ctx.font = _constants.fonts.small;
+            ctx.fillStyle = _constants.colours.white;
+            this.lines.forEach(function (line, index) {
+                ctx.fillText(line, _constants.interactionTextArea.badgeOffsetX, y + index * _constants.interactionTextArea.lineHeight);
+            });
+        }
     }, {
         key: "returnToWorldMap",
         value: function returnToWorldMap() {
@@ -452,7 +393,7 @@ var Interaction = function (_Scene) {
 exports.Interaction = Interaction;
 
 
-},{"../constants":1,"./scene":11,"./util":13}],6:[function(require,module,exports){
+},{"../constants":1,"./scene":10,"./util":12}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -502,7 +443,7 @@ var Item = function Item(name, description) {
 exports.Item = Item;
 
 
-},{"../constants":1,"./util":13}],7:[function(require,module,exports){
+},{"../constants":1,"./util":12}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -708,7 +649,7 @@ exports.Interior = Interior;
 exports.Inhabitance = Inhabitance;
 
 
-},{"../constants":1,"./util":13}],8:[function(require,module,exports){
+},{"../constants":1,"./util":12}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -722,7 +663,7 @@ var _util = require("./util");
 
 var util = _interopRequireWildcard(_util);
 
-var _availablepeople = require("../people/availablepeople");
+var _people = require("../people/people");
 
 function _interopRequireWildcard(obj) {
     if (obj && obj.__esModule) {
@@ -741,7 +682,7 @@ var choosePeople = exports.choosePeople = function choosePeople() {
     util.log("Choosing " + _constants.personCount + " people...");
     var person = void 0;
     while (chosenPeople.length < _constants.personCount) {
-        person = util.pickRandomProperty(_availablepeople.people);
+        person = util.pickRandomProperty(_people.people);
         if (chosenPeople.indexOf(person) === -1) {
             chosenPeople.push(person);
             util.log(person + " has been chosen.");
@@ -753,13 +694,13 @@ var choosePeople = exports.choosePeople = function choosePeople() {
     *
     *  XL RPG/People
     *  XL Gaming/Declan Tyson
-    *  v0.0.20
+    *  v0.0.23
     *  06/02/2018
     *
     */
 
 
-},{"../constants":1,"../people/availablepeople":33,"./util":13}],9:[function(require,module,exports){
+},{"../constants":1,"../people/people":39,"./util":12}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -779,8 +720,8 @@ var _createClass = function () {
       *
       *  XL RPG/Person
       *  XL Gaming/Declan Tyson
-      *  v0.0.20
-      *  05/02/2018
+      *  v0.0.23
+      *  06/02/2018
       *
       */
 
@@ -812,6 +753,7 @@ var Person = function () {
     function Person(name, gender) {
         _classCallCheck(this, Person);
 
+        this.id = name;
         this.name = name;
         this.gender = gender;
         this.colour = _constants.colours.black;
@@ -829,7 +771,7 @@ var Person = function () {
                     oldValue = relationship.value,
                     newValue = Math.floor(Math.random() * 99);
 
-                util.log(_this.name + '\'s relationship with ' + _constants.pronouns[_this.gender] + ' ' + relationship.description + ', ' + name + ', goes from ' + oldValue + ' to ' + newValue + '.');
+                util.log(_this.name + '\'s relationship with ' + _constants.posessivePronouns[_this.gender] + ' ' + relationship.description + ', ' + name + ', goes from ' + oldValue + ' to ' + newValue + '.');
                 _this.relationships[name].value = newValue;
             });
         }
@@ -849,7 +791,7 @@ var Person = function () {
 exports.Person = Person;
 
 
-},{"../constants":1,"./util":13}],10:[function(require,module,exports){
+},{"../constants":1,"./util":12}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -904,7 +846,7 @@ var Player = function () {
 exports.Player = Player;
 
 
-},{"../constants":1}],11:[function(require,module,exports){
+},{"../constants":1}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -980,7 +922,7 @@ var Scene = function () {
 exports.Scene = Scene;
 
 
-},{"../constants":1}],12:[function(require,module,exports){
+},{"../constants":1}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1168,7 +1110,7 @@ exports.Doorway = Doorway;
 exports.WoodenFloor = WoodenFloor;
 
 
-},{"../constants":1}],13:[function(require,module,exports){
+},{"../constants":1}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1178,10 +1120,15 @@ Object.defineProperty(exports, "__esModule", {
  *
  *  XL RPG/Util
  *  XL Gaming/Declan Tyson
- *  v0.0.21
+ *  v0.0.23
  *  06/02/2018
  *
  */
+
+var dieRoll = exports.dieRoll = function dieRoll(sides) {
+    var result = Math.floor(Math.random() * sides);
+    return result;
+};
 
 var pickRandomProperty = exports.pickRandomProperty = function pickRandomProperty(obj) {
     var result = void 0,
@@ -1193,17 +1140,9 @@ var pickRandomProperty = exports.pickRandomProperty = function pickRandomPropert
     return result;
 };
 
-var pickRandomIndex = exports.pickRandomIndex = function pickRandomIndex(arr) {
-    var indexOnly = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-
-    var index = Math.floor(Math.random() * (arr.length - 1));
-    if (indexOnly) return index;
-    return arr[index];
-};
-
 var log = exports.log = function log(str) {
     var log = document.getElementById('log');
-    log.innerHTML += str + '<br/>';
+    log.innerHTML += str + '<hr/>';
     log.scrollTop = log.scrollHeight;
 };
 
@@ -1212,7 +1151,7 @@ var clearLog = exports.clearLog = function clearLog() {
 };
 
 
-},{}],14:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1256,9 +1195,9 @@ var _scene = require("./scene");
 
 var _interaction = require("./interaction");
 
-var _availablelocales = require("../locales/availablelocales");
+var _locales = require("../locales/locales");
 
-var _availablepeople = require("../people/availablepeople");
+var _people = require("../people/people");
 
 function _interopRequireWildcard(obj) {
     if (obj && obj.__esModule) {
@@ -1482,24 +1421,22 @@ var WorldMap = function (_Scene) {
                 return;
             }
 
-            var localeId = _availablelocales.locales[entrance.locale.id],
+            var localeId = _locales.locales[entrance.locale.id],
                 locale = new localeId(this.locale.player, this.locale.people, entrance.locale);
 
             this.setCurrentLocale(locale, entrance.entryPoint);
-            this.spawnPeople();
         }
     }, {
         key: "spawnPeople",
         value: function spawnPeople() {
             var _this3 = this;
 
-            console.log("grrr");
             if (this.locale.inhabitance === undefined) return;
 
             this.locale.inhabitance.inhabitants.forEach(function (inhabitant, index) {
                 var spawnPoint = _this3.locale.spawnPoints[index];
                 if (spawnPoint !== undefined) {
-                    var person = new _availablepeople.people[inhabitant]();
+                    var person = new _people.people[inhabitant]();
                     person.x = spawnPoint.x;
                     person.y = spawnPoint.y;
                     _this3.presentPeople.push(person);
@@ -1518,6 +1455,8 @@ var WorldMap = function (_Scene) {
             locale.enterLocaleAt(entryPoint);
 
             if (rasterize) this.rasterizeLocaleMap();
+
+            this.spawnPeople();
         }
     }, {
         key: "rasterizeLocaleMap",
@@ -1540,15 +1479,31 @@ var WorldMap = function (_Scene) {
 exports.WorldMap = WorldMap;
 
 
-},{"../constants":1,"../locales/availablelocales":21,"../people/availablepeople":33,"./interaction":5,"./scene":11,"./terrain":12}],15:[function(require,module,exports){
-'use strict';
+},{"../constants":1,"../locales/locales":27,"../people/people":39,"./interaction":4,"./scene":10,"./terrain":11}],14:[function(require,module,exports){
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.Evidence = undefined;
 
-var _item = require('../engine/item');
+var _util = require("../engine/util");
+
+var util = _interopRequireWildcard(_util);
+
+var _item = require("../engine/item");
+
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) {
+        return obj;
+    } else {
+        var newObj = {};if (obj != null) {
+            for (var key in obj) {
+                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+            }
+        }newObj.default = obj;return newObj;
+    }
+}
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -1570,7 +1525,7 @@ function _inherits(subClass, superClass) {
    *
    *  CODENAME: Paradise/Evidence
    *  XL Gaming/Declan Tyson
-   *  v0.0.22
+   *  v0.0.23
    *  06/02/2018
    *
    */
@@ -1578,10 +1533,14 @@ function _inherits(subClass, superClass) {
 var Evidence = function (_Item) {
     _inherits(Evidence, _Item);
 
-    function Evidence(name, description) {
+    function Evidence(name, description, incriminates, location) {
         _classCallCheck(this, Evidence);
 
-        return _possibleConstructorReturn(this, (Evidence.__proto__ || Object.getPrototypeOf(Evidence)).call(this, name, description));
+        var _this = _possibleConstructorReturn(this, (Evidence.__proto__ || Object.getPrototypeOf(Evidence)).call(this, name, description));
+
+        _this.incriminates = incriminates;
+        _this.location = location;
+        return _this;
     }
 
     return Evidence;
@@ -1590,7 +1549,79 @@ var Evidence = function (_Item) {
 exports.Evidence = Evidence;
 
 
-},{"../engine/item":6}],16:[function(require,module,exports){
+},{"../engine/item":5,"../engine/util":12}],15:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.chooseEvidence = undefined;
+
+var _util = require("../engine/util");
+
+var util = _interopRequireWildcard(_util);
+
+var _murderweapons = require("./murderweapons");
+
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) {
+        return obj;
+    } else {
+        var newObj = {};if (obj != null) {
+            for (var key in obj) {
+                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+            }
+        }newObj.default = obj;return newObj;
+    }
+}
+
+var chooseEvidence = exports.chooseEvidence = function chooseEvidence(game) {
+    var evidences = [],
+        weapon = whatHappensToTheWeapon(game);
+
+    if (weapon) evidences.push(weapon);
+
+    return evidences;
+}; /*
+    *
+    *  CODENAME: Paradise/Evidences
+    *  XL Gaming/Declan Tyson
+    *  v0.0.23
+    *  06/02/2018
+    *
+    */
+
+var whatHappensToTheWeapon = function whatHappensToTheWeapon(game) {
+    var weapon = null,
+        inhabitances = game.scene.locale.inhabitances,
+        implicates = game.murderer,
+        inhabitanceIndex = (0, _util.dieRoll)(inhabitances.length - 1);
+
+    if (util.dieRoll(10) === 0) implicates = false; // Muddied evidence - also TODO hard mode
+
+    switch (util.dieRoll(3)) {
+        case 0:
+            // On the victim
+            weapon = new _murderweapons.murderWeapons[game.weapon](implicates, game.victim);
+            break;
+        case 1:
+            // In the murderer's inhabitance
+            inhabitances.forEach(function (inhabitance, index) {
+                if (inhabitance.inhabitants.indexOf(game.murderer) !== -1) inhabitanceIndex = index;
+            });
+            weapon = new _murderweapons.murderWeapons[game.weapon](implicates, game.scene.locale.inhabitances[inhabitanceIndex].id);
+            break;
+        case 2:
+            // Randomly hidden
+            weapon = new _murderweapons.murderWeapons[game.weapon](implicates, game.scene.locale.inhabitances[inhabitanceIndex].id);
+            break;
+    }
+
+    return weapon;
+};
+
+
+},{"../engine/util":12,"./murderweapons":19}],16:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1620,7 +1651,7 @@ function _inherits(subClass, superClass) {
    *
    *  CODENAME: Paradise/Handgun
    *  XL Gaming/Declan Tyson
-   *  v0.0.22
+   *  v0.0.23
    *  06/02/2018
    *
    */
@@ -1628,10 +1659,10 @@ function _inherits(subClass, superClass) {
 var Handgun = function (_MurderWeapon) {
     _inherits(Handgun, _MurderWeapon);
 
-    function Handgun() {
+    function Handgun(incriminates, locale) {
         _classCallCheck(this, Handgun);
 
-        return _possibleConstructorReturn(this, (Handgun.__proto__ || Object.getPrototypeOf(Handgun)).call(this, 'Handgun', 'a handgun, still warm from the recent shot'));
+        return _possibleConstructorReturn(this, (Handgun.__proto__ || Object.getPrototypeOf(Handgun)).call(this, 'Handgun', 'a handgun, still warm from the recent shot', incriminates, locale));
     }
 
     return Handgun;
@@ -1670,7 +1701,7 @@ function _inherits(subClass, superClass) {
    *
    *  CODENAME: Paradise/Knife
    *  XL Gaming/Declan Tyson
-   *  v0.0.22
+   *  v0.0.23
    *  06/02/2018
    *
    */
@@ -1678,10 +1709,10 @@ function _inherits(subClass, superClass) {
 var Knife = function (_MurderWeapon) {
     _inherits(Knife, _MurderWeapon);
 
-    function Knife() {
+    function Knife(incriminates, locale) {
         _classCallCheck(this, Knife);
 
-        return _possibleConstructorReturn(this, (Knife.__proto__ || Object.getPrototypeOf(Knife)).call(this, 'Knife', 'a blood-stained kitchen knife'));
+        return _possibleConstructorReturn(this, (Knife.__proto__ || Object.getPrototypeOf(Knife)).call(this, 'Knife', 'a blood-stained kitchen knife', incriminates, locale));
     }
 
     return Knife;
@@ -1720,7 +1751,7 @@ function _inherits(subClass, superClass) {
    *
    *  CODENAME: Paradise/Murder Weapon
    *  XL Gaming/Declan Tyson
-   *  v0.0.22
+   *  v0.0.23
    *  06/02/2018
    *
    */
@@ -1728,10 +1759,10 @@ function _inherits(subClass, superClass) {
 var MurderWeapon = function (_Evidence) {
     _inherits(MurderWeapon, _Evidence);
 
-    function MurderWeapon(name, description) {
+    function MurderWeapon(name, description, incriminates, locale) {
         _classCallCheck(this, MurderWeapon);
 
-        return _possibleConstructorReturn(this, (MurderWeapon.__proto__ || Object.getPrototypeOf(MurderWeapon)).call(this, name, description));
+        return _possibleConstructorReturn(this, (MurderWeapon.__proto__ || Object.getPrototypeOf(MurderWeapon)).call(this, name, description, incriminates, locale));
     }
 
     return MurderWeapon;
@@ -1740,7 +1771,7 @@ var MurderWeapon = function (_Evidence) {
 exports.MurderWeapon = MurderWeapon;
 
 
-},{"./evidence":15}],19:[function(require,module,exports){
+},{"./evidence":14}],19:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1792,7 +1823,7 @@ var chooseMurderWeapon = exports.chooseMurderWeapon = function chooseMurderWeapo
 };
 
 
-},{"../engine/util":13,"./handgun":16,"./knife":17,"./spoon":20}],20:[function(require,module,exports){
+},{"../engine/util":12,"./handgun":16,"./knife":17,"./spoon":20}],20:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1822,7 +1853,7 @@ function _inherits(subClass, superClass) {
    *
    *  CODENAME: Paradise/Spoon
    *  XL Gaming/Declan Tyson
-   *  v0.0.22
+   *  v0.0.23
    *  06/02/2018
    *
    */
@@ -1830,10 +1861,10 @@ function _inherits(subClass, superClass) {
 var Spoon = function (_MurderWeapon) {
     _inherits(Spoon, _MurderWeapon);
 
-    function Spoon() {
+    function Spoon(incriminates, locale) {
         _classCallCheck(this, Spoon);
 
-        return _possibleConstructorReturn(this, (Spoon.__proto__ || Object.getPrototypeOf(Spoon)).call(this, 'Spoon', 'a jagged rusty spoon'));
+        return _possibleConstructorReturn(this, (Spoon.__proto__ || Object.getPrototypeOf(Spoon)).call(this, 'Spoon', 'a jagged rusty spoon', incriminates, locale));
     }
 
     return Spoon;
@@ -1843,52 +1874,6 @@ exports.Spoon = Spoon;
 
 
 },{"./murderweapon":18}],21:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.locales = exports.startingMaps = undefined;
-
-var _village = require('./village');
-
-var _islands = require('./islands');
-
-var _grovestreet = require('./interiors/1grovestreet');
-
-var _grovestreet2 = require('./interiors/2grovestreet');
-
-var _grovestreet3 = require('./interiors/3grovestreet');
-
-var _grovestreet4 = require('./interiors/4grovestreet');
-
-/*
- *
- *  XL RPG/Locales
- *  XL Gaming/Declan Tyson
- *  v0.0.19
- *  06/02/2018
- *
- */
-
-// Locales
-
-var startingMaps = exports.startingMaps = {
-    "Village": _village.Village,
-    "Islands": _islands.Islands
-};
-
-var locales = exports.locales = {
-    "Village": _village.Village,
-    "Islands": _islands.Islands,
-    "GroveStreet1": _grovestreet.GroveStreet1,
-    "GroveStreet2": _grovestreet2.GroveStreet2,
-    "GroveStreet3": _grovestreet3.GroveStreet3,
-    "GroveStreet4": _grovestreet4.GroveStreet4
-};
-
-
-},{"./interiors/1grovestreet":22,"./interiors/2grovestreet":23,"./interiors/3grovestreet":24,"./interiors/4grovestreet":25,"./islands":27,"./village":29}],22:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1920,8 +1905,8 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Locales/1 Grove Street
    *  XL Gaming/Declan Tyson
-   *  v0.0.20
-   *  05/02/2018
+   *  v0.0.23
+   *  06/02/2018
    *
    */
 
@@ -1933,7 +1918,7 @@ var GroveStreet1 = function (_GroveStreetTemplate) {
 
         var _this = _possibleConstructorReturn(this, (GroveStreet1.__proto__ || Object.getPrototypeOf(GroveStreet1)).call(this, player, people, inhabitance));
 
-        _this.id = "1GroveStreet";
+        _this.id = "GroveStreet1";
         _this.entryPoints.frontDoor = { x: 48, y: 48 };
 
         _this.entrances[49][48] = {
@@ -1951,7 +1936,7 @@ var GroveStreet1 = function (_GroveStreetTemplate) {
 exports.GroveStreet1 = GroveStreet1;
 
 
-},{"../islands":27,"./grovestreethouse":26}],23:[function(require,module,exports){
+},{"../islands":26,"./grovestreethouse":25}],22:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1983,8 +1968,8 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Locales/1 Grove Street
    *  XL Gaming/Declan Tyson
-   *  v0.0.20
-   *  05/02/2018
+   *  v0.0.23
+   *  06/02/2018
    *
    */
 
@@ -1996,7 +1981,7 @@ var GroveStreet2 = function (_GroveStreetTemplate) {
 
         var _this = _possibleConstructorReturn(this, (GroveStreet2.__proto__ || Object.getPrototypeOf(GroveStreet2)).call(this, player, people, inhabitance));
 
-        _this.id = "2GroveStreet";
+        _this.id = "GroveStreet2";
         _this.entryPoints.frontDoor = { x: 26, y: 48 };
 
         _this.entrances[25][48] = {
@@ -2014,7 +1999,7 @@ var GroveStreet2 = function (_GroveStreetTemplate) {
 exports.GroveStreet2 = GroveStreet2;
 
 
-},{"../islands":27,"./grovestreethouse":26}],24:[function(require,module,exports){
+},{"../islands":26,"./grovestreethouse":25}],23:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2046,8 +2031,8 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Locales/1 Grove Street
    *  XL Gaming/Declan Tyson
-   *  v0.0.20
-   *  05/02/2018
+   *  v0.0.23
+   *  06/02/2018
    *
    */
 
@@ -2059,7 +2044,7 @@ var GroveStreet3 = function (_GroveStreetTemplate) {
 
         var _this = _possibleConstructorReturn(this, (GroveStreet3.__proto__ || Object.getPrototypeOf(GroveStreet3)).call(this, player, people, inhabitance));
 
-        _this.id = "3GroveStreet";
+        _this.id = "GroveStreet3";
         _this.entryPoints.frontDoor = { x: 48, y: 48 };
 
         _this.entrances[49][48] = {
@@ -2077,7 +2062,7 @@ var GroveStreet3 = function (_GroveStreetTemplate) {
 exports.GroveStreet3 = GroveStreet3;
 
 
-},{"../islands":27,"./grovestreethouse":26}],25:[function(require,module,exports){
+},{"../islands":26,"./grovestreethouse":25}],24:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2109,8 +2094,8 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Locales/4 Grove Street
    *  XL Gaming/Declan Tyson
-   *  v0.0.20
-   *  05/02/2018
+   *  v0.0.23
+   *  06/02/2018
    *
    */
 
@@ -2122,7 +2107,7 @@ var GroveStreet4 = function (_GroveStreetTemplate) {
 
         var _this = _possibleConstructorReturn(this, (GroveStreet4.__proto__ || Object.getPrototypeOf(GroveStreet4)).call(this, player, people, inhabitance));
 
-        _this.id = "2GroveStreet";
+        _this.id = "GroveStreet4";
         _this.entryPoints.frontDoor = { x: 26, y: 48 };
 
         _this.entrances[25][48] = {
@@ -2140,7 +2125,7 @@ var GroveStreet4 = function (_GroveStreetTemplate) {
 exports.GroveStreet4 = GroveStreet4;
 
 
-},{"../islands":27,"./grovestreethouse":26}],26:[function(require,module,exports){
+},{"../islands":26,"./grovestreethouse":25}],25:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2148,7 +2133,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.GroveStreetTemplate = undefined;
 
-var _locale = require("../../engine/locale");
+var _paradise_locale = require("../../paradise_locale");
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -2175,8 +2160,8 @@ function _inherits(subClass, superClass) {
    *
    */
 
-var GroveStreetTemplate = function (_Interior) {
-    _inherits(GroveStreetTemplate, _Interior);
+var GroveStreetTemplate = function (_ParadiseInterior) {
+    _inherits(GroveStreetTemplate, _ParadiseInterior);
 
     function GroveStreetTemplate(player, people, inhabitance) {
         _classCallCheck(this, GroveStreetTemplate);
@@ -2199,12 +2184,12 @@ var GroveStreetTemplate = function (_Interior) {
     }
 
     return GroveStreetTemplate;
-}(_locale.Interior);
+}(_paradise_locale.ParadiseInterior);
 
 exports.GroveStreetTemplate = GroveStreetTemplate;
 
 
-},{"../../engine/locale":7}],27:[function(require,module,exports){
+},{"../../paradise_locale":31}],26:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2213,6 +2198,8 @@ Object.defineProperty(exports, "__esModule", {
 exports.Islands = undefined;
 
 var _locale = require('../engine/locale');
+
+var _paradise_locale = require('../paradise_locale');
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -2234,13 +2221,13 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Locales/Islands
    *  XL Gaming/Declan Tyson
-   *  v0.0.22
+   *  v0.0.23
    *  06/02/2018
    *
    */
 
-var Islands = function (_Locale) {
-    _inherits(Islands, _Locale);
+var Islands = function (_ParadiseLocale) {
+    _inherits(Islands, _ParadiseLocale);
 
     function Islands(player, people) {
         _classCallCheck(this, Islands);
@@ -2273,12 +2260,12 @@ var Islands = function (_Locale) {
     }
 
     return Islands;
-}(_locale.Locale);
+}(_paradise_locale.ParadiseLocale);
 
 exports.Islands = Islands;
 
 
-},{"../engine/locale":7}],28:[function(require,module,exports){
+},{"../engine/locale":6,"../paradise_locale":31}],27:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2345,7 +2332,7 @@ var chooseStartingMap = exports.chooseStartingMap = function chooseStartingMap()
 };
 
 
-},{"../engine/util":13,"./interiors/1grovestreet":22,"./interiors/2grovestreet":23,"./interiors/3grovestreet":24,"./interiors/4grovestreet":25,"./islands":27,"./village":29}],29:[function(require,module,exports){
+},{"../engine/util":12,"./interiors/1grovestreet":21,"./interiors/2grovestreet":22,"./interiors/3grovestreet":23,"./interiors/4grovestreet":24,"./islands":26,"./village":28}],28:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2353,7 +2340,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Village = undefined;
 
-var _locale = require("../engine/locale");
+var _paradise_locale = require("../paradise_locale");
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -2375,13 +2362,13 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Locales/Village
    *  XL Gaming/Declan Tyson
-   *  v0.0.20
-   *  13/11/2017
+   *  v0.0.23
+   *  06/02/2018
    *
    */
 
-var Village = function (_Locale) {
-    _inherits(Village, _Locale);
+var Village = function (_ParadiseLocale) {
+    _inherits(Village, _ParadiseLocale);
 
     function Village(player, people) {
         _classCallCheck(this, Village);
@@ -2401,12 +2388,12 @@ var Village = function (_Locale) {
     }
 
     return Village;
-}(_locale.Locale);
+}(_paradise_locale.ParadiseLocale);
 
 exports.Village = Village;
 
 
-},{"../engine/locale":7}],30:[function(require,module,exports){
+},{"../paradise_locale":31}],29:[function(require,module,exports){
 'use strict';
 
 var _util = require('./engine/util');
@@ -2419,11 +2406,13 @@ var _player = require('./engine/player');
 
 var _paradise_worldmap = require('./paradise_worldmap');
 
-var _availablepeople = require('./people/availablepeople');
+var _people = require('./people/people');
 
-var _people = require('./engine/people');
+var _people2 = require('./engine/people');
 
 var _locales = require('./locales/locales');
+
+var _evidences = require('./evidence/evidences');
 
 var _murderweapons = require('./evidence/murderweapons');
 
@@ -2439,36 +2428,41 @@ function _interopRequireWildcard(obj) {
     }
 }
 
-/*
- *
- *  CODENAME: Paradise
- *  XL Gaming/Declan Tyson
- *  v0.0.22
- *  06/02/2018
- *
- */
-
 window.startGame = function (locale, people, victim, murderer, weapon) {
     util.clearLog();
 
     locale = _locales.startingMaps[locale] || _locales.startingMaps[(0, _locales.chooseStartingMap)()];
-    people = people || (0, _people.choosePeople)();
+    people = people || (0, _people2.choosePeople)();
     var player = new _player.Player(),
         worldMap = new _paradise_worldmap.ParadiseWorldMap(player);
 
     window.game = (0, _game.StartGame)(locale, people, player, worldMap);
 
-    window.game.victim = victim || (0, _availablepeople.chooseVictim)(people);
-    window.game.murderer = murderer || (0, _availablepeople.chooseMurderer)(victim, people);
+    window.game.victim = victim || (0, _people.chooseVictim)(people);
+    window.game.murderer = murderer || (0, _people.chooseMurderer)(victim, people);
     window.game.weapon = weapon || (0, _murderweapons.chooseMurderWeapon)();
+
+    window.game.evidence = (0, _evidences.chooseEvidence)(game);
+
+    util.log('Evidence includes:');
+    window.game.evidence.forEach(function (e) {
+        util.log('-  ' + e.name + ' (' + e.location + ')');
+    });
 
     document.querySelectorAll('button').forEach(function (button) {
         button.blur();
     });
-};
+}; /*
+    *
+    *  CODENAME: Paradise
+    *  XL Gaming/Declan Tyson
+    *  v0.0.23
+    *  06/02/2018
+    *
+    */
 
 
-},{"./engine/game":3,"./engine/people":8,"./engine/player":10,"./engine/util":13,"./evidence/murderweapons":19,"./locales/locales":28,"./paradise_worldmap":32,"./people/availablepeople":33}],31:[function(require,module,exports){
+},{"./engine/game":2,"./engine/people":7,"./engine/player":9,"./engine/util":12,"./evidence/evidences":15,"./evidence/murderweapons":19,"./locales/locales":27,"./paradise_worldmap":33,"./people/people":39}],30:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2550,13 +2544,28 @@ function _inherits(subClass, superClass) {
 var ParadiseInteraction = function (_Interaction) {
     _inherits(ParadiseInteraction, _Interaction);
 
-    function ParadiseInteraction(person) {
+    function ParadiseInteraction(person, game) {
         _classCallCheck(this, ParadiseInteraction);
 
         var _this = _possibleConstructorReturn(this, (ParadiseInteraction.__proto__ || Object.getPrototypeOf(ParadiseInteraction)).call(this, person));
 
+        _this.game = game;
+
         if (_this.person.victim) {
-            util.log(_this.person.name + " is dead.");
+            var lines = [],
+                _person = _this.person,
+                weapon = _this.game.weapon;
+
+            lines.push(_person.name + " is dead.");
+            _person.evidence.forEach(function (evidence) {
+                if (evidence.name === weapon) {
+                    lines.push("Lying next to " + _constants.pronouns[_person.gender] + " is " + evidence.description + ".");
+                }
+            });
+
+            for (var i = 0; i < lines.length; i++) {
+                _this.lines.push(lines[i]);
+            }
         }
         return _this;
     }
@@ -2573,9 +2582,6 @@ var ParadiseInteraction = function (_Interaction) {
             }
         }
     }, {
-        key: "drawConversation",
-        value: function drawConversation(ctx) {}
-    }, {
         key: "returnToWorldMap",
         value: function returnToWorldMap() {
             if (!this.worldMap) return;
@@ -2589,7 +2595,161 @@ var ParadiseInteraction = function (_Interaction) {
 exports.ParadiseInteraction = ParadiseInteraction;
 
 
-},{"./constants":1,"./engine/interaction":5,"./engine/util":13}],32:[function(require,module,exports){
+},{"./constants":1,"./engine/interaction":4,"./engine/util":12}],31:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.ParadiseLocale = exports.ParadiseInterior = undefined;
+
+var _util = require("./engine/util");
+
+var util = _interopRequireWildcard(_util);
+
+var _locale = require("./engine/locale");
+
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) {
+        return obj;
+    } else {
+        var newObj = {};if (obj != null) {
+            for (var key in obj) {
+                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+            }
+        }newObj.default = obj;return newObj;
+    }
+}
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  CODENAME: Paradise/Locales/Base
+   *  XL Gaming/Declan Tyson
+   *  v0.0.23
+   *  06/02/2018
+   *
+   */
+
+var ParadiseLocale = function (_Locale) {
+    _inherits(ParadiseLocale, _Locale);
+
+    function ParadiseLocale(player, people) {
+        _classCallCheck(this, ParadiseLocale);
+
+        var _this = _possibleConstructorReturn(this, (ParadiseLocale.__proto__ || Object.getPrototypeOf(ParadiseLocale)).call(this, player, people));
+
+        _this.evidence = [];
+        return _this;
+    }
+
+    return ParadiseLocale;
+}(_locale.Locale);
+
+var ParadiseInterior = function (_Interior) {
+    _inherits(ParadiseInterior, _Interior);
+
+    function ParadiseInterior(player, people, inhabitance) {
+        _classCallCheck(this, ParadiseInterior);
+
+        var _this2 = _possibleConstructorReturn(this, (ParadiseInterior.__proto__ || Object.getPrototypeOf(ParadiseInterior)).call(this, player, people, inhabitance));
+
+        _this2.evidence = [];
+        return _this2;
+    }
+
+    return ParadiseInterior;
+}(_locale.Interior);
+
+exports.ParadiseInterior = ParadiseInterior;
+exports.ParadiseLocale = ParadiseLocale;
+
+
+},{"./engine/locale":6,"./engine/util":12}],32:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.ParadisePerson = undefined;
+
+var _util = require("./engine/util");
+
+var util = _interopRequireWildcard(_util);
+
+var _person = require("./engine/person");
+
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) {
+        return obj;
+    } else {
+        var newObj = {};if (obj != null) {
+            for (var key in obj) {
+                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+            }
+        }newObj.default = obj;return newObj;
+    }
+}
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  XL RPG/Person
+   *  XL Gaming/Declan Tyson
+   *  v0.0.23
+   *  06/02/2018
+   *
+   */
+
+var ParadisePerson = function (_Person) {
+    _inherits(ParadisePerson, _Person);
+
+    function ParadisePerson(name, gender) {
+        _classCallCheck(this, ParadisePerson);
+
+        var _this = _possibleConstructorReturn(this, (ParadisePerson.__proto__ || Object.getPrototypeOf(ParadisePerson)).call(this, name, gender));
+
+        _this.evidence = [];
+        return _this;
+    }
+
+    return ParadisePerson;
+}(_person.Person);
+
+exports.ParadisePerson = ParadisePerson;
+
+
+},{"./engine/person":8,"./engine/util":12}],33:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2609,9 +2769,25 @@ var _createClass = function () {
 
 var _worldmap = require("./engine/worldmap");
 
-var _availablepeople = require("./people/availablepeople");
+var _people = require("./people/people");
 
 var _paradise_interaction = require("./paradise_interaction");
+
+var _util = require("./engine/util");
+
+var util = _interopRequireWildcard(_util);
+
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) {
+        return obj;
+    } else {
+        var newObj = {};if (obj != null) {
+            for (var key in obj) {
+                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+            }
+        }newObj.default = obj;return newObj;
+    }
+}
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -2633,7 +2809,7 @@ function _inherits(subClass, superClass) {
    *
    *  CODENAME: Paradise/World Map
    *  XL Gaming/Declan Tyson
-   *  v0.0.22
+   *  v0.0.23
    *  06/02/2018
    *
    */
@@ -2657,23 +2833,37 @@ var ParadiseWorldMap = function (_WorldMap) {
             this.locale.inhabitance.inhabitants.forEach(function (inhabitant, index) {
                 var spawnPoint = _this2.locale.spawnPoints[index];
                 if (spawnPoint !== undefined) {
-                    var person = new _availablepeople.people[inhabitant]();
+                    var person = new _people.people[inhabitant]();
                     person.x = spawnPoint.x;
                     person.y = spawnPoint.y;
 
                     if (person.name === _this2.game.victim) person.victim = true;
                     if (person.name === _this2.game.murderer) person.murderer = true;
 
+                    _this2.plantEvidence(person);
+
                     _this2.presentPeople.push(person);
                 }
             });
+
+            this.plantEvidence(this.locale);
         }
     }, {
         key: "startInteraction",
         value: function startInteraction(person) {
-            var interaction = new _paradise_interaction.ParadiseInteraction(person);
+            var interaction = new _paradise_interaction.ParadiseInteraction(person, this.game);
             interaction.worldMap = this;
             this.game.setScene(interaction);
+        }
+    }, {
+        key: "plantEvidence",
+        value: function plantEvidence(location) {
+            this.game.evidence.forEach(function (evidence) {
+                if (location.id === evidence.location) {
+                    location.evidence.push(evidence);
+                    util.log(evidence.name + " is hidden here!");
+                }
+            });
         }
     }]);
 
@@ -2683,7 +2873,267 @@ var ParadiseWorldMap = function (_WorldMap) {
 exports.ParadiseWorldMap = ParadiseWorldMap;
 
 
-},{"./engine/worldmap":14,"./paradise_interaction":31,"./people/availablepeople":33}],33:[function(require,module,exports){
+},{"./engine/util":12,"./engine/worldmap":13,"./paradise_interaction":30,"./people/people":39}],34:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Evelyn = undefined;
+
+var _constants = require("../constants");
+
+var _paradise_person = require("../paradise_person");
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  XL RPG/Person/Evelyn
+   *  XL Gaming/Declan Tyson
+   *  v0.0.23
+   *  06/02/2018
+   *
+   */
+
+var Evelyn = function (_ParadisePerson) {
+    _inherits(Evelyn, _ParadisePerson);
+
+    function Evelyn() {
+        _classCallCheck(this, Evelyn);
+
+        return _possibleConstructorReturn(this, (Evelyn.__proto__ || Object.getPrototypeOf(Evelyn)).call(this, "Evelyn", _constants.genders.female));
+    }
+
+    return Evelyn;
+}(_paradise_person.ParadisePerson);
+
+exports.Evelyn = Evelyn;
+
+
+},{"../constants":1,"../paradise_person":32}],35:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Jill = undefined;
+
+var _constants = require("../constants");
+
+var _paradise_person = require("../paradise_person");
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  XL RPG/Person/Jill
+   *  XL Gaming/Declan Tyson
+   *  v0.0.23
+   *  06/02/2018
+   *
+   */
+
+var Jill = function (_ParadisePerson) {
+    _inherits(Jill, _ParadisePerson);
+
+    function Jill() {
+        _classCallCheck(this, Jill);
+
+        return _possibleConstructorReturn(this, (Jill.__proto__ || Object.getPrototypeOf(Jill)).call(this, "Jill", _constants.genders.female));
+    }
+
+    return Jill;
+}(_paradise_person.ParadisePerson);
+
+exports.Jill = Jill;
+
+
+},{"../constants":1,"../paradise_person":32}],36:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.John = undefined;
+
+var _constants = require("../constants");
+
+var _paradise_person = require("../paradise_person");
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  XL RPG/Person/John
+   *  XL Gaming/Declan Tyson
+   *  v0.0.23
+   *  06/02/2018
+   *
+   */
+
+var John = function (_ParadisePerson) {
+    _inherits(John, _ParadisePerson);
+
+    function John() {
+        _classCallCheck(this, John);
+
+        return _possibleConstructorReturn(this, (John.__proto__ || Object.getPrototypeOf(John)).call(this, "John", _constants.genders.male));
+    }
+
+    return John;
+}(_paradise_person.ParadisePerson);
+
+exports.John = John;
+
+
+},{"../constants":1,"../paradise_person":32}],37:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Neil = undefined;
+
+var _constants = require("../constants");
+
+var _paradise_person = require("../paradise_person");
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  XL RPG/Person/Neil
+   *  XL Gaming/Declan Tyson
+   *  v0.0.23
+   *  06/02/2018
+   *
+   */
+
+var Neil = function (_ParadisePerson) {
+    _inherits(Neil, _ParadisePerson);
+
+    function Neil() {
+        _classCallCheck(this, Neil);
+
+        return _possibleConstructorReturn(this, (Neil.__proto__ || Object.getPrototypeOf(Neil)).call(this, "Neil", _constants.genders.male));
+    }
+
+    return Neil;
+}(_paradise_person.ParadisePerson);
+
+exports.Neil = Neil;
+
+
+},{"../constants":1,"../paradise_person":32}],38:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Pauline = undefined;
+
+var _constants = require("../constants");
+
+var _paradise_person = require("../paradise_person");
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  XL RPG/Person/Pauline
+   *  XL Gaming/Declan Tyson
+   *  v0.0.23
+   *  06/02/2018
+   *
+   */
+
+var Pauline = function (_ParadisePerson) {
+    _inherits(Pauline, _ParadisePerson);
+
+    function Pauline() {
+        _classCallCheck(this, Pauline);
+
+        return _possibleConstructorReturn(this, (Pauline.__proto__ || Object.getPrototypeOf(Pauline)).call(this, "Pauline", _constants.genders.female));
+    }
+
+    return Pauline;
+}(_paradise_person.ParadisePerson);
+
+exports.Pauline = Pauline;
+
+
+},{"../constants":1,"../paradise_person":32}],39:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2695,7 +3145,7 @@ var _util = require('../engine/util');
 
 var util = _interopRequireWildcard(_util);
 
-var _constants = require('../engine/constants');
+var _constants = require('../constants');
 
 var _evelyn = require('./evelyn');
 
@@ -2727,28 +3177,28 @@ function _interopRequireWildcard(obj) {
 
 /*
  *
- *  Paradise/People
+ *  CODENAME: Paradise/People
  *  XL Gaming/Declan Tyson
- *  v0.0.20
- *  05/02/2018
+ *  v0.0.23
+ *  06/02/2018
  *
  */
 
 // People
 
 var people = exports.people = {
-    "Evelyn": _evelyn.Evelyn,
-    "Jill": _jill.Jill,
-    "John": _john.John,
-    "Neil": _neil.Neil,
-    "Pauline": _pauline.Pauline,
-    "Petey": _petey.Petey,
-    "Quazar": _quazar.Quazar,
-    "Zenith": _zenith.Zenith
+    'Evelyn': _evelyn.Evelyn,
+    'Jill': _jill.Jill,
+    'John': _john.John,
+    'Neil': _neil.Neil,
+    'Pauline': _pauline.Pauline,
+    'Petey': _petey.Petey,
+    'Quazar': _quazar.Quazar,
+    'Zenith': _zenith.Zenith
 };
 
 var chooseVictim = exports.chooseVictim = function chooseVictim(chosenPeople) {
-    var victim = util.pickRandomIndex(chosenPeople);
+    var victim = util.dieRoll(chosenPeople.length - 1);
     util.log(victim + ' is the unlucky one.');
     return victim;
 };
@@ -2788,281 +3238,23 @@ var chooseMurderer = exports.chooseMurderer = function chooseMurderer(victimName
     }
     /* jshint ignore:end */
 
-    util.log(victim.name + '\'s murderer is ' + _constants.pronouns[victim.gender] + ' ' + relationship.description + ', ' + murderer + '!!!');
+    util.log(victim.name + '\'s murderer is ' + _constants.posessivePronouns[victim.gender] + ' ' + relationship.description + ', ' + murderer + '!!!');
+
+    return murderer;
 };
 
 
-},{"../engine/constants":2,"../engine/util":13,"./evelyn":34,"./jill":35,"./john":36,"./neil":37,"./pauline":38,"./petey":39,"./quazar":40,"./zenith":41}],34:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.Evelyn = undefined;
-
-var _person = require('../engine/person');
-
-var _constants = require('../constants');
-
-function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-        throw new TypeError("Cannot call a class as a function");
-    }
-}
-
-function _possibleConstructorReturn(self, call) {
-    if (!self) {
-        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
-}
-
-function _inherits(subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-} /*
-   *
-   *  XL RPG/Person/Evelyn
-   *  XL Gaming/Declan Tyson
-   *  v0.0.20
-   *  13/11/2017
-   *
-   */
-
-var Evelyn = function (_Person) {
-    _inherits(Evelyn, _Person);
-
-    function Evelyn() {
-        _classCallCheck(this, Evelyn);
-
-        return _possibleConstructorReturn(this, (Evelyn.__proto__ || Object.getPrototypeOf(Evelyn)).call(this, "Evelyn", _constants.genders.female));
-    }
-
-    return Evelyn;
-}(_person.Person);
-
-exports.Evelyn = Evelyn;
-
-
-},{"../constants":1,"../engine/person":9}],35:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.Jill = undefined;
-
-var _person = require('../engine/person');
-
-var _constants = require('../constants');
-
-function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-        throw new TypeError("Cannot call a class as a function");
-    }
-}
-
-function _possibleConstructorReturn(self, call) {
-    if (!self) {
-        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
-}
-
-function _inherits(subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-} /*
-   *
-   *  XL RPG/Person/Jill
-   *  XL Gaming/Declan Tyson
-   *  v0.0.20
-   *  13/11/2017
-   *
-   */
-
-var Jill = function (_Person) {
-    _inherits(Jill, _Person);
-
-    function Jill() {
-        _classCallCheck(this, Jill);
-
-        return _possibleConstructorReturn(this, (Jill.__proto__ || Object.getPrototypeOf(Jill)).call(this, "Jill", _constants.genders.female));
-    }
-
-    return Jill;
-}(_person.Person);
-
-exports.Jill = Jill;
-
-
-},{"../constants":1,"../engine/person":9}],36:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.John = undefined;
-
-var _person = require('../engine/person');
-
-var _constants = require('../constants');
-
-function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-        throw new TypeError("Cannot call a class as a function");
-    }
-}
-
-function _possibleConstructorReturn(self, call) {
-    if (!self) {
-        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
-}
-
-function _inherits(subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-} /*
-   *
-   *  XL RPG/Person/John
-   *  XL Gaming/Declan Tyson
-   *  v0.0.20
-   *  13/11/2017
-   *
-   */
-
-var John = function (_Person) {
-    _inherits(John, _Person);
-
-    function John() {
-        _classCallCheck(this, John);
-
-        return _possibleConstructorReturn(this, (John.__proto__ || Object.getPrototypeOf(John)).call(this, "John", _constants.genders.male));
-    }
-
-    return John;
-}(_person.Person);
-
-exports.John = John;
-
-
-},{"../constants":1,"../engine/person":9}],37:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.Neil = undefined;
-
-var _person = require('../engine/person');
-
-var _constants = require('../constants');
-
-function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-        throw new TypeError("Cannot call a class as a function");
-    }
-}
-
-function _possibleConstructorReturn(self, call) {
-    if (!self) {
-        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
-}
-
-function _inherits(subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-} /*
-   *
-   *  XL RPG/Person/Neil
-   *  XL Gaming/Declan Tyson
-   *  v0.0.20
-   *  13/11/2017
-   *
-   */
-
-var Neil = function (_Person) {
-    _inherits(Neil, _Person);
-
-    function Neil() {
-        _classCallCheck(this, Neil);
-
-        return _possibleConstructorReturn(this, (Neil.__proto__ || Object.getPrototypeOf(Neil)).call(this, "Neil", _constants.genders.male));
-    }
-
-    return Neil;
-}(_person.Person);
-
-exports.Neil = Neil;
-
-
-},{"../constants":1,"../engine/person":9}],38:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.Pauline = undefined;
-
-var _person = require('../engine/person');
-
-var _constants = require('../constants');
-
-function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-        throw new TypeError("Cannot call a class as a function");
-    }
-}
-
-function _possibleConstructorReturn(self, call) {
-    if (!self) {
-        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
-}
-
-function _inherits(subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-} /*
-   *
-   *  XL RPG/Person/Pauline
-   *  XL Gaming/Declan Tyson
-   *  v0.0.20
-   *  13/11/2017
-   *
-   */
-
-var Pauline = function (_Person) {
-    _inherits(Pauline, _Person);
-
-    function Pauline() {
-        _classCallCheck(this, Pauline);
-
-        return _possibleConstructorReturn(this, (Pauline.__proto__ || Object.getPrototypeOf(Pauline)).call(this, "Pauline", _constants.genders.female));
-    }
-
-    return Pauline;
-}(_person.Person);
-
-exports.Pauline = Pauline;
-
-
-},{"../constants":1,"../engine/person":9}],39:[function(require,module,exports){
-'use strict';
+},{"../constants":1,"../engine/util":12,"./evelyn":34,"./jill":35,"./john":36,"./neil":37,"./pauline":38,"./petey":40,"./quazar":41,"./zenith":42}],40:[function(require,module,exports){
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.Petey = undefined;
 
-var _person = require('../engine/person');
+var _constants = require("../constants");
 
-var _constants = require('../constants');
+var _paradise_person = require("../paradise_person");
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -3084,13 +3276,13 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Person/Petey
    *  XL Gaming/Declan Tyson
-   *  v0.0.20
-   *  13/11/2017
+   *  v0.0.23
+   *  06/02/2018
    *
    */
 
-var Petey = function (_Person) {
-    _inherits(Petey, _Person);
+var Petey = function (_ParadisePerson) {
+    _inherits(Petey, _ParadisePerson);
 
     function Petey() {
         _classCallCheck(this, Petey);
@@ -3099,22 +3291,22 @@ var Petey = function (_Person) {
     }
 
     return Petey;
-}(_person.Person);
+}(_paradise_person.ParadisePerson);
 
 exports.Petey = Petey;
 
 
-},{"../constants":1,"../engine/person":9}],40:[function(require,module,exports){
-'use strict';
+},{"../constants":1,"../paradise_person":32}],41:[function(require,module,exports){
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.Quazar = undefined;
 
-var _person = require('../engine/person');
+var _constants = require("../constants");
 
-var _constants = require('../constants');
+var _paradise_person = require("../paradise_person");
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -3136,13 +3328,13 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Person/Zenith
    *  XL Gaming/Declan Tyson
-   *  v0.0.20
-   *  05/02/2018
+   *  v0.0.23
+   *  06/02/2018
    *
    */
 
-var Quazar = function (_Person) {
-    _inherits(Quazar, _Person);
+var Quazar = function (_ParadisePerson) {
+    _inherits(Quazar, _ParadisePerson);
 
     function Quazar() {
         _classCallCheck(this, Quazar);
@@ -3160,22 +3352,22 @@ var Quazar = function (_Person) {
     }
 
     return Quazar;
-}(_person.Person);
+}(_paradise_person.ParadisePerson);
 
 exports.Quazar = Quazar;
 
 
-},{"../constants":1,"../engine/person":9}],41:[function(require,module,exports){
-'use strict';
+},{"../constants":1,"../paradise_person":32}],42:[function(require,module,exports){
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.Zenith = undefined;
 
-var _person = require('../engine/person');
+var _constants = require("../constants");
 
-var _constants = require('../constants');
+var _paradise_person = require("../paradise_person");
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -3197,13 +3389,13 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Person/Quazar
    *  XL Gaming/Declan Tyson
-   *  v0.0.20
-   *  05/02/2018
+   *  v0.0.23
+   *  06/02/2018
    *
    */
 
-var Zenith = function (_Person) {
-    _inherits(Zenith, _Person);
+var Zenith = function (_ParadisePerson) {
+    _inherits(Zenith, _ParadisePerson);
 
     function Zenith() {
         _classCallCheck(this, Zenith);
@@ -3221,9 +3413,9 @@ var Zenith = function (_Person) {
     }
 
     return Zenith;
-}(_person.Person);
+}(_paradise_person.ParadisePerson);
 
 exports.Zenith = Zenith;
 
 
-},{"../constants":1,"../engine/person":9}]},{},[1,31,32,30]);
+},{"../constants":1,"../paradise_person":32}]},{},[1,30,31,32,33,29]);

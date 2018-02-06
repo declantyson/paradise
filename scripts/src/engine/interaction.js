@@ -10,12 +10,13 @@
 import * as util from './util';
 
 import { Scene } from "./scene";
-import { canvasProperties, interactionTextArea, fonts, colours } from "../constants";
+import {canvasProperties, interactionTextArea, fonts, colours, texts} from "../constants";
 
 class Interaction extends Scene {
     constructor(person) {
         super();
 
+        this.lines = [];
         this.person = person;
         this.actions.back = this.returnToWorldMap.bind(this);
 
@@ -25,6 +26,7 @@ class Interaction extends Scene {
     draw(ctx) {
         this.drawConversationTextArea(ctx);
         this.drawBadge(ctx);
+        this.drawConversation(ctx);
     }
 
     drawConversationTextArea(ctx) {
@@ -43,7 +45,12 @@ class Interaction extends Scene {
     }
 
     drawConversation(ctx) {
-
+        let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.badgeOffsetY) * 3;
+        ctx.font = fonts.small;
+        ctx.fillStyle = colours.white;
+        this.lines.forEach((line, index) => {
+            ctx.fillText(line, interactionTextArea.badgeOffsetX, y + (index * interactionTextArea.lineHeight));
+        });
     }
 
     returnToWorldMap() {

@@ -2,10 +2,15 @@
  *
  *  XL RPG/Util
  *  XL Gaming/Declan Tyson
- *  v0.0.21
+ *  v0.0.23
  *  06/02/2018
  *
  */
+
+export const dieRoll = (sides)  => {
+    let result = Math.floor(Math.random() * (sides));
+    return result;
+};
 
 export const pickRandomProperty = (obj)  => {
     let result,
@@ -17,15 +22,9 @@ export const pickRandomProperty = (obj)  => {
     return result;
 };
 
-export const pickRandomIndex = (arr, indexOnly = false)  => {
-    let index = Math.floor(Math.random() * (arr.length-1));
-    if(indexOnly) return index;
-    return arr[index];
-};
-
 export const log = (str) => {
     let log = document.getElementById('log');
-    log.innerHTML += `${str}<br/>`;
+    log.innerHTML += `${str}<hr/>`;
     log.scrollTop = log.scrollHeight;
 };
 

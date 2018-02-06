@@ -2,14 +2,14 @@
  *
  *  XL RPG/Locales/Village
  *  XL Gaming/Declan Tyson
- *  v0.0.20
- *  13/11/2017
+ *  v0.0.23
+ *  06/02/2018
  *
  */
 
-import { Locale } from "../engine/locale";
+import {ParadiseLocale} from "../paradise_locale";
 
-class Village extends Locale {
+class Village extends ParadiseLocale {
     constructor(player, people) {
         super(player, people);
 

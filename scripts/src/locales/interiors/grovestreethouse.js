@@ -7,9 +7,9 @@
  *
  */
 
-import { Interior } from "../../engine/locale";
+import { ParadiseInterior } from "../../paradise_locale";
 
-class GroveStreetTemplate extends Interior {
+class GroveStreetTemplate extends ParadiseInterior {
     constructor(player, people, inhabitance) {
         super(player, people, inhabitance);
 

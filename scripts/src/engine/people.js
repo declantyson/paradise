@@ -2,14 +2,14 @@
  *
  *  XL RPG/People
  *  XL Gaming/Declan Tyson
- *  v0.0.20
+ *  v0.0.23
  *  06/02/2018
  *
  */
 
-import {personCount} from "../constants";
+import { personCount } from "../constants";
 import * as util from "./util";
-import {people} from "../people/availablepeople";
+import { people } from "../people/people";
 
 export const choosePeople = () => {
     let chosenPeople = [];

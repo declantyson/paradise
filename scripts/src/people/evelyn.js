@@ -2,15 +2,16 @@
  *
  *  XL RPG/Person/Evelyn
  *  XL Gaming/Declan Tyson
- *  v0.0.20
- *  13/11/2017
+ *  v0.0.23
+ *  06/02/2018
  *
  */
 
-import { Person } from '../engine/person';
-import { genders } from '../constants';
 
-class Evelyn extends Person {
+import { genders } from '../constants';
+import {ParadisePerson} from "../paradise_person";
+
+class Evelyn extends ParadisePerson {
     constructor() {
         super("Evelyn", genders.female);
     }

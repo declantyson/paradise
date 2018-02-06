@@ -2,7 +2,7 @@
  *
  *  CODENAME: Paradise/People
  *  XL Gaming/Declan Tyson
- *  v0.0.22
+ *  v0.0.23
  *  06/02/2018
  *
  */
@@ -10,7 +10,7 @@
 // People
 
 import * as util from '../engine/util';
-import { personCount, pronouns } from '../constants';
+import { personCount, posessivePronouns } from '../constants';
 
 import { Evelyn } from './evelyn';
 import { Jill } from './jill';
@@ -33,7 +33,7 @@ export let people = {
 };
 
 export const chooseVictim = (chosenPeople) => {
-    let victim = util.pickRandomIndex(chosenPeople);
+    let victim = util.dieRoll(chosenPeople.length - 1);
     util.log(`${victim} is the unlucky one.`);
     return victim;
 };
@@ -71,6 +71,7 @@ export const chooseMurderer = (victimName, chosenPeople, trueRandom = false) => 
     }
     /* jshint ignore:end */
 
-    util.log(`${victim.name}'s murderer is ${pronouns[victim.gender]} ${relationship.description}, ${murderer}!!!`);
+    util.log(`${victim.name}'s murderer is ${posessivePronouns[victim.gender]} ${relationship.description}, ${murderer}!!!`);
 
+    return murderer;
 };

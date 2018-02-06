@@ -2,8 +2,8 @@
  *
  *  XL RPG/Locales/4 Grove Street
  *  XL Gaming/Declan Tyson
- *  v0.0.20
- *  05/02/2018
+ *  v0.0.23
+ *  06/02/2018
  *
  */
 
@@ -14,7 +14,7 @@ class GroveStreet4 extends GroveStreetTemplate {
     constructor(player, people, inhabitance) {
         super(player, people, inhabitance);
 
-        this.id = "2GroveStreet";
+        this.id = "GroveStreet4";
         this.entryPoints.frontDoor = { x: 26, y: 48 };
 
         this.entrances[25][48] = {

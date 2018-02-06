@@ -2,14 +2,15 @@
  *
  *  CODENAME: Paradise/World Map
  *  XL Gaming/Declan Tyson
- *  v0.0.22
+ *  v0.0.23
  *  06/02/2018
  *
  */
 
 import { WorldMap } from "./engine/worldmap";
-import { people } from './people/availablepeople';
+import { people } from './people/people';
 import { ParadiseInteraction } from "./paradise_interaction";
+import * as util from "./engine/util";
 
 class ParadiseWorldMap extends WorldMap {
     constructor(player) {
@@ -29,15 +30,28 @@ class ParadiseWorldMap extends WorldMap {
                 if(person.name === this.game.victim) person.victim = true;
                 if(person.name === this.game.murderer) person.murderer = true;
 
+                this.plantEvidence(person);
+
                 this.presentPeople.push(person);
             }
         });
+
+        this.plantEvidence(this.locale);
     }
 
     startInteraction(person) {
-        let interaction = new ParadiseInteraction(person);
+        let interaction = new ParadiseInteraction(person, this.game);
         interaction.worldMap = this;
         this.game.setScene(interaction);
+    }
+
+    plantEvidence(location) {
+        this.game.evidence.forEach((evidence) => {
+             if(location.id === evidence.location) {
+                 location.evidence.push(evidence);
+                 util.log(`${evidence.name} is hidden here!`);
+             }
+        });
     }
 }
 
