@@ -2,8 +2,8 @@
  *
  *  XL RPG/Terrain
  *  XL Gaming/Declan Tyson
- *  v0.0.13
- *  14/11/2017
+ *  v0.0.19
+ *  06/02/2018
  *
  */
 
@@ -79,4 +79,4 @@ class WoodenFloor extends Terrain {
     }
 }
 
-window.terrains = { Blank, Grass, Water, Road, Wall, Doorway, WoodenFloor };
+export { Blank, Grass, Water, Road, Wall, Doorway, WoodenFloor };

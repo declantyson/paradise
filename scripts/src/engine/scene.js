@@ -2,12 +2,12 @@
  *
  *  XL RPG/Scene
  *  XL Gaming/Declan Tyson
- *  v0.0.8
- *  23/12/2016
+ *  v0.0.19
+ *  06/02/2018
  *
  */
 
-import { actionTimeoutLimit } from "../constants";
+import { actionTimeoutLimit } from "./constants";
 
 class Scene {
     constructor() {

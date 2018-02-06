@@ -2,7 +2,7 @@
  *
  *  XL RPG/Locales/4 Grove Street
  *  XL Gaming/Declan Tyson
- *  v0.0.18
+ *  v0.0.19
  *  05/02/2018
  *
  */
@@ -19,7 +19,7 @@ class GroveStreet4 extends GroveStreetTemplate {
 
         this.entrances[25][48] = {
             locale: new Islands(player, people),
-            entryPoint: "groveStreet2"
+            entryPoint: "groveStreet4"
         };
 
         this.terrainPaint(25, 48, 1, 1, "WoodenFloor");

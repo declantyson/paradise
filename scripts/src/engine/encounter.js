@@ -2,13 +2,13 @@
  *
  *  XL RPG/Scene-Encounter
  *  XL Gaming/Declan Tyson
- *  v0.0.8
- *  23/12/2016
+ *  v0.0.19
+ *  06/02/2018
  *
  */
 
 import { Scene } from "./scene";
-import { canvasProperties, colours } from "../constants";
+import { canvasProperties, colours } from "./constants";
 import "../enemies/enemydirectory";
 
 class Encounter extends Scene {

@@ -2,12 +2,12 @@
  *
  *  XL RPG/Locales/Islands
  *  XL Gaming/Declan Tyson
- *  v0.0.15
+ *  v0.0.19
  *  15/11/2017
  *
  */
 
-import { Locale, Inhabitance } from "./baselocale";
+import { Locale, Inhabitance } from "../engine/baselocale";
 
 class Islands extends Locale {
     constructor(player, people) {

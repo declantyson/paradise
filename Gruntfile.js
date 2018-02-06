@@ -34,6 +34,13 @@ module.exports = function(grunt) {
                 options: {
 
                 }
+            },
+            uglify: {
+                files: ['scripts/script.js'],
+                tasks: ['uglify'],
+                options: {
+
+                }
             }
         },
         sass : {

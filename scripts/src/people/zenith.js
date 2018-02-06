@@ -2,13 +2,13 @@
  *
  *  XL RPG/Person/Quazar
  *  XL Gaming/Declan Tyson
- *  v0.0.18
+ *  v0.0.19
  *  05/02/2018
  *
  */
 
-import { Person } from './baseperson';
-import { genders, colours } from '../constants';
+import { Person } from '../engine/baseperson';
+import { genders, colours } from '../engine/constants';
 
 class Zenith extends Person {
     constructor() {

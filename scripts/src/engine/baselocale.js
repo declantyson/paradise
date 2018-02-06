@@ -2,13 +2,13 @@
  *
  *  XL RPG/Locales/Base
  *  XL Gaming/Declan Tyson
- *  v0.0.18
+ *  v0.0.19
  *  05/02/2018
  *
  */
 
-import * as util from '../util';
-import {colours, inhabitanceSize, tileSize} from '../constants';
+import * as util from './util';
+import {colours, inhabitanceSize, tileSize} from './constants';
 
 class Locale {
     constructor(player, people) {

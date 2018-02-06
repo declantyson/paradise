@@ -2,12 +2,12 @@
  *
  *  XL RPG/Locales/Grove Street House Template
  *  XL Gaming/Declan Tyson
- *  v0.0.18
+ *  v0.0.19
  *  05/02/2018
  *
  */
 
-import { Interior } from "../baselocale";
+import { Interior } from "../../engine/baselocale";
 
 class GroveStreetTemplate extends Interior {
     constructor(player, people, inhabitance) {

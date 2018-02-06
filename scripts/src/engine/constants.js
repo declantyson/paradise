@@ -2,7 +2,7 @@
  *
  *  XL RPG/Constants
  *  XL Gaming/Declan Tyson
- *  v0.0.17
+ *  v0.0.19
  *  05/02/2018
  *
  */

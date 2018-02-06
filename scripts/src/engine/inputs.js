@@ -2,8 +2,8 @@
  *
  *  XL RPG/Inputs
  *  XL Gaming/Declan Tyson
- *  v0.0.5
- *  23/12/2016
+ *  v0.0.19
+ *  06/02/2018
  *
  */
 

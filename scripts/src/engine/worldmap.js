@@ -2,14 +2,14 @@
  *
  *  XL RPG/Scene-WorldMap
  *  XL Gaming/Declan Tyson
- *  v0.0.18
- *  05/02/2018
+ *  v0.0.19
+ *  06/02/2018
  *
  */
 
-import * as util from '../util';
-
-import { colours, tileSize, tilesWide as viewportWidth, tilesHigh as viewportHeight } from "../constants";
+import * as util from './util';
+import * as terrain from './terrain';
+import { colours, tileSize, tilesWide as viewportWidth, tilesHigh as viewportHeight } from "./constants";
 import { Scene } from "./scene";
 import { locales } from '../locales/availablelocales';
 import { people } from '../people/availablepeople';
@@ -178,7 +178,7 @@ class WorldMap extends Scene {
             for (let y = 0; y < this.locale.height; y++) {
                 let terrainType = this.locale.map[x][y];
 
-                this.localeMap[x][y] = new window.terrains[terrainType]();
+                this.localeMap[x][y] = new terrain[terrainType]();
             }
         }
     }

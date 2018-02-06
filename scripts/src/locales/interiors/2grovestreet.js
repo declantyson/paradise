@@ -2,7 +2,7 @@
  *
  *  XL RPG/Locales/1 Grove Street
  *  XL Gaming/Declan Tyson
- *  v0.0.18
+ *  v0.0.19
  *  05/02/2018
  *
  */

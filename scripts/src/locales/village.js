@@ -2,12 +2,12 @@
  *
  *  XL RPG/Locales/Village
  *  XL Gaming/Declan Tyson
- *  v0.0.9
+ *  v0.0.19
  *  13/11/2017
  *
  */
 
-import { Locale } from "./baselocale";
+import { Locale } from "../engine/baselocale";
 
 class Village extends Locale {
     constructor(player, people) {

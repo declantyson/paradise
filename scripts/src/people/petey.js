@@ -2,13 +2,13 @@
  *
  *  XL RPG/Person/Petey
  *  XL Gaming/Declan Tyson
- *  v0.0.10
+ *  v0.0.19
  *  13/11/2017
  *
  */
 
-import { Person } from './baseperson';
-import { genders } from '../constants';
+import { Person } from '../engine/baseperson';
+import { genders } from '../engine/constants';
 
 class Petey extends Person {
     constructor() {

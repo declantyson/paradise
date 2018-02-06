@@ -2,13 +2,13 @@
  *
  *  XL RPG/Person
  *  XL Gaming/Declan Tyson
- *  v0.0.17
+ *  v0.0.19
  *  05/02/2018
  *
  */
 
-import * as util from '../util';
-import { colours, pronouns } from '../constants';
+import * as util from './util';
+import { colours, pronouns } from './constants';
 
 
 class Person {

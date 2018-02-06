@@ -2,15 +2,15 @@
  *
  *  XL RPG/People
  *  XL Gaming/Declan Tyson
- *  v0.0.18
+ *  v0.0.19
  *  05/02/2018
  *
  */
 
 // People
 
-import * as util from '../util';
-import {personCount, pronouns} from '../constants';
+import * as util from '../engine/util';
+import {personCount, pronouns} from '../engine/constants';
 
 import { Evelyn } from './evelyn';
 import { Jill } from './jill';
@@ -30,21 +30,6 @@ export let people = {
     "Petey"   : Petey,
     "Quazar"  : Quazar,
     "Zenith"  : Zenith
-};
-
-export const choosePeople = () => {
-    let chosenPeople = [];
-    util.log(`Choosing ${personCount} people...`);
-    let person;
-    while(chosenPeople.length < personCount) {
-        person = util.pickRandomProperty(people);
-        if(chosenPeople.indexOf(person) === -1) {
-            chosenPeople.push(person);
-            util.log(`${person} has been chosen.`);
-        }
-    }
-
-    return chosenPeople;
 };
 
 export const chooseVictim = (chosenPeople) => {
