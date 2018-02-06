@@ -8,7 +8,7 @@
  */
 
 import { Scene } from "./scene";
-import { canvasProperties, colours } from "./constants";
+import { canvasProperties, colours } from "../constants";
 import "../enemies/enemydirectory";
 
 class Encounter extends Scene {

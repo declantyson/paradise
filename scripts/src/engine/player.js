@@ -7,7 +7,7 @@
  *
  */
 
-import { colours, directions } from "./constants";
+import { colours, directions } from "../constants";
 
 class Player {
     constructor() {

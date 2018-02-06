@@ -7,7 +7,7 @@
  *
  */
 
-import { Interior } from "../../engine/baselocale";
+import { Interior } from "../../engine/locale";
 
 class GroveStreetTemplate extends Interior {
     constructor(player, people, inhabitance) {

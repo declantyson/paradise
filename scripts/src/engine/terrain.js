@@ -7,7 +7,7 @@
  *
  */
 
-import { colours } from './constants';
+import { colours } from '../constants';
 
 class Terrain {
     constructor() {

@@ -7,8 +7,8 @@
  *
  */
 
-import { Person } from '../engine/baseperson';
-import { genders } from '../engine/constants';
+import { Person } from '../engine/person';
+import { genders } from '../constants';
 
 class Pauline extends Person {
     constructor() {

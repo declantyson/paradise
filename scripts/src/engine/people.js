@@ -7,7 +7,7 @@
  *
  */
 
-import {personCount} from "./constants";
+import {personCount} from "../constants";
 import * as util from "./util";
 import {people} from "../people/availablepeople";
 

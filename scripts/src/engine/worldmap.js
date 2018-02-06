@@ -2,13 +2,13 @@
  *
  *  XL RPG/Scene-WorldMap
  *  XL Gaming/Declan Tyson
- *  v0.0.21
+ *  v0.0.22
  *  06/02/2018
  *
  */
 
 import * as terrain from './terrain';
-import { colours, tileSize, tilesWide as viewportWidth, tilesHigh as viewportHeight, directions } from "./constants";
+import { colours, tileSize, tilesWide as viewportWidth, tilesHigh as viewportHeight, directions } from "../constants";
 import { Scene } from "./scene";
 import { Interaction } from "./interaction";
 import { locales } from '../locales/availablelocales';
@@ -183,6 +183,7 @@ class WorldMap extends Scene {
     }
 
     spawnPeople() {
+        console.log("grrr");
         if(this.locale.inhabitance === undefined) return;
 
         this.locale.inhabitance.inhabitants.forEach((inhabitant, index) => {

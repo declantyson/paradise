@@ -8,7 +8,7 @@
  */
 
 import * as util from './util';
-import {colours, inhabitanceSize, tileSize} from './constants';
+import {colours, inhabitanceSize, tileSize} from '../constants';
 
 class Locale {
     constructor(player, people) {

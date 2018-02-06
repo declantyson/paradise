@@ -1,4 +1,508 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+/*
+ *
+ *  XL RPG/Constants
+ *  XL Gaming/Declan Tyson
+ *  v0.0.22
+ *  06/02/2018
+ *
+ */
+
+var fps = exports.fps = 45;
+var actionTimeoutLimit = exports.actionTimeoutLimit = 2;
+var tileSize = exports.tileSize = 15;
+var tilesWide = exports.tilesWide = 96;
+var tilesHigh = exports.tilesHigh = 54;
+
+var colours = exports.colours = {
+    black: "#000000",
+    white: "#FFFFFF",
+    green: "#00AA00",
+    blue: "#0000AA",
+    brown: "#4f1f0b",
+    darkbrown: "#291006",
+    grey: "#cdcdcd",
+    red: "#ff0000"
+};
+
+var directions = exports.directions = {
+    up: 'up',
+    down: 'down',
+    left: 'left',
+    right: 'right'
+};
+
+var texts = exports.texts = {
+    dead: 'Dead'
+};
+
+var fonts = exports.fonts = {
+    large: '24px "Roboto Condensed"',
+    death: '24px "Permanent Marker"'
+};
+
+var canvasProperties = exports.canvasProperties = {
+    width: tileSize * tilesWide,
+    height: tileSize * tilesHigh,
+    centerPoint: {
+        x: tileSize * tilesWide / 2 - tileSize / 2,
+        y: tileSize * tilesHigh / 2 - tileSize / 2
+    }
+};
+
+var interactionTextArea = exports.interactionTextArea = {
+    width: canvasProperties.width,
+    height: canvasProperties.height / 3,
+    background: colours.black,
+    alpha: 0.4,
+    badgeOffsetX: 20,
+    badgeOffsetY: 40
+};
+
+var genders = exports.genders = {
+    male: "M",
+    female: "F",
+    alien: "A"
+};
+
+var pronouns = exports.pronouns = {
+    M: "his",
+    F: "her",
+    A: "xleir"
+};
+
+var personCount = exports.personCount = 4;
+var inhabitanceSize = exports.inhabitanceSize = 2;
+
+
+},{}],2:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+/*
+ *
+ *  XL RPG/Constants
+ *  XL Gaming/Declan Tyson
+ *  v0.0.21
+ *  06/02/2018
+ *
+ */
+
+var fps = exports.fps = 45;
+var actionTimeoutLimit = exports.actionTimeoutLimit = 2;
+var tileSize = exports.tileSize = 15;
+var tilesWide = exports.tilesWide = 96;
+var tilesHigh = exports.tilesHigh = 54;
+
+var colours = exports.colours = {
+    black: "#000000",
+    white: "#FFFFFF",
+    green: "#00AA00",
+    blue: "#0000AA",
+    brown: "#4f1f0b",
+    darkbrown: "#291006",
+    grey: "#cdcdcd"
+};
+
+var directions = exports.directions = {
+    up: 'up',
+    down: 'down',
+    left: 'left',
+    right: 'right'
+};
+
+var fonts = exports.fonts = {
+    large: '24px "Roboto Condensed"'
+};
+
+var canvasProperties = exports.canvasProperties = {
+    width: tileSize * tilesWide,
+    height: tileSize * tilesHigh,
+    centerPoint: {
+        x: tileSize * tilesWide / 2 - tileSize / 2,
+        y: tileSize * tilesHigh / 2 - tileSize / 2
+    }
+};
+
+var interactionTextArea = exports.interactionTextArea = {
+    width: canvasProperties.width,
+    height: canvasProperties.height / 3,
+    background: colours.black,
+    alpha: 0.4,
+    badgeOffsetX: 20,
+    badgeOffsetY: 40
+};
+
+var genders = exports.genders = {
+    male: "M",
+    female: "F",
+    alien: "A"
+};
+
+var pronouns = exports.pronouns = {
+    M: "his",
+    F: "her",
+    A: "xleir"
+};
+
+var personCount = exports.personCount = 4;
+var inhabitanceSize = exports.inhabitanceSize = 2;
+
+
+},{}],3:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.StartGame = undefined;
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
+
+var _util = require('./util');
+
+var util = _interopRequireWildcard(_util);
+
+var _inputs = require('./inputs');
+
+var input = _interopRequireWildcard(_inputs);
+
+var _player = require('./player');
+
+var _worldmap = require('./worldmap');
+
+var _constants = require('../constants');
+
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) {
+        return obj;
+    } else {
+        var newObj = {};if (obj != null) {
+            for (var key in obj) {
+                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+            }
+        }newObj.default = obj;return newObj;
+    }
+}
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+} /*
+   *
+   *  XL RPG/Game
+   *  XL Gaming/Declan Tyson
+   *  v0.0.22
+   *  06/02/2018
+   *
+   */
+
+var StartGame = exports.StartGame = function StartGame(locale, people, player, scene, renderer) {
+    clearInterval(window.drawScene);
+
+    player = player || new _player.Player();
+    scene = scene || new _worldmap.WorldMap(player);
+    renderer = renderer || new Renderer('world', _constants.canvasProperties.width, _constants.canvasProperties.height);
+
+    var start = new locale(player, people),
+        game = new Game(renderer, scene, _constants.canvasProperties.centerPoint);
+
+    game.scene.setCurrentLocale(start, 'beginningOfGame');
+
+    return game;
+};
+
+var Renderer = function Renderer(element, width, height) {
+    _classCallCheck(this, Renderer);
+
+    this.canvas = document.getElementById(element);
+    this.canvas.style.width = width;
+    this.canvas.style.height = height;
+    this.canvas.style.display = 'block';
+    this.canvas.width = width;
+    this.canvas.height = height;
+    this.fps = _constants.fps;
+    this.ctx = this.canvas.getContext('2d');
+};
+
+var Game = function () {
+    function Game(renderer, scene, centerPoint) {
+        _classCallCheck(this, Game);
+
+        this.actionTimeout = _constants.actionTimeoutLimit;
+        this.renderer = renderer;
+        this.setScene(scene);
+        this.centerPoint = centerPoint;
+        this.currentAction = null;
+
+        this.draw();
+    }
+
+    _createClass(Game, [{
+        key: 'draw',
+        value: function draw() {
+            var pre_canvas = document.createElement('canvas'),
+                pre_ctx = pre_canvas.getContext('2d');
+            pre_canvas.height = this.renderer.canvas.height;
+            pre_canvas.width = this.renderer.canvas.width;
+
+            this.renderer.ctx.clearRect(0, 0, this.renderer.canvas.width, this.renderer.canvas.height);
+
+            this.scene.doActions(this.currentAction);
+            this.scene.draw(pre_ctx);
+
+            this.renderer.ctx.drawImage(pre_canvas, 0, 0);
+
+            window.requestAnimationFrame(this.draw.bind(this));
+        }
+    }, {
+        key: 'setScene',
+        value: function setScene(scene) {
+            this.scene = scene;
+            this.scene.setGame(this);
+        }
+    }, {
+        key: 'sendInput',
+        value: function sendInput(input) {
+            this.currentAction = input;
+        }
+    }, {
+        key: 'triggerActionTimeout',
+        value: function triggerActionTimeout() {
+            this.actionTimeoutCounterInterval = setInterval(this.actionTimeoutCounter.bind(this), 1000 / this.renderer.fps);
+        }
+    }, {
+        key: 'actionTimeoutCounter',
+        value: function actionTimeoutCounter() {
+            this.actionTimeout--;
+            if (this.actionTimeout === 0) {
+                clearInterval(this.actionTimeoutCounterInterval);
+                this.actionTimeout = _constants.actionTimeoutLimit;
+            }
+        }
+    }]);
+
+    return Game;
+}();
+
+
+},{"../constants":1,"./inputs":4,"./player":10,"./util":13,"./worldmap":14}],4:[function(require,module,exports){
+'use strict';
+
+/*
+ *
+ *  XL RPG/Inputs
+ *  XL Gaming/Declan Tyson
+ *  v0.0.21
+ *  06/02/2018
+ *
+ */
+
+var actions = {
+    38: 'up',
+    40: 'down',
+    37: 'left',
+    39: 'right',
+    32: 'action',
+    27: 'back'
+};
+
+window.addEventListener('keydown', function (e) {
+    if (!actions[e.keyCode] || !window.game) return;
+    window.game.sendInput(actions[e.keyCode]);
+});
+
+window.addEventListener('keyup', function (e) {
+    if (!window.game) return;
+    window.game.sendInput(null);
+});
+
+
+},{}],5:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Interaction = undefined;
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
+
+var _util = require("./util");
+
+var util = _interopRequireWildcard(_util);
+
+var _scene = require("./scene");
+
+var _constants = require("../constants");
+
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) {
+        return obj;
+    } else {
+        var newObj = {};if (obj != null) {
+            for (var key in obj) {
+                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+            }
+        }newObj.default = obj;return newObj;
+    }
+}
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  XL RPG/Scene-Interaction
+   *  XL Gaming/Declan Tyson
+   *  v0.0.20
+   *  06/02/2018
+   *
+   */
+
+var Interaction = function (_Scene) {
+    _inherits(Interaction, _Scene);
+
+    function Interaction(person) {
+        _classCallCheck(this, Interaction);
+
+        var _this = _possibleConstructorReturn(this, (Interaction.__proto__ || Object.getPrototypeOf(Interaction)).call(this));
+
+        _this.person = person;
+        _this.actions.back = _this.returnToWorldMap.bind(_this);
+
+        util.log("Entering interaction with " + _this.person.name);
+        return _this;
+    }
+
+    _createClass(Interaction, [{
+        key: "draw",
+        value: function draw(ctx) {
+            this.drawConversationTextArea(ctx);
+            this.drawBadge(ctx);
+        }
+    }, {
+        key: "drawConversationTextArea",
+        value: function drawConversationTextArea(ctx) {
+            ctx.save();
+            ctx.rect(0, _constants.canvasProperties.height - _constants.interactionTextArea.height, _constants.interactionTextArea.width, _constants.interactionTextArea.height);
+            ctx.fillStyle = _constants.interactionTextArea.colour;
+            ctx.globalAlpha = _constants.interactionTextArea.alpha;
+            ctx.fill();
+            ctx.restore();
+        }
+    }, {
+        key: "drawBadge",
+        value: function drawBadge(ctx) {
+            ctx.font = _constants.fonts.large;
+            ctx.fillStyle = _constants.colours.white;
+            ctx.fillText(this.person.name, _constants.interactionTextArea.badgeOffsetX, _constants.canvasProperties.height - _constants.interactionTextArea.height + _constants.interactionTextArea.badgeOffsetY);
+        }
+    }, {
+        key: "drawConversation",
+        value: function drawConversation(ctx) {}
+    }, {
+        key: "returnToWorldMap",
+        value: function returnToWorldMap() {
+            if (!this.worldMap) return;
+            this.game.setScene(this.worldMap);
+        }
+    }]);
+
+    return Interaction;
+}(_scene.Scene);
+
+exports.Interaction = Interaction;
+
+
+},{"../constants":1,"./scene":11,"./util":13}],6:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Item = undefined;
+
+var _util = require('./util');
+
+var util = _interopRequireWildcard(_util);
+
+var _constants = require('../constants');
+
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) {
+        return obj;
+    } else {
+        var newObj = {};if (obj != null) {
+            for (var key in obj) {
+                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+            }
+        }newObj.default = obj;return newObj;
+    }
+}
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+} /*
+   *
+   *  XL RPG/Item
+   *  XL Gaming/Declan Tyson
+   *  v0.0.22
+   *  06/02/2018
+   *
+   */
+
+var Item = function Item(name, description) {
+    _classCallCheck(this, Item);
+
+    this.name = name;
+    this.description = description;
+    this.colour = _constants.colours.black;
+};
+
+exports.Item = Item;
+
+
+},{"../constants":1,"./util":13}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -18,7 +522,7 @@ var _createClass = function () {
       *
       *  XL RPG/Locales/Base
       *  XL Gaming/Declan Tyson
-      *  v0.0.19
+      *  v0.0.20
       *  05/02/2018
       *
       */
@@ -27,7 +531,7 @@ var _util = require('./util');
 
 var util = _interopRequireWildcard(_util);
 
-var _constants = require('./constants');
+var _constants = require('../constants');
 
 function _interopRequireWildcard(obj) {
     if (obj && obj.__esModule) {
@@ -204,7 +708,58 @@ exports.Interior = Interior;
 exports.Inhabitance = Inhabitance;
 
 
-},{"./constants":3,"./util":11}],2:[function(require,module,exports){
+},{"../constants":1,"./util":13}],8:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.choosePeople = undefined;
+
+var _constants = require("../constants");
+
+var _util = require("./util");
+
+var util = _interopRequireWildcard(_util);
+
+var _availablepeople = require("../people/availablepeople");
+
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) {
+        return obj;
+    } else {
+        var newObj = {};if (obj != null) {
+            for (var key in obj) {
+                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+            }
+        }newObj.default = obj;return newObj;
+    }
+}
+
+var choosePeople = exports.choosePeople = function choosePeople() {
+    var chosenPeople = [];
+    util.log("Choosing " + _constants.personCount + " people...");
+    var person = void 0;
+    while (chosenPeople.length < _constants.personCount) {
+        person = util.pickRandomProperty(_availablepeople.people);
+        if (chosenPeople.indexOf(person) === -1) {
+            chosenPeople.push(person);
+            util.log(person + " has been chosen.");
+        }
+    }
+
+    return chosenPeople;
+}; /*
+    *
+    *  XL RPG/People
+    *  XL Gaming/Declan Tyson
+    *  v0.0.20
+    *  06/02/2018
+    *
+    */
+
+
+},{"../constants":1,"../people/availablepeople":33,"./util":13}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -233,7 +788,7 @@ var _util = require('./util');
 
 var util = _interopRequireWildcard(_util);
 
-var _constants = require('./constants');
+var _constants = require('../constants');
 
 function _interopRequireWildcard(obj) {
     if (obj && obj.__esModule) {
@@ -294,429 +849,7 @@ var Person = function () {
 exports.Person = Person;
 
 
-},{"./constants":3,"./util":11}],3:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-/*
- *
- *  XL RPG/Constants
- *  XL Gaming/Declan Tyson
- *  v0.0.21
- *  06/02/2018
- *
- */
-
-var fps = exports.fps = 45;
-var actionTimeoutLimit = exports.actionTimeoutLimit = 2;
-var tileSize = exports.tileSize = 15;
-var tilesWide = exports.tilesWide = 96;
-var tilesHigh = exports.tilesHigh = 54;
-
-var colours = exports.colours = {
-    black: "#000000",
-    white: "#FFFFFF",
-    green: "#00AA00",
-    blue: "#0000AA",
-    brown: "#4f1f0b",
-    darkbrown: "#291006",
-    grey: "#cdcdcd"
-};
-
-var directions = exports.directions = {
-    up: 'up',
-    down: 'down',
-    left: 'left',
-    right: 'right'
-};
-
-var fonts = exports.fonts = {
-    large: '24px "Roboto Condensed"'
-};
-
-var canvasProperties = exports.canvasProperties = {
-    width: tileSize * tilesWide,
-    height: tileSize * tilesHigh,
-    centerPoint: {
-        x: tileSize * tilesWide / 2 - tileSize / 2,
-        y: tileSize * tilesHigh / 2 - tileSize / 2
-    }
-};
-
-var interactionTextArea = exports.interactionTextArea = {
-    width: canvasProperties.width,
-    height: canvasProperties.height / 3,
-    background: colours.black,
-    alpha: 0.4,
-    badgeOffsetX: 20,
-    badgeOffsetY: 40
-};
-
-var genders = exports.genders = {
-    male: "M",
-    female: "F",
-    alien: "A"
-};
-
-var pronouns = exports.pronouns = {
-    M: "his",
-    F: "her",
-    A: "xleir"
-};
-
-var personCount = exports.personCount = 4;
-var inhabitanceSize = exports.inhabitanceSize = 2;
-
-
-},{}],4:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.StartGame = undefined;
-
-var _createClass = function () {
-    function defineProperties(target, props) {
-        for (var i = 0; i < props.length; i++) {
-            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
-        }
-    }return function (Constructor, protoProps, staticProps) {
-        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
-    };
-}();
-
-var _util = require('./util');
-
-var util = _interopRequireWildcard(_util);
-
-var _inputs = require('./inputs');
-
-var input = _interopRequireWildcard(_inputs);
-
-var _player = require('./player');
-
-var _worldmap = require('./worldmap');
-
-var _constants = require('./constants');
-
-function _interopRequireWildcard(obj) {
-    if (obj && obj.__esModule) {
-        return obj;
-    } else {
-        var newObj = {};if (obj != null) {
-            for (var key in obj) {
-                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
-            }
-        }newObj.default = obj;return newObj;
-    }
-}
-
-function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-        throw new TypeError("Cannot call a class as a function");
-    }
-} /*
-   *
-   *  XL RPG/Game
-   *  XL Gaming/Declan Tyson
-   *  v0.0.20
-   *  06/02/2018
-   *
-   */
-
-var StartGame = exports.StartGame = function StartGame(locale, people) {
-    clearInterval(window.drawScene);
-
-    var player = new _player.Player(),
-        scene = new _worldmap.WorldMap(player),
-        start = new locale(player, people),
-        renderer = new Renderer('world', _constants.canvasProperties.width, _constants.canvasProperties.height),
-        game = new Game(renderer, scene, _constants.canvasProperties.centerPoint);
-
-    game.scene.setCurrentLocale(start, 'beginningOfGame');
-
-    return game;
-};
-
-var Renderer = function Renderer(element, width, height) {
-    _classCallCheck(this, Renderer);
-
-    this.canvas = document.getElementById(element);
-    this.canvas.style.width = width;
-    this.canvas.style.height = height;
-    this.canvas.style.display = 'block';
-    this.canvas.width = width;
-    this.canvas.height = height;
-    this.fps = _constants.fps;
-    this.ctx = this.canvas.getContext('2d');
-};
-
-var Game = function () {
-    function Game(renderer, scene, centerPoint) {
-        _classCallCheck(this, Game);
-
-        this.actionTimeout = _constants.actionTimeoutLimit;
-        this.renderer = renderer;
-        this.setScene(scene);
-        this.centerPoint = centerPoint;
-        this.currentAction = null;
-
-        this.draw();
-    }
-
-    _createClass(Game, [{
-        key: 'draw',
-        value: function draw() {
-            var pre_canvas = document.createElement('canvas'),
-                pre_ctx = pre_canvas.getContext('2d');
-            pre_canvas.height = this.renderer.canvas.height;
-            pre_canvas.width = this.renderer.canvas.width;
-
-            this.renderer.ctx.clearRect(0, 0, this.renderer.canvas.width, this.renderer.canvas.height);
-
-            this.scene.doActions(this.currentAction);
-            this.scene.draw(pre_ctx);
-
-            this.renderer.ctx.drawImage(pre_canvas, 0, 0);
-
-            window.requestAnimationFrame(this.draw.bind(this));
-        }
-    }, {
-        key: 'setScene',
-        value: function setScene(scene) {
-            this.scene = scene;
-            this.scene.setGame(this);
-        }
-    }, {
-        key: 'sendInput',
-        value: function sendInput(input) {
-            this.currentAction = input;
-        }
-    }, {
-        key: 'triggerActionTimeout',
-        value: function triggerActionTimeout() {
-            this.actionTimeoutCounterInterval = setInterval(this.actionTimeoutCounter.bind(this), 1000 / this.renderer.fps);
-        }
-    }, {
-        key: 'actionTimeoutCounter',
-        value: function actionTimeoutCounter() {
-            this.actionTimeout--;
-            if (this.actionTimeout === 0) {
-                clearInterval(this.actionTimeoutCounterInterval);
-                this.actionTimeout = _constants.actionTimeoutLimit;
-            }
-        }
-    }]);
-
-    return Game;
-}();
-
-
-},{"./constants":3,"./inputs":5,"./player":8,"./util":11,"./worldmap":12}],5:[function(require,module,exports){
-'use strict';
-
-/*
- *
- *  XL RPG/Inputs
- *  XL Gaming/Declan Tyson
- *  v0.0.21
- *  06/02/2018
- *
- */
-
-var actions = {
-    38: 'up',
-    40: 'down',
-    37: 'left',
-    39: 'right',
-    32: 'action',
-    27: 'back'
-};
-
-window.addEventListener('keydown', function (e) {
-    if (!actions[e.keyCode] || !window.game) return;
-    window.game.sendInput(actions[e.keyCode]);
-});
-
-window.addEventListener('keyup', function (e) {
-    if (!window.game) return;
-    window.game.sendInput(null);
-});
-
-
-},{}],6:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.Interaction = undefined;
-
-var _createClass = function () {
-    function defineProperties(target, props) {
-        for (var i = 0; i < props.length; i++) {
-            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
-        }
-    }return function (Constructor, protoProps, staticProps) {
-        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
-    };
-}();
-
-var _util = require("./util");
-
-var util = _interopRequireWildcard(_util);
-
-var _scene = require("./scene");
-
-var _constants = require("./constants");
-
-function _interopRequireWildcard(obj) {
-    if (obj && obj.__esModule) {
-        return obj;
-    } else {
-        var newObj = {};if (obj != null) {
-            for (var key in obj) {
-                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
-            }
-        }newObj.default = obj;return newObj;
-    }
-}
-
-function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-        throw new TypeError("Cannot call a class as a function");
-    }
-}
-
-function _possibleConstructorReturn(self, call) {
-    if (!self) {
-        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
-}
-
-function _inherits(subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-} /*
-   *
-   *  XL RPG/Scene-Interaction
-   *  XL Gaming/Declan Tyson
-   *  v0.0.20
-   *  06/02/2018
-   *
-   */
-
-var Interaction = function (_Scene) {
-    _inherits(Interaction, _Scene);
-
-    function Interaction(person) {
-        _classCallCheck(this, Interaction);
-
-        var _this = _possibleConstructorReturn(this, (Interaction.__proto__ || Object.getPrototypeOf(Interaction)).call(this));
-
-        _this.person = person;
-        _this.actions.back = _this.returnToWorldMap.bind(_this);
-
-        util.log("Entering interaction with " + _this.person.name);
-        return _this;
-    }
-
-    _createClass(Interaction, [{
-        key: "draw",
-        value: function draw(ctx) {
-            this.drawConversationTextArea(ctx);
-            this.drawBadge(ctx);
-        }
-    }, {
-        key: "drawConversationTextArea",
-        value: function drawConversationTextArea(ctx) {
-            ctx.save();
-            ctx.rect(0, _constants.canvasProperties.height - _constants.interactionTextArea.height, _constants.interactionTextArea.width, _constants.interactionTextArea.height);
-            ctx.fillStyle = _constants.interactionTextArea.colour;
-            ctx.globalAlpha = _constants.interactionTextArea.alpha;
-            ctx.fill();
-            ctx.restore();
-        }
-    }, {
-        key: "drawBadge",
-        value: function drawBadge(ctx) {
-            ctx.font = _constants.fonts.large;
-            ctx.fillStyle = _constants.colours.white;
-            ctx.fillText(this.person.name, _constants.interactionTextArea.badgeOffsetX, _constants.canvasProperties.height - _constants.interactionTextArea.height + _constants.interactionTextArea.badgeOffsetY);
-        }
-    }, {
-        key: "drawConversation",
-        value: function drawConversation(ctx) {}
-    }, {
-        key: "returnToWorldMap",
-        value: function returnToWorldMap() {
-            if (!this.worldMap) return;
-            this.game.setScene(this.worldMap);
-        }
-    }]);
-
-    return Interaction;
-}(_scene.Scene);
-
-exports.Interaction = Interaction;
-
-
-},{"./constants":3,"./scene":9,"./util":11}],7:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.choosePeople = undefined;
-
-var _constants = require("./constants");
-
-var _util = require("./util");
-
-var util = _interopRequireWildcard(_util);
-
-var _availablepeople = require("../people/availablepeople");
-
-function _interopRequireWildcard(obj) {
-    if (obj && obj.__esModule) {
-        return obj;
-    } else {
-        var newObj = {};if (obj != null) {
-            for (var key in obj) {
-                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
-            }
-        }newObj.default = obj;return newObj;
-    }
-}
-
-var choosePeople = exports.choosePeople = function choosePeople() {
-    var chosenPeople = [];
-    util.log("Choosing " + _constants.personCount + " people...");
-    var person = void 0;
-    while (chosenPeople.length < _constants.personCount) {
-        person = util.pickRandomProperty(_availablepeople.people);
-        if (chosenPeople.indexOf(person) === -1) {
-            chosenPeople.push(person);
-            util.log(person + " has been chosen.");
-        }
-    }
-
-    return chosenPeople;
-}; /*
-    *
-    *  XL RPG/People
-    *  XL Gaming/Declan Tyson
-    *  v0.0.20
-    *  06/02/2018
-    *
-    */
-
-
-},{"../people/availablepeople":23,"./constants":3,"./util":11}],8:[function(require,module,exports){
+},{"../constants":1,"./util":13}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -741,7 +874,7 @@ var _createClass = function () {
       *
       */
 
-var _constants = require("./constants");
+var _constants = require("../constants");
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -771,7 +904,7 @@ var Player = function () {
 exports.Player = Player;
 
 
-},{"./constants":3}],9:[function(require,module,exports){
+},{"../constants":1}],11:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -796,7 +929,7 @@ var _createClass = function () {
       *
       */
 
-var _constants = require("./constants");
+var _constants = require("../constants");
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -847,7 +980,7 @@ var Scene = function () {
 exports.Scene = Scene;
 
 
-},{"./constants":3}],10:[function(require,module,exports){
+},{"../constants":1}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -872,7 +1005,7 @@ var _createClass = function () {
       *
       */
 
-var _constants = require('./constants');
+var _constants = require('../constants');
 
 function _possibleConstructorReturn(self, call) {
     if (!self) {
@@ -1035,7 +1168,7 @@ exports.Doorway = Doorway;
 exports.WoodenFloor = WoodenFloor;
 
 
-},{"./constants":3}],11:[function(require,module,exports){
+},{"../constants":1}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1079,7 +1212,7 @@ var clearLog = exports.clearLog = function clearLog() {
 };
 
 
-},{}],12:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1117,7 +1250,7 @@ var _terrain2 = require("./terrain");
 
 var terrain = _interopRequireWildcard(_terrain2);
 
-var _constants = require("./constants");
+var _constants = require("../constants");
 
 var _scene = require("./scene");
 
@@ -1159,7 +1292,7 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Scene-WorldMap
    *  XL Gaming/Declan Tyson
-   *  v0.0.21
+   *  v0.0.22
    *  06/02/2018
    *
    */
@@ -1360,6 +1493,7 @@ var WorldMap = function (_Scene) {
         value: function spawnPeople() {
             var _this3 = this;
 
+            console.log("grrr");
             if (this.locale.inhabitance === undefined) return;
 
             this.locale.inhabitance.inhabitants.forEach(function (inhabitant, index) {
@@ -1406,7 +1540,309 @@ var WorldMap = function (_Scene) {
 exports.WorldMap = WorldMap;
 
 
-},{"../locales/availablelocales":13,"../people/availablepeople":23,"./constants":3,"./interaction":6,"./scene":9,"./terrain":10}],13:[function(require,module,exports){
+},{"../constants":1,"../locales/availablelocales":21,"../people/availablepeople":33,"./interaction":5,"./scene":11,"./terrain":12}],15:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Evidence = undefined;
+
+var _item = require('../engine/item');
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  CODENAME: Paradise/Evidence
+   *  XL Gaming/Declan Tyson
+   *  v0.0.22
+   *  06/02/2018
+   *
+   */
+
+var Evidence = function (_Item) {
+    _inherits(Evidence, _Item);
+
+    function Evidence(name, description) {
+        _classCallCheck(this, Evidence);
+
+        return _possibleConstructorReturn(this, (Evidence.__proto__ || Object.getPrototypeOf(Evidence)).call(this, name, description));
+    }
+
+    return Evidence;
+}(_item.Item);
+
+exports.Evidence = Evidence;
+
+
+},{"../engine/item":6}],16:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Handgun = undefined;
+
+var _murderweapon = require('./murderweapon');
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  CODENAME: Paradise/Handgun
+   *  XL Gaming/Declan Tyson
+   *  v0.0.22
+   *  06/02/2018
+   *
+   */
+
+var Handgun = function (_MurderWeapon) {
+    _inherits(Handgun, _MurderWeapon);
+
+    function Handgun() {
+        _classCallCheck(this, Handgun);
+
+        return _possibleConstructorReturn(this, (Handgun.__proto__ || Object.getPrototypeOf(Handgun)).call(this, 'Handgun', 'a handgun, still warm from the recent shot'));
+    }
+
+    return Handgun;
+}(_murderweapon.MurderWeapon);
+
+exports.Handgun = Handgun;
+
+
+},{"./murderweapon":18}],17:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Knife = undefined;
+
+var _murderweapon = require('./murderweapon');
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  CODENAME: Paradise/Knife
+   *  XL Gaming/Declan Tyson
+   *  v0.0.22
+   *  06/02/2018
+   *
+   */
+
+var Knife = function (_MurderWeapon) {
+    _inherits(Knife, _MurderWeapon);
+
+    function Knife() {
+        _classCallCheck(this, Knife);
+
+        return _possibleConstructorReturn(this, (Knife.__proto__ || Object.getPrototypeOf(Knife)).call(this, 'Knife', 'a blood-stained kitchen knife'));
+    }
+
+    return Knife;
+}(_murderweapon.MurderWeapon);
+
+exports.Knife = Knife;
+
+
+},{"./murderweapon":18}],18:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.MurderWeapon = undefined;
+
+var _evidence = require('./evidence');
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  CODENAME: Paradise/Murder Weapon
+   *  XL Gaming/Declan Tyson
+   *  v0.0.22
+   *  06/02/2018
+   *
+   */
+
+var MurderWeapon = function (_Evidence) {
+    _inherits(MurderWeapon, _Evidence);
+
+    function MurderWeapon(name, description) {
+        _classCallCheck(this, MurderWeapon);
+
+        return _possibleConstructorReturn(this, (MurderWeapon.__proto__ || Object.getPrototypeOf(MurderWeapon)).call(this, name, description));
+    }
+
+    return MurderWeapon;
+}(_evidence.Evidence);
+
+exports.MurderWeapon = MurderWeapon;
+
+
+},{"./evidence":15}],19:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.chooseMurderWeapon = exports.murderWeapons = undefined;
+
+var _util = require('../engine/util');
+
+var util = _interopRequireWildcard(_util);
+
+var _knife = require('./knife');
+
+var _spoon = require('./spoon');
+
+var _handgun = require('./handgun');
+
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) {
+        return obj;
+    } else {
+        var newObj = {};if (obj != null) {
+            for (var key in obj) {
+                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+            }
+        }newObj.default = obj;return newObj;
+    }
+}
+
+/*
+ *
+ *  CODENAME: Paradise/Murder Weapons
+ *  XL Gaming/Declan Tyson
+ *  v0.0.22
+ *  06/02/2018
+ *
+ */
+
+var murderWeapons = exports.murderWeapons = {
+    'Knife': _knife.Knife,
+    'Spoon': _spoon.Spoon,
+    'Handgun': _handgun.Handgun
+};
+
+var chooseMurderWeapon = exports.chooseMurderWeapon = function chooseMurderWeapon() {
+    var weapon = util.pickRandomProperty(murderWeapons);
+    util.log('The murder weapon is a ' + weapon + '.');
+    return weapon;
+};
+
+
+},{"../engine/util":13,"./handgun":16,"./knife":17,"./spoon":20}],20:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Spoon = undefined;
+
+var _murderweapon = require('./murderweapon');
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  CODENAME: Paradise/Spoon
+   *  XL Gaming/Declan Tyson
+   *  v0.0.22
+   *  06/02/2018
+   *
+   */
+
+var Spoon = function (_MurderWeapon) {
+    _inherits(Spoon, _MurderWeapon);
+
+    function Spoon() {
+        _classCallCheck(this, Spoon);
+
+        return _possibleConstructorReturn(this, (Spoon.__proto__ || Object.getPrototypeOf(Spoon)).call(this, 'Spoon', 'a jagged rusty spoon'));
+    }
+
+    return Spoon;
+}(_murderweapon.MurderWeapon);
+
+exports.Spoon = Spoon;
+
+
+},{"./murderweapon":18}],21:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1452,7 +1888,7 @@ var locales = exports.locales = {
 };
 
 
-},{"./interiors/1grovestreet":14,"./interiors/2grovestreet":15,"./interiors/3grovestreet":16,"./interiors/4grovestreet":17,"./islands":19,"./village":21}],14:[function(require,module,exports){
+},{"./interiors/1grovestreet":22,"./interiors/2grovestreet":23,"./interiors/3grovestreet":24,"./interiors/4grovestreet":25,"./islands":27,"./village":29}],22:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1515,7 +1951,7 @@ var GroveStreet1 = function (_GroveStreetTemplate) {
 exports.GroveStreet1 = GroveStreet1;
 
 
-},{"../islands":19,"./grovestreethouse":18}],15:[function(require,module,exports){
+},{"../islands":27,"./grovestreethouse":26}],23:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1578,7 +2014,7 @@ var GroveStreet2 = function (_GroveStreetTemplate) {
 exports.GroveStreet2 = GroveStreet2;
 
 
-},{"../islands":19,"./grovestreethouse":18}],16:[function(require,module,exports){
+},{"../islands":27,"./grovestreethouse":26}],24:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1641,7 +2077,7 @@ var GroveStreet3 = function (_GroveStreetTemplate) {
 exports.GroveStreet3 = GroveStreet3;
 
 
-},{"../islands":19,"./grovestreethouse":18}],17:[function(require,module,exports){
+},{"../islands":27,"./grovestreethouse":26}],25:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1704,7 +2140,7 @@ var GroveStreet4 = function (_GroveStreetTemplate) {
 exports.GroveStreet4 = GroveStreet4;
 
 
-},{"../islands":19,"./grovestreethouse":18}],18:[function(require,module,exports){
+},{"../islands":27,"./grovestreethouse":26}],26:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1712,7 +2148,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.GroveStreetTemplate = undefined;
 
-var _baselocale = require("../../engine/baselocale");
+var _locale = require("../../engine/locale");
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -1763,20 +2199,20 @@ var GroveStreetTemplate = function (_Interior) {
     }
 
     return GroveStreetTemplate;
-}(_baselocale.Interior);
+}(_locale.Interior);
 
 exports.GroveStreetTemplate = GroveStreetTemplate;
 
 
-},{"../../engine/baselocale":1}],19:[function(require,module,exports){
-"use strict";
+},{"../../engine/locale":7}],27:[function(require,module,exports){
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.Islands = undefined;
 
-var _baselocale = require("../engine/baselocale");
+var _locale = require('../engine/locale');
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -1798,8 +2234,8 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Locales/Islands
    *  XL Gaming/Declan Tyson
-   *  v0.0.20
-   *  15/11/2017
+   *  v0.0.22
+   *  06/02/2018
    *
    */
 
@@ -1811,25 +2247,25 @@ var Islands = function (_Locale) {
 
         var _this = _possibleConstructorReturn(this, (Islands.__proto__ || Object.getPrototypeOf(Islands)).call(this, player, people));
 
-        _this.id = "Islands";
-        _this.entryPoints.beginningOfGame = { x: 56, y: 17 };
-        _this.entryPoints.groveStreet1 = { x: 55, y: 20 };
-        _this.entryPoints.groveStreet2 = { x: 58, y: 20 };
-        _this.entryPoints.groveStreet3 = { x: 55, y: 23 };
-        _this.entryPoints.groveStreet4 = { x: 58, y: 23 };
+        _this.id = 'Islands';
+        _this.entryPoints.beginningOfGame = { x: 56, y: 57 };
+        _this.entryPoints.groveStreet1 = { x: 55, y: 60 };
+        _this.entryPoints.groveStreet2 = { x: 58, y: 60 };
+        _this.entryPoints.groveStreet3 = { x: 55, y: 63 };
+        _this.entryPoints.groveStreet4 = { x: 58, y: 63 };
 
         _this.initialise(300, 300);
 
-        _this.terrainPaint(0, 0, 300, 300, "Water");
-        _this.terrainPaint(52, 17, 10, 20, "Grass");
-        _this.terrainPaint(42, 35, 2, 8, "Grass");
-        _this.terrainPaint(56, 17, 2, 20, "Road");
-        _this.terrainPaint(55, 20, 1, 1, "Road");
-        _this.terrainPaint(58, 20, 1, 1, "Road");
-        _this.terrainPaint(55, 23, 1, 1, "Road");
-        _this.terrainPaint(58, 23, 1, 1, "Road");
+        _this.terrainPaint(0, 0, 300, 300, 'Water');
+        _this.terrainPaint(52, 57, 10, 20, 'Grass');
+        _this.terrainPaint(42, 35, 2, 8, 'Grass');
+        _this.terrainPaint(56, 57, 2, 20, 'Road');
+        _this.terrainPaint(55, 60, 1, 1, 'Road');
+        _this.terrainPaint(58, 60, 1, 1, 'Road');
+        _this.terrainPaint(55, 63, 1, 1, 'Road');
+        _this.terrainPaint(58, 63, 1, 1, 'Road');
 
-        _this.inhabitances.push(new _baselocale.Inhabitance("GroveStreet1", "1 Grove Street", 53, 19, { x: 54, y: 20 }), new _baselocale.Inhabitance("GroveStreet2", "2 Grove Street", 59, 19, { x: 59, y: 20 }), new _baselocale.Inhabitance("GroveStreet3", "3 Grove Street", 53, 22, { x: 54, y: 23 }), new _baselocale.Inhabitance("GroveStreet4", "4 Grove Street", 59, 22, { x: 59, y: 23 }));
+        _this.inhabitances.push(new _locale.Inhabitance('GroveStreet1', '1 Grove Street', 53, 59, { x: 54, y: 60 }), new _locale.Inhabitance('GroveStreet2', '2 Grove Street', 59, 59, { x: 59, y: 60 }), new _locale.Inhabitance('GroveStreet3', '3 Grove Street', 53, 62, { x: 54, y: 63 }), new _locale.Inhabitance('GroveStreet4', '4 Grove Street', 59, 62, { x: 59, y: 63 }));
 
         _this.drawInhabitances();
         _this.assignPeopleToInhabitances();
@@ -1837,12 +2273,12 @@ var Islands = function (_Locale) {
     }
 
     return Islands;
-}(_baselocale.Locale);
+}(_locale.Locale);
 
 exports.Islands = Islands;
 
 
-},{"../engine/baselocale":1}],20:[function(require,module,exports){
+},{"../engine/locale":7}],28:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1909,7 +2345,7 @@ var chooseStartingMap = exports.chooseStartingMap = function chooseStartingMap()
 };
 
 
-},{"../engine/util":11,"./interiors/1grovestreet":14,"./interiors/2grovestreet":15,"./interiors/3grovestreet":16,"./interiors/4grovestreet":17,"./islands":19,"./village":21}],21:[function(require,module,exports){
+},{"../engine/util":13,"./interiors/1grovestreet":22,"./interiors/2grovestreet":23,"./interiors/3grovestreet":24,"./interiors/4grovestreet":25,"./islands":27,"./village":29}],29:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1917,7 +2353,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Village = undefined;
 
-var _baselocale = require("../engine/baselocale");
+var _locale = require("../engine/locale");
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -1965,25 +2401,31 @@ var Village = function (_Locale) {
     }
 
     return Village;
-}(_baselocale.Locale);
+}(_locale.Locale);
 
 exports.Village = Village;
 
 
-},{"../engine/baselocale":1}],22:[function(require,module,exports){
-"use strict";
+},{"../engine/locale":7}],30:[function(require,module,exports){
+'use strict';
 
-var _util = require("./engine/util");
+var _util = require('./engine/util');
 
 var util = _interopRequireWildcard(_util);
 
-var _game = require("./engine/game");
+var _game = require('./engine/game');
 
-var _availablepeople = require("./people/availablepeople");
+var _player = require('./engine/player');
 
-var _people = require("./engine/people");
+var _paradise_worldmap = require('./paradise_worldmap');
 
-var _locales = require("./locales/locales");
+var _availablepeople = require('./people/availablepeople');
+
+var _people = require('./engine/people');
+
+var _locales = require('./locales/locales');
+
+var _murderweapons = require('./evidence/murderweapons');
 
 function _interopRequireWildcard(obj) {
     if (obj && obj.__esModule) {
@@ -1997,29 +2439,251 @@ function _interopRequireWildcard(obj) {
     }
 }
 
-window.startGame = function (locale, people, victim, murderer) {
+/*
+ *
+ *  CODENAME: Paradise
+ *  XL Gaming/Declan Tyson
+ *  v0.0.22
+ *  06/02/2018
+ *
+ */
+
+window.startGame = function (locale, people, victim, murderer, weapon) {
     util.clearLog();
 
     locale = _locales.startingMaps[locale] || _locales.startingMaps[(0, _locales.chooseStartingMap)()];
     people = people || (0, _people.choosePeople)();
-    victim = victim || (0, _availablepeople.chooseVictim)(people);
-    murderer = murderer || (0, _availablepeople.chooseMurderer)(victim, people);
+    var player = new _player.Player(),
+        worldMap = new _paradise_worldmap.ParadiseWorldMap(player);
 
-    window.game = (0, _game.StartGame)(locale, people);
+    window.game = (0, _game.StartGame)(locale, people, player, worldMap);
+
+    window.game.victim = victim || (0, _availablepeople.chooseVictim)(people);
+    window.game.murderer = murderer || (0, _availablepeople.chooseMurderer)(victim, people);
+    window.game.weapon = weapon || (0, _murderweapons.chooseMurderWeapon)();
+
     document.querySelectorAll('button').forEach(function (button) {
         button.blur();
     });
-}; /*
-    *
-    *  Paradise
-    *  XL Gaming/Declan Tyson
-    *  v0.0.21
-    *  06/02/2018
-    *
-    */
+};
 
 
-},{"./engine/game":4,"./engine/people":7,"./engine/util":11,"./locales/locales":20,"./people/availablepeople":23}],23:[function(require,module,exports){
+},{"./engine/game":3,"./engine/people":8,"./engine/player":10,"./engine/util":13,"./evidence/murderweapons":19,"./locales/locales":28,"./paradise_worldmap":32,"./people/availablepeople":33}],31:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.ParadiseInteraction = undefined;
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
+
+var _get = function get(object, property, receiver) {
+    if (object === null) object = Function.prototype;var desc = Object.getOwnPropertyDescriptor(object, property);if (desc === undefined) {
+        var parent = Object.getPrototypeOf(object);if (parent === null) {
+            return undefined;
+        } else {
+            return get(parent, property, receiver);
+        }
+    } else if ("value" in desc) {
+        return desc.value;
+    } else {
+        var getter = desc.get;if (getter === undefined) {
+            return undefined;
+        }return getter.call(receiver);
+    }
+};
+
+var _util = require("./engine/util");
+
+var util = _interopRequireWildcard(_util);
+
+var _constants = require("./constants");
+
+var _interaction = require("./engine/interaction");
+
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) {
+        return obj;
+    } else {
+        var newObj = {};if (obj != null) {
+            for (var key in obj) {
+                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+            }
+        }newObj.default = obj;return newObj;
+    }
+}
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  CODENAME: Paradise/Scene-Interaction
+   *  XL Gaming/Declan Tyson
+   *  v0.0.22
+   *  06/02/2018
+   *
+   */
+
+var ParadiseInteraction = function (_Interaction) {
+    _inherits(ParadiseInteraction, _Interaction);
+
+    function ParadiseInteraction(person) {
+        _classCallCheck(this, ParadiseInteraction);
+
+        var _this = _possibleConstructorReturn(this, (ParadiseInteraction.__proto__ || Object.getPrototypeOf(ParadiseInteraction)).call(this, person));
+
+        if (_this.person.victim) {
+            util.log(_this.person.name + " is dead.");
+        }
+        return _this;
+    }
+
+    _createClass(ParadiseInteraction, [{
+        key: "drawBadge",
+        value: function drawBadge(ctx) {
+            _get(ParadiseInteraction.prototype.__proto__ || Object.getPrototypeOf(ParadiseInteraction.prototype), "drawBadge", this).call(this, ctx);
+
+            if (this.person.victim) {
+                ctx.font = _constants.fonts.death;
+                ctx.fillStyle = _constants.colours.red;
+                ctx.fillText(_constants.texts.dead, _constants.interactionTextArea.badgeOffsetX, _constants.canvasProperties.height - _constants.interactionTextArea.height + _constants.interactionTextArea.badgeOffsetY * 2);
+            }
+        }
+    }, {
+        key: "drawConversation",
+        value: function drawConversation(ctx) {}
+    }, {
+        key: "returnToWorldMap",
+        value: function returnToWorldMap() {
+            if (!this.worldMap) return;
+            this.game.setScene(this.worldMap);
+        }
+    }]);
+
+    return ParadiseInteraction;
+}(_interaction.Interaction);
+
+exports.ParadiseInteraction = ParadiseInteraction;
+
+
+},{"./constants":1,"./engine/interaction":5,"./engine/util":13}],32:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.ParadiseWorldMap = undefined;
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
+
+var _worldmap = require("./engine/worldmap");
+
+var _availablepeople = require("./people/availablepeople");
+
+var _paradise_interaction = require("./paradise_interaction");
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  CODENAME: Paradise/World Map
+   *  XL Gaming/Declan Tyson
+   *  v0.0.22
+   *  06/02/2018
+   *
+   */
+
+var ParadiseWorldMap = function (_WorldMap) {
+    _inherits(ParadiseWorldMap, _WorldMap);
+
+    function ParadiseWorldMap(player) {
+        _classCallCheck(this, ParadiseWorldMap);
+
+        return _possibleConstructorReturn(this, (ParadiseWorldMap.__proto__ || Object.getPrototypeOf(ParadiseWorldMap)).call(this, player));
+    }
+
+    _createClass(ParadiseWorldMap, [{
+        key: "spawnPeople",
+        value: function spawnPeople() {
+            var _this2 = this;
+
+            if (this.locale.inhabitance === undefined) return;
+
+            this.locale.inhabitance.inhabitants.forEach(function (inhabitant, index) {
+                var spawnPoint = _this2.locale.spawnPoints[index];
+                if (spawnPoint !== undefined) {
+                    var person = new _availablepeople.people[inhabitant]();
+                    person.x = spawnPoint.x;
+                    person.y = spawnPoint.y;
+
+                    if (person.name === _this2.game.victim) person.victim = true;
+                    if (person.name === _this2.game.murderer) person.murderer = true;
+
+                    _this2.presentPeople.push(person);
+                }
+            });
+        }
+    }, {
+        key: "startInteraction",
+        value: function startInteraction(person) {
+            var interaction = new _paradise_interaction.ParadiseInteraction(person);
+            interaction.worldMap = this;
+            this.game.setScene(interaction);
+        }
+    }]);
+
+    return ParadiseWorldMap;
+}(_worldmap.WorldMap);
+
+exports.ParadiseWorldMap = ParadiseWorldMap;
+
+
+},{"./engine/worldmap":14,"./paradise_interaction":31,"./people/availablepeople":33}],33:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2063,7 +2727,7 @@ function _interopRequireWildcard(obj) {
 
 /*
  *
- *  XL RPG/People
+ *  Paradise/People
  *  XL Gaming/Declan Tyson
  *  v0.0.20
  *  05/02/2018
@@ -2128,7 +2792,7 @@ var chooseMurderer = exports.chooseMurderer = function chooseMurderer(victimName
 };
 
 
-},{"../engine/constants":3,"../engine/util":11,"./evelyn":24,"./jill":25,"./john":26,"./neil":27,"./pauline":28,"./petey":29,"./quazar":30,"./zenith":31}],24:[function(require,module,exports){
+},{"../engine/constants":2,"../engine/util":13,"./evelyn":34,"./jill":35,"./john":36,"./neil":37,"./pauline":38,"./petey":39,"./quazar":40,"./zenith":41}],34:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2136,9 +2800,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Evelyn = undefined;
 
-var _baseperson = require('../engine/baseperson');
+var _person = require('../engine/person');
 
-var _constants = require('../engine/constants');
+var _constants = require('../constants');
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -2175,12 +2839,12 @@ var Evelyn = function (_Person) {
     }
 
     return Evelyn;
-}(_baseperson.Person);
+}(_person.Person);
 
 exports.Evelyn = Evelyn;
 
 
-},{"../engine/baseperson":2,"../engine/constants":3}],25:[function(require,module,exports){
+},{"../constants":1,"../engine/person":9}],35:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2188,9 +2852,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Jill = undefined;
 
-var _baseperson = require('../engine/baseperson');
+var _person = require('../engine/person');
 
-var _constants = require('../engine/constants');
+var _constants = require('../constants');
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -2227,12 +2891,12 @@ var Jill = function (_Person) {
     }
 
     return Jill;
-}(_baseperson.Person);
+}(_person.Person);
 
 exports.Jill = Jill;
 
 
-},{"../engine/baseperson":2,"../engine/constants":3}],26:[function(require,module,exports){
+},{"../constants":1,"../engine/person":9}],36:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2240,9 +2904,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.John = undefined;
 
-var _baseperson = require('../engine/baseperson');
+var _person = require('../engine/person');
 
-var _constants = require('../engine/constants');
+var _constants = require('../constants');
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -2279,12 +2943,12 @@ var John = function (_Person) {
     }
 
     return John;
-}(_baseperson.Person);
+}(_person.Person);
 
 exports.John = John;
 
 
-},{"../engine/baseperson":2,"../engine/constants":3}],27:[function(require,module,exports){
+},{"../constants":1,"../engine/person":9}],37:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2292,9 +2956,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Neil = undefined;
 
-var _baseperson = require('../engine/baseperson');
+var _person = require('../engine/person');
 
-var _constants = require('../engine/constants');
+var _constants = require('../constants');
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -2331,12 +2995,12 @@ var Neil = function (_Person) {
     }
 
     return Neil;
-}(_baseperson.Person);
+}(_person.Person);
 
 exports.Neil = Neil;
 
 
-},{"../engine/baseperson":2,"../engine/constants":3}],28:[function(require,module,exports){
+},{"../constants":1,"../engine/person":9}],38:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2344,9 +3008,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Pauline = undefined;
 
-var _baseperson = require('../engine/baseperson');
+var _person = require('../engine/person');
 
-var _constants = require('../engine/constants');
+var _constants = require('../constants');
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -2383,12 +3047,12 @@ var Pauline = function (_Person) {
     }
 
     return Pauline;
-}(_baseperson.Person);
+}(_person.Person);
 
 exports.Pauline = Pauline;
 
 
-},{"../engine/baseperson":2,"../engine/constants":3}],29:[function(require,module,exports){
+},{"../constants":1,"../engine/person":9}],39:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2396,9 +3060,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Petey = undefined;
 
-var _baseperson = require('../engine/baseperson');
+var _person = require('../engine/person');
 
-var _constants = require('../engine/constants');
+var _constants = require('../constants');
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -2435,12 +3099,12 @@ var Petey = function (_Person) {
     }
 
     return Petey;
-}(_baseperson.Person);
+}(_person.Person);
 
 exports.Petey = Petey;
 
 
-},{"../engine/baseperson":2,"../engine/constants":3}],30:[function(require,module,exports){
+},{"../constants":1,"../engine/person":9}],40:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2448,9 +3112,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Quazar = undefined;
 
-var _baseperson = require('../engine/baseperson');
+var _person = require('../engine/person');
 
-var _constants = require('../engine/constants');
+var _constants = require('../constants');
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -2496,12 +3160,12 @@ var Quazar = function (_Person) {
     }
 
     return Quazar;
-}(_baseperson.Person);
+}(_person.Person);
 
 exports.Quazar = Quazar;
 
 
-},{"../engine/baseperson":2,"../engine/constants":3}],31:[function(require,module,exports){
+},{"../constants":1,"../engine/person":9}],41:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2509,9 +3173,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Zenith = undefined;
 
-var _baseperson = require('../engine/baseperson');
+var _person = require('../engine/person');
 
-var _constants = require('../engine/constants');
+var _constants = require('../constants');
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -2557,9 +3221,9 @@ var Zenith = function (_Person) {
     }
 
     return Zenith;
-}(_baseperson.Person);
+}(_person.Person);
 
 exports.Zenith = Zenith;
 
 
-},{"../engine/baseperson":2,"../engine/constants":3}]},{},[22]);
+},{"../constants":1,"../engine/person":9}]},{},[1,31,32,30]);

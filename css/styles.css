@@ -2,15 +2,16 @@
 *
 *	XL RPG
 *	XL Gaming/Declan Tyson
-*	v0.0.21
+*	v0.0.22
 *	06/02/2018
 *
 */
 /* Defaults */
-@import url("https://fonts.googleapis.com/css?family=Roboto|Roboto+Condensed");
+@import url("https://fonts.googleapis.com/css?family=Roboto|Roboto+Condensed|Permanent+Marker");
 html, body {
   font-family: 'Roboto',  sans-serif;
-  margin: 0; }
+  margin: 0;
+  overflow: hidden; }
 
 .clear, .clearfix {
   clear: both; }
@@ -30,7 +31,8 @@ html, body {
 
 canvas {
   border-bottom: solid 1px #cdcdcd;
-  width: 100%; }
+  width: 100%;
+  background-color: black; }
 
 button {
   margin: 20px 0 20px 20px;

@@ -2,7 +2,7 @@
  *
  *  XL RPG/Game
  *  XL Gaming/Declan Tyson
- *  v0.0.20
+ *  v0.0.22
  *  06/02/2018
  *
  */
@@ -12,15 +12,16 @@ import * as input from './inputs';
 
 import { Player } from './player';
 import { WorldMap } from './worldmap';
-import { tileSize, canvasProperties, fps, actionTimeoutLimit } from './constants';
+import { tileSize, canvasProperties, fps, actionTimeoutLimit } from '../constants';
 
-export const StartGame = (locale, people) => {
+export const StartGame = (locale, people, player, scene, renderer) => {
     clearInterval(window.drawScene);
 
-    let player = new Player(),
-        scene = new WorldMap(player),
-        start = new locale(player, people),
-        renderer = new Renderer('world', canvasProperties.width, canvasProperties.height),
+    player = player || new Player();
+    scene = scene || new WorldMap(player);
+    renderer = renderer || new Renderer('world', canvasProperties.width, canvasProperties.height);
+
+    let start = new locale(player, people),
         game = new Game(renderer, scene, canvasProperties.centerPoint);
 
     game.scene.setCurrentLocale(start, 'beginningOfGame');

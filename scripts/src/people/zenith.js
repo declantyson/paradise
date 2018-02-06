@@ -7,8 +7,8 @@
  *
  */
 
-import { Person } from '../engine/baseperson';
-import { genders, colours } from '../engine/constants';
+import { Person } from '../engine/person';
+import { genders, colours } from '../constants';
 
 class Zenith extends Person {
     constructor() {

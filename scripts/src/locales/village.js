@@ -7,7 +7,7 @@
  *
  */
 
-import { Locale } from "../engine/baselocale";
+import { Locale } from "../engine/locale";
 
 class Village extends Locale {
     constructor(player, people) {

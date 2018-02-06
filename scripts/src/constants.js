@@ -2,7 +2,7 @@
  *
  *  XL RPG/Constants
  *  XL Gaming/Declan Tyson
- *  v0.0.21
+ *  v0.0.22
  *  06/02/2018
  *
  */
@@ -20,7 +20,8 @@ export const colours = {
     blue: "#0000AA",
     brown: "#4f1f0b",
     darkbrown: "#291006",
-    grey: "#cdcdcd"
+    grey: "#cdcdcd",
+    red: "#ff0000"
 };
 
 export const directions = {
@@ -30,8 +31,13 @@ export const directions = {
     right: 'right'
 };
 
+export const texts = {
+    dead: 'Dead'
+};
+
 export const fonts = {
-    large: '24px "Roboto Condensed"'
+    large: '24px "Roboto Condensed"',
+    death: '24px "Permanent Marker"'
 };
 
 export const canvasProperties = {

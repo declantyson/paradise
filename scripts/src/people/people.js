@@ -1,16 +1,16 @@
 /*
  *
- *  XL RPG/People
+ *  CODENAME: Paradise/People
  *  XL Gaming/Declan Tyson
- *  v0.0.20
- *  05/02/2018
+ *  v0.0.22
+ *  06/02/2018
  *
  */
 
 // People
 
 import * as util from '../engine/util';
-import {personCount, pronouns} from '../engine/constants';
+import { personCount, pronouns } from '../constants';
 
 import { Evelyn } from './evelyn';
 import { Jill } from './jill';
@@ -22,14 +22,14 @@ import { Quazar } from './quazar';
 import { Zenith } from './zenith';
 
 export let people = {
-    "Evelyn"  : Evelyn,
-    "Jill"    : Jill,
-    "John"    : John,
-    "Neil"    : Neil,
-    "Pauline" : Pauline,
-    "Petey"   : Petey,
-    "Quazar"  : Quazar,
-    "Zenith"  : Zenith
+    'Evelyn'  : Evelyn,
+    'Jill'    : Jill,
+    'John'    : John,
+    'Neil'    : Neil,
+    'Pauline' : Pauline,
+    'Petey'   : Petey,
+    'Quazar'  : Quazar,
+    'Zenith'  : Zenith
 };
 
 export const chooseVictim = (chosenPeople) => {
