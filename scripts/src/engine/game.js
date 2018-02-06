@@ -7,10 +7,12 @@
  *
  */
 
+import * as util from './util';
+import * as input from './inputs';
+
 import { Player } from './player';
 import { WorldMap } from './worldmap';
 import { tileSize, canvasProperties, fps, actionTimeoutLimit } from './constants';
-import * as input from './inputs';
 
 export const StartGame = (locale, people) => {
     clearInterval(window.drawScene);
@@ -47,7 +49,7 @@ class Game {
         this.centerPoint = centerPoint;
         this.currentAction = null;
 
-        window.drawScene = setInterval(this.draw.bind(this), 1000 / this.renderer.fps);
+        this.draw();
     }
 
     draw() {
@@ -62,6 +64,8 @@ class Game {
         this.scene.draw(pre_ctx);
 
         this.renderer.ctx.drawImage(pre_canvas, 0, 0);
+
+        window.requestAnimationFrame(this.draw.bind(this));
     }
 
     setScene(scene) {

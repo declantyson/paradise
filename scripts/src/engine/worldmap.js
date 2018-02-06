@@ -2,7 +2,7 @@
  *
  *  XL RPG/Scene-WorldMap
  *  XL Gaming/Declan Tyson
- *  v0.0.20
+ *  v0.0.21
  *  06/02/2018
  *
  */
@@ -150,11 +150,14 @@ class WorldMap extends Scene {
                 break;
         }
 
+        if(!this.localeMap[x][y].person) return;
         this.startInteraction(this.localeMap[x][y].person);
     }
 
     startInteraction(person) {
-        this.game.setScene(new Interaction(person));
+        let interaction = new Interaction(person);
+        interaction.worldMap = this;
+        this.game.setScene(interaction);
     }
 
     checkForEntrance() {

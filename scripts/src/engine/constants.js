@@ -2,10 +2,16 @@
  *
  *  XL RPG/Constants
  *  XL Gaming/Declan Tyson
- *  v0.0.20
- *  05/02/2018
+ *  v0.0.21
+ *  06/02/2018
  *
  */
+
+export const fps = 45;
+export const actionTimeoutLimit = 2;
+export const tileSize = 15;
+export const tilesWide = 96;
+export const tilesHigh = 54;
 
 export const colours = {
     black : "#000000",
@@ -24,10 +30,9 @@ export const directions = {
     right: 'right'
 };
 
-export const tileSize = 10;
-
-export const tilesWide = 64,
-      tilesHigh = 36;
+export const fonts = {
+    large: '24px "Roboto Condensed"'
+};
 
 export const canvasProperties = {
     width: tileSize * tilesWide,
@@ -38,18 +43,26 @@ export const canvasProperties = {
     }
 };
 
-export const fps = 45;
-export const actionTimeoutLimit = 2;
+export const interactionTextArea = {
+    width: canvasProperties.width,
+    height: canvasProperties.height / 3,
+    background: colours.black,
+    alpha: 0.4,
+    badgeOffsetX: 20,
+    badgeOffsetY: 40
+};
 
-export const personCount = 4;
 export const genders = {
     male   : "M",
     female : "F",
     alien  : "A"
 };
+
 export const pronouns = {
     M   : "his",
     F   : "her",
     A   : "xleir"
 };
+
+export const personCount = 4;
 export const inhabitanceSize = 2;

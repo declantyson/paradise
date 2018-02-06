@@ -16,7 +16,8 @@ class Scene {
             down:   this.empty,
             left:   this.empty,
             right:  this.empty,
-            action: this.empty
+            action: this.empty,
+            back:   this.empty
         };
     }
 
@@ -25,7 +26,7 @@ class Scene {
     }
 
     doActions(action) {
-        if(!this.game || this.game.actionTimeout < actionTimeoutLimit || !action) return;
+        if(!this.game || !action) return;
         this.game.triggerActionTimeout();
 
         this.actions[action]();

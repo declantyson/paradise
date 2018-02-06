@@ -2,14 +2,15 @@
 *
 *	XL RPG
 *	XL Gaming/Declan Tyson
-*	v0.0.20
-*	13/11/2017
+*	v0.0.21
+*	06/02/2018
 *
 */
 /* Defaults */
+@import url("https://fonts.googleapis.com/css?family=Roboto|Roboto+Condensed");
 html, body {
-  margin: 0;
-  font-family: 'Helvetica Neue',  sans-serif; }
+  font-family: 'Roboto',  sans-serif;
+  margin: 0; }
 
 .clear, .clearfix {
   clear: both; }
@@ -28,12 +29,29 @@ html, body {
     width: 32%; }
 
 canvas {
-  border: solid 1px #cdcdcd;
-  margin: 40px;
-  float: left; }
+  border-bottom: solid 1px #cdcdcd;
+  width: 100%; }
+
+button {
+  margin: 20px 0 20px 20px;
+  font-family: 'Roboto',  sans-serif;
+  font-size: 14px;
+  -webkit-border-radius: none;
+  -moz-border-radius: none;
+  border-radius: none; }
 
 #log {
-  float: left; }
+  position: fixed;
+  top: 0;
+  right: 0;
+  margin: 0;
+  height: 400px;
+  overflow: auto;
+  width: 200px;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.5);
+  font-family: monospace;
+  font-size: 12px; }
 
 /* Mixins */
 

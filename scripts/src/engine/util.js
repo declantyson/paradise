@@ -2,8 +2,8 @@
  *
  *  XL RPG/Util
  *  XL Gaming/Declan Tyson
- *  v0.0.20
- *  05/02/2018
+ *  v0.0.21
+ *  06/02/2018
  *
  */
 
@@ -24,5 +24,11 @@ export const pickRandomIndex = (arr, indexOnly = false)  => {
 };
 
 export const log = (str) => {
-    document.getElementById('log').innerHTML += `\n\t${str}`;
+    let log = document.getElementById('log');
+    log.innerHTML += `${str}<br/>`;
+    log.scrollTop = log.scrollHeight;
+};
+
+export const clearLog = () => {
+    document.getElementById('log').innerHTML = '';
 };

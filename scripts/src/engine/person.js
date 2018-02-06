@@ -10,7 +10,6 @@
 import * as util from './util';
 import { colours, pronouns } from './constants';
 
-
 class Person {
     constructor(name, gender) {
         this.name = name;

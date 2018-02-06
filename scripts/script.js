@@ -304,10 +304,16 @@ Object.defineProperty(exports, "__esModule", {
  *
  *  XL RPG/Constants
  *  XL Gaming/Declan Tyson
- *  v0.0.20
- *  05/02/2018
+ *  v0.0.21
+ *  06/02/2018
  *
  */
+
+var fps = exports.fps = 45;
+var actionTimeoutLimit = exports.actionTimeoutLimit = 2;
+var tileSize = exports.tileSize = 15;
+var tilesWide = exports.tilesWide = 96;
+var tilesHigh = exports.tilesHigh = 54;
 
 var colours = exports.colours = {
     black: "#000000",
@@ -326,10 +332,9 @@ var directions = exports.directions = {
     right: 'right'
 };
 
-var tileSize = exports.tileSize = 10;
-
-var tilesWide = exports.tilesWide = 64,
-    tilesHigh = exports.tilesHigh = 36;
+var fonts = exports.fonts = {
+    large: '24px "Roboto Condensed"'
+};
 
 var canvasProperties = exports.canvasProperties = {
     width: tileSize * tilesWide,
@@ -340,20 +345,28 @@ var canvasProperties = exports.canvasProperties = {
     }
 };
 
-var fps = exports.fps = 45;
-var actionTimeoutLimit = exports.actionTimeoutLimit = 2;
+var interactionTextArea = exports.interactionTextArea = {
+    width: canvasProperties.width,
+    height: canvasProperties.height / 3,
+    background: colours.black,
+    alpha: 0.4,
+    badgeOffsetX: 20,
+    badgeOffsetY: 40
+};
 
-var personCount = exports.personCount = 4;
 var genders = exports.genders = {
     male: "M",
     female: "F",
     alien: "A"
 };
+
 var pronouns = exports.pronouns = {
     M: "his",
     F: "her",
     A: "xleir"
 };
+
+var personCount = exports.personCount = 4;
 var inhabitanceSize = exports.inhabitanceSize = 2;
 
 
@@ -375,15 +388,19 @@ var _createClass = function () {
     };
 }();
 
+var _util = require('./util');
+
+var util = _interopRequireWildcard(_util);
+
+var _inputs = require('./inputs');
+
+var input = _interopRequireWildcard(_inputs);
+
 var _player = require('./player');
 
 var _worldmap = require('./worldmap');
 
 var _constants = require('./constants');
-
-var _inputs = require('./inputs');
-
-var input = _interopRequireWildcard(_inputs);
 
 function _interopRequireWildcard(obj) {
     if (obj && obj.__esModule) {
@@ -447,7 +464,7 @@ var Game = function () {
         this.centerPoint = centerPoint;
         this.currentAction = null;
 
-        window.drawScene = setInterval(this.draw.bind(this), 1000 / this.renderer.fps);
+        this.draw();
     }
 
     _createClass(Game, [{
@@ -464,6 +481,8 @@ var Game = function () {
             this.scene.draw(pre_ctx);
 
             this.renderer.ctx.drawImage(pre_canvas, 0, 0);
+
+            window.requestAnimationFrame(this.draw.bind(this));
         }
     }, {
         key: 'setScene',
@@ -496,32 +515,33 @@ var Game = function () {
 }();
 
 
-},{"./constants":3,"./inputs":5,"./player":8,"./worldmap":12}],5:[function(require,module,exports){
-"use strict";
+},{"./constants":3,"./inputs":5,"./player":8,"./util":11,"./worldmap":12}],5:[function(require,module,exports){
+'use strict';
 
 /*
  *
  *  XL RPG/Inputs
  *  XL Gaming/Declan Tyson
- *  v0.0.20
+ *  v0.0.21
  *  06/02/2018
  *
  */
 
 var actions = {
-    38: "up",
-    40: "down",
-    37: "left",
-    39: "right",
-    32: "action"
+    38: 'up',
+    40: 'down',
+    37: 'left',
+    39: 'right',
+    32: 'action',
+    27: 'back'
 };
 
-window.addEventListener("keydown", function (e) {
+window.addEventListener('keydown', function (e) {
     if (!actions[e.keyCode] || !window.game) return;
     window.game.sendInput(actions[e.keyCode]);
 });
 
-window.addEventListener("keyup", function (e) {
+window.addEventListener('keyup', function (e) {
     if (!window.game) return;
     window.game.sendInput(null);
 });
@@ -545,9 +565,25 @@ var _createClass = function () {
     };
 }();
 
+var _util = require("./util");
+
+var util = _interopRequireWildcard(_util);
+
 var _scene = require("./scene");
 
 var _constants = require("./constants");
+
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) {
+        return obj;
+    } else {
+        var newObj = {};if (obj != null) {
+            for (var key in obj) {
+                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+            }
+        }newObj.default = obj;return newObj;
+    }
+}
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -582,16 +618,44 @@ var Interaction = function (_Scene) {
 
         var _this = _possibleConstructorReturn(this, (Interaction.__proto__ || Object.getPrototypeOf(Interaction)).call(this));
 
-        console.log(person);
+        _this.person = person;
+        _this.actions.back = _this.returnToWorldMap.bind(_this);
+
+        util.log("Entering interaction with " + _this.person.name);
         return _this;
     }
 
     _createClass(Interaction, [{
         key: "draw",
         value: function draw(ctx) {
-            ctx.strokeStyle = _constants.colours.black;
-            ctx.rect(0, 0, _constants.canvasProperties.width, _constants.canvasProperties.height);
+            this.drawConversationTextArea(ctx);
+            this.drawBadge(ctx);
+        }
+    }, {
+        key: "drawConversationTextArea",
+        value: function drawConversationTextArea(ctx) {
+            ctx.save();
+            ctx.rect(0, _constants.canvasProperties.height - _constants.interactionTextArea.height, _constants.interactionTextArea.width, _constants.interactionTextArea.height);
+            ctx.fillStyle = _constants.interactionTextArea.colour;
+            ctx.globalAlpha = _constants.interactionTextArea.alpha;
             ctx.fill();
+            ctx.restore();
+        }
+    }, {
+        key: "drawBadge",
+        value: function drawBadge(ctx) {
+            ctx.font = _constants.fonts.large;
+            ctx.fillStyle = _constants.colours.white;
+            ctx.fillText(this.person.name, _constants.interactionTextArea.badgeOffsetX, _constants.canvasProperties.height - _constants.interactionTextArea.height + _constants.interactionTextArea.badgeOffsetY);
+        }
+    }, {
+        key: "drawConversation",
+        value: function drawConversation(ctx) {}
+    }, {
+        key: "returnToWorldMap",
+        value: function returnToWorldMap() {
+            if (!this.worldMap) return;
+            this.game.setScene(this.worldMap);
         }
     }]);
 
@@ -601,7 +665,7 @@ var Interaction = function (_Scene) {
 exports.Interaction = Interaction;
 
 
-},{"./constants":3,"./scene":9}],7:[function(require,module,exports){
+},{"./constants":3,"./scene":9,"./util":11}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -749,7 +813,8 @@ var Scene = function () {
             down: this.empty,
             left: this.empty,
             right: this.empty,
-            action: this.empty
+            action: this.empty,
+            back: this.empty
         };
     }
 
@@ -761,7 +826,7 @@ var Scene = function () {
     }, {
         key: "doActions",
         value: function doActions(action) {
-            if (!this.game || this.game.actionTimeout < _constants.actionTimeoutLimit || !action) return;
+            if (!this.game || !action) return;
             this.game.triggerActionTimeout();
 
             this.actions[action]();
@@ -980,8 +1045,8 @@ Object.defineProperty(exports, "__esModule", {
  *
  *  XL RPG/Util
  *  XL Gaming/Declan Tyson
- *  v0.0.20
- *  05/02/2018
+ *  v0.0.21
+ *  06/02/2018
  *
  */
 
@@ -1004,7 +1069,13 @@ var pickRandomIndex = exports.pickRandomIndex = function pickRandomIndex(arr) {
 };
 
 var log = exports.log = function log(str) {
-    document.getElementById('log').innerHTML += '\n\t' + str;
+    var log = document.getElementById('log');
+    log.innerHTML += str + '<br/>';
+    log.scrollTop = log.scrollHeight;
+};
+
+var clearLog = exports.clearLog = function clearLog() {
+    document.getElementById('log').innerHTML = '';
 };
 
 
@@ -1088,7 +1159,7 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Scene-WorldMap
    *  XL Gaming/Declan Tyson
-   *  v0.0.20
+   *  v0.0.21
    *  06/02/2018
    *
    */
@@ -1250,12 +1321,15 @@ var WorldMap = function (_Scene) {
                     break;
             }
 
+            if (!this.localeMap[x][y].person) return;
             this.startInteraction(this.localeMap[x][y].person);
         }
     }, {
         key: "startInteraction",
         value: function startInteraction(person) {
-            this.game.setScene(new _interaction.Interaction(person));
+            var interaction = new _interaction.Interaction(person);
+            interaction.worldMap = this;
+            this.game.setScene(interaction);
         }
     }, {
         key: "checkForEntrance",
@@ -1899,6 +1973,10 @@ exports.Village = Village;
 },{"../engine/baselocale":1}],22:[function(require,module,exports){
 "use strict";
 
+var _util = require("./engine/util");
+
+var util = _interopRequireWildcard(_util);
+
 var _game = require("./engine/game");
 
 var _availablepeople = require("./people/availablepeople");
@@ -1907,26 +1985,41 @@ var _people = require("./engine/people");
 
 var _locales = require("./locales/locales");
 
-/*
- *
- *  Paradise
- *  XL Gaming/Declan Tyson
- *  v0.0.20
- *  06/02/2018
- *
- */
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) {
+        return obj;
+    } else {
+        var newObj = {};if (obj != null) {
+            for (var key in obj) {
+                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+            }
+        }newObj.default = obj;return newObj;
+    }
+}
 
 window.startGame = function (locale, people, victim, murderer) {
-  locale = _locales.startingMaps[locale] || _locales.startingMaps[(0, _locales.chooseStartingMap)()];
-  people = people || (0, _people.choosePeople)();
-  victim = victim || (0, _availablepeople.chooseVictim)(people);
-  murderer = murderer || (0, _availablepeople.chooseMurderer)(victim, people);
+    util.clearLog();
 
-  window.game = (0, _game.StartGame)(locale, people);
-};
+    locale = _locales.startingMaps[locale] || _locales.startingMaps[(0, _locales.chooseStartingMap)()];
+    people = people || (0, _people.choosePeople)();
+    victim = victim || (0, _availablepeople.chooseVictim)(people);
+    murderer = murderer || (0, _availablepeople.chooseMurderer)(victim, people);
+
+    window.game = (0, _game.StartGame)(locale, people);
+    document.querySelectorAll('button').forEach(function (button) {
+        button.blur();
+    });
+}; /*
+    *
+    *  Paradise
+    *  XL Gaming/Declan Tyson
+    *  v0.0.21
+    *  06/02/2018
+    *
+    */
 
 
-},{"./engine/game":4,"./engine/people":7,"./locales/locales":20,"./people/availablepeople":23}],23:[function(require,module,exports){
+},{"./engine/game":4,"./engine/people":7,"./engine/util":11,"./locales/locales":20,"./people/availablepeople":23}],23:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
