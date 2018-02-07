@@ -144,7 +144,7 @@ function _classCallCheck(instance, Constructor) {
    *
    *  XL RPG/Game
    *  XL Gaming/Declan Tyson
-   *  v0.0.27
+   *  v0.0.28
    *  07/02/2018
    *
    */
@@ -187,6 +187,7 @@ var Game = function () {
         this.centerPoint = centerPoint;
         this.currentAction = null;
         this.initTerrainSprites();
+        this.redraw = true;
 
         this.draw();
     }
@@ -194,14 +195,16 @@ var Game = function () {
     _createClass(Game, [{
         key: 'initTerrainSprites',
         value: function initTerrainSprites() {
-            var terrainTiles = [];
+            var terrainTiles = {};
             Object.keys(_terrains.terrains).forEach(function (terrainKey) {
                 var terrain = new _terrains.terrains[terrainKey](),
                     tile = new Image();
 
+                console.log("A new image has been created!");
+
                 if (terrain.image) {
                     tile.src = terrain.image;
-                    terrainTiles.push(tile);
+                    terrainTiles[terrain.id] = tile;
                 }
             });
 
@@ -220,7 +223,11 @@ var Game = function () {
             this.scene.doActions(this.currentAction);
             this.scene.draw(pre_ctx);
 
-            this.renderer.ctx.drawImage(pre_canvas, 0, 0);
+            if (this.redraw) {
+                console.log('redrawing');
+                this.cachedCanvas = pre_canvas;
+            }
+            this.renderer.ctx.drawImage(this.cachedCanvas, 0, 0, this.renderer.canvas.width, this.renderer.canvas.height);
 
             window.requestAnimationFrame(this.draw.bind(this));
         }
@@ -229,6 +236,7 @@ var Game = function () {
         value: function setScene(scene) {
             this.scene = scene;
             this.scene.setGame(this);
+            this.redraw = true;
         }
     }, {
         key: 'sendInput',
@@ -345,8 +353,8 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Scene-Interaction
    *  XL Gaming/Declan Tyson
-   *  v0.0.20
-   *  06/02/2018
+   *  v0.0.28
+   *  07/02/2018
    *
    */
 
@@ -892,8 +900,8 @@ var _createClass = function () {
       *
       *  XL RPG/Scene
       *  XL Gaming/Declan Tyson
-      *  v0.0.20
-      *  06/02/2018
+      *  v0.0.28
+      *  07/02/2018
       *
       */
 
@@ -1286,7 +1294,7 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Scene-WorldMap
    *  XL Gaming/Declan Tyson
-   *  v0.0.27
+   *  v0.0.28
    *  07/02/2018
    *
    */
@@ -1348,6 +1356,13 @@ var WorldMap = function (_Scene) {
     }, {
         key: 'draw',
         value: function draw(ctx) {
+            if (this.offsetX === this.player.x * _constants.tileSize - this.game.centerPoint.x && this.offsetY === this.player.y * _constants.tileSize - this.game.centerPoint.y) {
+                this.game.redraw = false;
+                return;
+            }
+
+            this.game.redraw = true;
+
             this.offsetX = this.player.x * _constants.tileSize - this.game.centerPoint.x;
             this.offsetY = this.player.y * _constants.tileSize - this.game.centerPoint.y;
             this.viewportStartX = this.player.x - _constants.tilesWide / 2;
@@ -1382,11 +1397,13 @@ var WorldMap = function (_Scene) {
 
             for (var x = viewportStartX; x <= viewportStartX + _constants.tilesWide; x++) {
                 for (var y = viewportStartY; y <= viewportStartY + _constants.tilesHigh; y++) {
+
                     var _terrain = this.localeMap[x][y],
                         tileX = x * _constants.tileSize - this.offsetX,
-                        tileY = y * _constants.tileSize - this.offsetY;
+                        tileY = y * _constants.tileSize - this.offsetY,
+                        tile = window.game.terrainSprites[_terrain.id];
 
-                    if (!_terrain.image) {
+                    if (!tile) {
                         ctx.beginPath();
                         ctx.fillStyle = _terrain.colour;
                         ctx.strokeStyle = _terrain.colour;
@@ -1394,8 +1411,8 @@ var WorldMap = function (_Scene) {
                         ctx.fill();
                         ctx.stroke();
                     } else {
-                        var tile = window.game.terrainSprites[_terrain.id];
-                        ctx.drawImage(tile, tileX, tileY, _constants.tileSize, _constants.tileSize);
+                        ctx.strokeStyle = null;
+                        ctx.drawImage(tile, 0, 0, 45, 45, tileX, tileY, _constants.tileSize, _constants.tileSize);
                     }
                 }
             }

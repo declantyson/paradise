@@ -2,7 +2,7 @@
  *
  *  XL RPG/Game
  *  XL Gaming/Declan Tyson
- *  v0.0.27
+ *  v0.0.28
  *  07/02/2018
  *
  */
@@ -51,19 +51,22 @@ class Game {
         this.centerPoint = centerPoint;
         this.currentAction = null;
         this.initTerrainSprites();
+        this.redraw = true;
 
         this.draw();
     }
 
     initTerrainSprites() {
-        let terrainTiles = [];
+        let terrainTiles = {};
         Object.keys(terrains).forEach((terrainKey) => {
             let terrain = new terrains[terrainKey](),
                 tile = new Image();
 
+            console.log("A new image has been created!");
+
             if(terrain.image) {
                 tile.src = terrain.image;
-                terrainTiles.push(tile);
+                terrainTiles[terrain.id] = tile;
             }
         });
 
@@ -81,7 +84,11 @@ class Game {
         this.scene.doActions(this.currentAction);
         this.scene.draw(pre_ctx);
 
-        this.renderer.ctx.drawImage(pre_canvas, 0, 0);
+        if(this.redraw) {
+            console.log('redrawing');
+            this.cachedCanvas = pre_canvas;
+        }
+        this.renderer.ctx.drawImage(this.cachedCanvas, 0, 0, this.renderer.canvas.width, this.renderer.canvas.height);
 
         window.requestAnimationFrame(this.draw.bind(this));
     }
@@ -89,6 +96,7 @@ class Game {
     setScene(scene) {
         this.scene = scene;
         this.scene.setGame(this);
+        this.redraw = true;
     }
 
     sendInput(input) {

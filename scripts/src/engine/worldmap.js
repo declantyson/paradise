@@ -2,7 +2,7 @@
  *
  *  XL RPG/Scene-WorldMap
  *  XL Gaming/Declan Tyson
- *  v0.0.27
+ *  v0.0.28
  *  07/02/2018
  *
  */
@@ -58,6 +58,16 @@ class WorldMap extends Scene {
     }
 
     draw(ctx) {
+        if(
+            this.offsetX === this.player.x * tileSize - this.game.centerPoint.x &&
+            this.offsetY === this.player.y * tileSize - this.game.centerPoint.y
+        ) {
+            this.game.redraw = false;
+            return;
+        }
+
+        this.game.redraw = true;
+
         this.offsetX = this.player.x * tileSize - this.game.centerPoint.x;
         this.offsetY = this.player.y * tileSize - this.game.centerPoint.y;
         this.viewportStartX = this.player.x - (viewportWidth / 2);
@@ -90,11 +100,13 @@ class WorldMap extends Scene {
 
         for(let x = viewportStartX; x <= viewportStartX + viewportWidth; x++) {
             for(let y = viewportStartY; y <= viewportStartY + viewportHeight; y++) {
+
                 let terrain = this.localeMap[x][y],
                     tileX = x * tileSize - this.offsetX,
-                    tileY = y * tileSize - this.offsetY;
+                    tileY = y * tileSize - this.offsetY,
+                    tile = window.game.terrainSprites[terrain.id];
 
-                if(!terrain.image) {
+                if(!tile) {
                     ctx.beginPath();
                     ctx.fillStyle = terrain.colour;
                     ctx.strokeStyle = terrain.colour;
@@ -102,8 +114,8 @@ class WorldMap extends Scene {
                     ctx.fill();
                     ctx.stroke();
                 } else {
-                    let tile = window.game.terrainSprites[terrain.id];
-                    ctx.drawImage(tile, tileX, tileY, tileSize, tileSize);
+                    ctx.strokeStyle = null;
+                    ctx.drawImage(tile, 0, 0, 45, 45, tileX, tileY, tileSize, tileSize);
                 }
             }
         }
