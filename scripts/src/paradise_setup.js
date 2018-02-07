@@ -2,7 +2,7 @@
  *
  *  CODENAME: Paradise/Setup
  *  XL Gaming/Declan Tyson
- *  v0.0.26
+ *  v0.0.27
  *  07/02/2018
  *
  */
@@ -114,10 +114,22 @@ export const chooseEvidence = (game) => {
     }
 
     for(let i = 0; i < chosenEvidenceKeys.length; i++) {
-        let incriminates = game.murderer;
+        let incriminates = game.murderer,
+            inhabitances = game.scene.locale.inhabitances,
+            location = inhabitances[dieRoll(inhabitances.length - 1)].id;
+
         if(i < herrings) incriminates = randomInnocentPerson(game);
 
-        let evidence = new evidences[chosenEvidenceKeys[i]](incriminates, game.victim);
+        /* jshint ignore:start */
+        if(dieRoll(2)) {
+            // Plant it on the suspect
+            inhabitances.forEach((inhabitance, index) => {
+                if(inhabitance.inhabitants.indexOf(incriminates) !== -1) location = inhabitances[index].id;
+            });
+        }
+        /* jshint ignore:end */
+
+        let evidence = new evidences[chosenEvidenceKeys[i]](incriminates, location);
         chosenEvidence.push(evidence);
     }
 
@@ -149,11 +161,11 @@ const whatHappensToTheWeapon = (game) => {
             inhabitances.forEach((inhabitance, index) => {
                 if(inhabitance.inhabitants.indexOf(game.murderer) !== -1) inhabitanceIndex = index;
             });
-            weapon = new murderWeapons[game.weapon](implicates, game.scene.locale.inhabitances[inhabitanceIndex].id);
+            weapon = new murderWeapons[game.weapon](implicates, inhabitances[inhabitanceIndex].id);
             break;
         case 2:
             // Randomly hidden
-            weapon = new murderWeapons[game.weapon](implicates, game.scene.locale.inhabitances[inhabitanceIndex].id);
+            weapon = new murderWeapons[game.weapon](implicates, inhabitances[inhabitanceIndex].id);
             break;
     }
 

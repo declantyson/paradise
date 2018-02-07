@@ -2,8 +2,8 @@
  *
  *  XL RPG/Scene-WorldMap
  *  XL Gaming/Declan Tyson
- *  v0.0.22
- *  06/02/2018
+ *  v0.0.27
+ *  07/02/2018
  *
  */
 
@@ -90,13 +90,21 @@ class WorldMap extends Scene {
 
         for(let x = viewportStartX; x <= viewportStartX + viewportWidth; x++) {
             for(let y = viewportStartY; y <= viewportStartY + viewportHeight; y++) {
-                let terrain = this.localeMap[x][y];
-                ctx.beginPath();
-                ctx.fillStyle = terrain.colour;
-                ctx.strokeStyle = terrain.colour;
-                ctx.rect(x * tileSize - this.offsetX, y * tileSize - this.offsetY, tileSize, tileSize);
-                ctx.fill();
-                ctx.stroke();
+                let terrain = this.localeMap[x][y],
+                    tileX = x * tileSize - this.offsetX,
+                    tileY = y * tileSize - this.offsetY;
+
+                if(!terrain.image) {
+                    ctx.beginPath();
+                    ctx.fillStyle = terrain.colour;
+                    ctx.strokeStyle = terrain.colour;
+                    ctx.rect(tileX, tileY, tileSize, tileSize);
+                    ctx.fill();
+                    ctx.stroke();
+                } else {
+                    let tile = window.game.terrainSprites[terrain.id];
+                    ctx.drawImage(tile, tileX, tileY, tileSize, tileSize);
+                }
             }
         }
     }

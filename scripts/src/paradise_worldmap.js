@@ -2,8 +2,8 @@
  *
  *  CODENAME: Paradise/World Map
  *  XL Gaming/Declan Tyson
- *  v0.0.23
- *  06/02/2018
+ *  v0.0.27
+ *  07/02/2018
  *
  */
 
@@ -15,6 +15,11 @@ import * as util from './engine/util';
 class ParadiseWorldMap extends WorldMap {
     constructor(player) {
         super(player);
+    }
+
+    draw(ctx) {
+        super.draw(ctx);
+        this.drawEvidence(ctx);
     }
 
     spawnPeople() {
@@ -52,6 +57,10 @@ class ParadiseWorldMap extends WorldMap {
                  util.log(`${evidence.name} is hidden here!`);
              }
         });
+    }
+
+    drawEvidence(ctx) {
+
     }
 }
 

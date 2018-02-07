@@ -6,6 +6,7 @@ var http = require('http'),
 
 
 app.use("/css", express.static('css'));
+app.use("/img", express.static('img'));
 app.use("/data", express.static('data'));
 app.use("/scripts", express.static('scripts'));
 

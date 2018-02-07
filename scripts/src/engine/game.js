@@ -2,8 +2,8 @@
  *
  *  XL RPG/Game
  *  XL Gaming/Declan Tyson
- *  v0.0.22
- *  06/02/2018
+ *  v0.0.27
+ *  07/02/2018
  *
  */
 
@@ -12,7 +12,8 @@ import * as input from './inputs';
 
 import { Player } from './player';
 import { WorldMap } from './worldmap';
-import { tileSize, canvasProperties, fps, actionTimeoutLimit } from '../constants';
+import { canvasProperties, fps, actionTimeoutLimit } from '../constants';
+import { terrains } from './terrains';
 
 export const StartGame = (locale, people, player, scene, renderer) => {
     clearInterval(window.drawScene);
@@ -49,8 +50,24 @@ class Game {
         this.setScene(scene);
         this.centerPoint = centerPoint;
         this.currentAction = null;
+        this.initTerrainSprites();
 
         this.draw();
+    }
+
+    initTerrainSprites() {
+        let terrainTiles = [];
+        Object.keys(terrains).forEach((terrainKey) => {
+            let terrain = new terrains[terrainKey](),
+                tile = new Image();
+
+            if(terrain.image) {
+                tile.src = terrain.image;
+                terrainTiles.push(tile);
+            }
+        });
+
+        this.terrainSprites = terrainTiles;
     }
 
     draw() {
