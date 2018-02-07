@@ -85,7 +85,7 @@ var posessivePronouns = exports.posessivePronouns = {
 };
 
 var personCount = exports.personCount = 4;
-var inhabitanceSize = exports.inhabitanceSize = 2;
+var defaultInhabitanceSize = exports.defaultInhabitanceSize = 2;
 
 
 },{}],2:[function(require,module,exports){
@@ -463,8 +463,8 @@ var _createClass = function () {
       *
       *  XL RPG/Locales/Base
       *  XL Gaming/Declan Tyson
-      *  v0.0.20
-      *  05/02/2018
+      *  v0.0.25
+      *  07/02/2018
       *
       */
 
@@ -580,7 +580,7 @@ var Locale = function () {
         value: function drawInhabitances() {
             for (var i = 0; i < this.inhabitances.length; i++) {
                 var inhabitance = this.inhabitances[i];
-                this.addInhabitance(inhabitance.x, inhabitance.y, _constants.inhabitanceSize, _constants.inhabitanceSize, inhabitance);
+                this.addInhabitance(inhabitance.x, inhabitance.y, inhabitance.sizeX, inhabitance.sizeY, inhabitance);
             }
         }
     }, {
@@ -624,6 +624,9 @@ var Interior = function (_Locale) {
 
 var Inhabitance = function () {
     function Inhabitance(id, name, x, y, doorway) {
+        var sizeX = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : _constants.defaultInhabitanceSize;
+        var sizeY = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : _constants.defaultInhabitanceSize;
+
         _classCallCheck(this, Inhabitance);
 
         this.id = id;
@@ -632,6 +635,8 @@ var Inhabitance = function () {
         this.y = y;
         this.doorway = doorway;
         this.inhabitants = [];
+        this.sizeX = sizeX;
+        this.sizeY = sizeY;
     }
 
     _createClass(Inhabitance, [{
@@ -700,7 +705,7 @@ var choosePeople = exports.choosePeople = function choosePeople() {
     */
 
 
-},{"../constants":1,"../people/people":43,"./util":12}],8:[function(require,module,exports){
+},{"../constants":1,"../people/people":45,"./util":12}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1479,7 +1484,7 @@ var WorldMap = function (_Scene) {
 exports.WorldMap = WorldMap;
 
 
-},{"../constants":1,"../locales/locales":27,"../people/people":43,"./interaction":4,"./scene":10,"./terrain":11}],14:[function(require,module,exports){
+},{"../constants":1,"../locales/locales":27,"../people/people":45,"./interaction":4,"./scene":10,"./terrain":11}],14:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1555,78 +1560,6 @@ exports.Evidence = Evidence;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.chooseEvidence = undefined;
-
-var _util = require('../engine/util');
-
-var util = _interopRequireWildcard(_util);
-
-var _murderweapons = require('./murderweapons');
-
-function _interopRequireWildcard(obj) {
-    if (obj && obj.__esModule) {
-        return obj;
-    } else {
-        var newObj = {};if (obj != null) {
-            for (var key in obj) {
-                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
-            }
-        }newObj.default = obj;return newObj;
-    }
-}
-
-var chooseEvidence = exports.chooseEvidence = function chooseEvidence(game) {
-    var evidences = [],
-        weapon = whatHappensToTheWeapon(game);
-
-    if (weapon) evidences.push(weapon);
-
-    return evidences;
-}; /*
-    *
-    *  CODENAME: Paradise/Evidences
-    *  XL Gaming/Declan Tyson
-    *  v0.0.23
-    *  06/02/2018
-    *
-    */
-
-var whatHappensToTheWeapon = function whatHappensToTheWeapon(game) {
-    var weapon = null,
-        inhabitances = game.scene.locale.inhabitances,
-        implicates = game.murderer,
-        inhabitanceIndex = (0, _util.dieRoll)(inhabitances.length - 1);
-
-    if (util.dieRoll(10) === 0) implicates = false; // Muddied evidence - also TODO hard mode
-
-    switch (util.dieRoll(3)) {
-        case 0:
-            // On the victim
-            weapon = new _murderweapons.murderWeapons[game.weapon](implicates, game.victim);
-            break;
-        case 1:
-            // In the murderer's inhabitance
-            inhabitances.forEach(function (inhabitance, index) {
-                if (inhabitance.inhabitants.indexOf(game.murderer) !== -1) inhabitanceIndex = index;
-            });
-            weapon = new _murderweapons.murderWeapons[game.weapon](implicates, game.scene.locale.inhabitances[inhabitanceIndex].id);
-            break;
-        case 2:
-            // Randomly hidden
-            weapon = new _murderweapons.murderWeapons[game.weapon](implicates, game.scene.locale.inhabitances[inhabitanceIndex].id);
-            break;
-    }
-
-    return weapon;
-};
-
-
-},{"../engine/util":12,"./murderweapons":19}],16:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
 exports.Handgun = undefined;
 
 var _murderweapon = require('./murderweapon');
@@ -1671,7 +1604,7 @@ var Handgun = function (_MurderWeapon) {
 exports.Handgun = Handgun;
 
 
-},{"./murderweapon":18}],17:[function(require,module,exports){
+},{"./murderweapon":17}],16:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1721,7 +1654,7 @@ var Knife = function (_MurderWeapon) {
 exports.Knife = Knife;
 
 
-},{"./murderweapon":18}],18:[function(require,module,exports){
+},{"./murderweapon":17}],17:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1771,17 +1704,13 @@ var MurderWeapon = function (_Evidence) {
 exports.MurderWeapon = MurderWeapon;
 
 
-},{"./evidence":14}],19:[function(require,module,exports){
+},{"./evidence":14}],18:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
-exports.chooseMurderWeapon = exports.murderWeapons = undefined;
-
-var _util = require('../engine/util');
-
-var util = _interopRequireWildcard(_util);
+exports.murderWeapons = undefined;
 
 var _knife = require('./knife');
 
@@ -1789,41 +1718,37 @@ var _spoon = require('./spoon');
 
 var _handgun = require('./handgun');
 
+var _util = require('../engine/util');
+
+var util = _interopRequireWildcard(_util);
+
 function _interopRequireWildcard(obj) {
-    if (obj && obj.__esModule) {
-        return obj;
-    } else {
-        var newObj = {};if (obj != null) {
-            for (var key in obj) {
-                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
-            }
-        }newObj.default = obj;return newObj;
-    }
+  if (obj && obj.__esModule) {
+    return obj;
+  } else {
+    var newObj = {};if (obj != null) {
+      for (var key in obj) {
+        if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+      }
+    }newObj.default = obj;return newObj;
+  }
 }
 
-/*
- *
- *  CODENAME: Paradise/Murder Weapons
- *  XL Gaming/Declan Tyson
- *  v0.0.22
- *  06/02/2018
- *
- */
-
 var murderWeapons = exports.murderWeapons = {
-    'Knife': _knife.Knife,
-    'Spoon': _spoon.Spoon,
-    'Handgun': _handgun.Handgun
-};
+  'Knife': _knife.Knife,
+  'Spoon': _spoon.Spoon,
+  'Handgun': _handgun.Handgun
+}; /*
+    *
+    *  CODENAME: Paradise/Murder Weapons
+    *  XL Gaming/Declan Tyson
+    *  v0.0.25
+    *  07/02/2018
+    *
+    */
 
-var chooseMurderWeapon = exports.chooseMurderWeapon = function chooseMurderWeapon() {
-    var weapon = util.pickRandomProperty(murderWeapons);
-    util.log('The murder weapon is a ' + weapon + '.');
-    return weapon;
-};
 
-
-},{"../engine/util":12,"./handgun":16,"./knife":17,"./spoon":20}],20:[function(require,module,exports){
+},{"../engine/util":12,"./handgun":15,"./knife":16,"./spoon":19}],19:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1873,7 +1798,7 @@ var Spoon = function (_MurderWeapon) {
 exports.Spoon = Spoon;
 
 
-},{"./murderweapon":18}],21:[function(require,module,exports){
+},{"./murderweapon":17}],20:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1936,7 +1861,7 @@ var GroveStreet1 = function (_GroveStreetTemplate) {
 exports.GroveStreet1 = GroveStreet1;
 
 
-},{"../islands":26,"./grovestreethouse":25}],22:[function(require,module,exports){
+},{"../islands":26,"./grovestreethouse":24}],21:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1999,7 +1924,7 @@ var GroveStreet2 = function (_GroveStreetTemplate) {
 exports.GroveStreet2 = GroveStreet2;
 
 
-},{"../islands":26,"./grovestreethouse":25}],23:[function(require,module,exports){
+},{"../islands":26,"./grovestreethouse":24}],22:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2062,7 +1987,7 @@ var GroveStreet3 = function (_GroveStreetTemplate) {
 exports.GroveStreet3 = GroveStreet3;
 
 
-},{"../islands":26,"./grovestreethouse":25}],24:[function(require,module,exports){
+},{"../islands":26,"./grovestreethouse":24}],23:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2125,7 +2050,7 @@ var GroveStreet4 = function (_GroveStreetTemplate) {
 exports.GroveStreet4 = GroveStreet4;
 
 
-},{"../islands":26,"./grovestreethouse":25}],25:[function(require,module,exports){
+},{"../islands":26,"./grovestreethouse":24}],24:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2189,7 +2114,70 @@ var GroveStreetTemplate = function (_ParadiseInterior) {
 exports.GroveStreetTemplate = GroveStreetTemplate;
 
 
-},{"../../paradise_locale":35}],26:[function(require,module,exports){
+},{"../../paradise_locale":36}],25:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.TownHall = undefined;
+
+var _village = require('../village');
+
+var _grovestreethouse = require('./grovestreethouse');
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  XL RPG/Locales/Town Hall
+   *  XL Gaming/Declan Tyson
+   *  v0.0.25
+   *  07/02/2018
+   *
+   */
+
+var TownHall = function (_GroveStreetTemplate) {
+    _inherits(TownHall, _GroveStreetTemplate);
+
+    function TownHall(player, people, inhabitance) {
+        _classCallCheck(this, TownHall);
+
+        var _this = _possibleConstructorReturn(this, (TownHall.__proto__ || Object.getPrototypeOf(TownHall)).call(this, player, people, inhabitance));
+
+        _this.id = 'TownHall';
+        _this.entryPoints.frontDoor = { x: 48, y: 48 };
+
+        _this.entrances[49][48] = {
+            locale: new _village.Village(player, people),
+            entryPoint: 'townHall'
+        };
+
+        _this.terrainPaint(49, 48, 1, 1, 'WoodenFloor');
+        return _this;
+    }
+
+    return TownHall;
+}(_grovestreethouse.GroveStreetTemplate);
+
+exports.TownHall = TownHall;
+
+
+},{"../village":28,"./grovestreethouse":24}],26:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2265,17 +2253,13 @@ var Islands = function (_ParadiseLocale) {
 exports.Islands = Islands;
 
 
-},{"../engine/locale":6,"../paradise_locale":35}],27:[function(require,module,exports){
+},{"../engine/locale":6,"../paradise_locale":36}],27:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.chooseStartingMap = exports.locales = exports.startingMaps = undefined;
-
-var _util = require('../engine/util');
-
-var util = _interopRequireWildcard(_util);
+exports.locales = exports.startingMaps = undefined;
 
 var _village = require('./village');
 
@@ -2289,17 +2273,7 @@ var _grovestreet3 = require('./interiors/3grovestreet');
 
 var _grovestreet4 = require('./interiors/4grovestreet');
 
-function _interopRequireWildcard(obj) {
-    if (obj && obj.__esModule) {
-        return obj;
-    } else {
-        var newObj = {};if (obj != null) {
-            for (var key in obj) {
-                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
-            }
-        }newObj.default = obj;return newObj;
-    }
-}
+var _townhall = require('./interiors/townhall');
 
 var startingMaps = exports.startingMaps = {
     'Village': _village.Village,
@@ -2308,12 +2282,10 @@ var startingMaps = exports.startingMaps = {
     *
     *  XL RPG/Locales
     *  XL Gaming/Declan Tyson
-    *  v0.0.20
-    *  06/02/2018
+    *  v0.0.25
+    *  07/02/2018
     *
     */
-
-// Locales
 
 var locales = exports.locales = {
     'Village': _village.Village,
@@ -2321,18 +2293,12 @@ var locales = exports.locales = {
     'GroveStreet1': _grovestreet.GroveStreet1,
     'GroveStreet2': _grovestreet2.GroveStreet2,
     'GroveStreet3': _grovestreet3.GroveStreet3,
-    'GroveStreet4': _grovestreet4.GroveStreet4
-};
-
-var chooseStartingMap = exports.chooseStartingMap = function chooseStartingMap() {
-    var locale = util.pickRandomProperty(startingMaps);
-    util.log('Choosing starting map...');
-    util.log('Map is ' + locale + '.');
-    return locale;
+    'GroveStreet4': _grovestreet4.GroveStreet4,
+    'TownHall': _townhall.TownHall
 };
 
 
-},{"../engine/util":12,"./interiors/1grovestreet":21,"./interiors/2grovestreet":22,"./interiors/3grovestreet":23,"./interiors/4grovestreet":24,"./islands":26,"./village":28}],28:[function(require,module,exports){
+},{"./interiors/1grovestreet":20,"./interiors/2grovestreet":21,"./interiors/3grovestreet":22,"./interiors/4grovestreet":23,"./interiors/townhall":25,"./islands":26,"./village":28}],28:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2340,7 +2306,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Village = undefined;
 
+var _locale = require('../engine/locale');
+
 var _paradise_locale = require('../paradise_locale');
+
+var _townhall = require('./interiors/townhall');
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -2362,8 +2332,8 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Locales/Village
    *  XL Gaming/Declan Tyson
-   *  v0.0.23
-   *  06/02/2018
+   *  v0.0.25
+   *  07/02/2018
    *
    */
 
@@ -2376,6 +2346,7 @@ var Village = function (_ParadiseLocale) {
         var _this = _possibleConstructorReturn(this, (Village.__proto__ || Object.getPrototypeOf(Village)).call(this, player, people));
 
         _this.entryPoints.beginningOfGame = { x: 30, y: 30 };
+        _this.entryPoints.townHall = { x: 31, y: 62 };
 
         _this.initialise(300, 300);
 
@@ -2384,6 +2355,11 @@ var Village = function (_ParadiseLocale) {
         _this.terrainPaint(35, 35, 2, 40, 'Grass');
         _this.terrainPaint(37, 37, 2, 36, 'Grass');
         _this.terrainPaint(39, 39, 2, 32, 'Grass');
+
+        _this.inhabitances.push(new _locale.Inhabitance('TownHall', 'Town Hall', 30, 59, { x: 31, y: 62 }, 2, 4));
+
+        _this.drawInhabitances();
+        _this.assignPeopleToInhabitances();
         return _this;
     }
 
@@ -2393,7 +2369,7 @@ var Village = function (_ParadiseLocale) {
 exports.Village = Village;
 
 
-},{"../paradise_locale":35}],29:[function(require,module,exports){
+},{"../engine/locale":6,"../paradise_locale":36,"./interiors/townhall":25}],29:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2401,7 +2377,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.InheritanceScam = undefined;
 
-var _motives = require('./motives');
+var _motive = require('./motive');
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -2423,8 +2399,8 @@ function _inherits(subClass, superClass) {
    *
    *  CODENAME: Paradise/Motives/Inheritance Scam
    *  XL Gaming/Declan Tyson
-   *  v0.0.24
-   *  06/02/2018
+   *  v0.0.25
+   *  07/02/2018
    *
    */
 
@@ -2446,12 +2422,12 @@ var InheritanceScam = function (_Motive) {
     }
 
     return InheritanceScam;
-}(_motives.Motive);
+}(_motive.Motive);
 
 exports.InheritanceScam = InheritanceScam;
 
 
-},{"./motives":30}],30:[function(require,module,exports){
+},{"./motive":30}],30:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2476,10 +2452,10 @@ function _classCallCheck(instance, Constructor) {
 
 /*
  *
- *  CODENAME: Paradise/Motives
+ *  CODENAME: Paradise/Motive
  *  XL Gaming/Declan Tyson
- *  v0.0.24
- *  06/02/2018
+ *  v0.0.25
+ *  07/02/2018
  *
  */
 
@@ -2508,6 +2484,34 @@ exports.Motive = Motive;
 
 
 },{}],31:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.motives = undefined;
+
+var _psychosis = require("./psychosis");
+
+var _inheritancescam = require("./inheritancescam");
+
+var _passion = require("./passion");
+
+var motives = exports.motives = {
+  'InheritanceScam': _inheritancescam.InheritanceScam,
+  'Passion': _passion.Passion,
+  'Psychosis': _psychosis.Psychosis
+}; /*
+    *
+    *  CODENAME: Paradise/Motives
+    *  XL Gaming/Declan Tyson
+    *  v0.0.25
+    *  07/02/2018
+    *
+    */
+
+
+},{"./inheritancescam":29,"./passion":32,"./psychosis":33}],32:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2515,7 +2519,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Passion = undefined;
 
-var _motives = require('./motives');
+var _motive = require('./motive');
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -2537,8 +2541,8 @@ function _inherits(subClass, superClass) {
    *
    *  CODENAME: Paradise/Motives/Inheritance Scam
    *  XL Gaming/Declan Tyson
-   *  v0.0.24
-   *  06/02/2018
+   *  v0.0.25
+   *  07/02/2018
    *
    */
 
@@ -2560,12 +2564,12 @@ var Passion = function (_Motive) {
     }
 
     return Passion;
-}(_motives.Motive);
+}(_motive.Motive);
 
 exports.Passion = Passion;
 
 
-},{"./motives":30}],32:[function(require,module,exports){
+},{"./motive":30}],33:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2573,7 +2577,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Psychosis = undefined;
 
-var _motives = require('./motives');
+var _motive = require('./motive');
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -2595,8 +2599,8 @@ function _inherits(subClass, superClass) {
    *
    *  CODENAME: Paradise/Motives/Inheritance Scam
    *  XL Gaming/Declan Tyson
-   *  v0.0.24
-   *  06/02/2018
+   *  v0.0.25
+   *  07/02/2018
    *
    */
 
@@ -2628,12 +2632,12 @@ var Psychosis = function (_Motive) {
     }
 
     return Psychosis;
-}(_motives.Motive);
+}(_motive.Motive);
 
 exports.Psychosis = Psychosis;
 
 
-},{"./motives":30}],33:[function(require,module,exports){
+},{"./motive":30}],34:[function(require,module,exports){
 'use strict';
 
 var _util = require('./engine/util');
@@ -2646,15 +2650,11 @@ var _player = require('./engine/player');
 
 var _paradise_worldmap = require('./paradise_worldmap');
 
-var _people = require('./people/people');
+var _paradise_setup = require('./paradise_setup');
 
-var _people2 = require('./engine/people');
+var _people = require('./engine/people');
 
 var _locales = require('./locales/locales');
-
-var _evidences = require('./evidence/evidences');
-
-var _murderweapons = require('./evidence/murderweapons');
 
 function _interopRequireWildcard(obj) {
     if (obj && obj.__esModule) {
@@ -2671,19 +2671,20 @@ function _interopRequireWildcard(obj) {
 window.startGame = function (locale, people, victim, murderer, weapon, motive) {
     util.clearLog();
 
-    locale = _locales.startingMaps[locale] || _locales.startingMaps[(0, _locales.chooseStartingMap)()];
-    people = people || (0, _people2.choosePeople)();
+    locale = _locales.startingMaps[locale] || _locales.startingMaps[(0, _paradise_setup.chooseStartingMap)()];
+    people = people || (0, _people.choosePeople)();
     var player = new _player.Player(),
         worldMap = new _paradise_worldmap.ParadiseWorldMap(player);
 
     window.game = (0, _game.StartGame)(locale, people, player, worldMap);
 
-    window.game.victim = victim || (0, _people.chooseVictim)(people);
-    window.game.murderer = murderer || (0, _people.chooseMurderer)(window.game.victim, people);
-    window.game.weapon = weapon || (0, _murderweapons.chooseMurderWeapon)();
-    window.game.motive = motive || (0, _people.chooseMotive)(window.game.victim, window.game.murderer);
+    window.game.victim = victim || (0, _paradise_setup.chooseVictim)(people);
+    console.log(window.game.victim);
 
-    window.game.evidence = (0, _evidences.chooseEvidence)(game);
+    window.game.murderer = murderer || (0, _paradise_setup.chooseMurderer)(window.game.victim, people);
+    window.game.weapon = weapon || (0, _paradise_setup.chooseMurderWeapon)();
+    window.game.motive = motive || (0, _paradise_setup.chooseMotive)(window.game.victim, window.game.murderer);
+    window.game.evidence = (0, _paradise_setup.chooseEvidence)(game);
 
     util.log('Evidence includes:');
     window.game.evidence.forEach(function (e) {
@@ -2697,13 +2698,13 @@ window.startGame = function (locale, people, victim, murderer, weapon, motive) {
     *
     *  CODENAME: Paradise
     *  XL Gaming/Declan Tyson
-    *  v0.0.24
-    *  06/02/2018
+    *  v0.0.25
+    *  07/02/2018
     *
     */
 
 
-},{"./engine/game":2,"./engine/people":7,"./engine/player":9,"./engine/util":12,"./evidence/evidences":15,"./evidence/murderweapons":19,"./locales/locales":27,"./paradise_worldmap":37,"./people/people":43}],34:[function(require,module,exports){
+},{"./engine/game":2,"./engine/people":7,"./engine/player":9,"./engine/util":12,"./locales/locales":27,"./paradise_setup":38,"./paradise_worldmap":39}],35:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2836,7 +2837,7 @@ var ParadiseInteraction = function (_Interaction) {
 exports.ParadiseInteraction = ParadiseInteraction;
 
 
-},{"./constants":1,"./engine/interaction":4,"./engine/util":12}],35:[function(require,module,exports){
+},{"./constants":1,"./engine/interaction":4,"./engine/util":12}],36:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2921,7 +2922,7 @@ exports.ParadiseInterior = ParadiseInterior;
 exports.ParadiseLocale = ParadiseLocale;
 
 
-},{"./engine/locale":6,"./engine/util":12}],36:[function(require,module,exports){
+},{"./engine/locale":6,"./engine/util":12}],37:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2990,7 +2991,169 @@ var ParadisePerson = function (_Person) {
 exports.ParadisePerson = ParadisePerson;
 
 
-},{"./engine/person":8,"./engine/util":12}],37:[function(require,module,exports){
+},{"./engine/person":8,"./engine/util":12}],38:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.chooseMurderWeapon = exports.chooseEvidence = exports.chooseStartingMap = exports.chooseMotive = exports.chooseMurderer = exports.chooseVictim = undefined;
+
+var _util = require("./engine/util");
+
+var util = _interopRequireWildcard(_util);
+
+var _people = require("./people/people");
+
+var _locales = require("./locales/locales");
+
+var _constants = require("./constants");
+
+var _murderweapons = require("./evidence/murderweapons");
+
+var _motives = require("./motives/motives");
+
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) {
+        return obj;
+    } else {
+        var newObj = {};if (obj != null) {
+            for (var key in obj) {
+                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+            }
+        }newObj.default = obj;return newObj;
+    }
+}
+
+var chooseVictim = exports.chooseVictim = function chooseVictim(chosenPeople) {
+    var victim = chosenPeople[util.dieRoll(chosenPeople.length - 1)];
+    util.log(victim + " is the unlucky one.");
+    return victim;
+}; /*
+    *
+    *  CODENAME: Paradise/Setup
+    *  XL Gaming/Declan Tyson
+    *  v0.0.25
+    *  07/02/2018
+    *
+    */
+
+var chooseMurderer = exports.chooseMurderer = function chooseMurderer(victimName, chosenPeople) {
+    var trueRandom = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
+    var victim = new _people.people[victimName]();
+    chosenPeople.forEach(function (person) {
+        if (victim.name === person.name) return;
+        if (!(person in victim.relationships)) victim.addAcquaintanceRelationship(person);
+    });
+
+    if (trueRandom) v.randomizeRelationships();
+
+    /*
+     * Each relationship has a score of 0-99 (x)
+     * We loop through each relationship, taking (x) away from 100
+     * We then assign a random number between 1 and 100
+     * If the random number is in the range of 100-(x), that's our murderer
+     */
+
+    /* jshint ignore:start */
+    var murderer = null,
+        relationship = null;
+    while (murderer === null) {
+        Object.keys(victim.relationships).forEach(function (name) {
+            if (murderer !== null) return;
+            if (name === victim.name) return;
+
+            relationship = victim.relationships[name];
+            var limit = 100 - relationship.value,
+                test = Math.floor(Math.random() * 100);
+
+            if (test < limit) murderer = name;
+        });
+    }
+    /* jshint ignore:end */
+
+    util.log(victim.name + "'s murderer is " + _constants.posessivePronouns[victim.gender] + " " + relationship.description + ", " + murderer + "!!!");
+
+    return murderer;
+};
+
+var chooseMotive = exports.chooseMotive = function chooseMotive(victimKey, murderer) {
+    var potentialMotives = [],
+        victim = new _people.people[victimKey]();
+
+    if (!(murderer in victim.relationships)) victim.addAcquaintanceRelationship(murderer);
+
+    var relationship = victim.relationships[murderer];
+
+    Object.keys(_motives.motives).forEach(function (motiveKey) {
+        var motive = new _motives.motives[motiveKey]();
+
+        if (relationship.description in motive.relationshipBiases) {
+            for (var i = 0; i < motive.relationshipBiases[relationship.description]; i++) {
+                potentialMotives.push(motive);
+            }
+        }
+    });
+
+    var motive = potentialMotives[util.dieRoll(potentialMotives.length)].name;
+    util.log("The motive was " + motive + ".");
+    return motive;
+};
+
+var chooseStartingMap = exports.chooseStartingMap = function chooseStartingMap() {
+    var locale = util.pickRandomProperty(_locales.startingMaps);
+    util.log('Choosing starting map...');
+    util.log("Map is " + locale + ".");
+    return locale;
+};
+
+var chooseEvidence = exports.chooseEvidence = function chooseEvidence(game) {
+    var evidences = [],
+        weapon = whatHappensToTheWeapon(game);
+
+    if (weapon) evidences.push(weapon);
+
+    return evidences;
+};
+
+var chooseMurderWeapon = exports.chooseMurderWeapon = function chooseMurderWeapon() {
+    var weapon = util.pickRandomProperty(_murderweapons.murderWeapons);
+    util.log("The murder weapon is a " + weapon + ".");
+    return weapon;
+};
+
+var whatHappensToTheWeapon = function whatHappensToTheWeapon(game) {
+    var weapon = null,
+        inhabitances = game.scene.locale.inhabitances,
+        implicates = game.murderer,
+        inhabitanceIndex = (0, _util.dieRoll)(inhabitances.length - 1);
+
+    if (util.dieRoll(10) === 0) implicates = false; // Muddied evidence - also TODO hard mode
+
+    switch (util.dieRoll(3)) {
+        case 0:
+            // On the victim
+            weapon = new _murderweapons.murderWeapons[game.weapon](implicates, game.victim);
+            break;
+        case 1:
+            // In the murderer's inhabitance
+            inhabitances.forEach(function (inhabitance, index) {
+                if (inhabitance.inhabitants.indexOf(game.murderer) !== -1) inhabitanceIndex = index;
+            });
+            weapon = new _murderweapons.murderWeapons[game.weapon](implicates, game.scene.locale.inhabitances[inhabitanceIndex].id);
+            break;
+        case 2:
+            // Randomly hidden
+            weapon = new _murderweapons.murderWeapons[game.weapon](implicates, game.scene.locale.inhabitances[inhabitanceIndex].id);
+            break;
+    }
+
+    return weapon;
+};
+
+
+},{"./constants":1,"./engine/util":12,"./evidence/murderweapons":18,"./locales/locales":27,"./motives/motives":31,"./people/people":45}],39:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3114,7 +3277,7 @@ var ParadiseWorldMap = function (_WorldMap) {
 exports.ParadiseWorldMap = ParadiseWorldMap;
 
 
-},{"./engine/util":12,"./engine/worldmap":13,"./paradise_interaction":34,"./people/people":43}],38:[function(require,module,exports){
+},{"./engine/util":12,"./engine/worldmap":13,"./paradise_interaction":35,"./people/people":45}],40:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3166,7 +3329,7 @@ var Evelyn = function (_ParadisePerson) {
 exports.Evelyn = Evelyn;
 
 
-},{"../constants":1,"../paradise_person":36}],39:[function(require,module,exports){
+},{"../constants":1,"../paradise_person":37}],41:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3226,7 +3389,7 @@ var Jill = function (_ParadisePerson) {
 exports.Jill = Jill;
 
 
-},{"../constants":1,"../paradise_person":36}],40:[function(require,module,exports){
+},{"../constants":1,"../paradise_person":37}],42:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3286,7 +3449,7 @@ var John = function (_ParadisePerson) {
 exports.John = John;
 
 
-},{"../constants":1,"../paradise_person":36}],41:[function(require,module,exports){
+},{"../constants":1,"../paradise_person":37}],43:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3338,7 +3501,7 @@ var Neil = function (_ParadisePerson) {
 exports.Neil = Neil;
 
 
-},{"../constants":1,"../paradise_person":36}],42:[function(require,module,exports){
+},{"../constants":1,"../paradise_person":37}],44:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3390,19 +3553,13 @@ var Pauline = function (_ParadisePerson) {
 exports.Pauline = Pauline;
 
 
-},{"../constants":1,"../paradise_person":36}],43:[function(require,module,exports){
+},{"../constants":1,"../paradise_person":37}],45:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.chooseMotive = exports.chooseMurderer = exports.chooseVictim = exports.motives = exports.people = undefined;
-
-var _util = require('../engine/util');
-
-var util = _interopRequireWildcard(_util);
-
-var _constants = require('../constants');
+exports.people = undefined;
 
 var _evelyn = require('./evelyn');
 
@@ -3420,23 +3577,14 @@ var _quazar = require('./quazar');
 
 var _zenith = require('./zenith');
 
-var _inheritancescam = require('../motives/inheritancescam');
-
-var _passion = require('../motives/passion');
-
-var _psychosis = require('../motives/psychosis');
-
-function _interopRequireWildcard(obj) {
-    if (obj && obj.__esModule) {
-        return obj;
-    } else {
-        var newObj = {};if (obj != null) {
-            for (var key in obj) {
-                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
-            }
-        }newObj.default = obj;return newObj;
-    }
-}
+/*
+ *
+ *  CODENAME: Paradise/People
+ *  XL Gaming/Declan Tyson
+ *  v0.0.25
+ *  07/02/2018
+ *
+ */
 
 var people = exports.people = {
     'Evelyn': _evelyn.Evelyn,
@@ -3447,94 +3595,10 @@ var people = exports.people = {
     'Petey': _petey.Petey,
     'Quazar': _quazar.Quazar,
     'Zenith': _zenith.Zenith
-}; /*
-    *
-    *  CODENAME: Paradise/People
-    *  XL Gaming/Declan Tyson
-    *  v0.0.24
-    *  06/02/2018
-    *
-    */
-
-// People
-
-var motives = exports.motives = {
-    'InheritanceScam': _inheritancescam.InheritanceScam,
-    'Passion': _passion.Passion,
-    'Psychosis': _psychosis.Psychosis
-};
-
-var chooseVictim = exports.chooseVictim = function chooseVictim(chosenPeople) {
-    var victim = util.dieRoll(chosenPeople.length - 1);
-    util.log(victim + ' is the unlucky one.');
-    return victim;
-};
-
-var chooseMurderer = exports.chooseMurderer = function chooseMurderer(victimName, chosenPeople) {
-    var trueRandom = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
-
-    var victim = new people[victimName]();
-    chosenPeople.forEach(function (person) {
-        if (victim.name === person.name) return;
-        if (!(person in victim.relationships)) victim.addAcquaintanceRelationship(person);
-    });
-
-    if (trueRandom) v.randomizeRelationships();
-
-    /*
-     * Each relationship has a score of 0-99 (x)
-     * We loop through each relationship, taking (x) away from 100
-     * We then assign a random number between 1 and 100
-     * If the random number is in the range of 100-(x), that's our murderer
-     */
-
-    /* jshint ignore:start */
-    var murderer = null,
-        relationship = null;
-    while (murderer === null) {
-        Object.keys(victim.relationships).forEach(function (name) {
-            if (murderer !== null) return;
-            if (name === victim.name) return;
-
-            relationship = victim.relationships[name];
-            var limit = 100 - relationship.value,
-                test = Math.floor(Math.random() * 100);
-
-            if (test < limit) murderer = name;
-        });
-    }
-    /* jshint ignore:end */
-
-    util.log(victim.name + '\'s murderer is ' + _constants.posessivePronouns[victim.gender] + ' ' + relationship.description + ', ' + murderer + '!!!');
-
-    return murderer;
-};
-
-var chooseMotive = exports.chooseMotive = function chooseMotive(victimKey, murderer) {
-    var potentialMotives = [],
-        victim = new people[victimKey]();
-
-    if (!(murderer in victim.relationships)) victim.addAcquaintanceRelationship(murderer);
-
-    var relationship = victim.relationships[murderer];
-
-    Object.keys(motives).forEach(function (motiveKey) {
-        var motive = new motives[motiveKey]();
-
-        if (relationship.description in motive.relationshipBiases) {
-            for (var i = 0; i < motive.relationshipBiases[relationship.description]; i++) {
-                potentialMotives.push(motive);
-            }
-        }
-    });
-
-    var motive = potentialMotives[util.dieRoll(potentialMotives.length)].name;
-    util.log('The motive was ' + motive + '.');
-    return motive;
 };
 
 
-},{"../constants":1,"../engine/util":12,"../motives/inheritancescam":29,"../motives/passion":31,"../motives/psychosis":32,"./evelyn":38,"./jill":39,"./john":40,"./neil":41,"./pauline":42,"./petey":44,"./quazar":45,"./zenith":46}],44:[function(require,module,exports){
+},{"./evelyn":40,"./jill":41,"./john":42,"./neil":43,"./pauline":44,"./petey":46,"./quazar":47,"./zenith":48}],46:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3586,7 +3650,7 @@ var Petey = function (_ParadisePerson) {
 exports.Petey = Petey;
 
 
-},{"../constants":1,"../paradise_person":36}],45:[function(require,module,exports){
+},{"../constants":1,"../paradise_person":37}],47:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3647,7 +3711,7 @@ var Quazar = function (_ParadisePerson) {
 exports.Quazar = Quazar;
 
 
-},{"../constants":1,"../paradise_person":36}],46:[function(require,module,exports){
+},{"../constants":1,"../paradise_person":37}],48:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3708,4 +3772,4 @@ var Zenith = function (_ParadisePerson) {
 exports.Zenith = Zenith;
 
 
-},{"../constants":1,"../paradise_person":36}]},{},[1,34,35,36,37,33]);
+},{"../constants":1,"../paradise_person":37}]},{},[1,35,36,37,38,39,34]);

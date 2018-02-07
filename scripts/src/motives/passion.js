@@ -2,12 +2,12 @@
  *
  *  CODENAME: Paradise/Motives/Inheritance Scam
  *  XL Gaming/Declan Tyson
- *  v0.0.24
- *  06/02/2018
+ *  v0.0.25
+ *  07/02/2018
  *
  */
 
-import { Motive } from './motives';
+import { Motive } from './motive';
 
 class Passion extends Motive {
     constructor() {

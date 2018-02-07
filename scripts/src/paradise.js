@@ -2,8 +2,8 @@
  *
  *  CODENAME: Paradise
  *  XL Gaming/Declan Tyson
- *  v0.0.24
- *  06/02/2018
+ *  v0.0.25
+ *  07/02/2018
  *
  */
 
@@ -11,14 +11,10 @@ import * as util from './engine/util';
 
 import { StartGame } from './engine/game';
 import { Player } from './engine/player';
-
 import { ParadiseWorldMap } from './paradise_worldmap';
-
-import { chooseMotive, chooseMurderer, chooseVictim } from './people/people';
+import { chooseMotive, chooseMurderer, chooseVictim, chooseStartingMap, chooseMurderWeapon, chooseEvidence } from './paradise_setup';
 import { choosePeople } from './engine/people';
-import { chooseStartingMap, startingMaps } from './locales/locales';
-import { chooseEvidence } from './evidence/evidences';
-import {chooseMurderWeapon, murderWeapons} from './evidence/murderweapons';
+import { startingMaps } from "./locales/locales";
 
 window.startGame = (locale, people, victim, murderer, weapon, motive) => {
     util.clearLog();
@@ -31,10 +27,11 @@ window.startGame = (locale, people, victim, murderer, weapon, motive) => {
     window.game = StartGame(locale, people, player, worldMap);
 
     window.game.victim = victim || chooseVictim(people);
+    console.log(window.game.victim);
+
     window.game.murderer = murderer || chooseMurderer(window.game.victim, people);
     window.game.weapon = weapon || chooseMurderWeapon();
     window.game.motive = motive || chooseMotive(window.game.victim, window.game.murderer);
-
     window.game.evidence = chooseEvidence(game);
 
     util.log('Evidence includes:');

@@ -2,23 +2,17 @@
  *
  *  CODENAME: Paradise/Motives
  *  XL Gaming/Declan Tyson
- *  v0.0.24
- *  06/02/2018
+ *  v0.0.25
+ *  07/02/2018
  *
  */
 
-class Motive {
-    constructor(name, description, evidence) {
-        this.name = name;
-        this.description = description;
-        this.evidence = evidence;
+import { Psychosis } from "./psychosis";
+import { InheritanceScam } from "./inheritancescam";
+import { Passion } from "./passion";
 
-        this.relationshipBiases = {};
-    }
-
-    addRelationshipBias(relationshipName, value) {
-        this.relationshipBiases[relationshipName] = value;
-    }
-}
-
-export { Motive };
+export let motives = {
+    'InheritanceScam' : InheritanceScam,
+    'Passion' : Passion,
+    'Psychosis' : Psychosis
+};

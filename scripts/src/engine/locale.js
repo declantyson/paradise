@@ -2,13 +2,13 @@
  *
  *  XL RPG/Locales/Base
  *  XL Gaming/Declan Tyson
- *  v0.0.20
- *  05/02/2018
+ *  v0.0.25
+ *  07/02/2018
  *
  */
 
 import * as util from './util';
-import {colours, inhabitanceSize, tileSize} from '../constants';
+import { defaultInhabitanceSize } from '../constants';
 
 class Locale {
     constructor(player, people) {
@@ -77,7 +77,7 @@ class Locale {
     drawInhabitances() {
         for(let i = 0; i < this.inhabitances.length; i++) {
             let inhabitance = this.inhabitances[i];
-            this.addInhabitance(inhabitance.x, inhabitance.y, inhabitanceSize, inhabitanceSize, inhabitance);
+            this.addInhabitance(inhabitance.x, inhabitance.y, inhabitance.sizeX, inhabitance.sizeY, inhabitance);
         }
     }
 
@@ -108,13 +108,15 @@ class Interior extends Locale {
 }
 
 class Inhabitance {
-    constructor(id, name, x, y, doorway) {
+    constructor(id, name, x, y, doorway, sizeX = defaultInhabitanceSize, sizeY = defaultInhabitanceSize) {
         this.id = id;
         this.name = name;
         this.x = x;
         this.y = y;
         this.doorway = doorway;
         this.inhabitants = [];
+        this.sizeX = sizeX;
+        this.sizeY = sizeY;
     }
 
     addInhabitant(person) {

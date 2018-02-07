@@ -79,4 +79,4 @@ export const posessivePronouns = {
 };
 
 export const personCount = 4;
-export const inhabitanceSize = 2;
+export const defaultInhabitanceSize = 2;
