@@ -2,7 +2,7 @@
  *
  *  CODENAME: Paradise/Setup
  *  XL Gaming/Declan Tyson
- *  v0.0.25
+ *  v0.0.26
  *  07/02/2018
  *
  */
@@ -10,8 +10,9 @@
 import * as util from "./engine/util";
 import { people } from "./people/people";
 import { startingMaps } from "./locales/locales";
-import { posessivePronouns } from "./constants";
+import { evidenceCount, herrings, posessivePronouns } from "./constants";
 import { murderWeapons } from "./evidence/murderweapons";
+import { evidences } from "./evidence/evidences";
 import { motives } from "./motives/motives";
 import { dieRoll } from "./engine/util";
 
@@ -72,12 +73,12 @@ export const chooseMotive = (victimKey, murderer) => {
 
         if(relationship.description in motive.relationshipBiases) {
             for(let i = 0; i < motive.relationshipBiases[relationship.description]; i++) {
-                potentialMotives.push(motive);
+                potentialMotives.push(motiveKey);
             }
         }
     });
 
-    let motive = potentialMotives[util.dieRoll(potentialMotives.length)].name;
+    let motive = potentialMotives[util.dieRoll(potentialMotives.length)];
     util.log(`The motive was ${motive}.`);
     return motive;
 };
@@ -90,12 +91,37 @@ export const chooseStartingMap = () => {
 };
 
 export const chooseEvidence = (game) => {
-    let evidences = [],
+    let potentialEvidence = [],
+        chosenEvidenceKeys = [],
+        chosenEvidence = [],
         weapon = whatHappensToTheWeapon(game);
 
-    if(weapon) evidences.push(weapon);
+    if(weapon) chosenEvidence.push(weapon);
 
-    return evidences;
+    Object.keys(evidences).forEach((evidenceKey) => {
+        let evidence = new evidences[evidenceKey](game.murderer);
+
+        if(game.motive in evidence.motiveBiases) {
+            for(let i = 0; i < evidence.motiveBiases[game.motive]; i++) {
+                potentialEvidence.push(evidenceKey);
+            }
+        }
+    });
+
+    while(chosenEvidenceKeys.length < evidenceCount) {
+        let evidence = potentialEvidence[util.dieRoll(potentialEvidence.length)];
+        if(chosenEvidenceKeys.indexOf(evidence) === -1) chosenEvidenceKeys.push(evidence);
+    }
+
+    for(let i = 0; i < chosenEvidenceKeys.length; i++) {
+        let incriminates = game.murderer;
+        if(i < herrings) incriminates = randomInnocentPerson(game);
+
+        let evidence = new evidences[chosenEvidenceKeys[i]](incriminates, game.victim);
+        chosenEvidence.push(evidence);
+    }
+
+    return chosenEvidence;
 };
 
 export const chooseMurderWeapon = () => {
@@ -132,4 +158,15 @@ const whatHappensToTheWeapon = (game) => {
     }
 
     return weapon;
+};
+
+
+export const randomInnocentPerson = (game) => {
+    let person = false;
+    while(!person) {
+        person = game.people[util.dieRoll(game.people.length - 1)];
+        if(person === game.murderer || person === game.victim) person = false;
+    }
+
+    return person;
 };

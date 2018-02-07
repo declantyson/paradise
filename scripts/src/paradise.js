@@ -2,7 +2,7 @@
  *
  *  CODENAME: Paradise
  *  XL Gaming/Declan Tyson
- *  v0.0.25
+ *  v0.0.26
  *  07/02/2018
  *
  */
@@ -21,15 +21,14 @@ window.startGame = (locale, people, victim, murderer, weapon, motive) => {
 
     locale = startingMaps[locale] || startingMaps[chooseStartingMap()];
     people = people || choosePeople();
+
     let player = new Player(),
         worldMap = new ParadiseWorldMap(player);
 
     window.game = StartGame(locale, people, player, worldMap);
-
-    window.game.victim = victim || chooseVictim(people);
-    console.log(window.game.victim);
-
-    window.game.murderer = murderer || chooseMurderer(window.game.victim, people);
+    window.game.people = people;
+    window.game.victim = victim || chooseVictim(window.game.people);
+    window.game.murderer = murderer || chooseMurderer(window.game.victim, window.game.people);
     window.game.weapon = weapon || chooseMurderWeapon();
     window.game.motive = motive || chooseMotive(window.game.victim, window.game.murderer);
     window.game.evidence = chooseEvidence(game);

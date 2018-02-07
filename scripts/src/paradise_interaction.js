@@ -2,8 +2,8 @@
  *
  *  CODENAME: Paradise/Scene-Interaction
  *  XL Gaming/Declan Tyson
- *  v0.0.22
- *  06/02/2018
+ *  v0.0.26
+ *  07/02/2018
  *
  */
 
@@ -25,9 +25,7 @@ class ParadiseInteraction extends Interaction {
 
             lines.push(`${person.name} is dead.`);
             person.evidence.forEach((evidence) => {
-                if(evidence.name === weapon) {
-                    lines.push(`Lying next to ${pronouns[person.gender]} is ${evidence.description}.`);
-                }
+                lines.push(`Lying next to ${pronouns[person.gender]} is ${evidence.description}.`);
             });
 
             for(let i = 0; i < lines.length; i++) this.lines.push(lines[i]);

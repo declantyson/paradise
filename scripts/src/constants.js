@@ -2,8 +2,8 @@
  *
  *  XL RPG/Constants
  *  XL Gaming/Declan Tyson
- *  v0.0.22
- *  06/02/2018
+ *  v0.0.26
+ *  07/02/2018
  *
  */
 
@@ -79,4 +79,6 @@ export const posessivePronouns = {
 };
 
 export const personCount = 4;
+export const evidenceCount = 3;
+export const herrings = 1;
 export const defaultInhabitanceSize = 2;

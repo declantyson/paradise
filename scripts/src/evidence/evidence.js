@@ -2,8 +2,8 @@
  *
  *  CODENAME: Paradise/Evidence
  *  XL Gaming/Declan Tyson
- *  v0.0.23
- *  06/02/2018
+ *  v0.0.26
+ *  07/02/2018
  *
  */
 
@@ -16,6 +16,15 @@ class Evidence extends Item {
         super(name, description);
 
         this.incriminates = incriminates;
+        this.location = location;
+        this.motiveBiases = {};
+    }
+
+    addMotiveBias(motiveName, value) {
+        this.motiveBiases[motiveName] = value;
+    }
+
+    setLocation(location) {
         this.location = location;
     }
 }

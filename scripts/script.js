@@ -8,8 +8,8 @@ Object.defineProperty(exports, "__esModule", {
  *
  *  XL RPG/Constants
  *  XL Gaming/Declan Tyson
- *  v0.0.22
- *  06/02/2018
+ *  v0.0.26
+ *  07/02/2018
  *
  */
 
@@ -85,6 +85,8 @@ var posessivePronouns = exports.posessivePronouns = {
 };
 
 var personCount = exports.personCount = 4;
+var evidenceCount = exports.evidenceCount = 3;
+var herrings = exports.herrings = 1;
 var defaultInhabitanceSize = exports.defaultInhabitanceSize = 2;
 
 
@@ -705,7 +707,7 @@ var choosePeople = exports.choosePeople = function choosePeople() {
     */
 
 
-},{"../constants":1,"../people/people":45,"./util":12}],8:[function(require,module,exports){
+},{"../constants":1,"../people/people":53,"./util":12}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1484,13 +1486,186 @@ var WorldMap = function (_Scene) {
 exports.WorldMap = WorldMap;
 
 
-},{"../constants":1,"../locales/locales":27,"../people/people":45,"./interaction":4,"./scene":10,"./terrain":11}],14:[function(require,module,exports){
+},{"../constants":1,"../locales/locales":35,"../people/people":53,"./interaction":4,"./scene":10,"./terrain":11}],14:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.BloodyFootprint = undefined;
+
+var _evidence = require('./evidence');
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  CODENAME: Paradise/Evidence/Bloody Footprint
+   *  XL Gaming/Declan Tyson
+   *  v0.0.26
+   *  07/02/2018
+   *
+   */
+
+var BloodyFootprint = function (_Evidence) {
+    _inherits(BloodyFootprint, _Evidence);
+
+    function BloodyFootprint(incriminates, location) {
+        _classCallCheck(this, BloodyFootprint);
+
+        var _this = _possibleConstructorReturn(this, (BloodyFootprint.__proto__ || Object.getPrototypeOf(BloodyFootprint)).call(this, 'Bloody Footprint', 'a bloody footprint', incriminates, location));
+
+        _this.addMotiveBias('Psychosis', 40);
+        _this.addMotiveBias('Passion', 20);
+        _this.addMotiveBias('InheritanceScam', 5);
+        return _this;
+    }
+
+    return BloodyFootprint;
+}(_evidence.Evidence);
+
+exports.BloodyFootprint = BloodyFootprint;
+
+
+},{"./evidence":17}],15:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.BloodyShirt = undefined;
+
+var _evidence = require('./evidence');
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  CODENAME: Paradise/Evidence/Bloody Shirt
+   *  XL Gaming/Declan Tyson
+   *  v0.0.26
+   *  07/02/2018
+   *
+   */
+
+var BloodyShirt = function (_Evidence) {
+    _inherits(BloodyShirt, _Evidence);
+
+    function BloodyShirt(incriminates, location) {
+        _classCallCheck(this, BloodyShirt);
+
+        var _this = _possibleConstructorReturn(this, (BloodyShirt.__proto__ || Object.getPrototypeOf(BloodyShirt)).call(this, 'Bloody Shirt', 'a bloody shirt', incriminates, location));
+
+        _this.addMotiveBias('Psychosis', 40);
+        _this.addMotiveBias('Passion', 20);
+        _this.addMotiveBias('InheritanceScam', 5);
+        return _this;
+    }
+
+    return BloodyShirt;
+}(_evidence.Evidence);
+
+exports.BloodyShirt = BloodyShirt;
+
+
+},{"./evidence":17}],16:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.CondomWrapper = undefined;
+
+var _evidence = require('./evidence');
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  CODENAME: Paradise/Evidence/Condom Wrapper
+   *  XL Gaming/Declan Tyson
+   *  v0.0.26
+   *  07/02/2018
+   *
+   */
+
+var CondomWrapper = function (_Evidence) {
+    _inherits(CondomWrapper, _Evidence);
+
+    function CondomWrapper(incriminates, location) {
+        _classCallCheck(this, CondomWrapper);
+
+        var _this = _possibleConstructorReturn(this, (CondomWrapper.__proto__ || Object.getPrototypeOf(CondomWrapper)).call(this, 'Condom Wrapper', 'an open, empty condom wrapper', incriminates, location));
+
+        _this.addMotiveBias('Passion', 30);
+        return _this;
+    }
+
+    return CondomWrapper;
+}(_evidence.Evidence);
+
+exports.CondomWrapper = CondomWrapper;
+
+
+},{"./evidence":17}],17:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.Evidence = undefined;
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
 
 var _util = require('../engine/util');
 
@@ -1530,8 +1705,8 @@ function _inherits(subClass, superClass) {
    *
    *  CODENAME: Paradise/Evidence
    *  XL Gaming/Declan Tyson
-   *  v0.0.23
-   *  06/02/2018
+   *  v0.0.26
+   *  07/02/2018
    *
    */
 
@@ -1545,8 +1720,21 @@ var Evidence = function (_Item) {
 
         _this.incriminates = incriminates;
         _this.location = location;
+        _this.motiveBiases = {};
         return _this;
     }
+
+    _createClass(Evidence, [{
+        key: 'addMotiveBias',
+        value: function addMotiveBias(motiveName, value) {
+            this.motiveBiases[motiveName] = value;
+        }
+    }, {
+        key: 'setLocation',
+        value: function setLocation(location) {
+            this.location = location;
+        }
+    }]);
 
     return Evidence;
 }(_item.Item);
@@ -1554,7 +1742,47 @@ var Evidence = function (_Item) {
 exports.Evidence = Evidence;
 
 
-},{"../engine/item":5,"../engine/util":12}],15:[function(require,module,exports){
+},{"../engine/item":5,"../engine/util":12}],18:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.evidences = undefined;
+
+var _will = require("./will");
+
+var _threateningnote = require("./threateningnote");
+
+var _bloodyfootprint = require("./bloodyfootprint");
+
+var _medication = require("./medication");
+
+var _pregnancytest = require("./pregnancytest");
+
+var _condomwrapper = require("./condomwrapper");
+
+var _bloodyshirt = require("./bloodyshirt");
+
+var evidences = exports.evidences = {
+  'Will': _will.Will,
+  'ThreateningNote': _threateningnote.ThreateningNote,
+  'BloodyFootprint': _bloodyfootprint.BloodyFootprint,
+  'Medication': _medication.Medication,
+  'PregnancyTest': _pregnancytest.PregnancyTest,
+  'CondomWrapper': _condomwrapper.CondomWrapper,
+  'BloodyShirt': _bloodyshirt.BloodyShirt
+}; /*
+    *
+    *  CODENAME: Paradise/Evidences
+    *  XL Gaming/Declan Tyson
+    *  v0.0.26
+    *  07/02/2018
+    *
+    */
+
+
+},{"./bloodyfootprint":14,"./bloodyshirt":15,"./condomwrapper":16,"./medication":21,"./pregnancytest":24,"./threateningnote":26,"./will":27}],19:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1584,7 +1812,7 @@ function _inherits(subClass, superClass) {
    *
    *  CODENAME: Paradise/Handgun
    *  XL Gaming/Declan Tyson
-   *  v0.0.23
+   *  v0.0.26
    *  06/02/2018
    *
    */
@@ -1592,10 +1820,10 @@ function _inherits(subClass, superClass) {
 var Handgun = function (_MurderWeapon) {
     _inherits(Handgun, _MurderWeapon);
 
-    function Handgun(incriminates, locale) {
+    function Handgun(incriminates, location) {
         _classCallCheck(this, Handgun);
 
-        return _possibleConstructorReturn(this, (Handgun.__proto__ || Object.getPrototypeOf(Handgun)).call(this, 'Handgun', 'a handgun, still warm from the recent shot', incriminates, locale));
+        return _possibleConstructorReturn(this, (Handgun.__proto__ || Object.getPrototypeOf(Handgun)).call(this, 'Handgun', 'a handgun, still warm from the recent shot', incriminates, location));
     }
 
     return Handgun;
@@ -1604,7 +1832,7 @@ var Handgun = function (_MurderWeapon) {
 exports.Handgun = Handgun;
 
 
-},{"./murderweapon":17}],16:[function(require,module,exports){
+},{"./murderweapon":22}],20:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1634,7 +1862,7 @@ function _inherits(subClass, superClass) {
    *
    *  CODENAME: Paradise/Knife
    *  XL Gaming/Declan Tyson
-   *  v0.0.23
+   *  v0.0.26
    *  06/02/2018
    *
    */
@@ -1642,10 +1870,10 @@ function _inherits(subClass, superClass) {
 var Knife = function (_MurderWeapon) {
     _inherits(Knife, _MurderWeapon);
 
-    function Knife(incriminates, locale) {
+    function Knife(incriminates, location) {
         _classCallCheck(this, Knife);
 
-        return _possibleConstructorReturn(this, (Knife.__proto__ || Object.getPrototypeOf(Knife)).call(this, 'Knife', 'a blood-stained kitchen knife', incriminates, locale));
+        return _possibleConstructorReturn(this, (Knife.__proto__ || Object.getPrototypeOf(Knife)).call(this, 'Knife', 'a blood-stained kitchen knife', incriminates, location));
     }
 
     return Knife;
@@ -1654,7 +1882,61 @@ var Knife = function (_MurderWeapon) {
 exports.Knife = Knife;
 
 
-},{"./murderweapon":17}],17:[function(require,module,exports){
+},{"./murderweapon":22}],21:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Medication = undefined;
+
+var _evidence = require('./evidence');
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  CODENAME: Paradise/Evidence/Medication
+   *  XL Gaming/Declan Tyson
+   *  v0.0.26
+   *  07/02/2018
+   *
+   */
+
+var Medication = function (_Evidence) {
+    _inherits(Medication, _Evidence);
+
+    function Medication(incriminates, location) {
+        _classCallCheck(this, Medication);
+
+        var _this = _possibleConstructorReturn(this, (Medication.__proto__ || Object.getPrototypeOf(Medication)).call(this, 'Schizophrenia Medication', 'medication prescribed to ' + incriminates + ' for acute murderitis', incriminates, location));
+
+        _this.addMotiveBias('Psychosis', 40);
+        _this.addMotiveBias('InheritanceScam', 10);
+        return _this;
+    }
+
+    return Medication;
+}(_evidence.Evidence);
+
+exports.Medication = Medication;
+
+
+},{"./evidence":17}],22:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1704,7 +1986,7 @@ var MurderWeapon = function (_Evidence) {
 exports.MurderWeapon = MurderWeapon;
 
 
-},{"./evidence":14}],18:[function(require,module,exports){
+},{"./evidence":17}],23:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1748,7 +2030,61 @@ var murderWeapons = exports.murderWeapons = {
     */
 
 
-},{"../engine/util":12,"./handgun":15,"./knife":16,"./spoon":19}],19:[function(require,module,exports){
+},{"../engine/util":12,"./handgun":19,"./knife":20,"./spoon":25}],24:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.PregnancyTest = undefined;
+
+var _evidence = require('./evidence');
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  CODENAME: Paradise/Evidence/Pregnancy Test
+   *  XL Gaming/Declan Tyson
+   *  v0.0.26
+   *  07/02/2018
+   *
+   */
+
+var PregnancyTest = function (_Evidence) {
+    _inherits(PregnancyTest, _Evidence);
+
+    function PregnancyTest(incriminates, location) {
+        _classCallCheck(this, PregnancyTest);
+
+        var _this = _possibleConstructorReturn(this, (PregnancyTest.__proto__ || Object.getPrototypeOf(PregnancyTest)).call(this, 'Pregnancy Test', 'a positive pregnancy test', incriminates, location));
+
+        _this.addMotiveBias('Passion', 50);
+        _this.addMotiveBias('InheritanceScam', 15);
+        return _this;
+    }
+
+    return PregnancyTest;
+}(_evidence.Evidence);
+
+exports.PregnancyTest = PregnancyTest;
+
+
+},{"./evidence":17}],25:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1778,7 +2114,7 @@ function _inherits(subClass, superClass) {
    *
    *  CODENAME: Paradise/Spoon
    *  XL Gaming/Declan Tyson
-   *  v0.0.23
+   *  v0.0.26
    *  06/02/2018
    *
    */
@@ -1786,10 +2122,10 @@ function _inherits(subClass, superClass) {
 var Spoon = function (_MurderWeapon) {
     _inherits(Spoon, _MurderWeapon);
 
-    function Spoon(incriminates, locale) {
+    function Spoon(incriminates, location) {
         _classCallCheck(this, Spoon);
 
-        return _possibleConstructorReturn(this, (Spoon.__proto__ || Object.getPrototypeOf(Spoon)).call(this, 'Spoon', 'a jagged rusty spoon', incriminates, locale));
+        return _possibleConstructorReturn(this, (Spoon.__proto__ || Object.getPrototypeOf(Spoon)).call(this, 'Spoon', 'a jagged rusty spoon', incriminates, location));
     }
 
     return Spoon;
@@ -1798,7 +2134,115 @@ var Spoon = function (_MurderWeapon) {
 exports.Spoon = Spoon;
 
 
-},{"./murderweapon":17}],20:[function(require,module,exports){
+},{"./murderweapon":22}],26:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.ThreateningNote = undefined;
+
+var _evidence = require('./evidence');
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  CODENAME: Paradise/Evidence/Threatening Note
+   *  XL Gaming/Declan Tyson
+   *  v0.0.26
+   *  07/02/2018
+   *
+   */
+
+var ThreateningNote = function (_Evidence) {
+    _inherits(ThreateningNote, _Evidence);
+
+    function ThreateningNote(incriminates, location) {
+        _classCallCheck(this, ThreateningNote);
+
+        var _this = _possibleConstructorReturn(this, (ThreateningNote.__proto__ || Object.getPrototypeOf(ThreateningNote)).call(this, 'Threatening Note', 'an unsigned handwritten note to ' + window.game.victim + ' that reads, "I\'m going to murder you".', incriminates, location));
+
+        _this.addMotiveBias('Psychosis', 40);
+        _this.addMotiveBias('Passion', 10);
+        _this.addMotiveBias('InheritanceScam', 40);
+        return _this;
+    }
+
+    return ThreateningNote;
+}(_evidence.Evidence);
+
+exports.ThreateningNote = ThreateningNote;
+
+
+},{"./evidence":17}],27:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Will = undefined;
+
+var _evidence = require('./evidence');
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+} /*
+   *
+   *  CODENAME: Paradise/Evidence/Will
+   *  XL Gaming/Declan Tyson
+   *  v0.0.26
+   *  07/02/2018
+   *
+   */
+
+var Will = function (_Evidence) {
+    _inherits(Will, _Evidence);
+
+    function Will(incriminates, location) {
+        _classCallCheck(this, Will);
+
+        var _this = _possibleConstructorReturn(this, (Will.__proto__ || Object.getPrototypeOf(Will)).call(this, 'Will', 'a will that names ' + incriminates + ' as the sole heir to ' + window.game.victim + '\'s fortunes', incriminates, location));
+
+        _this.addMotiveBias('InheritanceScam', 50);
+        return _this;
+    }
+
+    return Will;
+}(_evidence.Evidence);
+
+exports.Will = Will;
+
+
+},{"./evidence":17}],28:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1861,7 +2305,7 @@ var GroveStreet1 = function (_GroveStreetTemplate) {
 exports.GroveStreet1 = GroveStreet1;
 
 
-},{"../islands":26,"./grovestreethouse":24}],21:[function(require,module,exports){
+},{"../islands":34,"./grovestreethouse":32}],29:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1924,7 +2368,7 @@ var GroveStreet2 = function (_GroveStreetTemplate) {
 exports.GroveStreet2 = GroveStreet2;
 
 
-},{"../islands":26,"./grovestreethouse":24}],22:[function(require,module,exports){
+},{"../islands":34,"./grovestreethouse":32}],30:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1987,7 +2431,7 @@ var GroveStreet3 = function (_GroveStreetTemplate) {
 exports.GroveStreet3 = GroveStreet3;
 
 
-},{"../islands":26,"./grovestreethouse":24}],23:[function(require,module,exports){
+},{"../islands":34,"./grovestreethouse":32}],31:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2050,7 +2494,7 @@ var GroveStreet4 = function (_GroveStreetTemplate) {
 exports.GroveStreet4 = GroveStreet4;
 
 
-},{"../islands":26,"./grovestreethouse":24}],24:[function(require,module,exports){
+},{"../islands":34,"./grovestreethouse":32}],32:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2114,7 +2558,7 @@ var GroveStreetTemplate = function (_ParadiseInterior) {
 exports.GroveStreetTemplate = GroveStreetTemplate;
 
 
-},{"../../paradise_locale":36}],25:[function(require,module,exports){
+},{"../../paradise_locale":44}],33:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2177,7 +2621,7 @@ var TownHall = function (_GroveStreetTemplate) {
 exports.TownHall = TownHall;
 
 
-},{"../village":28,"./grovestreethouse":24}],26:[function(require,module,exports){
+},{"../village":36,"./grovestreethouse":32}],34:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2253,7 +2697,7 @@ var Islands = function (_ParadiseLocale) {
 exports.Islands = Islands;
 
 
-},{"../engine/locale":6,"../paradise_locale":36}],27:[function(require,module,exports){
+},{"../engine/locale":6,"../paradise_locale":44}],35:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2298,7 +2742,7 @@ var locales = exports.locales = {
 };
 
 
-},{"./interiors/1grovestreet":20,"./interiors/2grovestreet":21,"./interiors/3grovestreet":22,"./interiors/4grovestreet":23,"./interiors/townhall":25,"./islands":26,"./village":28}],28:[function(require,module,exports){
+},{"./interiors/1grovestreet":28,"./interiors/2grovestreet":29,"./interiors/3grovestreet":30,"./interiors/4grovestreet":31,"./interiors/townhall":33,"./islands":34,"./village":36}],36:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2369,7 +2813,7 @@ var Village = function (_ParadiseLocale) {
 exports.Village = Village;
 
 
-},{"../engine/locale":6,"../paradise_locale":36,"./interiors/townhall":25}],29:[function(require,module,exports){
+},{"../engine/locale":6,"../paradise_locale":44,"./interiors/townhall":33}],37:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2427,7 +2871,7 @@ var InheritanceScam = function (_Motive) {
 exports.InheritanceScam = InheritanceScam;
 
 
-},{"./motive":30}],30:[function(require,module,exports){
+},{"./motive":38}],38:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2483,7 +2927,7 @@ var Motive = function () {
 exports.Motive = Motive;
 
 
-},{}],31:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2511,7 +2955,7 @@ var motives = exports.motives = {
     */
 
 
-},{"./inheritancescam":29,"./passion":32,"./psychosis":33}],32:[function(require,module,exports){
+},{"./inheritancescam":37,"./passion":40,"./psychosis":41}],40:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2569,7 +3013,7 @@ var Passion = function (_Motive) {
 exports.Passion = Passion;
 
 
-},{"./motive":30}],33:[function(require,module,exports){
+},{"./motive":38}],41:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2637,7 +3081,7 @@ var Psychosis = function (_Motive) {
 exports.Psychosis = Psychosis;
 
 
-},{"./motive":30}],34:[function(require,module,exports){
+},{"./motive":38}],42:[function(require,module,exports){
 'use strict';
 
 var _util = require('./engine/util');
@@ -2673,15 +3117,14 @@ window.startGame = function (locale, people, victim, murderer, weapon, motive) {
 
     locale = _locales.startingMaps[locale] || _locales.startingMaps[(0, _paradise_setup.chooseStartingMap)()];
     people = people || (0, _people.choosePeople)();
+
     var player = new _player.Player(),
         worldMap = new _paradise_worldmap.ParadiseWorldMap(player);
 
     window.game = (0, _game.StartGame)(locale, people, player, worldMap);
-
-    window.game.victim = victim || (0, _paradise_setup.chooseVictim)(people);
-    console.log(window.game.victim);
-
-    window.game.murderer = murderer || (0, _paradise_setup.chooseMurderer)(window.game.victim, people);
+    window.game.people = people;
+    window.game.victim = victim || (0, _paradise_setup.chooseVictim)(window.game.people);
+    window.game.murderer = murderer || (0, _paradise_setup.chooseMurderer)(window.game.victim, window.game.people);
     window.game.weapon = weapon || (0, _paradise_setup.chooseMurderWeapon)();
     window.game.motive = motive || (0, _paradise_setup.chooseMotive)(window.game.victim, window.game.murderer);
     window.game.evidence = (0, _paradise_setup.chooseEvidence)(game);
@@ -2698,13 +3141,13 @@ window.startGame = function (locale, people, victim, murderer, weapon, motive) {
     *
     *  CODENAME: Paradise
     *  XL Gaming/Declan Tyson
-    *  v0.0.25
+    *  v0.0.26
     *  07/02/2018
     *
     */
 
 
-},{"./engine/game":2,"./engine/people":7,"./engine/player":9,"./engine/util":12,"./locales/locales":27,"./paradise_setup":38,"./paradise_worldmap":39}],35:[function(require,module,exports){
+},{"./engine/game":2,"./engine/people":7,"./engine/player":9,"./engine/util":12,"./locales/locales":35,"./paradise_setup":46,"./paradise_worldmap":47}],43:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2800,9 +3243,7 @@ var ParadiseInteraction = function (_Interaction) {
 
             lines.push(_person.name + ' is dead.');
             _person.evidence.forEach(function (evidence) {
-                if (evidence.name === weapon) {
-                    lines.push('Lying next to ' + _constants.pronouns[_person.gender] + ' is ' + evidence.description + '.');
-                }
+                lines.push('Lying next to ' + _constants.pronouns[_person.gender] + ' is ' + evidence.description + '.');
             });
 
             for (var i = 0; i < lines.length; i++) {
@@ -2837,7 +3278,7 @@ var ParadiseInteraction = function (_Interaction) {
 exports.ParadiseInteraction = ParadiseInteraction;
 
 
-},{"./constants":1,"./engine/interaction":4,"./engine/util":12}],36:[function(require,module,exports){
+},{"./constants":1,"./engine/interaction":4,"./engine/util":12}],44:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2922,7 +3363,7 @@ exports.ParadiseInterior = ParadiseInterior;
 exports.ParadiseLocale = ParadiseLocale;
 
 
-},{"./engine/locale":6,"./engine/util":12}],37:[function(require,module,exports){
+},{"./engine/locale":6,"./engine/util":12}],45:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2991,13 +3432,13 @@ var ParadisePerson = function (_Person) {
 exports.ParadisePerson = ParadisePerson;
 
 
-},{"./engine/person":8,"./engine/util":12}],38:[function(require,module,exports){
+},{"./engine/person":8,"./engine/util":12}],46:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.chooseMurderWeapon = exports.chooseEvidence = exports.chooseStartingMap = exports.chooseMotive = exports.chooseMurderer = exports.chooseVictim = undefined;
+exports.randomInnocentPerson = exports.chooseMurderWeapon = exports.chooseEvidence = exports.chooseStartingMap = exports.chooseMotive = exports.chooseMurderer = exports.chooseVictim = undefined;
 
 var _util = require("./engine/util");
 
@@ -3010,6 +3451,8 @@ var _locales = require("./locales/locales");
 var _constants = require("./constants");
 
 var _murderweapons = require("./evidence/murderweapons");
+
+var _evidences = require("./evidence/evidences");
 
 var _motives = require("./motives/motives");
 
@@ -3025,18 +3468,20 @@ function _interopRequireWildcard(obj) {
     }
 }
 
+/*
+ *
+ *  CODENAME: Paradise/Setup
+ *  XL Gaming/Declan Tyson
+ *  v0.0.26
+ *  07/02/2018
+ *
+ */
+
 var chooseVictim = exports.chooseVictim = function chooseVictim(chosenPeople) {
     var victim = chosenPeople[util.dieRoll(chosenPeople.length - 1)];
     util.log(victim + " is the unlucky one.");
     return victim;
-}; /*
-    *
-    *  CODENAME: Paradise/Setup
-    *  XL Gaming/Declan Tyson
-    *  v0.0.25
-    *  07/02/2018
-    *
-    */
+};
 
 var chooseMurderer = exports.chooseMurderer = function chooseMurderer(victimName, chosenPeople) {
     var trueRandom = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
@@ -3091,12 +3536,12 @@ var chooseMotive = exports.chooseMotive = function chooseMotive(victimKey, murde
 
         if (relationship.description in motive.relationshipBiases) {
             for (var i = 0; i < motive.relationshipBiases[relationship.description]; i++) {
-                potentialMotives.push(motive);
+                potentialMotives.push(motiveKey);
             }
         }
     });
 
-    var motive = potentialMotives[util.dieRoll(potentialMotives.length)].name;
+    var motive = potentialMotives[util.dieRoll(potentialMotives.length)];
     util.log("The motive was " + motive + ".");
     return motive;
 };
@@ -3109,12 +3554,37 @@ var chooseStartingMap = exports.chooseStartingMap = function chooseStartingMap()
 };
 
 var chooseEvidence = exports.chooseEvidence = function chooseEvidence(game) {
-    var evidences = [],
+    var potentialEvidence = [],
+        chosenEvidenceKeys = [],
+        chosenEvidence = [],
         weapon = whatHappensToTheWeapon(game);
 
-    if (weapon) evidences.push(weapon);
+    if (weapon) chosenEvidence.push(weapon);
 
-    return evidences;
+    Object.keys(_evidences.evidences).forEach(function (evidenceKey) {
+        var evidence = new _evidences.evidences[evidenceKey](game.murderer);
+
+        if (game.motive in evidence.motiveBiases) {
+            for (var i = 0; i < evidence.motiveBiases[game.motive]; i++) {
+                potentialEvidence.push(evidenceKey);
+            }
+        }
+    });
+
+    while (chosenEvidenceKeys.length < _constants.evidenceCount) {
+        var evidence = potentialEvidence[util.dieRoll(potentialEvidence.length)];
+        if (chosenEvidenceKeys.indexOf(evidence) === -1) chosenEvidenceKeys.push(evidence);
+    }
+
+    for (var i = 0; i < chosenEvidenceKeys.length; i++) {
+        var incriminates = game.murderer;
+        if (i < _constants.herrings) incriminates = randomInnocentPerson(game);
+
+        var _evidence = new _evidences.evidences[chosenEvidenceKeys[i]](incriminates, game.victim);
+        chosenEvidence.push(_evidence);
+    }
+
+    return chosenEvidence;
 };
 
 var chooseMurderWeapon = exports.chooseMurderWeapon = function chooseMurderWeapon() {
@@ -3152,8 +3622,18 @@ var whatHappensToTheWeapon = function whatHappensToTheWeapon(game) {
     return weapon;
 };
 
+var randomInnocentPerson = exports.randomInnocentPerson = function randomInnocentPerson(game) {
+    var person = false;
+    while (!person) {
+        person = game.people[util.dieRoll(game.people.length - 1)];
+        if (person === game.murderer || person === game.victim) person = false;
+    }
 
-},{"./constants":1,"./engine/util":12,"./evidence/murderweapons":18,"./locales/locales":27,"./motives/motives":31,"./people/people":45}],39:[function(require,module,exports){
+    return person;
+};
+
+
+},{"./constants":1,"./engine/util":12,"./evidence/evidences":18,"./evidence/murderweapons":23,"./locales/locales":35,"./motives/motives":39,"./people/people":53}],47:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3277,7 +3757,7 @@ var ParadiseWorldMap = function (_WorldMap) {
 exports.ParadiseWorldMap = ParadiseWorldMap;
 
 
-},{"./engine/util":12,"./engine/worldmap":13,"./paradise_interaction":35,"./people/people":45}],40:[function(require,module,exports){
+},{"./engine/util":12,"./engine/worldmap":13,"./paradise_interaction":43,"./people/people":53}],48:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3329,7 +3809,7 @@ var Evelyn = function (_ParadisePerson) {
 exports.Evelyn = Evelyn;
 
 
-},{"../constants":1,"../paradise_person":37}],41:[function(require,module,exports){
+},{"../constants":1,"../paradise_person":45}],49:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3389,7 +3869,7 @@ var Jill = function (_ParadisePerson) {
 exports.Jill = Jill;
 
 
-},{"../constants":1,"../paradise_person":37}],42:[function(require,module,exports){
+},{"../constants":1,"../paradise_person":45}],50:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3449,7 +3929,7 @@ var John = function (_ParadisePerson) {
 exports.John = John;
 
 
-},{"../constants":1,"../paradise_person":37}],43:[function(require,module,exports){
+},{"../constants":1,"../paradise_person":45}],51:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3501,7 +3981,7 @@ var Neil = function (_ParadisePerson) {
 exports.Neil = Neil;
 
 
-},{"../constants":1,"../paradise_person":37}],44:[function(require,module,exports){
+},{"../constants":1,"../paradise_person":45}],52:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3553,7 +4033,7 @@ var Pauline = function (_ParadisePerson) {
 exports.Pauline = Pauline;
 
 
-},{"../constants":1,"../paradise_person":37}],45:[function(require,module,exports){
+},{"../constants":1,"../paradise_person":45}],53:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3598,7 +4078,7 @@ var people = exports.people = {
 };
 
 
-},{"./evelyn":40,"./jill":41,"./john":42,"./neil":43,"./pauline":44,"./petey":46,"./quazar":47,"./zenith":48}],46:[function(require,module,exports){
+},{"./evelyn":48,"./jill":49,"./john":50,"./neil":51,"./pauline":52,"./petey":54,"./quazar":55,"./zenith":56}],54:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3650,7 +4130,7 @@ var Petey = function (_ParadisePerson) {
 exports.Petey = Petey;
 
 
-},{"../constants":1,"../paradise_person":37}],47:[function(require,module,exports){
+},{"../constants":1,"../paradise_person":45}],55:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3711,7 +4191,7 @@ var Quazar = function (_ParadisePerson) {
 exports.Quazar = Quazar;
 
 
-},{"../constants":1,"../paradise_person":37}],48:[function(require,module,exports){
+},{"../constants":1,"../paradise_person":45}],56:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3772,4 +4252,4 @@ var Zenith = function (_ParadisePerson) {
 exports.Zenith = Zenith;
 
 
-},{"../constants":1,"../paradise_person":37}]},{},[1,35,36,37,38,39,34]);
+},{"../constants":1,"../paradise_person":45}]},{},[1,43,44,45,46,47,42]);
