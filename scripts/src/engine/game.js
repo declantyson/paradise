@@ -2,8 +2,8 @@
  *
  *  XL RPG/Game
  *  XL Gaming/Declan Tyson
- *  v0.0.28
- *  07/02/2018
+ *  v0.0.29
+ *  08/02/2018
  *
  */
 
@@ -26,6 +26,7 @@ export const StartGame = (locale, people, player, scene, renderer) => {
         game = new Game(renderer, scene, canvasProperties.centerPoint);
 
     game.scene.setCurrentLocale(start, 'beginningOfGame');
+    game.initTerrainSprites();
 
     return game;
 };
@@ -50,27 +51,30 @@ class Game {
         this.setScene(scene);
         this.centerPoint = centerPoint;
         this.currentAction = null;
-        this.initTerrainSprites();
+        this.terrainSprites = {};
         this.redraw = true;
 
         this.draw();
     }
 
     initTerrainSprites() {
-        let terrainTiles = {};
-        Object.keys(terrains).forEach((terrainKey) => {
-            let terrain = new terrains[terrainKey](),
-                tile = new Image();
+        let locale = this.scene.locale,
+            localeMap = this.scene.localeMap;
 
-            console.log("A new image has been created!");
+        console.log(this.scene);
 
-            if(terrain.image) {
-                tile.src = terrain.image;
-                terrainTiles[terrain.id] = tile;
+        for(let x = 0; x < locale.width; x++) {
+            for (let y = 0; y < locale.height; y++) {
+                let terrain = localeMap[x][y];
+                if(terrain.image && !this.terrainSprites[terrain.image]) {
+                    let tile = new Image();
+                    tile.src = terrain.image;
+                    this.terrainSprites[localeMap[x][y].image] = tile;
+                }
             }
-        });
+        }
 
-        this.terrainSprites = terrainTiles;
+        console.log(this.terrainSprites);
     }
 
     draw() {
@@ -85,7 +89,6 @@ class Game {
         this.scene.draw(pre_ctx);
 
         if(this.redraw) {
-            console.log('redrawing');
             this.cachedCanvas = pre_canvas;
         }
         this.renderer.ctx.drawImage(this.cachedCanvas, 0, 0, this.renderer.canvas.width, this.renderer.canvas.height);
@@ -96,7 +99,6 @@ class Game {
     setScene(scene) {
         this.scene = scene;
         this.scene.setGame(this);
-        this.redraw = true;
     }
 
     sendInput(input) {

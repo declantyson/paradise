@@ -2,16 +2,17 @@
  *
  *  XL RPG/Constants
  *  XL Gaming/Declan Tyson
- *  v0.0.26
- *  07/02/2018
+ *  v0.0.29
+ *  08/02/2018
  *
  */
 
 export const fps = 45;
 export const actionTimeoutLimit = 2;
-export const tileSize = 15;
-export const tilesWide = 96;
-export const tilesHigh = 54;
+export const tileSize = 20;
+export const spriteSize = 40;
+export const tilesWide = 48;
+export const tilesHigh = 32;
 
 export const colours = {
     black : '#000000',
@@ -79,6 +80,6 @@ export const posessivePronouns = {
 };
 
 export const personCount = 4;
-export const evidenceCount = 3;
-export const herrings = 1;
+export const evidenceCount = 4;
+export const herrings = 2;
 export const defaultInhabitanceSize = 2;

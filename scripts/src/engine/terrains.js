@@ -2,14 +2,19 @@
  *
  *  XL RPG/Terrain
  *  XL Gaming/Declan Tyson
- *  v0.0.27
- *  07/02/2018
+ *  v0.0.29
+ *  08/02/2018
  *
  */
 
-import { Grass, Water } from "./terrain";
+import { Blank, Doorway, Grass, Road, Wall, Water, WoodenFloor } from "./terrain";
 
 export let terrains = {
+    'Blank' : Blank,
     'Grass' : Grass,
-    'Water' : Water
+    'Water' : Water,
+    'Wall' : Wall,
+    'Road' : Road,
+    'Doorway' : Doorway,
+    'WoodenFloor' : WoodenFloor
 };

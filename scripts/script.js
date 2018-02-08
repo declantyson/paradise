@@ -8,16 +8,17 @@ Object.defineProperty(exports, "__esModule", {
  *
  *  XL RPG/Constants
  *  XL Gaming/Declan Tyson
- *  v0.0.26
- *  07/02/2018
+ *  v0.0.29
+ *  08/02/2018
  *
  */
 
 var fps = exports.fps = 45;
 var actionTimeoutLimit = exports.actionTimeoutLimit = 2;
-var tileSize = exports.tileSize = 15;
-var tilesWide = exports.tilesWide = 96;
-var tilesHigh = exports.tilesHigh = 54;
+var tileSize = exports.tileSize = 20;
+var spriteSize = exports.spriteSize = 40;
+var tilesWide = exports.tilesWide = 48;
+var tilesHigh = exports.tilesHigh = 32;
 
 var colours = exports.colours = {
     black: '#000000',
@@ -85,8 +86,8 @@ var posessivePronouns = exports.posessivePronouns = {
 };
 
 var personCount = exports.personCount = 4;
-var evidenceCount = exports.evidenceCount = 3;
-var herrings = exports.herrings = 1;
+var evidenceCount = exports.evidenceCount = 4;
+var herrings = exports.herrings = 2;
 var defaultInhabitanceSize = exports.defaultInhabitanceSize = 2;
 
 
@@ -144,8 +145,8 @@ function _classCallCheck(instance, Constructor) {
    *
    *  XL RPG/Game
    *  XL Gaming/Declan Tyson
-   *  v0.0.28
-   *  07/02/2018
+   *  v0.0.29
+   *  08/02/2018
    *
    */
 
@@ -160,6 +161,7 @@ var StartGame = exports.StartGame = function StartGame(locale, people, player, s
         game = new Game(renderer, scene, _constants.canvasProperties.centerPoint);
 
     game.scene.setCurrentLocale(start, 'beginningOfGame');
+    game.initTerrainSprites();
 
     return game;
 };
@@ -186,7 +188,7 @@ var Game = function () {
         this.setScene(scene);
         this.centerPoint = centerPoint;
         this.currentAction = null;
-        this.initTerrainSprites();
+        this.terrainSprites = {};
         this.redraw = true;
 
         this.draw();
@@ -195,20 +197,23 @@ var Game = function () {
     _createClass(Game, [{
         key: 'initTerrainSprites',
         value: function initTerrainSprites() {
-            var terrainTiles = {};
-            Object.keys(_terrains.terrains).forEach(function (terrainKey) {
-                var terrain = new _terrains.terrains[terrainKey](),
-                    tile = new Image();
+            var locale = this.scene.locale,
+                localeMap = this.scene.localeMap;
 
-                console.log("A new image has been created!");
+            console.log(this.scene);
 
-                if (terrain.image) {
-                    tile.src = terrain.image;
-                    terrainTiles[terrain.id] = tile;
+            for (var x = 0; x < locale.width; x++) {
+                for (var y = 0; y < locale.height; y++) {
+                    var terrain = localeMap[x][y];
+                    if (terrain.image && !this.terrainSprites[terrain.image]) {
+                        var tile = new Image();
+                        tile.src = terrain.image;
+                        this.terrainSprites[localeMap[x][y].image] = tile;
+                    }
                 }
-            });
+            }
 
-            this.terrainSprites = terrainTiles;
+            console.log(this.terrainSprites);
         }
     }, {
         key: 'draw',
@@ -224,7 +229,6 @@ var Game = function () {
             this.scene.draw(pre_ctx);
 
             if (this.redraw) {
-                console.log('redrawing');
                 this.cachedCanvas = pre_canvas;
             }
             this.renderer.ctx.drawImage(this.cachedCanvas, 0, 0, this.renderer.canvas.width, this.renderer.canvas.height);
@@ -236,7 +240,6 @@ var Game = function () {
         value: function setScene(scene) {
             this.scene = scene;
             this.scene.setGame(this);
-            this.redraw = true;
         }
     }, {
         key: 'sendInput',
@@ -845,8 +848,8 @@ var _createClass = function () {
       *
       *  XL RPG/Player
       *  XL Gaming/Declan Tyson
-      *  v0.0.20
-      *  06/02/2018
+      *  v0.0.29
+      *  08/02/2018
       *
       */
 
@@ -864,6 +867,22 @@ var Player = function () {
 
         this.colour = _constants.colours.black;
         this.direction = _constants.directions.down;
+
+        var sprite_test = new Image(),
+            spriteMap_test = {};
+
+        sprite_test.src = '/img/char_test.png';
+        spriteMap_test[_constants.directions.up] = 0;
+        spriteMap_test[_constants.directions.down] = 128;
+        spriteMap_test[_constants.directions.left] = 64;
+        spriteMap_test[_constants.directions.right] = 192;
+
+        this.spriteMap = spriteMap_test;
+        this.sprite = {
+            image: sprite_test,
+            x: 0,
+            y: 128
+        };
     }
 
     _createClass(Player, [{
@@ -871,6 +890,12 @@ var Player = function () {
         value: function setPlacement(x, y) {
             this.x = x;
             this.y = y;
+        }
+    }, {
+        key: 'setDirection',
+        value: function setDirection(direction) {
+            this.direction = direction;
+            this.sprite.y = this.spriteMap[direction];
         }
     }]);
 
@@ -976,8 +1001,8 @@ var _createClass = function () {
       *
       *  XL RPG/Terrain
       *  XL Gaming/Declan Tyson
-      *  v0.0.27
-      *  07/02/2018
+      *  v0.0.29
+      *  08/02/2018
       *
       */
 
@@ -1002,12 +1027,12 @@ function _classCallCheck(instance, Constructor) {
 }
 
 var Terrain = function () {
-    function Terrain() {
+    function Terrain(neighbours) {
         _classCallCheck(this, Terrain);
 
         this.encounters = [];
         this.image = false;
-        this.neighbours = {};
+        this.neighbours = neighbours;
     }
 
     _createClass(Terrain, [{
@@ -1028,11 +1053,12 @@ var Terrain = function () {
 var Blank = function (_Terrain) {
     _inherits(Blank, _Terrain);
 
-    function Blank() {
+    function Blank(neighbours) {
         _classCallCheck(this, Blank);
 
-        var _this = _possibleConstructorReturn(this, (Blank.__proto__ || Object.getPrototypeOf(Blank)).call(this));
+        var _this = _possibleConstructorReturn(this, (Blank.__proto__ || Object.getPrototypeOf(Blank)).call(this, neighbours));
 
+        _this.id = 'Blank';
         _this.passable = false;
         _this.colour = _constants.colours.black;
         return _this;
@@ -1044,17 +1070,56 @@ var Blank = function (_Terrain) {
 var Grass = function (_Terrain2) {
     _inherits(Grass, _Terrain2);
 
-    function Grass() {
+    function Grass(neighbours) {
         _classCallCheck(this, Grass);
 
-        var _this2 = _possibleConstructorReturn(this, (Grass.__proto__ || Object.getPrototypeOf(Grass)).call(this));
+        var _this2 = _possibleConstructorReturn(this, (Grass.__proto__ || Object.getPrototypeOf(Grass)).call(this, neighbours));
 
         _this2.id = 'Grass';
         _this2.passable = true;
         _this2.colour = _constants.colours.green;
         _this2.image = '/img/grass.png';
+
+        _this2.pickImage(_this2.neighbours);
         return _this2;
     }
+
+    _createClass(Grass, [{
+        key: 'pickImage',
+        value: function pickImage(neighbours) {
+            var image = this.image;
+
+            if (!neighbours) return;
+
+            /*
+             * THIS FUNCTION CAN BE IMPROVED DRAMATICALLY
+             * Long term solution - loop through neighbours and do something like grass_north_water_west_water_east_grass_south_water.png
+             * Will have lots of images but that's OK
+             */
+
+            if (neighbours.east === 'Water') {
+                image = '/img/coast_e.png';
+                if (neighbours.north === 'Water') {
+                    image = '/img/coast_ne.png';
+                } else if (neighbours.south === 'Water') {
+                    image = '/img/coast_se.png';
+                }
+            } else if (neighbours.west === 'Water') {
+                image = '/img/coast_w.png';
+                if (neighbours.north === 'Water') {
+                    image = '/img/coast_nw.png';
+                } else if (neighbours.south === 'Water') {
+                    image = '/img/coast_sw.png';
+                }
+            } else if (neighbours.north === 'Water') {
+                image = '/img/coast_n.png';
+            } else if (neighbours.south === 'Water') {
+                image = '/img/coast_s.png';
+            }
+
+            this.image = image;
+        }
+    }]);
 
     return Grass;
 }(Terrain);
@@ -1062,10 +1127,10 @@ var Grass = function (_Terrain2) {
 var Water = function (_Terrain3) {
     _inherits(Water, _Terrain3);
 
-    function Water() {
+    function Water(neighbours) {
         _classCallCheck(this, Water);
 
-        var _this3 = _possibleConstructorReturn(this, (Water.__proto__ || Object.getPrototypeOf(Water)).call(this));
+        var _this3 = _possibleConstructorReturn(this, (Water.__proto__ || Object.getPrototypeOf(Water)).call(this, neighbours));
 
         _this3.id = 'Water';
         _this3.passable = false;
@@ -1080,11 +1145,12 @@ var Water = function (_Terrain3) {
 var Road = function (_Terrain4) {
     _inherits(Road, _Terrain4);
 
-    function Road() {
+    function Road(neighbours) {
         _classCallCheck(this, Road);
 
-        var _this4 = _possibleConstructorReturn(this, (Road.__proto__ || Object.getPrototypeOf(Road)).call(this));
+        var _this4 = _possibleConstructorReturn(this, (Road.__proto__ || Object.getPrototypeOf(Road)).call(this, neighbours));
 
+        _this4.id = 'Road';
         _this4.passable = true;
         _this4.colour = _constants.colours.grey;
         return _this4;
@@ -1096,11 +1162,12 @@ var Road = function (_Terrain4) {
 var Wall = function (_Terrain5) {
     _inherits(Wall, _Terrain5);
 
-    function Wall() {
+    function Wall(neighbours) {
         _classCallCheck(this, Wall);
 
-        var _this5 = _possibleConstructorReturn(this, (Wall.__proto__ || Object.getPrototypeOf(Wall)).call(this));
+        var _this5 = _possibleConstructorReturn(this, (Wall.__proto__ || Object.getPrototypeOf(Wall)).call(this, neighbours));
 
+        _this5.id = 'Wall';
         _this5.passable = false;
         _this5.colour = _constants.colours.brown;
         return _this5;
@@ -1112,11 +1179,12 @@ var Wall = function (_Terrain5) {
 var Doorway = function (_Terrain6) {
     _inherits(Doorway, _Terrain6);
 
-    function Doorway() {
+    function Doorway(neighbours) {
         _classCallCheck(this, Doorway);
 
-        var _this6 = _possibleConstructorReturn(this, (Doorway.__proto__ || Object.getPrototypeOf(Doorway)).call(this));
+        var _this6 = _possibleConstructorReturn(this, (Doorway.__proto__ || Object.getPrototypeOf(Doorway)).call(this, neighbours));
 
+        _this6.id = 'Doorway';
         _this6.passable = true;
         _this6.colour = _constants.colours.darkbrown;
         return _this6;
@@ -1128,11 +1196,12 @@ var Doorway = function (_Terrain6) {
 var WoodenFloor = function (_Terrain7) {
     _inherits(WoodenFloor, _Terrain7);
 
-    function WoodenFloor() {
+    function WoodenFloor(neighbours) {
         _classCallCheck(this, WoodenFloor);
 
-        var _this7 = _possibleConstructorReturn(this, (WoodenFloor.__proto__ || Object.getPrototypeOf(WoodenFloor)).call(this));
+        var _this7 = _possibleConstructorReturn(this, (WoodenFloor.__proto__ || Object.getPrototypeOf(WoodenFloor)).call(this, neighbours));
 
+        _this7.id = 'WoodenFloor';
         _this7.passable = true;
         _this7.colour = _constants.colours.darkbrown;
         return _this7;
@@ -1161,14 +1230,19 @@ exports.terrains = undefined;
 var _terrain = require('./terrain');
 
 var terrains = exports.terrains = {
+  'Blank': _terrain.Blank,
   'Grass': _terrain.Grass,
-  'Water': _terrain.Water
+  'Water': _terrain.Water,
+  'Wall': _terrain.Wall,
+  'Road': _terrain.Road,
+  'Doorway': _terrain.Doorway,
+  'WoodenFloor': _terrain.WoodenFloor
 }; /*
     *
     *  XL RPG/Terrain
     *  XL Gaming/Declan Tyson
-    *  v0.0.27
-    *  07/02/2018
+    *  v0.0.29
+    *  08/02/2018
     *
     */
 
@@ -1248,9 +1322,7 @@ var _get = function get(object, property, receiver) {
     }
 };
 
-var _terrain2 = require('./terrain');
-
-var terrain = _interopRequireWildcard(_terrain2);
+var _terrains = require('./terrains');
 
 var _constants = require('../constants');
 
@@ -1261,18 +1333,6 @@ var _interaction = require('./interaction');
 var _locales = require('../locales/locales');
 
 var _people = require('../people/people');
-
-function _interopRequireWildcard(obj) {
-    if (obj && obj.__esModule) {
-        return obj;
-    } else {
-        var newObj = {};if (obj != null) {
-            for (var key in obj) {
-                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
-            }
-        }newObj.default = obj;return newObj;
-    }
-}
 
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -1294,8 +1354,8 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Scene-WorldMap
    *  XL Gaming/Declan Tyson
-   *  v0.0.28
-   *  07/02/2018
+   *  v0.0.29
+   *  08/02/2018
    *
    */
 
@@ -1333,33 +1393,41 @@ var WorldMap = function (_Scene) {
         key: 'moveUp',
         value: function moveUp() {
             if (this.localeMap[this.player.x][this.player.y - 1].isPassable()) this.player.setPlacement(this.player.x, this.player.y - 1);
-            this.player.direction = _constants.directions.up;
+            this.player.setDirection(_constants.directions.up);
         }
     }, {
         key: 'moveDown',
         value: function moveDown() {
             if (this.localeMap[this.player.x][this.player.y + 1].isPassable()) this.player.setPlacement(this.player.x, this.player.y + 1);
-            this.player.direction = _constants.directions.down;
+            this.player.setDirection(_constants.directions.down);
         }
     }, {
         key: 'moveLeft',
         value: function moveLeft() {
             if (this.localeMap[this.player.x - 1][this.player.y].isPassable()) this.player.setPlacement(this.player.x - 1, this.player.y);
-            this.player.direction = _constants.directions.left;
+            this.player.setDirection(_constants.directions.left);
         }
     }, {
         key: 'moveRight',
         value: function moveRight() {
             if (this.localeMap[this.player.x + 1][this.player.y].isPassable()) this.player.setPlacement(this.player.x + 1, this.player.y);
-            this.player.direction = _constants.directions.right;
+            this.player.setDirection(_constants.directions.right);
         }
     }, {
         key: 'draw',
         value: function draw(ctx) {
-            if (this.offsetX === this.player.x * _constants.tileSize - this.game.centerPoint.x && this.offsetY === this.player.y * _constants.tileSize - this.game.centerPoint.y) {
+            /*
+            * This was a performance experiment that didn't work properly... keeping it here in case we need it later
+            * and it's also pretty handy for debugging
+            */
+
+            /*if(
+                this.offsetX === this.player.x * tileSize - this.game.centerPoint.x &&
+                this.offsetY === this.player.y * tileSize - this.game.centerPoint.y
+            ) {
                 this.game.redraw = false;
                 return;
-            }
+            }*/
 
             this.game.redraw = true;
 
@@ -1376,11 +1444,13 @@ var WorldMap = function (_Scene) {
         key: 'drawPlayer',
         value: function drawPlayer(ctx) {
             // Player is always at center of screen
+            var sprite = this.player.sprite;
+            ctx.drawImage(sprite.image, sprite.x, sprite.y, 64, 64, this.game.centerPoint.x - _constants.tileSize / 2, this.game.centerPoint.y - _constants.tileSize, _constants.spriteSize, _constants.spriteSize);
 
-            ctx.beginPath();
-            ctx.rect(this.game.centerPoint.x, this.game.centerPoint.y, _constants.tileSize, _constants.tileSize);
+            /*ctx.beginPath();
+            ctx.rect(this.game.centerPoint.x, this.game.centerPoint.y, tileSize, tileSize);
             ctx.fillStyle = this.player.colour;
-            ctx.fill();
+            ctx.fill();*/
         }
     }, {
         key: 'drawLocale',
@@ -1398,15 +1468,15 @@ var WorldMap = function (_Scene) {
             for (var x = viewportStartX; x <= viewportStartX + _constants.tilesWide; x++) {
                 for (var y = viewportStartY; y <= viewportStartY + _constants.tilesHigh; y++) {
 
-                    var _terrain = this.localeMap[x][y],
+                    var terrain = this.localeMap[x][y],
                         tileX = x * _constants.tileSize - this.offsetX,
                         tileY = y * _constants.tileSize - this.offsetY,
-                        tile = window.game.terrainSprites[_terrain.id];
+                        tile = window.game.terrainSprites[terrain.image];
 
                     if (!tile) {
                         ctx.beginPath();
-                        ctx.fillStyle = _terrain.colour;
-                        ctx.strokeStyle = _terrain.colour;
+                        ctx.fillStyle = terrain.colour;
+                        ctx.strokeStyle = terrain.colour;
                         ctx.rect(tileX, tileY, _constants.tileSize, _constants.tileSize);
                         ctx.fill();
                         ctx.stroke();
@@ -1497,7 +1567,7 @@ var WorldMap = function (_Scene) {
             this.presentPeople = [];
 
             if (typeof this.visitedLocales[entrance.locale.id] !== 'undefined') {
-                this.setCurrentLocale(this.visitedLocales[entrance.locale.id], entrance.entryPoint, false);
+                this.setCurrentLocale(this.visitedLocales[entrance.locale.id], entrance.entryPoint);
                 return;
             }
 
@@ -1531,7 +1601,8 @@ var WorldMap = function (_Scene) {
             this.visitedLocales[locale.id] = locale;
 
             this.locale = locale;
-            this.localeMap = locale.map;
+            this.localeMap = JSON.parse(JSON.stringify(locale.map)); // deep copy the map
+
             locale.enterLocaleAt(entryPoint);
 
             if (rasterize) this.rasterizeLocaleMap();
@@ -1542,12 +1613,19 @@ var WorldMap = function (_Scene) {
         key: 'rasterizeLocaleMap',
         value: function rasterizeLocaleMap() {
             if (!this.locale) return;
-
+            var map = this.locale.map;
             for (var x = 0; x < this.locale.width; x++) {
                 for (var y = 0; y < this.locale.height; y++) {
-                    var terrainType = this.locale.map[x][y];
+                    var terrainType = map[x][y],
+                        neighbours = {};
 
-                    this.localeMap[x][y] = new terrain[terrainType]();
+                    if (map[x - 1]) neighbours.west = map[x - 1][y];
+                    if (map[x + 1]) neighbours.east = map[x + 1][y];
+                    if (map[x][y - 1]) neighbours.north = map[x][y - 1];
+                    if (map[x][y + 1]) neighbours.south = map[x][y + 1];
+
+                    var terrain = new _terrains.terrains[terrainType](neighbours);
+                    this.localeMap[x][y] = terrain;
                 }
             }
         }
@@ -1559,7 +1637,7 @@ var WorldMap = function (_Scene) {
 exports.WorldMap = WorldMap;
 
 
-},{"../constants":1,"../locales/locales":36,"../people/people":54,"./interaction":4,"./scene":10,"./terrain":11}],15:[function(require,module,exports){
+},{"../constants":1,"../locales/locales":36,"../people/people":54,"./interaction":4,"./scene":10,"./terrains":12}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2726,8 +2804,8 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Locales/Islands
    *  XL Gaming/Declan Tyson
-   *  v0.0.23
-   *  06/02/2018
+   *  v0.0.29
+   *  08/02/2018
    *
    */
 
@@ -2751,7 +2829,7 @@ var Islands = function (_ParadiseLocale) {
         _this.terrainPaint(0, 0, 300, 300, 'Water');
         _this.terrainPaint(52, 57, 10, 20, 'Grass');
         _this.terrainPaint(42, 35, 2, 8, 'Grass');
-        _this.terrainPaint(56, 57, 2, 20, 'Road');
+        _this.terrainPaint(56, 58, 2, 18, 'Road');
         _this.terrainPaint(55, 60, 1, 1, 'Road');
         _this.terrainPaint(58, 60, 1, 1, 'Road');
         _this.terrainPaint(55, 63, 1, 1, 'Road');

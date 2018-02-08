@@ -2,13 +2,13 @@
  *
  *  XL RPG/Scene-WorldMap
  *  XL Gaming/Declan Tyson
- *  v0.0.28
- *  07/02/2018
+ *  v0.0.29
+ *  08/02/2018
  *
  */
 
-import * as terrain from './terrain';
-import { colours, tileSize, tilesWide as viewportWidth, tilesHigh as viewportHeight, directions } from '../constants';
+import { terrains } from './terrains';
+import { spriteSize, tileSize, tilesWide as viewportWidth, tilesHigh as viewportHeight, directions } from '../constants';
 import { Scene } from './scene';
 import { Interaction } from './interaction';
 import { locales } from '../locales/locales';
@@ -39,32 +39,37 @@ class WorldMap extends Scene {
 
     moveUp() {
         if(this.localeMap[this.player.x][this.player.y - 1].isPassable()) this.player.setPlacement(this.player.x, this.player.y - 1);
-        this.player.direction = directions.up;
+        this.player.setDirection(directions.up);
     }
 
     moveDown() {
         if(this.localeMap[this.player.x][this.player.y + 1].isPassable()) this.player.setPlacement(this.player.x, this.player.y + 1);
-        this.player.direction = directions.down;
+        this.player.setDirection(directions.down);
     }
 
     moveLeft() {
         if(this.localeMap[this.player.x - 1][this.player.y].isPassable()) this.player.setPlacement(this.player.x - 1, this.player.y);
-        this.player.direction = directions.left;
+        this.player.setDirection(directions.left);
     }
 
     moveRight() {
         if(this.localeMap[this.player.x + 1][this.player.y].isPassable()) this.player.setPlacement(this.player.x + 1, this.player.y);
-        this.player.direction = directions.right;
+        this.player.setDirection(directions.right);
     }
 
     draw(ctx) {
-        if(
+        /*
+        * This was a performance experiment that didn't work properly... keeping it here in case we need it later
+        * and it's also pretty handy for debugging
+        */
+
+        /*if(
             this.offsetX === this.player.x * tileSize - this.game.centerPoint.x &&
             this.offsetY === this.player.y * tileSize - this.game.centerPoint.y
         ) {
             this.game.redraw = false;
             return;
-        }
+        }*/
 
         this.game.redraw = true;
 
@@ -80,11 +85,13 @@ class WorldMap extends Scene {
 
     drawPlayer(ctx) {
         // Player is always at center of screen
+        let sprite = this.player.sprite;
+        ctx.drawImage(sprite.image, sprite.x, sprite.y, 64, 64, this.game.centerPoint.x - (tileSize/2), this.game.centerPoint.y - tileSize, spriteSize, spriteSize);
 
-        ctx.beginPath();
+        /*ctx.beginPath();
         ctx.rect(this.game.centerPoint.x, this.game.centerPoint.y, tileSize, tileSize);
         ctx.fillStyle = this.player.colour;
-        ctx.fill();
+        ctx.fill();*/
     }
 
     drawLocale(ctx) {
@@ -104,7 +111,7 @@ class WorldMap extends Scene {
                 let terrain = this.localeMap[x][y],
                     tileX = x * tileSize - this.offsetX,
                     tileY = y * tileSize - this.offsetY,
-                    tile = window.game.terrainSprites[terrain.id];
+                    tile = window.game.terrainSprites[terrain.image];
 
                 if(!tile) {
                     ctx.beginPath();
@@ -191,7 +198,7 @@ class WorldMap extends Scene {
         this.presentPeople = [];
 
         if(typeof this.visitedLocales[entrance.locale.id] !== 'undefined') {
-            this.setCurrentLocale(this.visitedLocales[entrance.locale.id], entrance.entryPoint, false);
+            this.setCurrentLocale(this.visitedLocales[entrance.locale.id], entrance.entryPoint);
             return;
         }
 
@@ -219,7 +226,8 @@ class WorldMap extends Scene {
         this.visitedLocales[locale.id] = locale;
 
         this.locale = locale;
-        this.localeMap = locale.map;
+        this.localeMap = JSON.parse(JSON.stringify(locale.map));  // deep copy the map
+
         locale.enterLocaleAt(entryPoint);
 
         if(rasterize) this.rasterizeLocaleMap();
@@ -229,12 +237,19 @@ class WorldMap extends Scene {
 
     rasterizeLocaleMap() {
         if(!this.locale) return;
-
+        let map = this.locale.map;
         for(let x = 0; x < this.locale.width; x++) {
             for (let y = 0; y < this.locale.height; y++) {
-                let terrainType = this.locale.map[x][y];
+                let terrainType = map[x][y],
+                    neighbours = {};
 
-                this.localeMap[x][y] = new terrain[terrainType]();
+                if(map[x-1]) neighbours.west = map[x-1][y];
+                if(map[x+1]) neighbours.east = map[x+1][y];
+                if(map[x][y-1]) neighbours.north = map[x][y-1];
+                if(map[x][y+1]) neighbours.south = map[x][y+1];
+
+                let terrain = new terrains[terrainType](neighbours);
+                this.localeMap[x][y] = terrain;
             }
         }
     }
