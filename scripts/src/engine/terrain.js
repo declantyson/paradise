@@ -2,7 +2,7 @@
  *
  *  XL RPG/Terrain
  *  XL Gaming/Declan Tyson
- *  v0.0.29
+ *  v0.0.30
  *  08/02/2018
  *
  */
@@ -10,10 +10,13 @@
 import { colours } from '../constants';
 
 class Terrain {
-    constructor(neighbours) {
+    constructor(neighbours, spriteFolder = false) {
         this.encounters = [];
         this.image = false;
         this.neighbours = neighbours;
+        this.spriteFolder = spriteFolder;
+
+        this.pickImage(neighbours);
     }
 
     isPassable() {
@@ -22,6 +25,18 @@ class Terrain {
 
     hasEncounters() {
         return this.encounters;
+    }
+
+    pickImage(neighbours) {
+        if(!neighbours || !this.spriteFolder) return;
+
+        let filename = '';
+        Object.keys(neighbours).forEach((neighbourKey) => {
+            if(filename !== '') filename += '_';
+            filename += `${neighbourKey}_${neighbours[neighbourKey]}`;
+        });
+        filename = filename.toLowerCase();
+        this.image = `/img/${this.spriteFolder}/${filename}.png`;
     }
 }
 
@@ -36,57 +51,19 @@ class Blank extends Terrain {
 
 class Grass extends Terrain {
     constructor(neighbours) {
-        super(neighbours);
+        super(neighbours, 'Grass');
         this.id = 'Grass';
         this.passable = true;
         this.colour = colours.green;
-        this.image = '/img/grass.png';
-
-        this.pickImage(this.neighbours);
-    }
-
-    pickImage(neighbours) {
-        let image = this.image;
-
-        if(!neighbours) return;
-
-        /*
-         * THIS FUNCTION CAN BE IMPROVED DRAMATICALLY
-         * Long term solution - loop through neighbours and do something like grass_north_water_west_water_east_grass_south_water.png
-         * Will have lots of images but that's OK
-         */
-
-        if(neighbours.east === 'Water') {
-            image = '/img/coast_e.png';
-            if(neighbours.north === 'Water') {
-                image = '/img/coast_ne.png';
-            } else if(neighbours.south === 'Water') {
-                image = '/img/coast_se.png';
-            }
-        } else if(neighbours.west === 'Water') {
-            image = '/img/coast_w.png';
-            if(neighbours.north === 'Water') {
-                image = '/img/coast_nw.png';
-            } else if(neighbours.south === 'Water') {
-                image = '/img/coast_sw.png';
-            }
-        } else if(neighbours.north === 'Water') {
-            image = '/img/coast_n.png';
-        } else if(neighbours.south === 'Water') {
-            image = '/img/coast_s.png';
-        }
-
-        this.image = image;
     }
 }
 
 class Water extends Terrain {
     constructor(neighbours) {
-        super(neighbours);
+        super(neighbours, 'Water');
         this.id = 'Water';
         this.passable = false;
         this.colour = colours.blue;
-        this.image = '/img/water.png';
     }
 }
 

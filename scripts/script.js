@@ -145,7 +145,7 @@ function _classCallCheck(instance, Constructor) {
    *
    *  XL RPG/Game
    *  XL Gaming/Declan Tyson
-   *  v0.0.29
+   *  v0.0.30
    *  08/02/2018
    *
    */
@@ -190,6 +190,8 @@ var Game = function () {
         this.currentAction = null;
         this.terrainSprites = {};
         this.redraw = true;
+        this.spritesLoaded = 0;
+        this.loading = true;
 
         this.draw();
     }
@@ -197,23 +199,36 @@ var Game = function () {
     _createClass(Game, [{
         key: 'initTerrainSprites',
         value: function initTerrainSprites() {
+            var _this = this;
+
             var locale = this.scene.locale,
                 localeMap = this.scene.localeMap;
-
-            console.log(this.scene);
 
             for (var x = 0; x < locale.width; x++) {
                 for (var y = 0; y < locale.height; y++) {
                     var terrain = localeMap[x][y];
                     if (terrain.image && !this.terrainSprites[terrain.image]) {
+                        /* jshint ignore:start */
                         var tile = new Image();
                         tile.src = terrain.image;
                         this.terrainSprites[localeMap[x][y].image] = tile;
+
+                        tile.onload = function () {
+                            _this.spritesLoaded++;
+                            if (_this.spritesLoaded >= Object.keys(_this.terrainSprites).length) {
+                                _this.loading = false;
+                            }
+                        };
+                        tile.onerror = function () {
+                            _this.spritesLoaded++;
+                            if (_this.spritesLoaded >= Object.keys(_this.terrainSprites).length) {
+                                _this.loading = false;
+                            }
+                        };
+                        /* jshint ignore:end */
                     }
                 }
             }
-
-            console.log(this.terrainSprites);
         }
     }, {
         key: 'draw',
@@ -228,7 +243,11 @@ var Game = function () {
             this.scene.doActions(this.currentAction);
             this.scene.draw(pre_ctx);
 
-            if (this.redraw) {
+            if (this.loading) {
+                var loading = new Image();
+                loading.src = '/img/loading.png';
+                this.cachedCanvas = loading;
+            } else if (this.redraw) {
                 this.cachedCanvas = pre_canvas;
             }
             this.renderer.ctx.drawImage(this.cachedCanvas, 0, 0, this.renderer.canvas.width, this.renderer.canvas.height);
@@ -1001,7 +1020,7 @@ var _createClass = function () {
       *
       *  XL RPG/Terrain
       *  XL Gaming/Declan Tyson
-      *  v0.0.29
+      *  v0.0.30
       *  08/02/2018
       *
       */
@@ -1028,11 +1047,16 @@ function _classCallCheck(instance, Constructor) {
 
 var Terrain = function () {
     function Terrain(neighbours) {
+        var spriteFolder = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
         _classCallCheck(this, Terrain);
 
         this.encounters = [];
         this.image = false;
         this.neighbours = neighbours;
+        this.spriteFolder = spriteFolder;
+
+        this.pickImage(neighbours);
     }
 
     _createClass(Terrain, [{
@@ -1044,6 +1068,19 @@ var Terrain = function () {
         key: 'hasEncounters',
         value: function hasEncounters() {
             return this.encounters;
+        }
+    }, {
+        key: 'pickImage',
+        value: function pickImage(neighbours) {
+            if (!neighbours || !this.spriteFolder) return;
+
+            var filename = '';
+            Object.keys(neighbours).forEach(function (neighbourKey) {
+                if (filename !== '') filename += '_';
+                filename += neighbourKey + '_' + neighbours[neighbourKey];
+            });
+            filename = filename.toLowerCase();
+            this.image = '/img/' + this.spriteFolder + '/' + filename + '.png';
         }
     }]);
 
@@ -1073,53 +1110,13 @@ var Grass = function (_Terrain2) {
     function Grass(neighbours) {
         _classCallCheck(this, Grass);
 
-        var _this2 = _possibleConstructorReturn(this, (Grass.__proto__ || Object.getPrototypeOf(Grass)).call(this, neighbours));
+        var _this2 = _possibleConstructorReturn(this, (Grass.__proto__ || Object.getPrototypeOf(Grass)).call(this, neighbours, 'Grass'));
 
         _this2.id = 'Grass';
         _this2.passable = true;
         _this2.colour = _constants.colours.green;
-        _this2.image = '/img/grass.png';
-
-        _this2.pickImage(_this2.neighbours);
         return _this2;
     }
-
-    _createClass(Grass, [{
-        key: 'pickImage',
-        value: function pickImage(neighbours) {
-            var image = this.image;
-
-            if (!neighbours) return;
-
-            /*
-             * THIS FUNCTION CAN BE IMPROVED DRAMATICALLY
-             * Long term solution - loop through neighbours and do something like grass_north_water_west_water_east_grass_south_water.png
-             * Will have lots of images but that's OK
-             */
-
-            if (neighbours.east === 'Water') {
-                image = '/img/coast_e.png';
-                if (neighbours.north === 'Water') {
-                    image = '/img/coast_ne.png';
-                } else if (neighbours.south === 'Water') {
-                    image = '/img/coast_se.png';
-                }
-            } else if (neighbours.west === 'Water') {
-                image = '/img/coast_w.png';
-                if (neighbours.north === 'Water') {
-                    image = '/img/coast_nw.png';
-                } else if (neighbours.south === 'Water') {
-                    image = '/img/coast_sw.png';
-                }
-            } else if (neighbours.north === 'Water') {
-                image = '/img/coast_n.png';
-            } else if (neighbours.south === 'Water') {
-                image = '/img/coast_s.png';
-            }
-
-            this.image = image;
-        }
-    }]);
 
     return Grass;
 }(Terrain);
@@ -1130,12 +1127,11 @@ var Water = function (_Terrain3) {
     function Water(neighbours) {
         _classCallCheck(this, Water);
 
-        var _this3 = _possibleConstructorReturn(this, (Water.__proto__ || Object.getPrototypeOf(Water)).call(this, neighbours));
+        var _this3 = _possibleConstructorReturn(this, (Water.__proto__ || Object.getPrototypeOf(Water)).call(this, neighbours, 'Water'));
 
         _this3.id = 'Water';
         _this3.passable = false;
         _this3.colour = _constants.colours.blue;
-        _this3.image = '/img/water.png';
         return _this3;
     }
 

@@ -2,7 +2,7 @@
  *
  *  XL RPG/Game
  *  XL Gaming/Declan Tyson
- *  v0.0.29
+ *  v0.0.30
  *  08/02/2018
  *
  */
@@ -53,6 +53,8 @@ class Game {
         this.currentAction = null;
         this.terrainSprites = {};
         this.redraw = true;
+        this.spritesLoaded = 0;
+        this.loading = true;
 
         this.draw();
     }
@@ -61,20 +63,31 @@ class Game {
         let locale = this.scene.locale,
             localeMap = this.scene.localeMap;
 
-        console.log(this.scene);
-
         for(let x = 0; x < locale.width; x++) {
             for (let y = 0; y < locale.height; y++) {
                 let terrain = localeMap[x][y];
                 if(terrain.image && !this.terrainSprites[terrain.image]) {
+                    /* jshint ignore:start */
                     let tile = new Image();
                     tile.src = terrain.image;
                     this.terrainSprites[localeMap[x][y].image] = tile;
+
+                    tile.onload = () => {
+                        this.spritesLoaded++;
+                        if(this.spritesLoaded >= Object.keys(this.terrainSprites).length) {
+                            this.loading = false;
+                        }
+                    };
+                    tile.onerror = () => {
+                        this.spritesLoaded++;
+                        if(this.spritesLoaded >= Object.keys(this.terrainSprites).length) {
+                            this.loading = false;
+                        }
+                    };
+                    /* jshint ignore:end */
                 }
             }
         }
-
-        console.log(this.terrainSprites);
     }
 
     draw() {
@@ -88,7 +101,11 @@ class Game {
         this.scene.doActions(this.currentAction);
         this.scene.draw(pre_ctx);
 
-        if(this.redraw) {
+        if(this.loading) {
+            let loading = new Image();
+            loading.src = '/img/loading.png';
+            this.cachedCanvas = loading;
+        } else if(this.redraw) {
             this.cachedCanvas = pre_canvas;
         }
         this.renderer.ctx.drawImage(this.cachedCanvas, 0, 0, this.renderer.canvas.width, this.renderer.canvas.height);
