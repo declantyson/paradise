@@ -1,7 +1,7 @@
 /*
  *
- *  XL RPG/Game
- *  XL Gaming/Declan Tyson
+ *  Paradise/Game
+ *  Declan Tyson
  *  v0.0.30
  *  08/02/2018
  *

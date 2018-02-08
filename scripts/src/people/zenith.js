@@ -1,16 +1,16 @@
 /*
  *
- *  XL RPG/Person/Zenith
- *  XL Gaming/Declan Tyson
+ *  Paradise/Person/Zenith
+ *  Declan Tyson
  *  v0.0.23
  *  06/02/2018
  *
  */
 
 import { genders, colours } from '../constants';
-import { ParadisePerson } from '../paradise_person';
+import { Person } from '../engine/person';
 
-class Zenith extends ParadisePerson {
+class Zenith extends Person {
     constructor() {
         super('Zenith', genders.alien);
 

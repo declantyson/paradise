@@ -1,11 +1,13 @@
 /*
  *
- *  XL RPG/Locales
- *  XL Gaming/Declan Tyson
+ *  Paradise/Locales
+ *  Declan Tyson
  *  v0.0.25
  *  07/02/2018
  *
  */
+
+import * as util from '../engine/util';
 
 import { Village } from './village';
 import { Islands } from './islands';
@@ -28,4 +30,11 @@ export const locales = {
     'GroveStreet3' : GroveStreet3,
     'GroveStreet4' : GroveStreet4,
     'TownHall' : TownHall
+};
+
+export const chooseStartingMap = () => {
+    let locale = util.pickRandomProperty(startingMaps);
+    util.log('Choosing starting map...');
+    util.log(`Map is ${locale}.`);
+    return locale;
 };

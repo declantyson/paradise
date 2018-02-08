@@ -1,7 +1,7 @@
 /*
  *
- *  XL RPG/Locales/Town Hall
- *  XL Gaming/Declan Tyson
+ *  Paradise/Locales/Town Hall
+ *  Declan Tyson
  *  v0.0.25
  *  07/02/2018
  *

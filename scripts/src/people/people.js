@@ -1,7 +1,7 @@
 /*
  *
- *  CODENAME: Paradise/People
- *  XL Gaming/Declan Tyson
+ *  Paradise/People
+ *  Declan Tyson
  *  v0.0.25
  *  07/02/2018
  *

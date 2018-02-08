@@ -1,8 +1,8 @@
 {
-  "name": "canvas-game",
-  "version": "1.0.0",
+  "name": "paradise",
+  "version": "0.0.32",
   "description": "",
-  "main": "Gruntfile.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -19,13 +19,7 @@
     "grunt-contrib-cssmin": "^1.0.2",
     "grunt-contrib-jshint": "^1.0.0",
     "grunt-contrib-sass": "^1.0.0",
-    "grunt-contrib-uglify": "^2.0.0",
     "grunt-contrib-watch": "^1.0.0",
-    "grunt-notify": "^0.4.5",
-    "grunt-babel": "^6.0.0",
-    "grunt-browserify": "^5.0.0",
-    "babel-cli": "^6.10.1",
-    "babel-preset-es2015": "^6.9.0",
-    "babelify": "^7.3.0"
+    "grunt-notify": "^0.4.5"
   }
 }

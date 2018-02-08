@@ -1,7 +1,7 @@
 /*
  *
- *  XL RPG/Util
- *  XL Gaming/Declan Tyson
+ *  Paradise/Util
+ *  Declan Tyson
  *  v0.0.23
  *  06/02/2018
  *

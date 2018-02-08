@@ -1,7 +1,7 @@
 /*
  *
- *  XL RPG/People
- *  XL Gaming/Declan Tyson
+ *  Paradise/People
+ *  Declan Tyson
  *  v0.0.23
  *  06/02/2018
  *

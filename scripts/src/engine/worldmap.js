@@ -1,7 +1,7 @@
 /*
  *
- *  XL RPG/Scene-WorldMap
- *  XL Gaming/Declan Tyson
+ *  Paradise/Scene-WorldMap
+ *  Declan Tyson
  *  v0.0.31
  *  08/02/2018
  *

@@ -1,7 +1,7 @@
 /*
  *
- *  XL RPG/Locales/4 Grove Street
- *  XL Gaming/Declan Tyson
+ *  Paradise/Locales/4 Grove Street
+ *  Declan Tyson
  *  v0.0.23
  *  06/02/2018
  *

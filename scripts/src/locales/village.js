@@ -1,16 +1,16 @@
 /*
  *
- *  XL RPG/Locales/Village
- *  XL Gaming/Declan Tyson
+ *  Paradise/Locales/Village
+ *  Declan Tyson
  *  v0.0.25
  *  07/02/2018
  *
  */
 import { Inhabitance } from '../engine/locale';
-import { ParadiseLocale } from '../paradise_locale';
+import { Locale } from '../engine/locale';
 import {TownHall} from "./interiors/townhall";
 
-class Village extends ParadiseLocale {
+class Village extends Locale {
     constructor(player, people) {
         super(player, people);
 

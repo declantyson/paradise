@@ -1,7 +1,7 @@
 /*
  *
- *  XL RPG/Item
- *  XL Gaming/Declan Tyson
+ *  Paradise/Item
+ *  Declan Tyson
  *  v0.0.22
  *  06/02/2018
  *

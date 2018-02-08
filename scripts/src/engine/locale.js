@@ -1,7 +1,7 @@
 /*
  *
- *  XL RPG/Locales/Base
- *  XL Gaming/Declan Tyson
+ *  Paradise/Locales/Base
+ *  Declan Tyson
  *  v0.0.25
  *  07/02/2018
  *
