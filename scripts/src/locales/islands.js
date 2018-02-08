@@ -2,8 +2,8 @@
  *
  *  XL RPG/Locales/Islands
  *  XL Gaming/Declan Tyson
- *  v0.0.23
- *  06/02/2018
+ *  v0.0.29
+ *  08/02/2018
  *
  */
 
@@ -26,7 +26,7 @@ class Islands extends ParadiseLocale {
         this.terrainPaint(0, 0, 300, 300, 'Water');
         this.terrainPaint(52, 57, 10, 20, 'Grass');
         this.terrainPaint(42, 35, 2, 8, 'Grass');
-        this.terrainPaint(56, 57, 2, 20, 'Road');
+        this.terrainPaint(56, 58, 2, 18, 'Road');
         this.terrainPaint(55, 60, 1, 1, 'Road');
         this.terrainPaint(58, 60, 1, 1, 'Road');
         this.terrainPaint(55, 63, 1, 1, 'Road');

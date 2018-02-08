@@ -2,17 +2,16 @@
  *
  *  XL RPG/Game
  *  XL Gaming/Declan Tyson
- *  v0.0.22
- *  06/02/2018
+ *  v0.0.30
+ *  08/02/2018
  *
  */
 
-import * as util from './util';
 import * as input from './inputs';
 
 import { Player } from './player';
 import { WorldMap } from './worldmap';
-import { tileSize, canvasProperties, fps, actionTimeoutLimit } from '../constants';
+import { canvasProperties, fps, actionTimeoutLimit } from '../constants';
 
 export const StartGame = (locale, people, player, scene, renderer) => {
     clearInterval(window.drawScene);
@@ -25,6 +24,11 @@ export const StartGame = (locale, people, player, scene, renderer) => {
         game = new Game(renderer, scene, canvasProperties.centerPoint);
 
     game.scene.setCurrentLocale(start, 'beginningOfGame');
+    game.initTerrainSprites();
+
+    if(window.debug) {
+        document.getElementById('log').style.display = 'block';
+    }
 
     return game;
 };
@@ -49,8 +53,45 @@ class Game {
         this.setScene(scene);
         this.centerPoint = centerPoint;
         this.currentAction = null;
+        this.terrainSprites = {};
+        this.redraw = true;
+        this.spritesLoaded = 0;
+        this.loading = true;
 
         this.draw();
+    }
+
+    initTerrainSprites() {
+        let locale = this.scene.locale,
+            localeMap = this.scene.localeMap;
+
+        for(let x = 0; x < locale.width; x++) {
+            for (let y = 0; y < locale.height; y++) {
+                let terrain = localeMap[x][y];
+                if(terrain.image && !this.terrainSprites[terrain.image]) {
+                    /* jshint ignore:start */
+                    let tile = new Image();
+                    tile.src = terrain.image;
+                    this.terrainSprites[localeMap[x][y].image] = tile;
+
+                    tile.onload = () => {
+                        this.spritesLoaded++;
+                        if(this.spritesLoaded >= Object.keys(this.terrainSprites).length) {
+                            this.loading = false;
+                        }
+                    };
+                    tile.onerror = () => {
+                        this.spritesLoaded++;
+                        if(this.spritesLoaded >= Object.keys(this.terrainSprites).length) {
+                            setTimeout(() => {
+                                this.loading = false;
+                            }, 2500);
+                        }
+                    };
+                    /* jshint ignore:end */
+                }
+            }
+        }
     }
 
     draw() {
@@ -64,7 +105,14 @@ class Game {
         this.scene.doActions(this.currentAction);
         this.scene.draw(pre_ctx);
 
-        this.renderer.ctx.drawImage(pre_canvas, 0, 0);
+        if(this.loading) {
+            let loading = new Image();
+            loading.src = '/img/loading.png';
+            this.cachedCanvas = loading;
+        } else if(this.redraw) {
+            this.cachedCanvas = pre_canvas;
+        }
+        this.renderer.ctx.drawImage(this.cachedCanvas, 0, 0, this.renderer.canvas.width, this.renderer.canvas.height);
 
         window.requestAnimationFrame(this.draw.bind(this));
     }
