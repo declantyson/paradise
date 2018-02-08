@@ -7,13 +7,11 @@
  *
  */
 
-import * as util from './util';
 import * as input from './inputs';
 
 import { Player } from './player';
 import { WorldMap } from './worldmap';
 import { canvasProperties, fps, actionTimeoutLimit } from '../constants';
-import { terrains } from './terrains';
 
 export const StartGame = (locale, people, player, scene, renderer) => {
     clearInterval(window.drawScene);
@@ -27,6 +25,10 @@ export const StartGame = (locale, people, player, scene, renderer) => {
 
     game.scene.setCurrentLocale(start, 'beginningOfGame');
     game.initTerrainSprites();
+
+    if(window.debug) {
+        document.getElementById('log').style.display = 'block';
+    }
 
     return game;
 };
@@ -81,7 +83,9 @@ class Game {
                     tile.onerror = () => {
                         this.spritesLoaded++;
                         if(this.spritesLoaded >= Object.keys(this.terrainSprites).length) {
-                            this.loading = false;
+                            setTimeout(() => {
+                                this.loading = false;
+                            }, 2500);
                         }
                     };
                     /* jshint ignore:end */

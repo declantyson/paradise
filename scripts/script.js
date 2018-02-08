@@ -109,10 +109,6 @@ var _createClass = function () {
     };
 }();
 
-var _util = require('./util');
-
-var util = _interopRequireWildcard(_util);
-
 var _inputs = require('./inputs');
 
 var input = _interopRequireWildcard(_inputs);
@@ -122,8 +118,6 @@ var _player = require('./player');
 var _worldmap = require('./worldmap');
 
 var _constants = require('../constants');
-
-var _terrains = require('./terrains');
 
 function _interopRequireWildcard(obj) {
     if (obj && obj.__esModule) {
@@ -162,6 +156,10 @@ var StartGame = exports.StartGame = function StartGame(locale, people, player, s
 
     game.scene.setCurrentLocale(start, 'beginningOfGame');
     game.initTerrainSprites();
+
+    if (window.debug) {
+        document.getElementById('log').style.display = 'block';
+    }
 
     return game;
 };
@@ -222,7 +220,9 @@ var Game = function () {
                         tile.onerror = function () {
                             _this.spritesLoaded++;
                             if (_this.spritesLoaded >= Object.keys(_this.terrainSprites).length) {
-                                _this.loading = false;
+                                setTimeout(function () {
+                                    _this.loading = false;
+                                }, 2500);
                             }
                         };
                         /* jshint ignore:end */
@@ -285,7 +285,7 @@ var Game = function () {
 }();
 
 
-},{"../constants":1,"./inputs":3,"./player":9,"./terrains":12,"./util":13,"./worldmap":14}],3:[function(require,module,exports){
+},{"../constants":1,"./inputs":3,"./player":9,"./worldmap":14}],3:[function(require,module,exports){
 'use strict';
 
 /*
