@@ -2,7 +2,7 @@
  *
  *  XL RPG/Scene-WorldMap
  *  XL Gaming/Declan Tyson
- *  v0.0.29
+ *  v0.0.31
  *  08/02/2018
  *
  */
@@ -32,7 +32,10 @@ class WorldMap extends Scene {
     doActions(action) {
         super.doActions(action);
 
-        if(!action) return;
+        if(!action) {
+            this.player.resetSprite();
+            return;
+        }
         this.checkForRandomEncounters();
         this.checkForEntrance();
     }
@@ -40,21 +43,25 @@ class WorldMap extends Scene {
     moveUp() {
         if(this.localeMap[this.player.x][this.player.y - 1].isPassable()) this.player.setPlacement(this.player.x, this.player.y - 1);
         this.player.setDirection(directions.up);
+        this.player.advanceFrame();
     }
 
     moveDown() {
         if(this.localeMap[this.player.x][this.player.y + 1].isPassable()) this.player.setPlacement(this.player.x, this.player.y + 1);
         this.player.setDirection(directions.down);
+        this.player.advanceFrame();
     }
 
     moveLeft() {
         if(this.localeMap[this.player.x - 1][this.player.y].isPassable()) this.player.setPlacement(this.player.x - 1, this.player.y);
         this.player.setDirection(directions.left);
+        this.player.advanceFrame();
     }
 
     moveRight() {
         if(this.localeMap[this.player.x + 1][this.player.y].isPassable()) this.player.setPlacement(this.player.x + 1, this.player.y);
         this.player.setDirection(directions.right);
+        this.player.advanceFrame();
     }
 
     draw(ctx) {
@@ -79,8 +86,8 @@ class WorldMap extends Scene {
         this.viewportStartY = this.player.y - (viewportHeight / 2);
 
         this.drawLocale(ctx);
-        this.drawPlayer(ctx);
         this.drawPeople(ctx);
+        this.drawPlayer(ctx);
     }
 
     drawPlayer(ctx) {

@@ -2,7 +2,7 @@
  *
  *  XL RPG/Constants
  *  XL Gaming/Declan Tyson
- *  v0.0.29
+ *  v0.0.31
  *  08/02/2018
  *
  */
@@ -11,6 +11,8 @@ export const fps = 45;
 export const actionTimeoutLimit = 2;
 export const tileSize = 20;
 export const spriteSize = 40;
+export const frameSize = 64;
+export const frameCount = 9;
 export const tilesWide = 48;
 export const tilesHigh = 32;
 

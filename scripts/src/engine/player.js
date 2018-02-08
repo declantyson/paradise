@@ -2,12 +2,12 @@
  *
  *  XL RPG/Player
  *  XL Gaming/Declan Tyson
- *  v0.0.29
+ *  v0.0.31
  *  08/02/2018
  *
  */
 
-import { colours, directions } from '../constants';
+import { colours, directions, frameSize, frameCount } from '../constants';
 
 class Player {
     constructor() {
@@ -29,6 +29,19 @@ class Player {
             x : 0,
             y : 128
         };
+    }
+
+    advanceFrame() {
+        let newSpriteX = this.sprite.x + frameSize;
+        if(newSpriteX >= frameSize * frameCount) {
+            newSpriteX = 0;
+        }
+
+        this.sprite.x = newSpriteX;
+    }
+
+    resetSprite() {
+        this.sprite.x = 0;
     }
 
     setPlacement(x, y) {

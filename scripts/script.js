@@ -8,7 +8,7 @@ Object.defineProperty(exports, "__esModule", {
  *
  *  XL RPG/Constants
  *  XL Gaming/Declan Tyson
- *  v0.0.29
+ *  v0.0.31
  *  08/02/2018
  *
  */
@@ -17,6 +17,8 @@ var fps = exports.fps = 45;
 var actionTimeoutLimit = exports.actionTimeoutLimit = 2;
 var tileSize = exports.tileSize = 20;
 var spriteSize = exports.spriteSize = 40;
+var frameSize = exports.frameSize = 64;
+var frameCount = exports.frameCount = 9;
 var tilesWide = exports.tilesWide = 48;
 var tilesHigh = exports.tilesHigh = 32;
 
@@ -867,7 +869,7 @@ var _createClass = function () {
       *
       *  XL RPG/Player
       *  XL Gaming/Declan Tyson
-      *  v0.0.29
+      *  v0.0.31
       *  08/02/2018
       *
       */
@@ -905,6 +907,21 @@ var Player = function () {
     }
 
     _createClass(Player, [{
+        key: 'advanceFrame',
+        value: function advanceFrame() {
+            var newSpriteX = this.sprite.x + _constants.frameSize;
+            if (newSpriteX >= _constants.frameSize * _constants.frameCount) {
+                newSpriteX = 0;
+            }
+
+            this.sprite.x = newSpriteX;
+        }
+    }, {
+        key: 'resetSprite',
+        value: function resetSprite() {
+            this.sprite.x = 0;
+        }
+    }, {
         key: 'setPlacement',
         value: function setPlacement(x, y) {
             this.x = x;
@@ -1350,7 +1367,7 @@ function _inherits(subClass, superClass) {
    *
    *  XL RPG/Scene-WorldMap
    *  XL Gaming/Declan Tyson
-   *  v0.0.29
+   *  v0.0.31
    *  08/02/2018
    *
    */
@@ -1381,7 +1398,10 @@ var WorldMap = function (_Scene) {
         value: function doActions(action) {
             _get(WorldMap.prototype.__proto__ || Object.getPrototypeOf(WorldMap.prototype), 'doActions', this).call(this, action);
 
-            if (!action) return;
+            if (!action) {
+                this.player.resetSprite();
+                return;
+            }
             this.checkForRandomEncounters();
             this.checkForEntrance();
         }
@@ -1390,24 +1410,28 @@ var WorldMap = function (_Scene) {
         value: function moveUp() {
             if (this.localeMap[this.player.x][this.player.y - 1].isPassable()) this.player.setPlacement(this.player.x, this.player.y - 1);
             this.player.setDirection(_constants.directions.up);
+            this.player.advanceFrame();
         }
     }, {
         key: 'moveDown',
         value: function moveDown() {
             if (this.localeMap[this.player.x][this.player.y + 1].isPassable()) this.player.setPlacement(this.player.x, this.player.y + 1);
             this.player.setDirection(_constants.directions.down);
+            this.player.advanceFrame();
         }
     }, {
         key: 'moveLeft',
         value: function moveLeft() {
             if (this.localeMap[this.player.x - 1][this.player.y].isPassable()) this.player.setPlacement(this.player.x - 1, this.player.y);
             this.player.setDirection(_constants.directions.left);
+            this.player.advanceFrame();
         }
     }, {
         key: 'moveRight',
         value: function moveRight() {
             if (this.localeMap[this.player.x + 1][this.player.y].isPassable()) this.player.setPlacement(this.player.x + 1, this.player.y);
             this.player.setDirection(_constants.directions.right);
+            this.player.advanceFrame();
         }
     }, {
         key: 'draw',
@@ -1433,8 +1457,8 @@ var WorldMap = function (_Scene) {
             this.viewportStartY = this.player.y - _constants.tilesHigh / 2;
 
             this.drawLocale(ctx);
-            this.drawPlayer(ctx);
             this.drawPeople(ctx);
+            this.drawPlayer(ctx);
         }
     }, {
         key: 'drawPlayer',
