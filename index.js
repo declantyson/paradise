@@ -1449,4 +1449,4 @@ const choosePeople = () => {
 // Engine
 // Test data
 
-export { StartGame, Interaction, Item, Locale, Inhabitance, Interior, Player, choosePeople, Person, Scene, terrains, Util, WorldMap, startingMaps, chooseStartingMap, people };
+export { StartGame, Interaction, Item, Locale, Inhabitance, Interior, Player, choosePeople, Person, Scene, terrains, Util, WorldMap, startingMaps, chooseStartingMap, people, Evelyn, Jill, John, Neil, Pauline, Petey, Quazar, Zenith };

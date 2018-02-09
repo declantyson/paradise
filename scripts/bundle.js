@@ -1468,6 +1468,14 @@ exports.WorldMap = WorldMap;
 exports.startingMaps = startingMaps;
 exports.chooseStartingMap = chooseStartingMap;
 exports.people = people;
+exports.Evelyn = Evelyn;
+exports.Jill = Jill;
+exports.John = John;
+exports.Neil = Neil;
+exports.Pauline = Pauline;
+exports.Petey = Petey;
+exports.Quazar = Quazar;
+exports.Zenith = Zenith;
 
 return exports;
 

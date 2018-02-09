@@ -22,9 +22,17 @@ import { WorldMap } from './engine/worldmap';
 // Test data
 import { startingMaps, chooseStartingMap } from "./locales/locales";
 import { people } from './people/people';
+import { Evelyn } from './people/evelyn';
+import { Jill } from './people/jill';
+import { John } from './people/john';
+import { Neil } from './people/neil';
+import { Pauline } from './people/pauline';
+import { Petey } from './people/petey';
+import { Quazar } from './people/quazar';
+import { Zenith } from './people/zenith';
 
 export {
     StartGame, Interaction, Item, Locale, Inhabitance, Interior, Player, choosePeople, Person, Scene, terrains, Util, WorldMap,
     startingMaps, chooseStartingMap,
-    people
+    people, Evelyn, Jill, John, Neil, Pauline, Petey, Quazar, Zenith
 };
