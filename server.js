@@ -6,6 +6,7 @@ var http = require('http'),
 
 app.use("/css", express.static('css'));
 app.use("/img", express.static('img'));
+app.use("/oob", express.static('img'));
 app.use("/games", express.static('games'));
 app.use("/scripts", express.static('scripts'));
 
@@ -19,6 +20,6 @@ app.get('/demo', function(req,res) {
     });
 });
 
-http.createServer(app).listen(3000);
+http.createServer(app).listen(3001);
 
-console.log("App running on 3000");
+console.log("App running on 3001");

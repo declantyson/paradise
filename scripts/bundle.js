@@ -176,7 +176,7 @@ class Player {
         let sprite_test = new Image(),
             spriteMap_test = {};
 
-        sprite_test.src = '/img/char_test.png';
+        sprite_test.src = '/oob/char_test.png';
         spriteMap_test[directions.up] = 0;
         spriteMap_test[directions.down] = 128;
         spriteMap_test[directions.left] = 64;
@@ -218,7 +218,7 @@ class Player {
  *
  *  Paradise/Terrain
  *  Declan Tyson
- *  v0.0.30
+ *  v0.0.35
  *  08/02/2018
  *
  */
@@ -250,7 +250,7 @@ class Terrain {
             filename += `${neighbourKey}_${neighbours[neighbourKey]}`;
         });
         filename = filename.toLowerCase();
-        this.image = `/img/${this.spriteFolder}/${filename}.png`;
+        this.image = `${this.spriteFolder}/${filename}.png`;
     }
 }
 
@@ -265,7 +265,7 @@ class Blank extends Terrain {
 
 class Grass extends Terrain {
     constructor(neighbours) {
-        super(neighbours, 'Grass');
+        super(neighbours, '/oob/Grass');
         this.id = 'Grass';
         this.passable = true;
         this.colour = colours.green;
@@ -274,7 +274,7 @@ class Grass extends Terrain {
 
 class Water extends Terrain {
     constructor(neighbours) {
-        super(neighbours, 'Water');
+        super(neighbours, '/oob/Water');
         this.id = 'Water';
         this.passable = false;
         this.colour = colours.blue;
@@ -1385,7 +1385,7 @@ class Game {
 
         if(this.loading) {
             let loading = new Image();
-            loading.src = '/img/loading.png';
+            loading.src = '/oob/loading.png';
             this.cachedCanvas = loading;
         } else if(this.redraw) {
             this.cachedCanvas = pre_canvas;
@@ -1450,7 +1450,6 @@ const choosePeople = () => {
  *
  */
 // Engine
-// Test data
 
 exports.StartGame = StartGame;
 exports.Interaction = Interaction;

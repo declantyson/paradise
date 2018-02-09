@@ -108,7 +108,7 @@ class Game {
 
         if(this.loading) {
             let loading = new Image();
-            loading.src = '/img/loading.png';
+            loading.src = '/oob/loading.png';
             this.cachedCanvas = loading;
         } else if(this.redraw) {
             this.cachedCanvas = pre_canvas;

@@ -17,7 +17,7 @@ class Player {
         let sprite_test = new Image(),
             spriteMap_test = {};
 
-        sprite_test.src = '/img/char_test.png';
+        sprite_test.src = '/oob/char_test.png';
         spriteMap_test[directions.up] = 0;
         spriteMap_test[directions.down] = 128;
         spriteMap_test[directions.left] = 64;
