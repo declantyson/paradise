@@ -7,27 +7,30 @@
  *
  */
 
-export const dieRoll = (sides)  => {
-    let result = Math.floor(Math.random() * (sides));
-    return result;
-};
-
-export const pickRandomProperty = (obj)  => {
-    let result,
-        count = 0;
-
-    for (let prop in obj) {
-        if (Math.random() < 1 / ++count) result = prop;
+class Util {
+    static dieRoll(sides) {
+        return Math.floor(Math.random() * (sides));;
     }
-    return result;
-};
 
-export const log = (str) => {
-    let log = document.getElementById('log');
-    log.innerHTML += `${str}<hr/>`;
-    log.scrollTop = log.scrollHeight;
-};
+    static pickRandomProperty(obj) {
+        let result,
+            count = 0;
 
-export const clearLog = () => {
-    document.getElementById('log').innerHTML = '';
-};
+        for (let prop in obj) {
+            if (Math.random() < 1 / ++count) result = prop;
+        }
+        return result;
+    }
+
+    static log(str) {
+        let log = document.getElementById('log');
+        log.innerHTML += `${str}<hr/>`;
+        log.scrollTop = log.scrollHeight;
+    }
+
+    static clearLog() {
+        document.getElementById('log').innerHTML = '';
+    }
+}
+
+export { Util };

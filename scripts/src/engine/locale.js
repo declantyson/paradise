@@ -7,7 +7,7 @@
  *
  */
 
-import * as util from './util';
+import { Util } from './util';
 import { defaultInhabitanceSize } from '../constants';
 
 class Locale {
@@ -98,11 +98,11 @@ class Interior extends Locale {
     constructor(player, people, inhabitance) {
         super(player, people);
         this.inhabitance = inhabitance;
-        util.log(`Welcome to ${inhabitance.name}.`);
+        Util.log(`Welcome to ${inhabitance.name}.`);
 
         for(let i = 0; i < inhabitance.inhabitants.length; i++) {
             let inhabitant = inhabitance.inhabitants[i];
-            util.log(`${inhabitant} lives here.`);
+            Util.log(`${inhabitant} lives here.`);
         }
     }
 }

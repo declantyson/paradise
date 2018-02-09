@@ -7,7 +7,7 @@
  *
  */
 
-import * as util from './util';
+import { Util } from './util';
 import { colours } from '../constants';
 
 class Item {

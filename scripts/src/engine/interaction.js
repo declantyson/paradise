@@ -7,7 +7,7 @@
  *
  */
 
-import * as util from './util';
+import { Util } from './util';
 
 import { Scene } from './scene';
 import {canvasProperties, interactionTextArea, fonts, colours } from '../constants';
@@ -20,7 +20,7 @@ class Interaction extends Scene {
         this.person = person;
         this.actions.back = this.returnToWorldMap.bind(this);
 
-        util.log(`Entering interaction with ${this.person.name}`);
+        Util.log(`Entering interaction with ${this.person.name}`);
     }
 
     draw(ctx) {

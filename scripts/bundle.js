@@ -1,4 +1,4 @@
-(function () {
+var Paradise = (function (exports) {
 'use strict';
 
 /*
@@ -10,27 +10,31 @@
  *
  */
 
-
-
-const pickRandomProperty = (obj)  => {
-    let result,
-        count = 0;
-
-    for (let prop in obj) {
-        if (Math.random() < 1 / ++count) result = prop;
+class Util {
+    static dieRoll(sides) {
+        return Math.floor(Math.random() * (sides));
     }
-    return result;
-};
 
-const log = (str) => {
-    let log = document.getElementById('log');
-    log.innerHTML += `${str}<hr/>`;
-    log.scrollTop = log.scrollHeight;
-};
+    static pickRandomProperty(obj) {
+        let result,
+            count = 0;
 
-const clearLog = () => {
-    document.getElementById('log').innerHTML = '';
-};
+        for (let prop in obj) {
+            if (Math.random() < 1 / ++count) result = prop;
+        }
+        return result;
+    }
+
+    static log(str) {
+        let log = document.getElementById('log');
+        log.innerHTML += `${str}<hr/>`;
+        log.scrollTop = log.scrollHeight;
+    }
+
+    static clearLog() {
+        document.getElementById('log').innerHTML = '';
+    }
+}
 
 /*
  *
@@ -137,6 +141,15 @@ const posessivePronouns = {
 
 const personCount = 4;
 const defaultInhabitanceSize = 2;
+
+/*
+ *
+ *  Paradise/Item
+ *  Declan Tyson
+ *  v0.0.22
+ *  06/02/2018
+ *
+ */
 
 /*
  *
@@ -373,7 +386,7 @@ class Interaction extends Scene {
         this.person = person;
         this.actions.back = this.returnToWorldMap.bind(this);
 
-        log(`Entering interaction with ${this.person.name}`);
+        Util.log(`Entering interaction with ${this.person.name}`);
     }
 
     draw(ctx) {
@@ -509,11 +522,11 @@ class Interior extends Locale {
     constructor(player, people, inhabitance) {
         super(player, people);
         this.inhabitance = inhabitance;
-        log(`Welcome to ${inhabitance.name}.`);
+        Util.log(`Welcome to ${inhabitance.name}.`);
 
         for(let i = 0; i < inhabitance.inhabitants.length; i++) {
             let inhabitant = inhabitance.inhabitants[i];
-            log(`${inhabitant} lives here.`);
+            Util.log(`${inhabitant} lives here.`);
         }
     }
 }
@@ -788,9 +801,9 @@ const locales = {
 };
 
 const chooseStartingMap = () => {
-    let locale = pickRandomProperty(startingMaps);
-    log('Choosing starting map...');
-    log(`Map is ${locale}.`);
+    let locale = Util.pickRandomProperty(startingMaps);
+    Util.log('Choosing starting map...');
+    Util.log(`Map is ${locale}.`);
     return locale;
 };
 
@@ -819,7 +832,7 @@ class Person {
                 oldValue = relationship.value,
                 newValue = Math.floor(Math.random() * 99);
 
-            log(`${this.name}'s relationship with ${posessivePronouns[this.gender]} ${relationship.description}, ${name}, goes from ${oldValue} to ${newValue}.`);
+            Util.log(`${this.name}'s relationship with ${posessivePronouns[this.gender]} ${relationship.description}, ${name}, goes from ${oldValue} to ${newValue}.`);
             this.relationships[name].value = newValue;
         });
     }
@@ -1407,13 +1420,13 @@ class Game {
 
 const choosePeople = () => {
     let chosenPeople = [];
-    log(`Choosing ${personCount} people...`);
+    Util.log(`Choosing ${personCount} people...`);
     let person;
     while(chosenPeople.length < personCount) {
-        person = pickRandomProperty(people);
+        person = Util.pickRandomProperty(people);
         if(chosenPeople.indexOf(person) === -1) {
             chosenPeople.push(person);
-            log(`${person} has been chosen.`);
+            Util.log(`${person} has been chosen.`);
         }
     }
 
@@ -1430,7 +1443,7 @@ const choosePeople = () => {
  */
 
 window.startGame = (locale, people) => {
-    clearLog();
+    Util.clearLog();
 
     locale = startingMaps[locale] || startingMaps[chooseStartingMap()];
     people = people || choosePeople();
@@ -1446,4 +1459,8 @@ window.startGame = (locale, people) => {
     });
 };
 
-}());
+exports.WorldMap = WorldMap;
+
+return exports;
+
+}({}));

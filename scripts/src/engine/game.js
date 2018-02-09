@@ -9,6 +9,7 @@
 
 import * as input from './inputs';
 
+import { Item } from './item';
 import { Player } from './player';
 import { WorldMap } from './worldmap';
 import { canvasProperties, fps, actionTimeoutLimit } from '../constants';

@@ -8,18 +8,18 @@
  */
 
 import { personCount } from '../constants';
-import * as util from './util';
+import { Util } from './util';
 import { people } from '../people/people';
 
 export const choosePeople = () => {
     let chosenPeople = [];
-    util.log(`Choosing ${personCount} people...`);
+    Util.log(`Choosing ${personCount} people...`);
     let person;
     while(chosenPeople.length < personCount) {
-        person = util.pickRandomProperty(people);
+        person = Util.pickRandomProperty(people);
         if(chosenPeople.indexOf(person) === -1) {
             chosenPeople.push(person);
-            util.log(`${person} has been chosen.`);
+            Util.log(`${person} has been chosen.`);
         }
     }
 

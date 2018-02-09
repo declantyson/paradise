@@ -7,7 +7,7 @@
  *
  */
 
-import * as util from '../engine/util';
+import { Util } from '../engine/util';
 
 import { Village } from './village';
 import { Islands } from './islands';
@@ -33,8 +33,8 @@ export const locales = {
 };
 
 export const chooseStartingMap = () => {
-    let locale = util.pickRandomProperty(startingMaps);
-    util.log('Choosing starting map...');
-    util.log(`Map is ${locale}.`);
+    let locale = Util.pickRandomProperty(startingMaps);
+    Util.log('Choosing starting map...');
+    Util.log(`Map is ${locale}.`);
     return locale;
 };

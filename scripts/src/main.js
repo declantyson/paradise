@@ -7,7 +7,7 @@
  *
  */
 
-import * as util from './engine/util';
+import { Util } from './engine/util';
 
 import { StartGame } from './engine/game';
 import { Player } from './engine/player';
@@ -16,7 +16,7 @@ import { choosePeople } from './engine/people';
 import { startingMaps, chooseStartingMap } from "./locales/locales";
 
 window.startGame = (locale, people) => {
-    util.clearLog();
+    Util.clearLog();
 
     locale = startingMaps[locale] || startingMaps[chooseStartingMap()];
     people = people || choosePeople();
@@ -31,3 +31,5 @@ window.startGame = (locale, people) => {
         button.blur();
     });
 };
+
+export { WorldMap };
