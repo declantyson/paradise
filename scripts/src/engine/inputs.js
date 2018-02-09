@@ -7,7 +7,7 @@
  *
  */
 
-const actions = {
+export const actions = {
     38 :    'up',
     40 :    'down',
     37 :    'left',

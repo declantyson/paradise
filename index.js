@@ -4,6 +4,34 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 /*
  *
+ *  Paradise/Inputs
+ *  Declan Tyson
+ *  v0.0.21
+ *  06/02/2018
+ *
+ */
+
+const actions = {
+    38 :    'up',
+    40 :    'down',
+    37 :    'left',
+    39 :    'right',
+    32 :    'action',
+    27 :    'back'
+};
+
+window.addEventListener('keydown', (e) => {
+    if(!actions[e.keyCode] || !window.game) return;
+    window.game.sendInput(actions[e.keyCode]);
+});
+
+window.addEventListener('keyup', (e) => {
+    if(!window.game) return;
+    window.game.sendInput(null);
+});
+
+/*
+ *
  *  Paradise/Util
  *  Declan Tyson
  *  v0.0.23
@@ -36,34 +64,6 @@ class Util {
         document.getElementById('log').innerHTML = '';
     }
 }
-
-/*
- *
- *  Paradise/Inputs
- *  Declan Tyson
- *  v0.0.21
- *  06/02/2018
- *
- */
-
-const actions = {
-    38 :    'up',
-    40 :    'down',
-    37 :    'left',
-    39 :    'right',
-    32 :    'action',
-    27 :    'back'
-};
-
-window.addEventListener('keydown', (e) => {
-    if(!actions[e.keyCode] || !window.game) return;
-    window.game.sendInput(actions[e.keyCode]);
-});
-
-window.addEventListener('keyup', (e) => {
-    if(!window.game) return;
-    window.game.sendInput(null);
-});
 
 /*
  *
@@ -151,6 +151,14 @@ const defaultInhabitanceSize = 2;
  *  06/02/2018
  *
  */
+
+class Item {
+    constructor(name, description) {
+        this.name = name;
+        this.description = description;
+        this.colour = colours.black;
+    }
+}
 
 /*
  *
@@ -1442,22 +1450,36 @@ const choosePeople = () => {
  *  07/02/2018
  *
  */
-
-window.startGame = (locale, people) => {
+// Engine
+// Test data
+window.startGame = (locale, people$$1) => {
     Util.clearLog();
 
     locale = startingMaps[locale] || startingMaps[chooseStartingMap()];
-    people = people || choosePeople();
+    people$$1 = people$$1 || choosePeople();
 
     let player = new Player(),
         worldMap = new WorldMap(player);
 
-    window.game = StartGame(locale, people, player, worldMap);
-    window.game.people = people;
+    window.game = StartGame(locale, people$$1, player, worldMap);
+    window.game.people = people$$1;
 
     document.querySelectorAll('button').forEach((button) => {
         button.blur();
     });
 };
 
+exports.StartGame = StartGame;
+exports.Interaction = Interaction;
+exports.Item = Item;
+exports.Locale = Locale;
+exports.Player = Player;
+exports.choosePeople = choosePeople;
+exports.Person = Person;
+exports.Scene = Scene;
+exports.terrains = terrains;
+exports.Util = Util;
 exports.WorldMap = WorldMap;
+exports.startingMaps = startingMaps;
+exports.chooseStartingMap = chooseStartingMap;
+exports.people = people;

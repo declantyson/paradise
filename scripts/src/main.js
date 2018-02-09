@@ -6,14 +6,22 @@
  *  07/02/2018
  *
  */
-
-import { Util } from './engine/util';
-
+// Engine
 import { StartGame } from './engine/game';
-import { Player } from './engine/player';
+import { Interaction } from "./engine/interaction";
+import { Item } from './engine/item';
+import { Locale } from "./engine/locale";
+import { Player } from "./engine/player";
+import { choosePeople } from "./engine/people";
+import { Person } from "./engine/person";
+import { Scene } from "./engine/scene";
+import { terrains } from './engine/terrains';
+import { Util } from './engine/util';
 import { WorldMap } from './engine/worldmap';
-import { choosePeople } from './engine/people';
+
+// Test data
 import { startingMaps, chooseStartingMap } from "./locales/locales";
+import { people } from './people/people';
 
 window.startGame = (locale, people) => {
     Util.clearLog();
@@ -32,4 +40,9 @@ window.startGame = (locale, people) => {
     });
 };
 
-export { WorldMap };
+
+export {
+    StartGame, Interaction, Item, Locale, Player, choosePeople, Person, Scene, terrains, Util, WorldMap,
+    startingMaps, chooseStartingMap,
+    people
+};

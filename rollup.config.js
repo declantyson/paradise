@@ -11,7 +11,8 @@ export default [{
         commonjs({
             namedExports: {
                 'index.js': [
-                    'Item'
+                    'StartGame', 'Interaction', 'Item', 'Locale', 'Player', 'Scene', 'terrains', 'Util', 'WorldMap',
+                    'startingMaps'
                 ]
             }
         })
