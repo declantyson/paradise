@@ -1450,11 +1450,14 @@ const choosePeople = () => {
  *
  */
 // Engine
+// Test data
 
 exports.StartGame = StartGame;
 exports.Interaction = Interaction;
 exports.Item = Item;
 exports.Locale = Locale;
+exports.Inhabitance = Inhabitance;
+exports.Interior = Interior;
 exports.Player = Player;
 exports.choosePeople = choosePeople;
 exports.Person = Person;

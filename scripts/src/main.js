@@ -10,7 +10,7 @@
 import { StartGame } from './engine/game';
 import { Interaction } from "./engine/interaction";
 import { Item } from './engine/item';
-import { Locale } from "./engine/locale";
+import { Locale, Inhabitance, Interior } from "./engine/locale";
 import { Player } from "./engine/player";
 import { choosePeople } from "./engine/people";
 import { Person } from "./engine/person";
@@ -24,7 +24,7 @@ import { startingMaps, chooseStartingMap } from "./locales/locales";
 import { people } from './people/people';
 
 export {
-    StartGame, Interaction, Item, Locale, Player, choosePeople, Person, Scene, terrains, Util, WorldMap,
+    StartGame, Interaction, Item, Locale, Inhabitance, Interior, Player, choosePeople, Person, Scene, terrains, Util, WorldMap,
     startingMaps, chooseStartingMap,
     people
 };
