@@ -4,19 +4,9 @@ export default [{
     input: 'scripts/src/main.js',
     output: {
         file: 'index.js',
-        format: 'cjs',
+        format: 'es',
         name: 'Paradise',
-    },
-    plugins: [
-        commonjs({
-            namedExports: {
-                'index.js': [
-                    'StartGame', 'Interaction', 'Item', 'Locale', 'Player', 'Scene', 'terrains', 'Util', 'WorldMap',
-                    'startingMaps'
-                ]
-            }
-        })
-    ]
+    }
 },{
     input: 'scripts/src/main.js',
     output: {

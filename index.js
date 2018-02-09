@@ -1,7 +1,3 @@
-'use strict';
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
 /*
  *
  *  Paradise/Inputs
@@ -1447,23 +1443,10 @@ const choosePeople = () => {
  *  Paradise
  *  Declan Tyson
  *  v0.0.33
- *  07/02/2018
+ *  09/02/2018
  *
  */
 // Engine
 // Test data
 
-exports.StartGame = StartGame;
-exports.Interaction = Interaction;
-exports.Item = Item;
-exports.Locale = Locale;
-exports.Player = Player;
-exports.choosePeople = choosePeople;
-exports.Person = Person;
-exports.Scene = Scene;
-exports.terrains = terrains;
-exports.Util = Util;
-exports.WorldMap = WorldMap;
-exports.startingMaps = startingMaps;
-exports.chooseStartingMap = chooseStartingMap;
-exports.people = people;
+export { StartGame, Interaction, Item, Locale, Player, choosePeople, Person, Scene, terrains, Util, WorldMap, startingMaps, chooseStartingMap, people };
