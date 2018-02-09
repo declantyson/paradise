@@ -1445,28 +1445,12 @@ const choosePeople = () => {
  *
  *  Paradise
  *  Declan Tyson
- *  v0.0.32
+ *  v0.0.33
  *  07/02/2018
  *
  */
 // Engine
 // Test data
-window.startGame = (locale, people$$1) => {
-    Util.clearLog();
-
-    locale = startingMaps[locale] || startingMaps[chooseStartingMap()];
-    people$$1 = people$$1 || choosePeople();
-
-    let player = new Player(),
-        worldMap = new WorldMap(player);
-
-    window.game = StartGame(locale, people$$1, player, worldMap);
-    window.game.people = people$$1;
-
-    document.querySelectorAll('button').forEach((button) => {
-        button.blur();
-    });
-};
 
 exports.StartGame = StartGame;
 exports.Interaction = Interaction;

@@ -24,4 +24,11 @@ export default [{
         format: 'iife',
         name: 'Paradise'
     }
+},{
+    input: 'scripts/src/demo.js',
+    output: {
+        file: 'games/demo.js',
+        format: 'iife',
+        name: 'Paradise'
+    }
 }];

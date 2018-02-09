@@ -1,6 +1,5 @@
+(function () {
 'use strict';
-
-Object.defineProperty(exports, '__esModule', { value: true });
 
 /*
  *
@@ -151,14 +150,6 @@ const defaultInhabitanceSize = 2;
  *  06/02/2018
  *
  */
-
-class Item {
-    constructor(name, description) {
-        this.name = name;
-        this.description = description;
-        this.colour = colours.black;
-    }
-}
 
 /*
  *
@@ -1453,17 +1444,30 @@ const choosePeople = () => {
 // Engine
 // Test data
 
-exports.StartGame = StartGame;
-exports.Interaction = Interaction;
-exports.Item = Item;
-exports.Locale = Locale;
-exports.Player = Player;
-exports.choosePeople = choosePeople;
-exports.Person = Person;
-exports.Scene = Scene;
-exports.terrains = terrains;
-exports.Util = Util;
-exports.WorldMap = WorldMap;
-exports.startingMaps = startingMaps;
-exports.chooseStartingMap = chooseStartingMap;
-exports.people = people;
+/*
+ *
+ *  Paradise
+ *  Declan Tyson
+ *  v0.0.33
+ *  07/02/2018
+ *
+ */
+
+window.startGame = (locale, people$$1) => {
+    Util.clearLog();
+
+    locale = startingMaps[locale] || startingMaps[chooseStartingMap()];
+    people$$1 = people$$1 || choosePeople();
+
+    let player = new Player(),
+        worldMap = new WorldMap(player);
+
+    window.game = StartGame(locale, people$$1, player, worldMap);
+    window.game.people = people$$1;
+
+    document.querySelectorAll('button').forEach((button) => {
+        button.blur();
+    });
+};
+
+}());
