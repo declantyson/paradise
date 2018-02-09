@@ -1,15 +1,15 @@
 /*
  *
- *  XL RPG/Locales/Grove Street House Template
- *  XL Gaming/Declan Tyson
+ *  Paradise/Locales/Grove Street House Template
+ *  Declan Tyson
  *  v0.0.20
  *  05/02/2018
  *
  */
 
-import { ParadiseInterior } from '../../paradise_locale';
+import { Interior } from '../../engine/locale';
 
-class GroveStreetTemplate extends ParadiseInterior {
+class GroveStreetTemplate extends Interior {
     constructor(player, people, inhabitance) {
         super(player, people, inhabitance);
 

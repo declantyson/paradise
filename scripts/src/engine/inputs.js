@@ -1,13 +1,13 @@
 /*
  *
- *  XL RPG/Inputs
- *  XL Gaming/Declan Tyson
+ *  Paradise/Inputs
+ *  Declan Tyson
  *  v0.0.21
  *  06/02/2018
  *
  */
 
-const actions = {
+export const actions = {
     38 :    'up',
     40 :    'down',
     37 :    'left',

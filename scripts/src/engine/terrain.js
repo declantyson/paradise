@@ -1,8 +1,8 @@
 /*
  *
- *  XL RPG/Terrain
- *  XL Gaming/Declan Tyson
- *  v0.0.30
+ *  Paradise/Terrain
+ *  Declan Tyson
+ *  v0.0.35
  *  08/02/2018
  *
  */
@@ -36,7 +36,7 @@ class Terrain {
             filename += `${neighbourKey}_${neighbours[neighbourKey]}`;
         });
         filename = filename.toLowerCase();
-        this.image = `/img/${this.spriteFolder}/${filename}.png`;
+        this.image = `${this.spriteFolder}/${filename}.png`;
     }
 }
 
@@ -51,7 +51,7 @@ class Blank extends Terrain {
 
 class Grass extends Terrain {
     constructor(neighbours) {
-        super(neighbours, 'Grass');
+        super(neighbours, '/oob/Grass');
         this.id = 'Grass';
         this.passable = true;
         this.colour = colours.green;
@@ -60,7 +60,7 @@ class Grass extends Terrain {
 
 class Water extends Terrain {
     constructor(neighbours) {
-        super(neighbours, 'Water');
+        super(neighbours, '/oob/Water');
         this.id = 'Water';
         this.passable = false;
         this.colour = colours.blue;

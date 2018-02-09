@@ -1,16 +1,16 @@
 /*
  *
- *  XL RPG/Person/John
- *  XL Gaming/Declan Tyson
+ *  Paradise/Person/John
+ *  Declan Tyson
  *  v0.0.24
  *  06/02/2018
  *
  */
 
 import { genders } from '../constants';
-import { ParadisePerson } from '../paradise_person';
+import { Person } from '../engine/person';
 
-class John extends ParadisePerson {
+class John extends Person {
     constructor() {
         super('John', genders.male);
 

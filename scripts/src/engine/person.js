@@ -1,13 +1,13 @@
 /*
  *
- *  XL RPG/Person
- *  XL Gaming/Declan Tyson
+ *  Paradise/Person
+ *  Declan Tyson
  *  v0.0.23
  *  06/02/2018
  *
  */
 
-import * as util from './util';
+import { Util } from './util';
 import { colours, posessivePronouns } from '../constants';
 
 class Person {
@@ -26,7 +26,7 @@ class Person {
                 oldValue = relationship.value,
                 newValue = Math.floor(Math.random() * 99);
 
-            util.log(`${this.name}'s relationship with ${posessivePronouns[this.gender]} ${relationship.description}, ${name}, goes from ${oldValue} to ${newValue}.`);
+            Util.log(`${this.name}'s relationship with ${posessivePronouns[this.gender]} ${relationship.description}, ${name}, goes from ${oldValue} to ${newValue}.`);
             this.relationships[name].value = newValue;
         });
     }

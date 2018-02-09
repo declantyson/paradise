@@ -1,16 +1,16 @@
 /*
  *
- *  XL RPG/Locales/Islands
- *  XL Gaming/Declan Tyson
+ *  Paradise/Locales/Islands
+ *  Declan Tyson
  *  v0.0.29
  *  08/02/2018
  *
  */
 
 import { Inhabitance } from '../engine/locale';
-import { ParadiseLocale } from '../paradise_locale';
+import { Locale } from '../engine/locale';
 
-class Islands extends ParadiseLocale {
+class Islands extends Locale {
     constructor(player, people) {
         super(player, people);
 

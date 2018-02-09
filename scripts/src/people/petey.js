@@ -1,16 +1,16 @@
 /*
  *
- *  XL RPG/Person/Petey
- *  XL Gaming/Declan Tyson
+ *  Paradise/Person/Petey
+ *  Declan Tyson
  *  v0.0.23
  *  06/02/2018
  *
  */
 
 import { genders } from '../constants';
-import { ParadisePerson } from '../paradise_person';
+import { Person } from '../engine/person';
 
-class Petey extends ParadisePerson {
+class Petey extends Person {
     constructor() {
         super('Petey', genders.male);
     }

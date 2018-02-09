@@ -1,7 +1,7 @@
 /*
  *
- *  XL RPG/Scene-Encounter
- *  XL Gaming/Declan Tyson
+ *  Paradise/Scene-Encounter
+ *  Declan Tyson
  *  v0.0.20
  *  06/02/2018
  *

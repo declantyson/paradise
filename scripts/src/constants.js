@@ -1,7 +1,7 @@
 /*
  *
- *  XL RPG/Constants
- *  XL Gaming/Declan Tyson
+ *  Paradise/Constants
+ *  Declan Tyson
  *  v0.0.31
  *  08/02/2018
  *
@@ -32,10 +32,6 @@ export const directions = {
     down: 'down',
     left: 'left',
     right: 'right'
-};
-
-export const texts = {
-    dead: 'Dead'
 };
 
 export const fonts = {
@@ -82,6 +78,4 @@ export const posessivePronouns = {
 };
 
 export const personCount = 4;
-export const evidenceCount = 4;
-export const herrings = 2;
 export const defaultInhabitanceSize = 2;
