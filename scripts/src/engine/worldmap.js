@@ -11,8 +11,6 @@ import { terrains } from './terrains';
 import { spriteSize, tileSize, tilesWide as viewportWidth, tilesHigh as viewportHeight, directions } from '../constants';
 import { Scene } from './scene';
 import { Interaction } from './interaction';
-import { locales } from '../locales/locales';
-import { people } from '../people/people';
 
 class WorldMap extends Scene {
     constructor(player) {
@@ -209,7 +207,7 @@ class WorldMap extends Scene {
             return;
         }
 
-        let localeId = locales[entrance.locale.id],
+        let localeId = window.game.locales[entrance.locale.id],
             locale = new localeId(this.locale.player, this.locale.people, entrance.locale);
 
         this.setCurrentLocale(locale, entrance.entryPoint);
@@ -221,7 +219,8 @@ class WorldMap extends Scene {
         this.locale.inhabitance.inhabitants.forEach((inhabitant, index) => {
             let spawnPoint = this.locale.spawnPoints[index];
             if(spawnPoint !== undefined) {
-                let person = new people[inhabitant]();
+                console.log(window.game.people);
+                let person = new window.game.people[inhabitant]();
                 person.x = spawnPoint.x;
                 person.y = spawnPoint.y;
                 this.presentPeople.push(person);

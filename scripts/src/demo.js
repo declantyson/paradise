@@ -19,7 +19,6 @@ window.startGame = (locale, people) => {
         worldMap = new WorldMap(player);
 
     window.game = StartGame(locale, people, player, worldMap);
-    window.game.people = people;
 
     document.querySelectorAll('button').forEach((button) => {
         button.blur();

@@ -13,17 +13,21 @@ import { Item } from './item';
 import { Player } from './player';
 import { WorldMap } from './worldmap';
 import { canvasProperties, fps, actionTimeoutLimit } from '../constants';
+import { locales } from '../locales/locales';
+import { people } from '../people/people';
 
-export const StartGame = (locale, people, player, scene, renderer) => {
+export const StartGame = (locale, activePeople, player, scene, renderer) => {
     clearInterval(window.drawScene);
 
     player = player || new Player();
     scene = scene || new WorldMap(player);
     renderer = renderer || new Renderer('world', canvasProperties.width, canvasProperties.height);
 
-    let start = new locale(player, people),
+    let start = new locale(player, activePeople),
         game = new Game(renderer, scene, canvasProperties.centerPoint);
 
+    game.locales = locales;
+    game.people = people;
     game.scene.setCurrentLocale(start, 'beginningOfGame');
     game.initTerrainSprites();
 
