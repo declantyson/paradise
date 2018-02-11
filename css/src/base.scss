@@ -2,8 +2,8 @@
 *
 *	Paradise
 *	Declan Tyson
-*	v0.0.30
-*	08/02/2018
+*	v0.0.36
+*	11/02/2018
 *
 */
 
@@ -40,8 +40,8 @@ html, body {
 }
 
 canvas {
-	border-bottom: solid 1px #cdcdcd;
-	//width: 100%;
+	width: 100vw;
+	height: 100vh;
 	background-color: black;
 }
 

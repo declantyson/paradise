@@ -65,8 +65,8 @@ class Util {
  *
  *  Paradise/Constants
  *  Declan Tyson
- *  v0.0.31
- *  08/02/2018
+ *  v0.0.36
+ *  11/02/2018
  *
  */
 
@@ -76,8 +76,8 @@ const tileSize = 20;
 const spriteSize = 40;
 const frameSize = 64;
 const frameCount = 9;
-const tilesWide = 48;
-const tilesHigh = 32;
+const tilesWide = 50;
+const tilesHigh = 28;
 
 const colours = {
     black : '#000000',
@@ -434,8 +434,8 @@ class Interaction extends Scene {
  *
  *  Paradise/Scene-WorldMap
  *  Declan Tyson
- *  v0.0.31
- *  08/02/2018
+ *  v0.0.36
+ *  11/02/2018
  *
  */
 
@@ -540,21 +540,23 @@ class WorldMap extends Scene {
         for(let x = viewportStartX; x <= viewportStartX + tilesWide; x++) {
             for(let y = viewportStartY; y <= viewportStartY + tilesHigh; y++) {
 
-                let terrain = this.localeMap[x][y],
-                    tileX = x * tileSize - this.offsetX,
-                    tileY = y * tileSize - this.offsetY,
-                    tile = window.game.terrainSprites[terrain.image];
+                let terrain = this.localeMap[x][y];
+                if(typeof terrain !== "undefined") {
+                    let tileX = x * tileSize - this.offsetX,
+                        tileY = y * tileSize - this.offsetY,
+                        tile = window.game.terrainSprites[terrain.image];
 
-                if(!tile) {
-                    ctx.beginPath();
-                    ctx.fillStyle = terrain.colour;
-                    ctx.strokeStyle = terrain.colour;
-                    ctx.rect(tileX, tileY, tileSize, tileSize);
-                    ctx.fill();
-                    ctx.stroke();
-                } else {
-                    ctx.strokeStyle = null;
-                    ctx.drawImage(tile, 0, 0, 45, 45, tileX, tileY, tileSize, tileSize);
+                    if (!tile) {
+                        ctx.beginPath();
+                        ctx.fillStyle = terrain.colour;
+                        ctx.strokeStyle = terrain.colour;
+                        ctx.rect(tileX, tileY, tileSize, tileSize);
+                        ctx.fill();
+                        ctx.stroke();
+                    } else {
+                        ctx.strokeStyle = null;
+                        ctx.drawImage(tile, 0, 0, 45, 45, tileX, tileY, tileSize, tileSize);
+                    }
                 }
             }
         }
@@ -646,7 +648,6 @@ class WorldMap extends Scene {
         this.locale.inhabitance.inhabitants.forEach((inhabitant, index) => {
             let spawnPoint = this.locale.spawnPoints[index];
             if(spawnPoint !== undefined) {
-                console.log(window.game.people);
                 let person = new window.game.people[inhabitant]();
                 person.x = spawnPoint.x;
                 person.y = spawnPoint.y;
@@ -1450,5 +1451,6 @@ const choosePeople = () => {
  *
  */
 // Engine
+// Test data
 
 export { StartGame, Interaction, Item, Locale, Inhabitance, Interior, Player, choosePeople, Person, Scene, terrains, Util, WorldMap, startingMaps, chooseStartingMap, people, Evelyn, Jill, John, Neil, Pauline, Petey, Quazar, Zenith };
