@@ -2,19 +2,20 @@
  *
  *  Paradise/Terrain
  *  Declan Tyson
- *  v0.0.35
- *  08/02/2018
+ *  v0.0.38
+ *  12/02/2018
  *
  */
 
 import { colours } from '../constants';
 
 class Terrain {
-    constructor(neighbours, spriteFolder = false) {
+    constructor(neighbours, spriteFolder = '/oob') {
         this.encounters = [];
         this.image = false;
-        this.neighbours = neighbours;
         this.spriteFolder = spriteFolder;
+        this.fallbackImage = `${this.spriteFolder}/fallback.png`;
+        this.neighbours = neighbours;
 
         this.pickImage(neighbours);
     }
@@ -28,7 +29,7 @@ class Terrain {
     }
 
     pickImage(neighbours) {
-        if(!neighbours || !this.spriteFolder) return;
+        if(!neighbours || this.spriteFolder === '/oob') return;
 
         let filename = '';
         Object.keys(neighbours).forEach((neighbourKey) => {

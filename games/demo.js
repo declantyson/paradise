@@ -224,17 +224,18 @@ class Player {
  *
  *  Paradise/Terrain
  *  Declan Tyson
- *  v0.0.35
- *  08/02/2018
+ *  v0.0.38
+ *  12/02/2018
  *
  */
 
 class Terrain {
-    constructor(neighbours, spriteFolder = false) {
+    constructor(neighbours, spriteFolder = '/oob') {
         this.encounters = [];
         this.image = false;
-        this.neighbours = neighbours;
         this.spriteFolder = spriteFolder;
+        this.fallbackImage = `${this.spriteFolder}/fallback.png`;
+        this.neighbours = neighbours;
 
         this.pickImage(neighbours);
     }
@@ -248,7 +249,7 @@ class Terrain {
     }
 
     pickImage(neighbours) {
-        if(!neighbours || !this.spriteFolder) return;
+        if(!neighbours || this.spriteFolder === '/oob') return;
 
         let filename = '';
         Object.keys(neighbours).forEach((neighbourKey) => {
@@ -443,7 +444,7 @@ class Interaction extends Scene {
  *
  *  Paradise/Scene-WorldMap
  *  Declan Tyson
- *  v0.0.37
+ *  v0.0.38
  *  12/02/2018
  *
  */
@@ -531,7 +532,7 @@ class WorldMap extends Scene {
     }
 
     drawLocale(ctx) {
-        if(!this.locale) return;
+        if(!this.locale || this.game.loading) return;
 
         let viewportStartX = this.viewportStartX,
             viewportStartY = this.viewportStartY;
@@ -1289,7 +1290,7 @@ let people = {
  *
  *  Paradise/Game
  *  Declan Tyson
- *  v0.0.37
+ *  v0.0.38
  *  12/02/2018
  *
  */
@@ -1364,12 +1365,7 @@ class Game {
                         }
                     };
                     tile.onerror = () => {
-                        this.spritesLoaded++;
-                        if(this.spritesLoaded >= Object.keys(this.terrainSprites).length) {
-                            setTimeout(() => {
-                                this.loading = false;
-                            }, 2500);
-                        }
+                        tile.src = terrain.fallbackImage;
                     };
                     /* jshint ignore:end */
                 }
@@ -1455,7 +1451,6 @@ const choosePeople = () => {
  *
  */
 // Engine
-// Test data
 
 /*
  *

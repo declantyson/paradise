@@ -2,7 +2,7 @@
  *
  *  Paradise/Scene-WorldMap
  *  Declan Tyson
- *  v0.0.37
+ *  v0.0.38
  *  12/02/2018
  *
  */
@@ -96,7 +96,7 @@ class WorldMap extends Scene {
     }
 
     drawLocale(ctx) {
-        if(!this.locale) return;
+        if(!this.locale || this.game.loading) return;
 
         let viewportStartX = this.viewportStartX,
             viewportStartY = this.viewportStartY;
