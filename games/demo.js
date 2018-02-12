@@ -66,21 +66,47 @@ class Util {
 
 /*
  *
- *  Paradise/Constants
+ *  Paradise/Settings
  *  Declan Tyson
- *  v0.0.36
- *  11/02/2018
+ *  v0.0.37
+ *  12/02/2018
  *
  */
 
-const fps = 45;
-const actionTimeoutLimit = 2;
-const tileSize = 20;
-const spriteSize = 40;
-const frameSize = 64;
-const frameCount = 9;
-const tilesWide = 50;
-const tilesHigh = 28;
+let settings = {
+    fps : 45,
+    actionTimeoutLimit : 2,
+    terrain: {
+        tileSize: 20,
+        tilesWide: 50,
+        tilesHigh: 28
+    },
+    character : {
+        spriteSize: 40,
+        frameSize: 64,
+        frameCount: 9
+    },
+    personCount : 4,
+    defaultInhabitanceSize : 2
+};
+
+let canvasProperties = {
+    width: settings.terrain.tileSize * settings.terrain.tilesWide,
+    height: settings.terrain.tileSize * settings.terrain.tilesHigh,
+    centerPoint: {
+        x: ((settings.terrain.tileSize * settings.terrain.tilesWide) / 2) - (settings.terrain.tileSize / 2),
+        y: ((settings.terrain.tileSize * settings.terrain.tilesHigh) / 2) - (settings.terrain.tileSize / 2)
+    }
+};
+
+/*
+ *
+ *  Paradise/Constants
+ *  Declan Tyson
+ *  v0.0.37
+ *  12/02/2018
+ *
+ */
 
 const colours = {
     black : '#000000',
@@ -104,15 +130,6 @@ const fonts = {
     large: '24px "Roboto Condensed"',
     small: '16px "Roboto"',
     death: '24px "Permanent Marker"'
-};
-
-const canvasProperties = {
-    width: tileSize * tilesWide,
-    height: tileSize * tilesHigh,
-    centerPoint: {
-        x: ((tileSize * tilesWide) / 2) - (tileSize / 2),
-        y: ((tileSize * tilesHigh) / 2) - (tileSize / 2)
-    }
 };
 
 const interactionTextArea = {
@@ -139,9 +156,6 @@ const posessivePronouns = {
     A   : 'xleir'
 };
 
-const personCount = 4;
-const defaultInhabitanceSize = 2;
-
 /*
  *
  *  Paradise/Item
@@ -155,8 +169,8 @@ const defaultInhabitanceSize = 2;
  *
  *  Paradise/Player
  *  Declan Tyson
- *  v0.0.31
- *  08/02/2018
+ *  v0.0.37
+ *  12/02/2018
  *
  */
 
@@ -183,8 +197,8 @@ class Player {
     }
 
     advanceFrame() {
-        let newSpriteX = this.sprite.x + frameSize;
-        if(newSpriteX >= frameSize * frameCount) {
+        let newSpriteX = this.sprite.x + settings.character.frameSize;
+        if(newSpriteX >= settings.character.frameSize * settings.character.frameCount) {
             newSpriteX = 0;
         }
 
@@ -332,8 +346,8 @@ let terrains = {
  *
  *  Paradise/Scene
  *  Declan Tyson
- *  v0.0.28
- *  07/02/2018
+ *  v0.0.37
+ *  12/02/2018
  *
  */
 
@@ -373,8 +387,8 @@ class Scene {
  *
  *  Paradise/Scene-Interaction
  *  Declan Tyson
- *  v0.0.28
- *  07/02/2018
+ *  v0.0.37
+ *  12/02/2018
  *
  */
 
@@ -429,8 +443,8 @@ class Interaction extends Scene {
  *
  *  Paradise/Scene-WorldMap
  *  Declan Tyson
- *  v0.0.36
- *  11/02/2018
+ *  v0.0.37
+ *  12/02/2018
  *
  */
 
@@ -491,8 +505,8 @@ class WorldMap extends Scene {
         */
 
         /*if(
-            this.offsetX === this.player.x * tileSize - this.game.centerPoint.x &&
-            this.offsetY === this.player.y * tileSize - this.game.centerPoint.y
+            this.offsetX === this.player.x * settings.terrain.tileSize - this.game.centerPoint.x &&
+            this.offsetY === this.player.y * settings.terrain.tileSize - this.game.centerPoint.y
         ) {
             this.game.redraw = false;
             return;
@@ -500,10 +514,10 @@ class WorldMap extends Scene {
 
         this.game.redraw = true;
 
-        this.offsetX = this.player.x * tileSize - this.game.centerPoint.x;
-        this.offsetY = this.player.y * tileSize - this.game.centerPoint.y;
-        this.viewportStartX = this.player.x - (tilesWide / 2);
-        this.viewportStartY = this.player.y - (tilesHigh / 2);
+        this.offsetX = this.player.x * settings.terrain.tileSize - this.game.centerPoint.x;
+        this.offsetY = this.player.y * settings.terrain.tileSize - this.game.centerPoint.y;
+        this.viewportStartX = this.player.x - (settings.terrain.tilesWide / 2);
+        this.viewportStartY = this.player.y - (settings.terrain.tilesHigh / 2);
 
         this.drawLocale(ctx);
         this.drawPeople(ctx);
@@ -513,12 +527,7 @@ class WorldMap extends Scene {
     drawPlayer(ctx) {
         // Player is always at center of screen
         let sprite = this.player.sprite;
-        ctx.drawImage(sprite.image, sprite.x, sprite.y, 64, 64, this.game.centerPoint.x - (tileSize/2), this.game.centerPoint.y - tileSize, spriteSize, spriteSize);
-
-        /*ctx.beginPath();
-        ctx.rect(this.game.centerPoint.x, this.game.centerPoint.y, tileSize, tileSize);
-        ctx.fillStyle = this.player.colour;
-        ctx.fill();*/
+        ctx.drawImage(sprite.image, sprite.x, sprite.y, 64, 64, this.game.centerPoint.x - (settings.terrain.tileSize/2), this.game.centerPoint.y - settings.terrain.tileSize, settings.character.spriteSize, settings.character.spriteSize);
     }
 
     drawLocale(ctx) {
@@ -532,25 +541,25 @@ class WorldMap extends Scene {
         if(viewportStartX >= this.locale.width) viewportStartX = this.locale.width;
         if(viewportStartY >= this.locale.height) viewportStartY = this.locale.height;
 
-        for(let x = viewportStartX; x <= viewportStartX + tilesWide; x++) {
-            for(let y = viewportStartY; y <= viewportStartY + tilesHigh; y++) {
+        for(let x = viewportStartX; x <= viewportStartX + settings.terrain.tilesWide; x++) {
+            for(let y = viewportStartY; y <= viewportStartY + settings.terrain.tilesHigh; y++) {
 
                 let terrain = this.localeMap[x][y];
                 if(typeof terrain !== "undefined") {
-                    let tileX = x * tileSize - this.offsetX,
-                        tileY = y * tileSize - this.offsetY,
+                    let tileX = x * settings.terrain.tileSize - this.offsetX,
+                        tileY = y * settings.terrain.tileSize - this.offsetY,
                         tile = window.game.terrainSprites[terrain.image];
 
                     if (!tile) {
                         ctx.beginPath();
                         ctx.fillStyle = terrain.colour;
                         ctx.strokeStyle = terrain.colour;
-                        ctx.rect(tileX, tileY, tileSize, tileSize);
+                        ctx.rect(tileX, tileY, settings.terrain.tileSize, settings.terrain.tileSize);
                         ctx.fill();
                         ctx.stroke();
                     } else {
                         ctx.strokeStyle = null;
-                        ctx.drawImage(tile, 0, 0, 45, 45, tileX, tileY, tileSize, tileSize);
+                        ctx.drawImage(tile, 0, 0, 45, 45, tileX, tileY, settings.terrain.tileSize, settings.terrain.tileSize);
                     }
                 }
             }
@@ -562,7 +571,7 @@ class WorldMap extends Scene {
 
         this.presentPeople.forEach((person) => {
             ctx.beginPath();
-            ctx.rect(person.x * tileSize - this.offsetX, person.y * tileSize - this.offsetY, tileSize, tileSize);
+            ctx.rect(person.x * settings.terrain.tileSize - this.offsetX, person.y * settings.terrain.tileSize - this.offsetY, settings.terrain.tileSize, settings.terrain.tileSize);
             ctx.strokeStyle = person.colour;
             ctx.fillStyle = person.colour;
             ctx.fill();
@@ -688,8 +697,8 @@ class WorldMap extends Scene {
  *
  *  Paradise/Locales/Base
  *  Declan Tyson
- *  v0.0.25
- *  07/02/2018
+ *  v0.0.37
+ *  12/02/2018
  *
  */
 
@@ -791,7 +800,7 @@ class Interior extends Locale {
 }
 
 class Inhabitance {
-    constructor(id, name, x, y, doorway, sizeX = defaultInhabitanceSize, sizeY = defaultInhabitanceSize) {
+    constructor(id, name, x, y, doorway, sizeX = settings.defaultInhabitanceSize, sizeY = settings.defaultInhabitanceSize) {
         this.id = id;
         this.name = name;
         this.x = x;
@@ -1280,8 +1289,8 @@ let people = {
  *
  *  Paradise/Game
  *  Declan Tyson
- *  v0.0.30
- *  08/02/2018
+ *  v0.0.37
+ *  12/02/2018
  *
  */
 
@@ -1315,14 +1324,14 @@ class Renderer {
         this.canvas.style.display = 'block';
         this.canvas.width = width;
         this.canvas.height = height;
-        this.fps = fps;
+        this.fps = settings.fps;
         this.ctx = this.canvas.getContext('2d');
     }
 }
 
 class Game {
     constructor(renderer, scene, centerPoint) {
-        this.actionTimeout = actionTimeoutLimit;
+        this.actionTimeout = settings.actionTimeoutLimit;
         this.renderer = renderer;
         this.setScene(scene);
         this.centerPoint = centerPoint;
@@ -1408,7 +1417,7 @@ class Game {
         this.actionTimeout--;
         if(this.actionTimeout === 0) {
             clearInterval(this.actionTimeoutCounterInterval);
-            this.actionTimeout = actionTimeoutLimit;
+            this.actionTimeout = settings.actionTimeoutLimit;
         }
     }
 }
@@ -1417,16 +1426,16 @@ class Game {
  *
  *  Paradise/People
  *  Declan Tyson
- *  v0.0.23
- *  06/02/2018
+ *  v0.0.37
+ *  12/02/2018
  *
  */
 
 const choosePeople = () => {
     let chosenPeople = [];
-    Util.log(`Choosing ${personCount} people...`);
+    Util.log(`Choosing ${settings.personCount} people...`);
     let person;
-    while(chosenPeople.length < personCount) {
+    while(chosenPeople.length < settings.personCount) {
         person = Util.pickRandomProperty(people);
         if(chosenPeople.indexOf(person) === -1) {
             chosenPeople.push(person);

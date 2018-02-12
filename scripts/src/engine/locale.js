@@ -2,13 +2,13 @@
  *
  *  Paradise/Locales/Base
  *  Declan Tyson
- *  v0.0.25
- *  07/02/2018
+ *  v0.0.37
+ *  12/02/2018
  *
  */
 
 import { Util } from './util';
-import { defaultInhabitanceSize } from '../constants';
+import { settings } from '../settings';
 
 class Locale {
     constructor(player, people) {
@@ -108,7 +108,7 @@ class Interior extends Locale {
 }
 
 class Inhabitance {
-    constructor(id, name, x, y, doorway, sizeX = defaultInhabitanceSize, sizeY = defaultInhabitanceSize) {
+    constructor(id, name, x, y, doorway, sizeX = settings.defaultInhabitanceSize, sizeY = settings.defaultInhabitanceSize) {
         this.id = id;
         this.name = name;
         this.x = x;

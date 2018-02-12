@@ -2,20 +2,20 @@
  *
  *  Paradise/People
  *  Declan Tyson
- *  v0.0.23
- *  06/02/2018
+ *  v0.0.37
+ *  12/02/2018
  *
  */
 
-import { personCount } from '../constants';
+import { settings } from '../settings';
 import { Util } from './util';
 import { people } from '../people/people';
 
 export const choosePeople = () => {
     let chosenPeople = [];
-    Util.log(`Choosing ${personCount} people...`);
+    Util.log(`Choosing ${settings.personCount} people...`);
     let person;
-    while(chosenPeople.length < personCount) {
+    while(chosenPeople.length < settings.personCount) {
         person = Util.pickRandomProperty(people);
         if(chosenPeople.indexOf(person) === -1) {
             chosenPeople.push(person);

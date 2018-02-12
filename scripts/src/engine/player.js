@@ -2,12 +2,13 @@
  *
  *  Paradise/Player
  *  Declan Tyson
- *  v0.0.31
- *  08/02/2018
+ *  v0.0.37
+ *  12/02/2018
  *
  */
 
-import { colours, directions, frameSize, frameCount } from '../constants';
+import { colours, directions } from '../constants';
+import { settings } from '../settings';
 
 class Player {
     constructor() {
@@ -32,8 +33,8 @@ class Player {
     }
 
     advanceFrame() {
-        let newSpriteX = this.sprite.x + frameSize;
-        if(newSpriteX >= frameSize * frameCount) {
+        let newSpriteX = this.sprite.x + settings.character.frameSize;
+        if(newSpriteX >= settings.character.frameSize * settings.character.frameCount) {
             newSpriteX = 0;
         }
 

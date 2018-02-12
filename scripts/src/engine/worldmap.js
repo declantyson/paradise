@@ -2,15 +2,16 @@
  *
  *  Paradise/Scene-WorldMap
  *  Declan Tyson
- *  v0.0.36
- *  11/02/2018
+ *  v0.0.37
+ *  12/02/2018
  *
  */
 
 import { terrains } from './terrains';
-import { spriteSize, tileSize, tilesWide as viewportWidth, tilesHigh as viewportHeight, directions } from '../constants';
+import { directions } from '../constants';
 import { Scene } from './scene';
 import { Interaction } from './interaction';
+import { settings } from '../settings';
 
 class WorldMap extends Scene {
     constructor(player) {
@@ -69,8 +70,8 @@ class WorldMap extends Scene {
         */
 
         /*if(
-            this.offsetX === this.player.x * tileSize - this.game.centerPoint.x &&
-            this.offsetY === this.player.y * tileSize - this.game.centerPoint.y
+            this.offsetX === this.player.x * settings.terrain.tileSize - this.game.centerPoint.x &&
+            this.offsetY === this.player.y * settings.terrain.tileSize - this.game.centerPoint.y
         ) {
             this.game.redraw = false;
             return;
@@ -78,10 +79,10 @@ class WorldMap extends Scene {
 
         this.game.redraw = true;
 
-        this.offsetX = this.player.x * tileSize - this.game.centerPoint.x;
-        this.offsetY = this.player.y * tileSize - this.game.centerPoint.y;
-        this.viewportStartX = this.player.x - (viewportWidth / 2);
-        this.viewportStartY = this.player.y - (viewportHeight / 2);
+        this.offsetX = this.player.x * settings.terrain.tileSize - this.game.centerPoint.x;
+        this.offsetY = this.player.y * settings.terrain.tileSize - this.game.centerPoint.y;
+        this.viewportStartX = this.player.x - (settings.terrain.tilesWide / 2);
+        this.viewportStartY = this.player.y - (settings.terrain.tilesHigh / 2);
 
         this.drawLocale(ctx);
         this.drawPeople(ctx);
@@ -91,12 +92,7 @@ class WorldMap extends Scene {
     drawPlayer(ctx) {
         // Player is always at center of screen
         let sprite = this.player.sprite;
-        ctx.drawImage(sprite.image, sprite.x, sprite.y, 64, 64, this.game.centerPoint.x - (tileSize/2), this.game.centerPoint.y - tileSize, spriteSize, spriteSize);
-
-        /*ctx.beginPath();
-        ctx.rect(this.game.centerPoint.x, this.game.centerPoint.y, tileSize, tileSize);
-        ctx.fillStyle = this.player.colour;
-        ctx.fill();*/
+        ctx.drawImage(sprite.image, sprite.x, sprite.y, 64, 64, this.game.centerPoint.x - (settings.terrain.tileSize/2), this.game.centerPoint.y - settings.terrain.tileSize, settings.character.spriteSize, settings.character.spriteSize);
     }
 
     drawLocale(ctx) {
@@ -110,25 +106,25 @@ class WorldMap extends Scene {
         if(viewportStartX >= this.locale.width) viewportStartX = this.locale.width;
         if(viewportStartY >= this.locale.height) viewportStartY = this.locale.height;
 
-        for(let x = viewportStartX; x <= viewportStartX + viewportWidth; x++) {
-            for(let y = viewportStartY; y <= viewportStartY + viewportHeight; y++) {
+        for(let x = viewportStartX; x <= viewportStartX + settings.terrain.tilesWide; x++) {
+            for(let y = viewportStartY; y <= viewportStartY + settings.terrain.tilesHigh; y++) {
 
                 let terrain = this.localeMap[x][y];
                 if(typeof terrain !== "undefined") {
-                    let tileX = x * tileSize - this.offsetX,
-                        tileY = y * tileSize - this.offsetY,
+                    let tileX = x * settings.terrain.tileSize - this.offsetX,
+                        tileY = y * settings.terrain.tileSize - this.offsetY,
                         tile = window.game.terrainSprites[terrain.image];
 
                     if (!tile) {
                         ctx.beginPath();
                         ctx.fillStyle = terrain.colour;
                         ctx.strokeStyle = terrain.colour;
-                        ctx.rect(tileX, tileY, tileSize, tileSize);
+                        ctx.rect(tileX, tileY, settings.terrain.tileSize, settings.terrain.tileSize);
                         ctx.fill();
                         ctx.stroke();
                     } else {
                         ctx.strokeStyle = null;
-                        ctx.drawImage(tile, 0, 0, 45, 45, tileX, tileY, tileSize, tileSize);
+                        ctx.drawImage(tile, 0, 0, 45, 45, tileX, tileY, settings.terrain.tileSize, settings.terrain.tileSize);
                     }
                 }
             }
@@ -140,7 +136,7 @@ class WorldMap extends Scene {
 
         this.presentPeople.forEach((person) => {
             ctx.beginPath();
-            ctx.rect(person.x * tileSize - this.offsetX, person.y * tileSize - this.offsetY, tileSize, tileSize);
+            ctx.rect(person.x * settings.terrain.tileSize - this.offsetX, person.y * settings.terrain.tileSize - this.offsetY, settings.terrain.tileSize, settings.terrain.tileSize);
             ctx.strokeStyle = person.colour;
             ctx.fillStyle = person.colour;
             ctx.fill();

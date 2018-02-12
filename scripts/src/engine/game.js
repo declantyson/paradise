@@ -2,8 +2,8 @@
  *
  *  Paradise/Game
  *  Declan Tyson
- *  v0.0.30
- *  08/02/2018
+ *  v0.0.37
+ *  12/02/2018
  *
  */
 
@@ -12,9 +12,10 @@ import * as input from './inputs';
 import { Item } from './item';
 import { Player } from './player';
 import { WorldMap } from './worldmap';
-import { canvasProperties, fps, actionTimeoutLimit } from '../constants';
 import { locales } from '../locales/locales';
 import { people } from '../people/people';
+import { settings, canvasProperties } from '../settings';
+
 
 export const StartGame = (locale, activePeople, player, scene, renderer) => {
     clearInterval(window.drawScene);
@@ -46,14 +47,14 @@ class Renderer {
         this.canvas.style.display = 'block';
         this.canvas.width = width;
         this.canvas.height = height;
-        this.fps = fps;
+        this.fps = settings.fps;
         this.ctx = this.canvas.getContext('2d');
     }
 }
 
 class Game {
     constructor(renderer, scene, centerPoint) {
-        this.actionTimeout = actionTimeoutLimit;
+        this.actionTimeout = settings.actionTimeoutLimit;
         this.renderer = renderer;
         this.setScene(scene);
         this.centerPoint = centerPoint;
@@ -139,7 +140,7 @@ class Game {
         this.actionTimeout--;
         if(this.actionTimeout === 0) {
             clearInterval(this.actionTimeoutCounterInterval);
-            this.actionTimeout = actionTimeoutLimit;
+            this.actionTimeout = settings.actionTimeoutLimit;
         }
     }
 }

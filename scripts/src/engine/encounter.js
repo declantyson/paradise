@@ -2,13 +2,14 @@
  *
  *  Paradise/Scene-Encounter
  *  Declan Tyson
- *  v0.0.20
- *  06/02/2018
+ *  v0.0.37
+ *  12/02/2018
  *
  */
 
 import { Scene } from './scene';
-import { canvasProperties, colours } from '../constants';
+import { colours } from '../constants';
+import { canvasProperties } from '../settings';
 import '../enemies/enemydirectory';
 
 class Encounter extends Scene {

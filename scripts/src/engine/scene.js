@@ -2,12 +2,10 @@
  *
  *  Paradise/Scene
  *  Declan Tyson
- *  v0.0.28
- *  07/02/2018
+ *  v0.0.37
+ *  12/02/2018
  *
  */
-
-import { actionTimeoutLimit } from '../constants';
 
 class Scene {
     constructor() {

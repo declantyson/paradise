@@ -2,15 +2,16 @@
  *
  *  Paradise/Scene-Interaction
  *  Declan Tyson
- *  v0.0.28
- *  07/02/2018
+ *  v0.0.37
+ *  12/02/2018
  *
  */
 
 import { Util } from './util';
 
 import { Scene } from './scene';
-import {canvasProperties, interactionTextArea, fonts, colours } from '../constants';
+import { interactionTextArea, fonts, colours } from '../constants';
+import { canvasProperties } from '../settings';
 
 class Interaction extends Scene {
     constructor(person) {

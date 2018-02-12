@@ -2,19 +2,12 @@
  *
  *  Paradise/Constants
  *  Declan Tyson
- *  v0.0.36
- *  11/02/2018
+ *  v0.0.37
+ *  12/02/2018
  *
  */
 
-export const fps = 45;
-export const actionTimeoutLimit = 2;
-export const tileSize = 20;
-export const spriteSize = 40;
-export const frameSize = 64;
-export const frameCount = 9;
-export const tilesWide = 50;
-export const tilesHigh = 28;
+import { canvasProperties } from './settings';
 
 export const colours = {
     black : '#000000',
@@ -38,15 +31,6 @@ export const fonts = {
     large: '24px "Roboto Condensed"',
     small: '16px "Roboto"',
     death: '24px "Permanent Marker"'
-};
-
-export const canvasProperties = {
-    width: tileSize * tilesWide,
-    height: tileSize * tilesHigh,
-    centerPoint: {
-        x: ((tileSize * tilesWide) / 2) - (tileSize / 2),
-        y: ((tileSize * tilesHigh) / 2) - (tileSize / 2)
-    }
 };
 
 export const interactionTextArea = {
@@ -76,6 +60,3 @@ export const posessivePronouns = {
     F   : 'her',
     A   : 'xleir'
 };
-
-export const personCount = 4;
-export const defaultInhabitanceSize = 2;
