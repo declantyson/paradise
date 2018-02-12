@@ -2,8 +2,8 @@
  *
  *  Paradise/Locales
  *  Declan Tyson
- *  v0.0.25
- *  07/02/2018
+ *  v0.0.38
+ *  12/02/2018
  *
  */
 
@@ -16,6 +16,7 @@ import { GroveStreet2 } from './interiors/2grovestreet';
 import { GroveStreet3 } from './interiors/3grovestreet';
 import { GroveStreet4 } from './interiors/4grovestreet';
 import { TownHall } from "./interiors/townhall";
+import { BallManor } from './interiors/ballmanor';
 
 export const startingMaps = {
     'Village' : Village,
@@ -29,6 +30,7 @@ export const locales = {
     'GroveStreet2' : GroveStreet2,
     'GroveStreet3' : GroveStreet3,
     'GroveStreet4' : GroveStreet4,
+    'BallManor' : BallManor,
     'TownHall' : TownHall
 };
 

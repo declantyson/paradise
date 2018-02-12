@@ -2,8 +2,8 @@
  *
  *  Paradise/Locales/Islands
  *  Declan Tyson
- *  v0.0.29
- *  08/02/2018
+ *  v0.0.38
+ *  12/02/2018
  *
  */
 
@@ -15,28 +15,34 @@ class Islands extends Locale {
         super(player, people);
 
         this.id = 'Islands';
-        this.entryPoints.beginningOfGame = { x: 56, y: 57 };
+        this.entryPoints.beginningOfGame = { x: 57, y: 60 };
         this.entryPoints.groveStreet1 = { x: 55, y: 60 };
         this.entryPoints.groveStreet2 = { x: 58, y: 60 };
         this.entryPoints.groveStreet3 = { x: 55, y: 63 };
         this.entryPoints.groveStreet4 = { x: 58, y: 63 };
+        this.entryPoints.ballManor = { x: 56, y: 74 };
 
         this.initialise(300, 300);
 
         this.terrainPaint(0, 0, 300, 300, 'Water');
-        this.terrainPaint(52, 57, 10, 20, 'Grass');
+        this.terrainPaint(52, 57, 11, 20, 'Grass');
         this.terrainPaint(42, 35, 2, 8, 'Grass');
-        this.terrainPaint(56, 58, 2, 18, 'Road');
-        this.terrainPaint(55, 60, 1, 1, 'Road');
-        this.terrainPaint(58, 60, 1, 1, 'Road');
-        this.terrainPaint(55, 63, 1, 1, 'Road');
-        this.terrainPaint(58, 63, 1, 1, 'Road');
+        this.terrainPaint(57, 60, 1, 16, 'VerticalRoad');
+        this.terrainPaint(55, 60, 2, 1, 'HorizontalRoad');
+        this.terrainPaint(58, 60, 2, 1, 'HorizontalRoad');
+        this.terrainPaint(55, 63, 2, 1, 'HorizontalRoad');
+        this.terrainPaint(58, 63, 2, 1, 'HorizontalRoad');
+
+        this.terrainPaint(55, 70, 2, 1, 'HorizontalRoad');
+        this.terrainPaint(54, 70, 1, 5, 'VerticalRoad');
+        this.terrainPaint(55, 74, 2, 1, 'HorizontalRoad');
 
         this.inhabitances.push(
             new Inhabitance('GroveStreet1', '1 Grove Street', 53, 59, { x: 54, y: 60 }),
-            new Inhabitance('GroveStreet2', '2 Grove Street', 59, 59, { x: 59, y: 60 }),
+            new Inhabitance('GroveStreet2', '2 Grove Street', 60, 59, { x: 60, y: 60 }),
             new Inhabitance('GroveStreet3', '3 Grove Street', 53, 62, { x: 54, y: 63 }),
-            new Inhabitance('GroveStreet4', '4 Grove Street', 59, 62, { x: 59, y: 63 })
+            new Inhabitance('GroveStreet4', '4 Grove Street', 60, 62, { x: 60, y: 63 }),
+            new Inhabitance('BallManor', 'Ball Manor', 55, 72, { x: 56, y: 73 })
         );
 
         this.drawInhabitances();

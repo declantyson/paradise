@@ -2,19 +2,20 @@
  *
  *  Paradise/Terrain
  *  Declan Tyson
- *  v0.0.29
+ *  v0.0.38
  *  08/02/2018
  *
  */
 
-import { Blank, Doorway, Grass, Road, Wall, Water, WoodenFloor } from "./terrain";
+import { Blank, Doorway, Grass, VerticalRoad, HorizontalRoad, Wall, Water, WoodenFloor } from "./terrain";
 
 export let terrains = {
     'Blank' : Blank,
     'Grass' : Grass,
     'Water' : Water,
     'Wall' : Wall,
-    'Road' : Road,
+    'VerticalRoad' : VerticalRoad,
+    'HorizontalRoad' : HorizontalRoad,
     'Doorway' : Doorway,
     'WoodenFloor' : WoodenFloor
 };

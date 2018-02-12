@@ -68,10 +68,19 @@ class Water extends Terrain {
     }
 }
 
-class Road extends Terrain {
+class VerticalRoad extends Terrain {
     constructor(neighbours) {
-        super(neighbours);
-        this.id = 'Road';
+        super(neighbours, '/oob/VerticalRoad');
+        this.id = 'VerticalRoad';
+        this.passable = true;
+        this.colour = colours.grey;
+    }
+}
+
+class HorizontalRoad extends Terrain {
+    constructor(neighbours) {
+        super(neighbours, '/oob/HorizontalRoad');
+        this.id = 'HorizontalRoad';
         this.passable = true;
         this.colour = colours.grey;
     }
@@ -104,4 +113,4 @@ class WoodenFloor extends Terrain {
     }
 }
 
-export { Blank, Grass, Water, Road, Wall, Doorway, WoodenFloor };
+export { Blank, Grass, Water, VerticalRoad, HorizontalRoad, Wall, Doorway, WoodenFloor };
