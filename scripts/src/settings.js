@@ -2,8 +2,8 @@
  *
  *  Paradise/Settings
  *  Declan Tyson
- *  v0.0.37
- *  12/02/2018
+ *  v0.0.40
+ *  13/02/2018
  *
  */
 
@@ -18,11 +18,12 @@ export let settings = {
     character : {
         spriteSize: 40,
         frameSize: 64,
-        frameCount: 9
+        frameCount: 9,
+        stepsPerTile: 2
     },
     personCount : 4,
     defaultInhabitanceSize : 2
-}
+};
 
 export let canvasProperties = {
     width: settings.terrain.tileSize * settings.terrain.tilesWide,
@@ -32,3 +33,5 @@ export let canvasProperties = {
         y: ((settings.terrain.tileSize * settings.terrain.tilesHigh) / 2) - (settings.terrain.tileSize / 2)
     }
 };
+
+export let tileStep = (settings.terrain.tileSize / settings.character.stepsPerTile);

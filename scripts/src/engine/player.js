@@ -2,8 +2,8 @@
  *
  *  Paradise/Player
  *  Declan Tyson
- *  v0.0.37
- *  12/02/2018
+ *  v0.0.40
+ *  13/02/2018
  *
  */
 
@@ -14,6 +14,8 @@ class Player {
     constructor() {
         this.colour = colours.black;
         this.direction = directions.down;
+        this.stepX = 0;
+        this.stepY = 0;
 
         let sprite_test = new Image(),
             spriteMap_test = {};
@@ -45,9 +47,29 @@ class Player {
         this.sprite.x = 0;
     }
 
-    setPlacement(x, y) {
-        this.x = x;
-        this.y = y;
+    setPlacement(x, y, init = false) {
+        if(x !== this.x) {
+            if (this.stepX >= settings.character.stepsPerTile || this.stepX < 0 || init) {
+                this.x = x;
+                if(this.stepX >= settings.character.stepsPerTile) this.stepX = 0;
+                if(this.stepX < 0) this.stepX = settings.character.stepsPerTile - 1;
+            } else {
+                if(x > this.x) this.stepX++;
+                if(x < this.x) this.stepX--;
+            }
+        }
+
+        if(y !== this.y) {
+            if (this.stepY >= settings.character.stepsPerTile || this.stepY < 0 || init) {
+                this.y = y;
+                if(this.stepY >= settings.character.stepsPerTile) this.stepY = 0;
+                if(this.stepY < 0) this.stepY = settings.character.stepsPerTile - 1;
+            } else {
+                if(y > this.y) this.stepY++;
+                if(y < this.y) this.stepY--;
+            }
+        }
+
     }
 
     setDirection(direction) {

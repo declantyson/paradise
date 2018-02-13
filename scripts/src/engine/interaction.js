@@ -2,8 +2,8 @@
  *
  *  Paradise/Scene-Interaction
  *  Declan Tyson
- *  v0.0.37
- *  12/02/2018
+ *  v0.0.40
+ *  13/02/2018
  *
  */
 
@@ -25,6 +25,9 @@ class Interaction extends Scene {
     }
 
     draw(ctx) {
+        // World map should be overlaid
+        this.worldMap.draw(ctx);
+
         this.drawConversationTextArea(ctx);
         this.drawBadge(ctx);
         this.drawConversation(ctx);
