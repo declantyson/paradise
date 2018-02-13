@@ -85,7 +85,7 @@ let settings = {
         spriteSize: 40,
         frameSize: 64,
         frameCount: 9,
-        stepsPerTile: 10
+        stepsPerTile: 5
     },
     personCount : 4,
     defaultInhabitanceSize : 2
@@ -428,7 +428,7 @@ class Scene {
  *
  *  Paradise/Scene-Interaction
  *  Declan Tyson
- *  v0.0.40
+ *  v0.0.42
  *  13/02/2018
  *
  */
@@ -454,12 +454,11 @@ class Interaction extends Scene {
     }
 
     drawConversationTextArea(ctx) {
-        ctx.save();
         ctx.rect(0, canvasProperties.height - interactionTextArea.height, interactionTextArea.width, interactionTextArea.height);
         ctx.fillStyle = interactionTextArea.colour;
         ctx.globalAlpha = interactionTextArea.alpha;
         ctx.fill();
-        ctx.restore();
+        ctx.globalAlpha = 1;
     }
 
     drawBadge(ctx) {
@@ -487,7 +486,7 @@ class Interaction extends Scene {
  *
  *  Paradise/Scene-WorldMap
  *  Declan Tyson
- *  v0.0.41
+ *  v0.0.42
  *  13/02/2018
  *
  */
@@ -518,13 +517,29 @@ class WorldMap extends Scene {
         this.checkForEntrance();
     }
 
+    checkIfTilePassable(x, y) {
+        return this.localeMap[x][y].isPassable();
+    }
+
     moveUp() {
         if(this.player.direction !== directions.up) {
             this.player.setDirection(directions.up);
             return;
         }
 
-        if(this.localeMap[this.player.x][this.player.y - 1].isPassable()) this.player.setPlacement(this.player.x, this.player.y - 1);
+        console.log(this.player.stepY, this.checkIfTilePassable(this.player.x, this.player.y - 1), this.player.stepX, this.checkIfTilePassable(this.player.x - 1, this.player.y - 1));
+
+        if(this.player.stepY > 0
+            || (
+                this.checkIfTilePassable(this.player.x, this.player.y - 1)
+                && (
+                    this.player.stepX <= 1
+                    || this.checkIfTilePassable(this.player.x + 1, this.player.y - 1)
+                )
+            )
+        ) {
+            this.player.setPlacement(this.player.x, this.player.y - 1);
+        }
         this.player.advanceFrame();
     }
 
@@ -534,7 +549,17 @@ class WorldMap extends Scene {
             return;
         }
 
-        if(this.localeMap[this.player.x][this.player.y + 1].isPassable()) this.player.setPlacement(this.player.x, this.player.y + 1);
+        if(this.player.stepY > 0
+            || (
+                this.checkIfTilePassable(this.player.x, this.player.y + 1)
+                && (
+                    this.player.stepX <= 1
+                    || this.checkIfTilePassable(this.player.x + 1, this.player.y + 1)
+                )
+            )
+        ) {
+            this.player.setPlacement(this.player.x, this.player.y + 1);
+        }
         this.player.advanceFrame();
     }
 
@@ -544,7 +569,18 @@ class WorldMap extends Scene {
             return;
         }
 
-        if(this.localeMap[this.player.x - 1][this.player.y].isPassable()) this.player.setPlacement(this.player.x - 1, this.player.y);
+        if(this.player.stepX > 0
+            || (
+                this.checkIfTilePassable(this.player.x - 1, this.player.y)
+                && (
+                    this.player.stepY <= 1
+                    || this.checkIfTilePassable(this.player.x - 1, this.player.y + 1)
+                )
+            )
+        ) {
+            this.player.setPlacement(this.player.x - 1, this.player.y);
+        }
+
         this.player.advanceFrame();
     }
 
@@ -554,7 +590,17 @@ class WorldMap extends Scene {
             return;
         }
 
-        if(this.localeMap[this.player.x + 1][this.player.y].isPassable()) this.player.setPlacement(this.player.x + 1, this.player.y);
+        if(this.player.stepX > 0
+            || (
+                this.checkIfTilePassable(this.player.x + 1, this.player.y)
+                && (
+                    this.player.stepY <= 1
+                    || this.checkIfTilePassable(this.player.x + 1, this.player.y + 1)
+                )
+            )
+        ) {
+            this.player.setPlacement(this.player.x + 1, this.player.y);
+        }
         this.player.advanceFrame();
     }
 

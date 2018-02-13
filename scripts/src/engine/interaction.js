@@ -2,7 +2,7 @@
  *
  *  Paradise/Scene-Interaction
  *  Declan Tyson
- *  v0.0.40
+ *  v0.0.42
  *  13/02/2018
  *
  */
@@ -34,12 +34,11 @@ class Interaction extends Scene {
     }
 
     drawConversationTextArea(ctx) {
-        ctx.save();
         ctx.rect(0, canvasProperties.height - interactionTextArea.height, interactionTextArea.width, interactionTextArea.height);
         ctx.fillStyle = interactionTextArea.colour;
         ctx.globalAlpha = interactionTextArea.alpha;
         ctx.fill();
-        ctx.restore();
+        ctx.globalAlpha = 1;
     }
 
     drawBadge(ctx) {

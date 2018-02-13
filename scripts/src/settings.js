@@ -19,7 +19,7 @@ export let settings = {
         spriteSize: 40,
         frameSize: 64,
         frameCount: 9,
-        stepsPerTile: 10
+        stepsPerTile: 5
     },
     personCount : 4,
     defaultInhabitanceSize : 2
