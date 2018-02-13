@@ -2,7 +2,7 @@
  *
  *  Paradise/Scene-WorldMap
  *  Declan Tyson
- *  v0.0.40
+ *  v0.0.41
  *  13/02/2018
  *
  */
@@ -40,27 +40,42 @@ class WorldMap extends Scene {
     }
 
     moveUp() {
+        if(this.player.direction !== directions.up) {
+            this.player.setDirection(directions.up);
+            return;
+        }
+
         if(this.localeMap[this.player.x][this.player.y - 1].isPassable()) this.player.setPlacement(this.player.x, this.player.y - 1);
-        this.player.setDirection(directions.up);
         this.player.advanceFrame();
-        console.log(this.player.y, this.player.stepY);
     }
 
     moveDown() {
+        if(this.player.direction !== directions.down) {
+            this.player.setDirection(directions.down);
+            return;
+        }
+
         if(this.localeMap[this.player.x][this.player.y + 1].isPassable()) this.player.setPlacement(this.player.x, this.player.y + 1);
-        this.player.setDirection(directions.down);
         this.player.advanceFrame();
     }
 
     moveLeft() {
+        if(this.player.direction !== directions.left) {
+            this.player.setDirection(directions.left);
+            return;
+        }
+
         if(this.localeMap[this.player.x - 1][this.player.y].isPassable()) this.player.setPlacement(this.player.x - 1, this.player.y);
-        this.player.setDirection(directions.left);
         this.player.advanceFrame();
     }
 
     moveRight() {
+        if(this.player.direction !== directions.right) {
+            this.player.setDirection(directions.right);
+            return;
+        }
+
         if(this.localeMap[this.player.x + 1][this.player.y].isPassable()) this.player.setPlacement(this.player.x + 1, this.player.y);
-        this.player.setDirection(directions.right);
         this.player.advanceFrame();
     }
 

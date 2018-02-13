@@ -65,7 +65,7 @@ class Util {
  *
  *  Paradise/Settings
  *  Declan Tyson
- *  v0.0.40
+ *  v0.0.41
  *  13/02/2018
  *
  */
@@ -82,7 +82,7 @@ let settings = {
         spriteSize: 40,
         frameSize: 64,
         frameCount: 9,
-        stepsPerTile: 2
+        stepsPerTile: 10
     },
     personCount : 4,
     defaultInhabitanceSize : 2
@@ -177,7 +177,7 @@ class Item {
  *
  *  Paradise/Player
  *  Declan Tyson
- *  v0.0.40
+ *  v0.0.41
  *  13/02/2018
  *
  */
@@ -245,6 +245,11 @@ class Player {
     }
 
     setDirection(direction) {
+        if(this.stepX >= settings.character.stepsPerTile) this.stepX = settings.character.stepsPerTile - 1;
+        if(this.stepX < 0) this.stepX = 0;
+        if(this.stepY >= settings.character.stepsPerTile) this.stepY = settings.character.stepsPerTile - 1;
+        if(this.stepY < 0) this.stepY = 0;
+
         this.direction = direction;
         this.sprite.y = this.spriteMap[direction];
     }
@@ -487,7 +492,7 @@ class Interaction extends Scene {
  *
  *  Paradise/Scene-WorldMap
  *  Declan Tyson
- *  v0.0.40
+ *  v0.0.41
  *  13/02/2018
  *
  */
@@ -519,27 +524,42 @@ class WorldMap extends Scene {
     }
 
     moveUp() {
+        if(this.player.direction !== directions.up) {
+            this.player.setDirection(directions.up);
+            return;
+        }
+
         if(this.localeMap[this.player.x][this.player.y - 1].isPassable()) this.player.setPlacement(this.player.x, this.player.y - 1);
-        this.player.setDirection(directions.up);
         this.player.advanceFrame();
-        console.log(this.player.y, this.player.stepY);
     }
 
     moveDown() {
+        if(this.player.direction !== directions.down) {
+            this.player.setDirection(directions.down);
+            return;
+        }
+
         if(this.localeMap[this.player.x][this.player.y + 1].isPassable()) this.player.setPlacement(this.player.x, this.player.y + 1);
-        this.player.setDirection(directions.down);
         this.player.advanceFrame();
     }
 
     moveLeft() {
+        if(this.player.direction !== directions.left) {
+            this.player.setDirection(directions.left);
+            return;
+        }
+
         if(this.localeMap[this.player.x - 1][this.player.y].isPassable()) this.player.setPlacement(this.player.x - 1, this.player.y);
-        this.player.setDirection(directions.left);
         this.player.advanceFrame();
     }
 
     moveRight() {
+        if(this.player.direction !== directions.right) {
+            this.player.setDirection(directions.right);
+            return;
+        }
+
         if(this.localeMap[this.player.x + 1][this.player.y].isPassable()) this.player.setPlacement(this.player.x + 1, this.player.y);
-        this.player.setDirection(directions.right);
         this.player.advanceFrame();
     }
 

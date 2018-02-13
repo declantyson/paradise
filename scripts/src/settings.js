@@ -2,7 +2,7 @@
  *
  *  Paradise/Settings
  *  Declan Tyson
- *  v0.0.40
+ *  v0.0.41
  *  13/02/2018
  *
  */
@@ -19,7 +19,7 @@ export let settings = {
         spriteSize: 40,
         frameSize: 64,
         frameCount: 9,
-        stepsPerTile: 2
+        stepsPerTile: 10
     },
     personCount : 4,
     defaultInhabitanceSize : 2
