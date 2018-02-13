@@ -73,10 +73,13 @@ class Player {
     }
 
     setDirection(direction) {
-        if(this.stepX >= settings.character.stepsPerTile) this.stepX = settings.character.stepsPerTile - 1;
-        if(this.stepX < 0) this.stepX = 0;
-        if(this.stepY >= settings.character.stepsPerTile) this.stepY = settings.character.stepsPerTile - 1;
-        if(this.stepY < 0) this.stepY = 0;
+        if(direction === directions.left || direction === directions.right) {
+            if (this.stepX >= settings.character.stepsPerTile) this.stepX = settings.character.stepsPerTile - 1;
+            if (this.stepX < 0) this.stepX = 0;
+        } else if(direction === directions.up || direction === directions.down) {
+            if (this.stepY >= settings.character.stepsPerTile) this.stepY = settings.character.stepsPerTile - 1;
+            if (this.stepY < 0) this.stepY = 0;
+        }
 
         this.direction = direction;
         this.sprite.y = this.spriteMap[direction];

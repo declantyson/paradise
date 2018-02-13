@@ -49,8 +49,6 @@ class WorldMap extends Scene {
             return;
         }
 
-        console.log(this.player.stepY, this.checkIfTilePassable(this.player.x, this.player.y - 1), this.player.stepX, this.checkIfTilePassable(this.player.x - 1, this.player.y - 1));
-
         if(this.player.stepY > 0
             || (
                 this.checkIfTilePassable(this.player.x, this.player.y - 1)
