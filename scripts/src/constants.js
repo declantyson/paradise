@@ -2,8 +2,8 @@
  *
  *  Paradise/Constants
  *  Declan Tyson
- *  v0.0.37
- *  12/02/2018
+ *  v0.0.44
+ *  13/02/2018
  *
  */
 
@@ -40,6 +40,9 @@ export const interactionTextArea = {
     alpha: 0.4,
     badgeOffsetX: 20,
     badgeOffsetY: 40,
+    optionsOffsetX: canvasProperties.width - 300,
+    optionsOffsetY: 40,
+    optionHeight: 36,
     lineHeight: 18
 };
 

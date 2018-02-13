@@ -2,8 +2,8 @@
  *
  *  Paradise/Game
  *  Declan Tyson
- *  v0.0.38
- *  12/02/2018
+ *  v0.0.44
+ *  13/02/2018
  *
  */
 
@@ -125,6 +125,7 @@ class Game {
 
     sendInput(input) {
         this.currentAction = input;
+        this.keyHeld = input;
     }
 
     triggerActionTimeout() {

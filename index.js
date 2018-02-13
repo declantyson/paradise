@@ -103,8 +103,8 @@ let tileStep = (settings.terrain.tileSize / settings.character.stepsPerTile);
  *
  *  Paradise/Constants
  *  Declan Tyson
- *  v0.0.37
- *  12/02/2018
+ *  v0.0.44
+ *  13/02/2018
  *
  */
 
@@ -139,6 +139,9 @@ const interactionTextArea = {
     alpha: 0.4,
     badgeOffsetX: 20,
     badgeOffsetY: 40,
+    optionsOffsetX: canvasProperties.width - 300,
+    optionsOffsetY: 40,
+    optionHeight: 36,
     lineHeight: 18
 };
 
@@ -395,8 +398,8 @@ let terrains = {
  *
  *  Paradise/Scene
  *  Declan Tyson
- *  v0.0.37
- *  12/02/2018
+ *  v0.0.44
+ *  13/02/2018
  *
  */
 
@@ -410,6 +413,7 @@ class Scene {
             action: this.empty,
             back:   this.empty
         };
+        this.keyHeld = false;
     }
 
     empty() {
@@ -484,7 +488,7 @@ class Portrait {
  *
  *  Paradise/Scene-Interaction
  *  Declan Tyson
- *  v0.0.43
+ *  v0.0.44
  *  13/02/2018
  *
  */
@@ -493,12 +497,21 @@ class Interaction extends Scene {
     constructor(person) {
         super();
 
-        this.lines = [];
         this.person = person;
-        this.actions.back = this.returnToWorldMap.bind(this);
+
+        // calculate these values based on mood etc....;
+        this.lines = this.person.lines || [];
+        this.conversationOptions = this.person.conversationOptions || [];
+        this.portrait = new Portrait('/oob/test_portrait.png', this);
+
+        this.selectedConversationOption = 0;
+
         this.exiting = false;
 
-        this.portrait = new Portrait('/oob/test_portrait.png', this);  // calculate the portrait based on mood etc....;
+        this.actions.up = this.previousOption.bind(this);
+        this.actions.down = this.nextOption.bind(this);
+        this.actions.action = this.sendResponse.bind(this);
+        this.actions.back = this.returnToWorldMap.bind(this);
 
         Util.log(`Entering interaction with ${this.person.name}`);
     }
@@ -511,14 +524,17 @@ class Interaction extends Scene {
             this.exit();
         }
 
+        if(!this.game.keyHeld) this.keyHeld = false;
+
         this.drawConversationTextArea(ctx);
         this.drawBadge(ctx);
         this.drawConversation(ctx);
+        this.drawOptions(ctx);
     }
 
     drawConversationTextArea(ctx) {
         ctx.rect(0, canvasProperties.height - interactionTextArea.height, interactionTextArea.width, interactionTextArea.height);
-        ctx.fillStyle = interactionTextArea.colour;
+        ctx.fillStyle = interactionTextArea.background;
         ctx.globalAlpha = interactionTextArea.alpha;
         ctx.fill();
         ctx.globalAlpha = 1;
@@ -531,7 +547,7 @@ class Interaction extends Scene {
     }
 
     drawConversation(ctx) {
-        let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.badgeOffsetY) * 3;
+        let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.badgeOffsetY) * 2;
         ctx.font = fonts.small;
         ctx.fillStyle = colours.white;
         this.lines.forEach((line, index) => {
@@ -539,10 +555,45 @@ class Interaction extends Scene {
         });
     }
 
+    drawOptions(ctx) {
+        let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.optionsOffsetY);
+        ctx.font = fonts.small;
+        ctx.fillStyle = colours.white;
+        this.conversationOptions.forEach((conversationOption, index) => {
+            ctx.fillText(conversationOption.value, interactionTextArea.optionsOffsetX, y + (index * interactionTextArea.optionHeight));
+            if(index === this.selectedConversationOption) {
+                ctx.strokeStyle = colours.white;
+                ctx.strokeRect(interactionTextArea.optionsOffsetX - interactionTextArea.optionHeight / 2,  y + (index * interactionTextArea.optionHeight) - (interactionTextArea.optionHeight / 1.5), 250 + interactionTextArea.optionHeight, interactionTextArea.optionHeight);
+            }
+        });
+    }
+
+    nextOption() {
+        if(this.keyHeld) return;
+
+        if(this.selectedConversationOption < this.conversationOptions.length - 1) this.selectedConversationOption++;
+        this.keyHeld = true;
+    }
+
+    previousOption() {
+        if(this.keyHeld) return;
+
+        if(this.selectedConversationOption > 0) this.selectedConversationOption--;
+        this.keyHeld = true;
+    }
+
+    sendResponse() {
+        if(this.keyHeld || this.portrait.entering) return;
+
+        this.person.sendResponse(this.conversationOptions[this.selectedConversationOption], this);
+        this.keyHeld = true;
+    }
+
     returnToWorldMap() {
         if (!this.worldMap) return;
         this.exiting = true;
         this.portrait.exiting = true;
+        this.conversationOptions = [];
     }
 
     exit() {
@@ -1302,8 +1353,8 @@ const chooseStartingMap = () => {
  *
  *  Paradise/Person
  *  Declan Tyson
- *  v0.0.23
- *  06/02/2018
+ *  v0.0.44
+ *  13/02/2018
  *
  */
 
@@ -1313,6 +1364,7 @@ class Person {
         this.name = name;
         this.gender = gender;
         this.colour = colours.black;
+        this.responses = {};
 
         this.relationships = {};
     }
@@ -1333,6 +1385,18 @@ class Person {
            description : 'Acquaintance',
            value: 50
        };
+    }
+
+    sendResponse(conversationOption, interaction) {
+        Util.log(conversationOption.value);
+
+        if(!this.responses[conversationOption.key]) {
+            interaction.returnToWorldMap();
+        } else {
+            interaction.selectedConversationOption = 0;
+            interaction.lines = this.responses[conversationOption.key].lines;
+            interaction.conversationOptions = this.responses[conversationOption.key].conversationOptions;
+        }
     }
 }
 
@@ -1469,8 +1533,8 @@ class Quazar extends Person {
  *
  *  Paradise/Person/Zenith
  *  Declan Tyson
- *  v0.0.23
- *  06/02/2018
+ *  v0.0.44
+ *  13/02/2018
  *
  */
 
@@ -1484,6 +1548,56 @@ class Zenith extends Person {
                 description : 'Brother',
                 value: 85
             }
+        };
+        this.lines = ["I am so lonely..."];
+        this.conversationOptions = [{
+                "key" : "Nice",
+                "value" : "Happy Valentine's Day!"
+            },{
+                "key" : "Truth",
+                "value" : "You're going to die alone"
+            },{
+                "key" : "Mean",
+                "value" : "LOL!"
+            }];
+        this.responses = {
+            "Nice" : {
+                "lines" : ["<3"],
+                "conversationOptions" : [{
+                    "key" : "Goodbye",
+                    "value" : "Goodbye"
+                }]
+            },
+            "Truth" : {
+                "lines" : ["I know... :("],
+                "conversationOptions" : [{
+                    "key" : "Goodbye",
+                    "value" : "Goodbye"
+                }]
+            },
+            "Mean" : {
+                "lines" : ["Screw you! >:("],
+                "conversationOptions" : [{
+                    "key" : "Confront",
+                    "value" : "What are you gonna do!?"
+                },{
+                    "key" : "Goodbye",
+                    "value" : "Goodbye"
+                }]
+            },
+            "Confront" : {
+                "lines" : ["Nothing... I'm so lonely..."],
+                "conversationOptions" : [{
+                    "key" : "Nice",
+                    "value" : "Happy Valentine's Day!"
+                },{
+                    "key" : "Truth",
+                    "value" : "You're going to die alone"
+                },{
+                    "key" : "Mean",
+                    "value" : "LOL!"
+                }]
+            },
         };
     }
 }
@@ -1512,8 +1626,8 @@ let people = {
  *
  *  Paradise/Game
  *  Declan Tyson
- *  v0.0.38
- *  12/02/2018
+ *  v0.0.44
+ *  13/02/2018
  *
  */
 
@@ -1625,6 +1739,7 @@ class Game {
 
     sendInput(input) {
         this.currentAction = input;
+        this.keyHeld = input;
     }
 
     triggerActionTimeout() {
@@ -1673,5 +1788,6 @@ const choosePeople = () => {
  *
  */
 // Engine
+// Test data
 
 export { StartGame, Interaction, Item, Locale, Inhabitance, Interior, Player, choosePeople, Person, Scene, terrains, Util, WorldMap, startingMaps, chooseStartingMap, people, Evelyn, Jill, John, Neil, Pauline, Petey, Quazar, Zenith };

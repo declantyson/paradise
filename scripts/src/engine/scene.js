@@ -2,8 +2,8 @@
  *
  *  Paradise/Scene
  *  Declan Tyson
- *  v0.0.37
- *  12/02/2018
+ *  v0.0.44
+ *  13/02/2018
  *
  */
 
@@ -17,6 +17,7 @@ class Scene {
             action: this.empty,
             back:   this.empty
         };
+        this.keyHeld = false;
     }
 
     empty() {

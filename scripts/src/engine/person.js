@@ -2,8 +2,8 @@
  *
  *  Paradise/Person
  *  Declan Tyson
- *  v0.0.23
- *  06/02/2018
+ *  v0.0.44
+ *  13/02/2018
  *
  */
 
@@ -16,6 +16,7 @@ class Person {
         this.name = name;
         this.gender = gender;
         this.colour = colours.black;
+        this.responses = {};
 
         this.relationships = {};
     }
@@ -36,6 +37,18 @@ class Person {
            description : 'Acquaintance',
            value: 50
        };
+    }
+
+    sendResponse(conversationOption, interaction) {
+        Util.log(conversationOption.value);
+
+        if(!this.responses[conversationOption.key]) {
+            interaction.returnToWorldMap();
+        } else {
+            interaction.selectedConversationOption = 0;
+            interaction.lines = this.responses[conversationOption.key].lines;
+            interaction.conversationOptions = this.responses[conversationOption.key].conversationOptions;
+        }
     }
 }
 
