@@ -2,7 +2,7 @@
  *
  *  Paradise/Person
  *  Declan Tyson
- *  v0.0.44
+ *  v0.0.45
  *  13/02/2018
  *
  */
@@ -17,6 +17,11 @@ class Person {
         this.gender = gender;
         this.colour = colours.black;
         this.responses = {};
+        this.lines = ["I'm a default character, short and stout.", "Here's my handle, here's my spout."];
+        this.conversationOptions = [{
+            "key" : "Kettle",
+            "value" : "I'll go put the kettle on"
+        }];
 
         this.relationships = {};
     }

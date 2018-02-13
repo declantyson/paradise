@@ -2,7 +2,7 @@
  *
  *  Paradise/Scene-WorldMap
  *  Declan Tyson
- *  v0.0.42
+ *  v0.0.45
  *  13/02/2018
  *
  */
@@ -258,8 +258,15 @@ class WorldMap extends Scene {
                 break;
         }
 
-        if(!this.localeMap[x][y].person) return;
-        this.startInteraction(this.localeMap[x][y].person);
+        let person = this.localeMap[x][y].person;
+
+        if(!person) {
+            if(this.player.direction === directions.up && this.player.stepX > 0) person = this.localeMap[x+1][y].person;
+            else if(this.player.direction === directions.right && this.player.stepY > 0) person = this.localeMap[x][y+1].person;
+        }
+        if(!person) return;
+
+        this.startInteraction(person);
     }
 
     startInteraction(person) {

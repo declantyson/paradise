@@ -32,7 +32,7 @@ class Interaction extends Scene {
         this.actions.up = this.previousOption.bind(this);
         this.actions.down = this.nextOption.bind(this);
         this.actions.action = this.sendResponse.bind(this);
-        this.actions.back = this.returnToWorldMap.bind(this);
+        // this.actions.back = this.returnToWorldMap.bind(this);
 
         Util.log(`Entering interaction with ${this.person.name}`);
     }

@@ -511,7 +511,7 @@ class Interaction extends Scene {
         this.actions.up = this.previousOption.bind(this);
         this.actions.down = this.nextOption.bind(this);
         this.actions.action = this.sendResponse.bind(this);
-        this.actions.back = this.returnToWorldMap.bind(this);
+        // this.actions.back = this.returnToWorldMap.bind(this);
 
         Util.log(`Entering interaction with ${this.person.name}`);
     }
@@ -605,7 +605,7 @@ class Interaction extends Scene {
  *
  *  Paradise/Scene-WorldMap
  *  Declan Tyson
- *  v0.0.42
+ *  v0.0.45
  *  13/02/2018
  *
  */
@@ -855,8 +855,15 @@ class WorldMap extends Scene {
                 break;
         }
 
-        if(!this.localeMap[x][y].person) return;
-        this.startInteraction(this.localeMap[x][y].person);
+        let person = this.localeMap[x][y].person;
+
+        if(!person) {
+            if(this.player.direction === directions.up && this.player.stepX > 0) person = this.localeMap[x+1][y].person;
+            else if(this.player.direction === directions.right && this.player.stepY > 0) person = this.localeMap[x][y+1].person;
+        }
+        if(!person) return;
+
+        this.startInteraction(person);
     }
 
     startInteraction(person) {
@@ -1353,7 +1360,7 @@ const chooseStartingMap = () => {
  *
  *  Paradise/Person
  *  Declan Tyson
- *  v0.0.44
+ *  v0.0.45
  *  13/02/2018
  *
  */
@@ -1365,6 +1372,11 @@ class Person {
         this.gender = gender;
         this.colour = colours.black;
         this.responses = {};
+        this.lines = ["I'm a default character, short and stout.", "Here's my handle, here's my spout."];
+        this.conversationOptions = [{
+            "key" : "Kettle",
+            "value" : "I'll go put the kettle on"
+        }];
 
         this.relationships = {};
     }
