@@ -156,7 +156,7 @@ class WorldMap extends Scene {
             playerX = this.game.centerPoint.x - (settings.terrain.tileSize/2),
             playerY = this.game.centerPoint.y - settings.terrain.tileSize;
 
-        ctx.drawImage(sprite.image, sprite.x, sprite.y , 64, 64, playerX, playerY, settings.character.spriteSize, settings.character.spriteSize);
+        ctx.drawImage(sprite.image, sprite.x, sprite.y, 64, 64, playerX, playerY, settings.character.spriteSize, settings.character.spriteSize);
     }
 
     drawLocale(ctx) {

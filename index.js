@@ -65,7 +65,7 @@ class Util {
  *
  *  Paradise/Settings
  *  Declan Tyson
- *  v0.0.41
+ *  v0.0.43
  *  13/02/2018
  *
  */
@@ -434,9 +434,57 @@ class Scene {
 
 /*
  *
+ *  Paradise/Portrait
+ *  Declan Tyson
+ *  v0.0.43
+ *  13/02/2018
+ *
+ */
+
+class Portrait {
+    constructor(imageSrc, interaction) {
+        let image = new Image();
+        image.src = imageSrc;
+        this.image = image;
+        this.entering = true;
+        this.exiting = false;
+        this.frame = 0;
+        this.frameIncrement = 1;
+        this.maxFrames = 30;
+        this.interaction = interaction;
+    }
+
+    draw(ctx) {
+        if(this.entering) this.enter();
+        if(this.exiting) this.exit();
+
+        ctx.globalAlpha = this.frame / this.maxFrames;
+        ctx.drawImage(this.image, 0, 0, canvasProperties.width, canvasProperties.height, canvasProperties.width - (this.frame * ((canvasProperties.width / 2) / this.maxFrames)), 0, canvasProperties.width, canvasProperties.height);
+        ctx.globalAlpha = 1;
+    }
+
+    enter() {
+        if(this.frame < this.maxFrames) {
+            this.frame += this.frameIncrement;
+        } else {
+            this.entering = false;
+        }
+    }
+
+    exit() {
+        if(this.frame > 0) {
+            this.frame -= this.frameIncrement;
+        } else {
+            this.exiting = false;
+        }
+    }
+}
+
+/*
+ *
  *  Paradise/Scene-Interaction
  *  Declan Tyson
- *  v0.0.42
+ *  v0.0.43
  *  13/02/2018
  *
  */
@@ -448,6 +496,9 @@ class Interaction extends Scene {
         this.lines = [];
         this.person = person;
         this.actions.back = this.returnToWorldMap.bind(this);
+        this.exiting = false;
+
+        this.portrait = new Portrait('/oob/test_portrait.png', this);  // calculate the portrait based on mood etc....;
 
         Util.log(`Entering interaction with ${this.person.name}`);
     }
@@ -455,6 +506,10 @@ class Interaction extends Scene {
     draw(ctx) {
         // World map should be overlaid
         this.worldMap.draw(ctx);
+        this.portrait.draw(ctx);
+        if(this.exiting && !this.portrait.exiting) {
+            this.exit();
+        }
 
         this.drawConversationTextArea(ctx);
         this.drawBadge(ctx);
@@ -485,7 +540,12 @@ class Interaction extends Scene {
     }
 
     returnToWorldMap() {
-        if(!this.worldMap) return;
+        if (!this.worldMap) return;
+        this.exiting = true;
+        this.portrait.exiting = true;
+    }
+
+    exit() {
         this.game.setScene(this.worldMap);
     }
 }
@@ -642,7 +702,7 @@ class WorldMap extends Scene {
             playerX = this.game.centerPoint.x - (settings.terrain.tileSize/2),
             playerY = this.game.centerPoint.y - settings.terrain.tileSize;
 
-        ctx.drawImage(sprite.image, sprite.x, sprite.y , 64, 64, playerX, playerY, settings.character.spriteSize, settings.character.spriteSize);
+        ctx.drawImage(sprite.image, sprite.x, sprite.y, 64, 64, playerX, playerY, settings.character.spriteSize, settings.character.spriteSize);
     }
 
     drawLocale(ctx) {

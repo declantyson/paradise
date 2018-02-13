@@ -2,7 +2,7 @@
  *
  *  Paradise/Settings
  *  Declan Tyson
- *  v0.0.41
+ *  v0.0.43
  *  13/02/2018
  *
  */
@@ -35,3 +35,4 @@ export let canvasProperties = {
 };
 
 export let tileStep = (settings.terrain.tileSize / settings.character.stepsPerTile);
+export let portraitWidth = canvasProperties.width / 2;

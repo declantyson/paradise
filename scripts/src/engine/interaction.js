@@ -2,7 +2,7 @@
  *
  *  Paradise/Scene-Interaction
  *  Declan Tyson
- *  v0.0.42
+ *  v0.0.43
  *  13/02/2018
  *
  */
@@ -12,6 +12,7 @@ import { Util } from './util';
 import { Scene } from './scene';
 import { interactionTextArea, fonts, colours } from '../constants';
 import { canvasProperties } from '../settings';
+import { Portrait } from './portrait';
 
 class Interaction extends Scene {
     constructor(person) {
@@ -20,6 +21,9 @@ class Interaction extends Scene {
         this.lines = [];
         this.person = person;
         this.actions.back = this.returnToWorldMap.bind(this);
+        this.exiting = false;
+
+        this.portrait = new Portrait('/oob/test_portrait.png', this);  // calculate the portrait based on mood etc....;
 
         Util.log(`Entering interaction with ${this.person.name}`);
     }
@@ -27,6 +31,10 @@ class Interaction extends Scene {
     draw(ctx) {
         // World map should be overlaid
         this.worldMap.draw(ctx);
+        this.portrait.draw(ctx);
+        if(this.exiting && !this.portrait.exiting) {
+            this.exit();
+        }
 
         this.drawConversationTextArea(ctx);
         this.drawBadge(ctx);
@@ -57,7 +65,12 @@ class Interaction extends Scene {
     }
 
     returnToWorldMap() {
-        if(!this.worldMap) return;
+        if (!this.worldMap) return;
+        this.exiting = true;
+        this.portrait.exiting = true;
+    }
+
+    exit() {
         this.game.setScene(this.worldMap);
     }
 }
