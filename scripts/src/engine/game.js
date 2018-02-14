@@ -2,8 +2,8 @@
  *
  *  Paradise/Game
  *  Declan Tyson
- *  v0.0.44
- *  13/02/2018
+ *  v0.0.47
+ *  14/02/2018
  *
  */
 
@@ -83,7 +83,9 @@ class Game {
                     tile.onload = () => {
                         this.spritesLoaded++;
                         if(this.spritesLoaded >= Object.keys(this.terrainSprites).length) {
-                            this.loading = false;
+                            setTimeout(() => {
+                                this.loading = false;
+                            }, settings.minLoadingTime);
                         }
                     };
                     tile.onerror = () => {
@@ -108,7 +110,7 @@ class Game {
 
         if(this.loading) {
             let loading = new Image();
-            loading.src = '/oob/loading.png';
+            loading.src = settings.loadingScreen;
             this.cachedCanvas = loading;
         } else if(this.redraw) {
             this.cachedCanvas = pre_canvas;

@@ -2,8 +2,8 @@
  *
  *  Paradise/Settings
  *  Declan Tyson
- *  v0.0.43
- *  13/02/2018
+ *  v0.0.47
+ *  14/02/2018
  *
  */
 
@@ -22,7 +22,9 @@ export let settings = {
         stepsPerTile: 5
     },
     personCount : 4,
-    defaultInhabitanceSize : 2
+    defaultInhabitanceSize : 2,
+    loadingScreen: '/oob/loading.png',
+    minLoadingTime: 2000
 };
 
 export let canvasProperties = {

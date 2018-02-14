@@ -10,9 +10,9 @@ app.use("/oob", express.static('img'));
 app.use("/games", express.static('games'));
 app.use("/scripts", express.static('scripts'));
 
-app.get('/demo', function(req,res) {
+app.get('/demo', (req,res) => {
     res.writeHead(200, {'Content-Type': 'text/html'});
-    fs.readFile('games/demo.html', 'utf-8', function (err, content) {
+    fs.readFile('games/demo.html', 'utf-8', (err, content) => {
         if (err) {
             throw err;
         }
