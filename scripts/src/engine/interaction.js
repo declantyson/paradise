@@ -2,8 +2,8 @@
  *
  *  Paradise/Scene-Interaction
  *  Declan Tyson
- *  v0.0.44
- *  13/02/2018
+ *  v0.0.46
+ *  14/02/2018
  *
  */
 
@@ -12,7 +12,6 @@ import { Util } from './util';
 import { Scene } from './scene';
 import { interactionTextArea, fonts, colours } from '../constants';
 import { canvasProperties } from '../settings';
-import { Portrait } from './portrait';
 
 class Interaction extends Scene {
     constructor(person) {
@@ -23,7 +22,6 @@ class Interaction extends Scene {
         // calculate these values based on mood etc....;
         this.lines = this.person.lines || [];
         this.conversationOptions = this.person.conversationOptions || [];
-        this.portrait = new Portrait('/oob/test_portrait.png', this);
 
         this.selectedConversationOption = 0;
 
@@ -40,8 +38,9 @@ class Interaction extends Scene {
     draw(ctx) {
         // World map should be overlaid
         this.worldMap.draw(ctx);
-        this.portrait.draw(ctx);
-        if(this.exiting && !this.portrait.exiting) {
+        this.person.currentPortrait.draw(ctx);
+
+        if(this.exiting && !this.person.currentPortrait.exiting) {
             this.exit();
         }
 
@@ -104,7 +103,7 @@ class Interaction extends Scene {
     }
 
     sendResponse() {
-        if(this.keyHeld || this.portrait.entering) return;
+        if(this.keyHeld || this.person.currentPortrait.entering || this.person.currentPortrait.exiting) return;
 
         this.person.sendResponse(this.conversationOptions[this.selectedConversationOption], this);
         this.keyHeld = true;
@@ -113,7 +112,7 @@ class Interaction extends Scene {
     returnToWorldMap() {
         if (!this.worldMap) return;
         this.exiting = true;
-        this.portrait.exiting = true;
+        this.person.currentPortrait.exiting = true;
         this.conversationOptions = [];
     }
 

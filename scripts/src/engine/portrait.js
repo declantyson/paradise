@@ -2,25 +2,24 @@
  *
  *  Paradise/Portrait
  *  Declan Tyson
- *  v0.0.43
- *  13/02/2018
+ *  v0.0.46
+ *  14/02/2018
  *
  */
 
-import { canvasProperties, portraitWidth } from '../settings';
-import {interactionTextArea} from '../constants';
+import { canvasProperties } from '../settings';
 
 class Portrait {
-    constructor(imageSrc, interaction) {
+    constructor(imageSrc) {
         let image = new Image();
         image.src = imageSrc;
         this.image = image;
-        this.entering = true;
+        this.src = imageSrc;
+        this.entering = false;
         this.exiting = false;
         this.frame = 0;
         this.frameIncrement = 1;
         this.maxFrames = 30;
-        this.interaction = interaction;
     }
 
     draw(ctx) {
@@ -34,10 +33,21 @@ class Portrait {
 
     enter() {
         if(this.frame < this.maxFrames) {
+            this.entering = true;
             this.frame += this.frameIncrement;
         } else {
             this.entering = false;
         }
+    }
+
+    enterWithoutAnimation() {
+        this.frame = this.maxFrames;
+        this.entering = false;
+    }
+
+    exitWithoutAnimation() {
+        this.frame = 0;
+        this.exiting = false;
     }
 
     exit() {

@@ -2,15 +2,14 @@
  *
  *  Paradise/Scene-WorldMap
  *  Declan Tyson
- *  v0.0.45
- *  13/02/2018
+ *  v0.0.46
+ *  14/02/2018
  *
  */
 
 import { terrains } from './terrains';
 import { directions } from '../constants';
 import { Scene } from './scene';
-import { Interaction } from './interaction';
 import { settings, tileStep } from '../settings';
 
 class WorldMap extends Scene {
@@ -270,8 +269,7 @@ class WorldMap extends Scene {
     }
 
     startInteraction(person) {
-        let interaction = new Interaction(person);
-        interaction.worldMap = this;
+        let interaction = person.startInteraction(this);
         this.game.setScene(interaction);
     }
 

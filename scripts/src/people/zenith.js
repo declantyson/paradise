@@ -2,8 +2,8 @@
  *
  *  Paradise/Person/Zenith
  *  Declan Tyson
- *  v0.0.44
- *  13/02/2018
+ *  v0.0.46
+ *  14/02/2018
  *
  */
 
@@ -34,6 +34,7 @@ class Zenith extends Person {
             }];
         this.responses = {
             "Nice" : {
+                "mood" : "neutral",
                 "lines" : ["<3"],
                 "conversationOptions" : [{
                     "key" : "Goodbye",
@@ -41,6 +42,7 @@ class Zenith extends Person {
                 }]
             },
             "Truth" : {
+                "mood" : "neutral",
                 "lines" : ["I know... :("],
                 "conversationOptions" : [{
                     "key" : "Goodbye",
@@ -48,6 +50,7 @@ class Zenith extends Person {
                 }]
             },
             "Mean" : {
+                "mood" : "angry",
                 "lines" : ["Screw you! >:("],
                 "conversationOptions" : [{
                     "key" : "Confront",
@@ -58,6 +61,7 @@ class Zenith extends Person {
                 }]
             },
             "Confront" : {
+                "mood" : "sad",
                 "lines" : ["Nothing... I'm so lonely..."],
                 "conversationOptions" : [{
                     "key" : "Nice",
