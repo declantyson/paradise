@@ -2,7 +2,7 @@
  *
  *  Paradise/Scene-WorldMap
  *  Declan Tyson
- *  v0.0.48
+ *  v0.0.49
  *  15/02/2018
  *
  */
@@ -132,9 +132,9 @@ class WorldMap extends Scene {
         this.viewportStartY = this.player.y - (settings.terrain.tilesHigh / 2);
 
         this.drawLocale(ctx);
-        this.drawPeople(ctx);
 
         this.drawDecorativeBehindPlayer(ctx);
+        this.drawPeople(ctx);
         this.drawPlayer(ctx);
         this.drawDecorativeInFrontOfPlayer(ctx);
     }
@@ -152,7 +152,7 @@ class WorldMap extends Scene {
         if(!this.locale || this.game.loading) return;
 
         this.locale.decorative.forEach((decoration) => {
-            if(decoration.y > this.player.y) return;
+            if(decoration.y > this.player.y && decoration.canWalkBehind) return;
 
             decoration.draw(ctx, this.player, this.offsetX, this.offsetY, this.localeMap);
         });
@@ -162,7 +162,7 @@ class WorldMap extends Scene {
         if(!this.locale || this.game.loading) return;
 
         this.locale.decorative.forEach((decoration) => {
-            if(decoration.y <= this.player.y) return;
+            if(decoration.y <= this.player.y || !decoration.canWalkBehind) return;
 
             decoration.draw(ctx, this.player, this.offsetX, this.offsetY, this.localeMap);
         });

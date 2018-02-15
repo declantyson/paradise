@@ -2,7 +2,7 @@
  *
  *  Paradise/Locales
  *  Declan Tyson
- *  v0.0.48
+ *  v0.0.49
  *  15/02/2018
  *
  */
@@ -19,8 +19,6 @@ import { GroveStreet4 } from './interiors/4grovestreet';
 import { TownHall } from "./interiors/townhall";
 import { BallManor } from './interiors/ballmanor';
 
-import { Tree } from './decorative/tree';
-
 export const startingMaps = {
     'Village' : Village,
     'Islands' : Islands
@@ -35,10 +33,6 @@ export const locales = {
     'GroveStreet4' : GroveStreet4,
     'BallManor' : BallManor,
     'TownHall' : TownHall
-};
-
-export const decorative = {
-    'Tree' : Tree
 };
 
 export const chooseStartingMap = () => {

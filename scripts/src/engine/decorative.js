@@ -2,16 +2,16 @@
  *
  *  Paradise/Decorative
  *  Declan Tyson
- *  v0.0.48
+ *  v0.0.49
  *  15/02/2018
  *
  */
 
 import { colours } from '../constants';
-import {settings, tileStep} from '../settings';
+import { settings, tileStep } from '../settings';
 
 class Decorative {
-    constructor(name, description, src, x, y, passMap = []) {
+    constructor(name, description, src, x, y, passMap = [false], canWalkBehind = true) {
         this.name = name;
         this.description = description;
         let image = new Image();
@@ -20,9 +20,10 @@ class Decorative {
         this.items = [];
         this.colour = colours.red;
         this.passMap = passMap;
+        this.canWalkBehind = canWalkBehind;
 
-        if(x) this.x = x;
-        if(y) this.y = y;
+        this.x = x;
+        this.y = y;
     }
 
     addItem(item) {

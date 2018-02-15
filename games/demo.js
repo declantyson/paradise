@@ -438,7 +438,7 @@ class Scene {
  *
  *  Paradise/Scene-WorldMap
  *  Declan Tyson
- *  v0.0.48
+ *  v0.0.49
  *  15/02/2018
  *
  */
@@ -563,9 +563,9 @@ class WorldMap extends Scene {
         this.viewportStartY = this.player.y - (settings.terrain.tilesHigh / 2);
 
         this.drawLocale(ctx);
-        this.drawPeople(ctx);
 
         this.drawDecorativeBehindPlayer(ctx);
+        this.drawPeople(ctx);
         this.drawPlayer(ctx);
         this.drawDecorativeInFrontOfPlayer(ctx);
     }
@@ -583,7 +583,7 @@ class WorldMap extends Scene {
         if(!this.locale || this.game.loading) return;
 
         this.locale.decorative.forEach((decoration) => {
-            if(decoration.y > this.player.y) return;
+            if(decoration.y > this.player.y && decoration.canWalkBehind) return;
 
             decoration.draw(ctx, this.player, this.offsetX, this.offsetY, this.localeMap);
         });
@@ -593,7 +593,7 @@ class WorldMap extends Scene {
         if(!this.locale || this.game.loading) return;
 
         this.locale.decorative.forEach((decoration) => {
-            if(decoration.y <= this.player.y) return;
+            if(decoration.y <= this.player.y || !decoration.canWalkBehind) return;
 
             decoration.draw(ctx, this.player, this.offsetX, this.offsetY, this.localeMap);
         });
@@ -1001,13 +1001,13 @@ class Village extends Locale {
  *
  *  Paradise/Decorative
  *  Declan Tyson
- *  v0.0.48
+ *  v0.0.49
  *  15/02/2018
  *
  */
 
 class Decorative {
-    constructor(name, description, src, x, y, passMap = []) {
+    constructor(name, description, src, x, y, passMap = [false], canWalkBehind = true) {
         this.name = name;
         this.description = description;
         let image = new Image();
@@ -1016,9 +1016,10 @@ class Decorative {
         this.items = [];
         this.colour = colours.red;
         this.passMap = passMap;
+        this.canWalkBehind = canWalkBehind;
 
-        if(x) this.x = x;
-        if(y) this.y = y;
+        this.x = x;
+        this.y = y;
     }
 
     addItem(item) {
@@ -1219,6 +1220,36 @@ class GroveStreet4 extends GroveStreetTemplate {
 
 /*
  *
+ *  Paradise/Decorative/Dresser
+ *  Declan Tyson
+ *  v0.0.49
+ *  15/02/2018
+ *
+ */
+
+class Dresser extends Decorative {
+    constructor(x, y) {
+        super('Dresser', 'a fancy dresser', '/oob/Decorative/dresser.png', x, y, [false, false]);
+    }
+}
+
+/*
+ *
+ *  Paradise/Decorative/Rug
+ *  Declan Tyson
+ *  v0.0.49
+ *  15/02/2018
+ *
+ */
+
+class Rug extends Decorative {
+    constructor(x, y) {
+        super('Rug', 'a fancy rug', '/oob/Decorative/rug.png', x, y, [], false);
+    }
+}
+
+/*
+ *
  *  Paradise/Locales/Ball Manor
  *  Declan Tyson
  *  v0.0.38
@@ -1239,6 +1270,9 @@ class BallManor extends GroveStreetTemplate {
         };
 
         this.terrainPaint(48, 49, 1, 1, 'WoodenFloor');
+
+        this.addDecoration(new Dresser(38, 26));
+        this.addDecoration(new Rug(44, 32));
     }
 }
 
@@ -1246,7 +1280,7 @@ class BallManor extends GroveStreetTemplate {
  *
  *  Paradise/Locales
  *  Declan Tyson
- *  v0.0.48
+ *  v0.0.49
  *  15/02/2018
  *
  */
@@ -1266,8 +1300,6 @@ const locales = {
     'BallManor' : BallManor,
     'TownHall' : TownHall
 };
-
-
 
 const chooseStartingMap = () => {
     let locale = Util.pickRandomProperty(startingMaps);
