@@ -2118,11 +2118,12 @@ const choosePeople = () => {
  *
  *  Paradise
  *  Declan Tyson
- *  v0.0.48
+ *  v0.0.51
  *  15/02/2018
  *
  */
 // Engine
+// Demo data
 
 exports.StartGame = StartGame;
 exports.Interaction = Interaction;
@@ -2138,6 +2139,7 @@ exports.terrains = terrains;
 exports.Util = Util;
 exports.WorldMap = WorldMap;
 exports.Decorative = Decorative;
+exports.settings = settings;
 exports.startingMaps = startingMaps;
 exports.chooseStartingMap = chooseStartingMap;
 exports.people = people;

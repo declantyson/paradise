@@ -2,7 +2,7 @@
  *
  *  Paradise
  *  Declan Tyson
- *  v0.0.48
+ *  v0.0.51
  *  15/02/2018
  *
  */
@@ -19,6 +19,7 @@ import { terrains } from './engine/terrains';
 import { Util } from './engine/util';
 import { WorldMap } from './engine/worldmap';
 import { Decorative } from './engine/decorative';
+import { settings } from './settings';
 
 // Demo data
 import { startingMaps, chooseStartingMap } from "./locales/locales";
@@ -33,7 +34,7 @@ import { Quazar } from './people/quazar';
 import { Zenith } from './people/zenith';
 
 export {
-    StartGame, Interaction, Item, Locale, Inhabitance, Interior, Player, choosePeople, Person, Scene, terrains, Util, WorldMap, Decorative,
+    StartGame, Interaction, Item, Locale, Inhabitance, Interior, Player, choosePeople, Person, Scene, terrains, Util, WorldMap, Decorative, settings,
     startingMaps, chooseStartingMap,
     people, Evelyn, Jill, John, Neil, Pauline, Petey, Quazar, Zenith
 };
