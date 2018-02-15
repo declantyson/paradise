@@ -2118,10 +2118,11 @@ const choosePeople = () => {
  *
  *  Paradise
  *  Declan Tyson
- *  v0.0.51
+ *  v0.0.52
  *  15/02/2018
  *
  */
+
 // Engine
 // Demo data
 
@@ -2151,6 +2152,9 @@ exports.Pauline = Pauline;
 exports.Petey = Petey;
 exports.Quazar = Quazar;
 exports.Zenith = Zenith;
+exports.Dresser = Dresser;
+exports.Rug = Rug;
+exports.Tree = Tree;
 
 return exports;
 

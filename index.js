@@ -2115,11 +2115,12 @@ const choosePeople = () => {
  *
  *  Paradise
  *  Declan Tyson
- *  v0.0.51
+ *  v0.0.52
  *  15/02/2018
  *
  */
+
 // Engine
 // Demo data
 
-export { StartGame, Interaction, Item, Locale, Inhabitance, Interior, Player, choosePeople, Person, Scene, terrains, Util, WorldMap, Decorative, settings, startingMaps, chooseStartingMap, people, Evelyn, Jill, John, Neil, Pauline, Petey, Quazar, Zenith };
+export { StartGame, Interaction, Item, Locale, Inhabitance, Interior, Player, choosePeople, Person, Scene, terrains, Util, WorldMap, Decorative, settings, startingMaps, chooseStartingMap, people, Evelyn, Jill, John, Neil, Pauline, Petey, Quazar, Zenith, Dresser, Rug, Tree };

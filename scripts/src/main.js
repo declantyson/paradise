@@ -2,10 +2,11 @@
  *
  *  Paradise
  *  Declan Tyson
- *  v0.0.51
+ *  v0.0.52
  *  15/02/2018
  *
  */
+
 // Engine
 import { StartGame } from './engine/game';
 import { Interaction } from "./engine/interaction";
@@ -32,9 +33,13 @@ import { Pauline } from './people/pauline';
 import { Petey } from './people/petey';
 import { Quazar } from './people/quazar';
 import { Zenith } from './people/zenith';
+import { Tree } from "./locales/decorative/tree";
+import { Dresser } from "./locales/decorative/dresser";
+import { Rug } from "./locales/decorative/rug";
 
 export {
     StartGame, Interaction, Item, Locale, Inhabitance, Interior, Player, choosePeople, Person, Scene, terrains, Util, WorldMap, Decorative, settings,
     startingMaps, chooseStartingMap,
-    people, Evelyn, Jill, John, Neil, Pauline, Petey, Quazar, Zenith
+    people, Evelyn, Jill, John, Neil, Pauline, Petey, Quazar, Zenith,
+    Dresser, Rug, Tree
 };
