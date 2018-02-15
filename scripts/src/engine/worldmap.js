@@ -2,8 +2,8 @@
  *
  *  Paradise/Scene-WorldMap
  *  Declan Tyson
- *  v0.0.46
- *  14/02/2018
+ *  v0.0.48
+ *  15/02/2018
  *
  */
 
@@ -124,19 +124,6 @@ class WorldMap extends Scene {
     }
 
     draw(ctx) {
-        /*
-        * This was a performance experiment that didn't work properly... keeping it here in case we need it later
-        * and it's also pretty handy for debugging
-        */
-
-        /*if(
-            this.offsetX === this.player.x * settings.terrain.tileSize - this.game.centerPoint.x &&
-            this.offsetY === this.player.y * settings.terrain.tileSize - this.game.centerPoint.y
-        ) {
-            this.game.redraw = false;
-            return;
-        }*/
-
         this.game.redraw = true;
 
         this.offsetX = this.player.x * settings.terrain.tileSize - this.game.centerPoint.x;
@@ -146,7 +133,10 @@ class WorldMap extends Scene {
 
         this.drawLocale(ctx);
         this.drawPeople(ctx);
+
+        this.drawDecorativeBehindPlayer(ctx);
         this.drawPlayer(ctx);
+        this.drawDecorativeInFrontOfPlayer(ctx);
     }
 
     drawPlayer(ctx) {
@@ -156,6 +146,26 @@ class WorldMap extends Scene {
             playerY = this.game.centerPoint.y - settings.terrain.tileSize;
 
         ctx.drawImage(sprite.image, sprite.x, sprite.y, 64, 64, playerX, playerY, settings.character.spriteSize, settings.character.spriteSize);
+    }
+
+    drawDecorativeBehindPlayer(ctx) {
+        if(!this.locale || this.game.loading) return;
+
+        this.locale.decorative.forEach((decoration) => {
+            if(decoration.y > this.player.y) return;
+
+            decoration.draw(ctx, this.player, this.offsetX, this.offsetY, this.localeMap);
+        });
+    }
+
+    drawDecorativeInFrontOfPlayer(ctx) {
+        if(!this.locale || this.game.loading) return;
+
+        this.locale.decorative.forEach((decoration) => {
+            if(decoration.y <= this.player.y) return;
+
+            decoration.draw(ctx, this.player, this.offsetX, this.offsetY, this.localeMap);
+        });
     }
 
     drawLocale(ctx) {

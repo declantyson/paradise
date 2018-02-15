@@ -68,8 +68,8 @@ class Util {
  *
  *  Paradise/Settings
  *  Declan Tyson
- *  v0.0.43
- *  13/02/2018
+ *  v0.0.47
+ *  14/02/2018
  *
  */
 
@@ -108,8 +108,8 @@ let tileStep = (settings.terrain.tileSize / settings.character.stepsPerTile);
  *
  *  Paradise/Constants
  *  Declan Tyson
- *  v0.0.44
- *  13/02/2018
+ *  v0.0.48
+ *  15/02/2018
  *
  */
 
@@ -121,7 +121,8 @@ const colours = {
     brown: '#4f1f0b',
     darkbrown: '#291006',
     grey: '#cdcdcd',
-    red: '#ff0000'
+    red: '#ff0000',
+    fuschia: '#ff00ff'
 };
 
 const directions = {
@@ -437,8 +438,8 @@ class Scene {
  *
  *  Paradise/Scene-WorldMap
  *  Declan Tyson
- *  v0.0.46
- *  14/02/2018
+ *  v0.0.48
+ *  15/02/2018
  *
  */
 
@@ -554,19 +555,6 @@ class WorldMap extends Scene {
     }
 
     draw(ctx) {
-        /*
-        * This was a performance experiment that didn't work properly... keeping it here in case we need it later
-        * and it's also pretty handy for debugging
-        */
-
-        /*if(
-            this.offsetX === this.player.x * settings.terrain.tileSize - this.game.centerPoint.x &&
-            this.offsetY === this.player.y * settings.terrain.tileSize - this.game.centerPoint.y
-        ) {
-            this.game.redraw = false;
-            return;
-        }*/
-
         this.game.redraw = true;
 
         this.offsetX = this.player.x * settings.terrain.tileSize - this.game.centerPoint.x;
@@ -576,7 +564,10 @@ class WorldMap extends Scene {
 
         this.drawLocale(ctx);
         this.drawPeople(ctx);
+
+        this.drawDecorativeBehindPlayer(ctx);
         this.drawPlayer(ctx);
+        this.drawDecorativeInFrontOfPlayer(ctx);
     }
 
     drawPlayer(ctx) {
@@ -586,6 +577,26 @@ class WorldMap extends Scene {
             playerY = this.game.centerPoint.y - settings.terrain.tileSize;
 
         ctx.drawImage(sprite.image, sprite.x, sprite.y, 64, 64, playerX, playerY, settings.character.spriteSize, settings.character.spriteSize);
+    }
+
+    drawDecorativeBehindPlayer(ctx) {
+        if(!this.locale || this.game.loading) return;
+
+        this.locale.decorative.forEach((decoration) => {
+            if(decoration.y > this.player.y) return;
+
+            decoration.draw(ctx, this.player, this.offsetX, this.offsetY, this.localeMap);
+        });
+    }
+
+    drawDecorativeInFrontOfPlayer(ctx) {
+        if(!this.locale || this.game.loading) return;
+
+        this.locale.decorative.forEach((decoration) => {
+            if(decoration.y <= this.player.y) return;
+
+            decoration.draw(ctx, this.player, this.offsetX, this.offsetY, this.localeMap);
+        });
     }
 
     drawLocale(ctx) {
@@ -775,8 +786,8 @@ class WorldMap extends Scene {
  *
  *  Paradise/Locales/Base
  *  Declan Tyson
- *  v0.0.40
- *  13/02/2018
+ *  v0.0.48
+ *  15/02/2018
  *
  */
 
@@ -787,6 +798,7 @@ class Locale {
         this.entryPoints = {};
         this.spawnPoints = [];
         this.inhabitances = [];
+        this.decorative = [];
     }
 
     initialise(width, height) {
@@ -844,6 +856,10 @@ class Locale {
         this.player.stepX = 0;
         this.player.stepY = 0;
         this.player.setPlacement(this.entryPoints[entryPoint].x, this.entryPoints[entryPoint].y, true);
+    }
+
+    addDecoration(decoration) {
+        this.decorative.push(decoration);
     }
 
     drawInhabitances() {
@@ -983,9 +999,78 @@ class Village extends Locale {
 
 /*
  *
+ *  Paradise/Decorative
+ *  Declan Tyson
+ *  v0.0.48
+ *  15/02/2018
+ *
+ */
+
+class Decorative {
+    constructor(name, description, src, x, y, passMap = []) {
+        this.name = name;
+        this.description = description;
+        let image = new Image();
+        image.src = src;
+        this.image = image;
+        this.items = [];
+        this.colour = colours.red;
+        this.passMap = passMap;
+
+        if(x) this.x = x;
+        if(y) this.y = y;
+    }
+
+    addItem(item) {
+        this.items.push(item);
+    }
+
+    draw(ctx, player, mapOffsetX, mapOffsetY, map) {
+        let decorationX =  this.x * settings.terrain.tileSize - mapOffsetX,
+            decorationY =  this.y * settings.terrain.tileSize - mapOffsetY,
+            offsetX = player.stepX * tileStep,
+            offsetY = player.stepY * tileStep,
+            height = this.image.naturalHeight; // we draw this from the bottom
+
+        ctx.drawImage(this.image, decorationX - offsetX, decorationY - offsetY - height + settings.terrain.tileSize);
+
+        for(let i = 0; i < this.passMap.length; i++) {
+            map[this.x + i][this.y].passable = this.passMap[i];
+
+            if(window.debug && !this.passMap[i]) {
+                let debugX =  (this.x + i) * settings.terrain.tileSize - mapOffsetX;
+
+                ctx.beginPath();
+                ctx.fillStyle = this.colour;
+                ctx.strokeStyle = this.colour;
+                ctx.rect(debugX - offsetX, decorationY - offsetY, settings.terrain.tileSize, settings.terrain.tileSize);
+                ctx.fill();
+                ctx.stroke();
+            }
+        }
+    }
+}
+
+/*
+ *
+ *  Paradise/Decorative/Tree
+ *  Declan Tyson
+ *  v0.0.48
+ *  15/02/2018
+ *
+ */
+
+class Tree extends Decorative {
+    constructor(x, y) {
+        super('Tree', 'a tropical palm tree', '/oob/Decorative/tree.png', x, y, [true, false, true]);
+    }
+}
+
+/*
+ *
  *  Paradise/Locales/Islands
  *  Declan Tyson
- *  v0.0.38
+ *  v0.0.48
  *  12/02/2018
  *
  */
@@ -1016,6 +1101,8 @@ class Islands extends Locale {
         this.terrainPaint(55, 70, 2, 1, 'HorizontalRoad');
         this.terrainPaint(54, 70, 1, 5, 'VerticalRoad');
         this.terrainPaint(55, 74, 2, 1, 'HorizontalRoad');
+
+        this.addDecoration(new Tree(60, 74));
 
         this.inhabitances.push(
             new Inhabitance('GroveStreet1', '1 Grove Street', 53, 59, { x: 54, y: 60 }),
@@ -1159,8 +1246,8 @@ class BallManor extends GroveStreetTemplate {
  *
  *  Paradise/Locales
  *  Declan Tyson
- *  v0.0.38
- *  12/02/2018
+ *  v0.0.48
+ *  15/02/2018
  *
  */
 
@@ -1179,6 +1266,8 @@ const locales = {
     'BallManor' : BallManor,
     'TownHall' : TownHall
 };
+
+
 
 const chooseStartingMap = () => {
     let locale = Util.pickRandomProperty(startingMaps);
@@ -1832,12 +1921,11 @@ const choosePeople = () => {
  *
  *  Paradise
  *  Declan Tyson
- *  v0.0.33
- *  09/02/2018
+ *  v0.0.48
+ *  15/02/2018
  *
  */
 // Engine
-// Test data
 
 /*
  *

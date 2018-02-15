@@ -2,13 +2,14 @@
  *
  *  Paradise/Locales/Islands
  *  Declan Tyson
- *  v0.0.38
+ *  v0.0.48
  *  12/02/2018
  *
  */
 
 import { Inhabitance } from '../engine/locale';
 import { Locale } from '../engine/locale';
+import { Tree } from './decorative/tree';
 
 class Islands extends Locale {
     constructor(player, people) {
@@ -36,6 +37,8 @@ class Islands extends Locale {
         this.terrainPaint(55, 70, 2, 1, 'HorizontalRoad');
         this.terrainPaint(54, 70, 1, 5, 'VerticalRoad');
         this.terrainPaint(55, 74, 2, 1, 'HorizontalRoad');
+
+        this.addDecoration(new Tree(60, 74));
 
         this.inhabitances.push(
             new Inhabitance('GroveStreet1', '1 Grove Street', 53, 59, { x: 54, y: 60 }),

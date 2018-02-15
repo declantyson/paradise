@@ -2,8 +2,8 @@
  *
  *  Paradise/Constants
  *  Declan Tyson
- *  v0.0.44
- *  13/02/2018
+ *  v0.0.48
+ *  15/02/2018
  *
  */
 
@@ -17,7 +17,8 @@ export const colours = {
     brown: '#4f1f0b',
     darkbrown: '#291006',
     grey: '#cdcdcd',
-    red: '#ff0000'
+    red: '#ff0000',
+    fuschia: '#ff00ff'
 };
 
 export const directions = {

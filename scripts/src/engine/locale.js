@@ -2,8 +2,8 @@
  *
  *  Paradise/Locales/Base
  *  Declan Tyson
- *  v0.0.40
- *  13/02/2018
+ *  v0.0.48
+ *  15/02/2018
  *
  */
 
@@ -17,6 +17,7 @@ class Locale {
         this.entryPoints = {};
         this.spawnPoints = [];
         this.inhabitances = [];
+        this.decorative = [];
     }
 
     initialise(width, height) {
@@ -74,6 +75,10 @@ class Locale {
         this.player.stepX = 0;
         this.player.stepY = 0;
         this.player.setPlacement(this.entryPoints[entryPoint].x, this.entryPoints[entryPoint].y, true);
+    }
+
+    addDecoration(decoration) {
+        this.decorative.push(decoration);
     }
 
     drawInhabitances() {
