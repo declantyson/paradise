@@ -2,7 +2,7 @@
  *
  *  Paradise/Scene-WorldMap
  *  Declan Tyson
- *  v0.0.49
+ *  v0.0.50
  *  15/02/2018
  *
  */
@@ -22,6 +22,7 @@ class WorldMap extends Scene {
         this.actions.left = this.moveLeft.bind(this);
         this.actions.right = this.moveRight.bind(this);
         this.actions.action = this.checkForInteraction.bind(this);
+        this.leavingInteraction = false;
 
         this.visitedLocales = {};
         this.presentPeople = [];
@@ -249,6 +250,8 @@ class WorldMap extends Scene {
     }
 
     checkForInteraction() {
+        if(this.leavingInteraction) return;
+
         let x = this.player.x,
             y = this.player.y;
 
@@ -267,19 +270,30 @@ class WorldMap extends Scene {
                 break;
         }
 
-        let person = this.localeMap[x][y].person;
+        let person = this.localeMap[x][y].person,
+            decoration = this.localeMap[x][y].decoration;
 
         if(!person) {
             if(this.player.direction === directions.up && this.player.stepX > 0) person = this.localeMap[x+1][y].person;
             else if(this.player.direction === directions.right && this.player.stepY > 0) person = this.localeMap[x][y+1].person;
         }
-        if(!person) return;
 
-        this.startInteraction(person);
+        if(person) {
+            this.startInteraction(person);
+        } else if(decoration) {
+            this.startObjectInteraction(decoration);
+        }
     }
 
     startInteraction(person) {
         let interaction = person.startInteraction(this);
+        this.game.setScene(interaction);
+    }
+
+    startObjectInteraction(decoration) {
+        if(decoration.lines.length === 0) return;
+
+        let interaction = decoration.startInteraction(this);
         this.game.setScene(interaction);
     }
 

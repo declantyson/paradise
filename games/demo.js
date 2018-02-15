@@ -438,7 +438,7 @@ class Scene {
  *
  *  Paradise/Scene-WorldMap
  *  Declan Tyson
- *  v0.0.49
+ *  v0.0.50
  *  15/02/2018
  *
  */
@@ -453,6 +453,7 @@ class WorldMap extends Scene {
         this.actions.left = this.moveLeft.bind(this);
         this.actions.right = this.moveRight.bind(this);
         this.actions.action = this.checkForInteraction.bind(this);
+        this.leavingInteraction = false;
 
         this.visitedLocales = {};
         this.presentPeople = [];
@@ -680,6 +681,8 @@ class WorldMap extends Scene {
     }
 
     checkForInteraction() {
+        if(this.leavingInteraction) return;
+
         let x = this.player.x,
             y = this.player.y;
 
@@ -698,19 +701,30 @@ class WorldMap extends Scene {
                 break;
         }
 
-        let person = this.localeMap[x][y].person;
+        let person = this.localeMap[x][y].person,
+            decoration = this.localeMap[x][y].decoration;
 
         if(!person) {
             if(this.player.direction === directions.up && this.player.stepX > 0) person = this.localeMap[x+1][y].person;
             else if(this.player.direction === directions.right && this.player.stepY > 0) person = this.localeMap[x][y+1].person;
         }
-        if(!person) return;
 
-        this.startInteraction(person);
+        if(person) {
+            this.startInteraction(person);
+        } else if(decoration) {
+            this.startObjectInteraction(decoration);
+        }
     }
 
     startInteraction(person) {
         let interaction = person.startInteraction(this);
+        this.game.setScene(interaction);
+    }
+
+    startObjectInteraction(decoration) {
+        if(decoration.lines.length === 0) return;
+
+        let interaction = decoration.startInteraction(this);
         this.game.setScene(interaction);
     }
 
@@ -999,9 +1013,109 @@ class Village extends Locale {
 
 /*
  *
+ *  Paradise/Scene-ObjectInteraction
+ *  Declan Tyson
+ *  v0.0.50
+ *  15/02/2018
+ *
+ */
+
+class ObjectInteraction extends Scene {
+    constructor(decoration) {
+        super();
+
+        this.decoration = decoration;
+
+        // calculate these values based on mood etc....;
+        this.lines = this.decoration.lines || [];
+        this.conversationOptions = this.decoration.conversationOptions || [];
+
+        this.selectedConversationOption = 0;
+
+        this.keyHeld = true;
+        this.exiting = false;
+
+        this.actions.up = this.previousOption.bind(this);
+        this.actions.down = this.nextOption.bind(this);
+        this.actions.action = this.sendResponse.bind(this);
+    }
+
+    draw(ctx) {
+        // World map should be overlaid
+        this.worldMap.draw(ctx);
+
+        if(!this.game.keyHeld) this.keyHeld = false;
+
+        this.drawConversationTextArea(ctx);
+        this.drawConversation(ctx);
+        this.drawOptions(ctx);
+    }
+
+    drawConversationTextArea(ctx) {
+        ctx.rect(0, canvasProperties.height - interactionTextArea.height, interactionTextArea.width, interactionTextArea.height);
+        ctx.fillStyle = interactionTextArea.background;
+        ctx.globalAlpha = interactionTextArea.alpha;
+        ctx.fill();
+        ctx.globalAlpha = 1;
+    }
+
+    drawConversation(ctx) {
+        let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.badgeOffsetY) * 2;
+        ctx.font = fonts.small;
+        ctx.fillStyle = colours.white;
+        this.lines.forEach((line, index) => {
+            ctx.fillText(line, interactionTextArea.badgeOffsetX, y + (index * interactionTextArea.lineHeight));
+        });
+    }
+
+    drawOptions(ctx) {
+        let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.optionsOffsetY);
+        ctx.font = fonts.small;
+        ctx.fillStyle = colours.white;
+        this.conversationOptions.forEach((conversationOption, index) => {
+            ctx.fillText(conversationOption.value, interactionTextArea.optionsOffsetX, y + (index * interactionTextArea.optionHeight));
+            if(index === this.selectedConversationOption) {
+                ctx.strokeStyle = colours.white;
+                ctx.strokeRect(interactionTextArea.optionsOffsetX - interactionTextArea.optionHeight / 2,  y + (index * interactionTextArea.optionHeight) - (interactionTextArea.optionHeight / 1.5), 250 + interactionTextArea.optionHeight, interactionTextArea.optionHeight);
+            }
+        });
+    }
+
+    nextOption() {
+        if(this.keyHeld) return;
+
+        if(this.selectedConversationOption < this.conversationOptions.length - 1) this.selectedConversationOption++;
+        this.keyHeld = true;
+    }
+
+    previousOption() {
+        if(this.keyHeld) return;
+
+        if(this.selectedConversationOption > 0) this.selectedConversationOption--;
+        this.keyHeld = true;
+    }
+
+    sendResponse() {
+        if(this.keyHeld) return;
+
+        this.decoration.sendResponse(this.conversationOptions[this.selectedConversationOption], this);
+        this.keyHeld = true;
+    }
+
+    returnToWorldMap() {
+        this.worldMap.leavingInteraction = true;
+        setTimeout(() => {
+            this.worldMap.leavingInteraction = false;
+        }, 250);
+        this.game.setScene(this.worldMap);
+    }
+}
+
+/*
+ *
  *  Paradise/Decorative
  *  Declan Tyson
- *  v0.0.49
+ *  v0.0.50
  *  15/02/2018
  *
  */
@@ -1017,6 +1131,10 @@ class Decorative {
         this.colour = colours.red;
         this.passMap = passMap;
         this.canWalkBehind = canWalkBehind;
+
+        this.lines = [];
+        this.conversationOptions = [];
+        this.responses = {};
 
         this.x = x;
         this.y = y;
@@ -1036,7 +1154,9 @@ class Decorative {
         ctx.drawImage(this.image, decorationX - offsetX, decorationY - offsetY - height + settings.terrain.tileSize);
 
         for(let i = 0; i < this.passMap.length; i++) {
-            map[this.x + i][this.y].passable = this.passMap[i];
+            let mapEntry = map[this.x + i][this.y];
+            mapEntry.passable = this.passMap[i];
+            mapEntry.decoration = this;
 
             if(window.debug && !this.passMap[i]) {
                 let debugX =  (this.x + i) * settings.terrain.tileSize - mapOffsetX;
@@ -1048,6 +1168,26 @@ class Decorative {
                 ctx.fill();
                 ctx.stroke();
             }
+        }
+    }
+
+    startInteraction(worldMap) {
+        let interaction = new ObjectInteraction(this);
+        interaction.worldMap = worldMap;
+
+        return interaction;
+    }
+
+    sendResponse(conversationOption, interaction) {
+        Util.log(conversationOption.value);
+
+        if(!this.responses[conversationOption.key]) {
+            interaction.returnToWorldMap();
+        } else {
+            let response = this.responses[conversationOption.key];
+            interaction.selectedConversationOption = 0;
+            interaction.lines = response.lines;
+            interaction.conversationOptions = response.conversationOptions;
         }
     }
 }
@@ -1222,7 +1362,7 @@ class GroveStreet4 extends GroveStreetTemplate {
  *
  *  Paradise/Decorative/Dresser
  *  Declan Tyson
- *  v0.0.49
+ *  v0.0.50
  *  15/02/2018
  *
  */
@@ -1230,6 +1370,23 @@ class GroveStreet4 extends GroveStreetTemplate {
 class Dresser extends Decorative {
     constructor(x, y) {
         super('Dresser', 'a fancy dresser', '/oob/Decorative/dresser.png', x, y, [false, false]);
+        this.lines = [`It's a fancy dresser.`];
+        this.conversationOptions = [{
+            "key" : "Search",
+            "value" : "Open the drawers"
+        },{
+            "key" : "Leave",
+            "value" : "That's nice."
+        }];
+        this.responses = {
+            "Search" : {
+                "lines" : ["You find nothing but a dead fly."],
+                "conversationOptions" : [{
+                    "key" : "Leave",
+                    "value" : "Shut the drawer and go elsewhere."
+                }]
+            }
+        };
     }
 }
 

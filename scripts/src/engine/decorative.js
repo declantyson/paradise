@@ -2,13 +2,15 @@
  *
  *  Paradise/Decorative
  *  Declan Tyson
- *  v0.0.49
+ *  v0.0.50
  *  15/02/2018
  *
  */
 
 import { colours } from '../constants';
 import { settings, tileStep } from '../settings';
+import { ObjectInteraction } from './objectinteraction';
+import {Util} from './util';
 
 class Decorative {
     constructor(name, description, src, x, y, passMap = [false], canWalkBehind = true) {
@@ -21,6 +23,10 @@ class Decorative {
         this.colour = colours.red;
         this.passMap = passMap;
         this.canWalkBehind = canWalkBehind;
+
+        this.lines = [];
+        this.conversationOptions = [];
+        this.responses = {};
 
         this.x = x;
         this.y = y;
@@ -40,7 +46,9 @@ class Decorative {
         ctx.drawImage(this.image, decorationX - offsetX, decorationY - offsetY - height + settings.terrain.tileSize);
 
         for(let i = 0; i < this.passMap.length; i++) {
-            map[this.x + i][this.y].passable = this.passMap[i];
+            let mapEntry = map[this.x + i][this.y];
+            mapEntry.passable = this.passMap[i];
+            mapEntry.decoration = this;
 
             if(window.debug && !this.passMap[i]) {
                 let debugX =  (this.x + i) * settings.terrain.tileSize - mapOffsetX;
@@ -52,6 +60,26 @@ class Decorative {
                 ctx.fill();
                 ctx.stroke();
             }
+        }
+    }
+
+    startInteraction(worldMap) {
+        let interaction = new ObjectInteraction(this);
+        interaction.worldMap = worldMap;
+
+        return interaction;
+    }
+
+    sendResponse(conversationOption, interaction) {
+        Util.log(conversationOption.value);
+
+        if(!this.responses[conversationOption.key]) {
+            interaction.returnToWorldMap();
+        } else {
+            let response = this.responses[conversationOption.key];
+            interaction.selectedConversationOption = 0;
+            interaction.lines = response.lines;
+            interaction.conversationOptions = response.conversationOptions;
         }
     }
 }
