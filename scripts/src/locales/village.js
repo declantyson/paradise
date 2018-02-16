@@ -30,7 +30,7 @@ class Village extends Locale {
         );
 
         this.drawInhabitances();
-        this.assignPeopleToInhabitances();
+        this.assignPeopleToInhabitancesRandomly(4);
     }
 }
 

@@ -2,18 +2,20 @@
  *
  *  Paradise/Locales/Base
  *  Declan Tyson
- *  v0.0.48
- *  15/02/2018
+ *  v0.0.54
+ *  16/02/2018
  *
  */
 
 import { Util } from './util';
+import { pairedRelationships } from '../constants';
 import { settings } from '../settings';
+import { people } from '../people/people';
 
 class Locale {
-    constructor(player, people) {
+    constructor(player, activePeople) {
         this.player = player;
-        this.people = people;
+        this.people = activePeople;
         this.entryPoints = {};
         this.spawnPoints = [];
         this.inhabitances = [];
@@ -81,6 +83,13 @@ class Locale {
         this.decorative.push(decoration);
     }
 
+    addSpawnPoint(x, y) {
+        this.spawnPoints.push({
+            x: x,
+            y: y
+        });
+    }
+
     drawInhabitances() {
         for(let i = 0; i < this.inhabitances.length; i++) {
             let inhabitance = this.inhabitances[i];
@@ -88,16 +97,65 @@ class Locale {
         }
     }
 
-    assignPeopleToInhabitances() {
-        if(this.inhabitances.length === 0 || this.people.length === 0) return;
+    assignPeopleToInhabitancesRandomly(maxPerInhabitancy, thisPeople = this.people) {
+        if(this.inhabitances.length === 0 || thisPeople.length === 0) return;
 
-        for(let i = 0; i < this.people.length; i++) {
-            let person = this.people[i],
+        for(let i = 0; i < thisPeople.length; i++) {
+            let person = thisPeople[i],
                 index = Math.floor(Math.random() * this.inhabitances.length),
                 inhabitance = this.inhabitances[index];
 
+            while(inhabitance.inhabitants.length >= maxPerInhabitancy) {
+                index = Math.floor(Math.random() * this.inhabitances.length);
+                inhabitance = this.inhabitances[index];
+            }
+
             inhabitance.addInhabitant(person);
         }
+    }
+
+    assignPairedPeopleToInhabitancesRandomly(maxPerInhabitancy) {
+        if(this.inhabitances.length === 0 || this.people.length === 0) return;
+
+        let thisPeople = this.people.slice(0),
+            pairedPeople = [],
+            currentPairing = [];
+
+        for(let i = 0; i < thisPeople.length; i++) {
+            let person = thisPeople[i];
+            if(pairedPeople.indexOf(person) === -1) {
+                currentPairing.push(person);
+                let thisPerson = new people[person]();
+                Object.keys(thisPerson.relationships).forEach((relationship) => {
+                    if(pairedRelationships.indexOf(thisPerson.relationships[relationship].description) !== -1 && this.people.indexOf(relationship) !== -1) {
+                        currentPairing.push(relationship);
+                    }
+                });
+            }
+
+            if(currentPairing.length === maxPerInhabitancy) {
+                let index = Math.floor(Math.random() * this.inhabitances.length),
+                    inhabitance = this.inhabitances[index];
+
+                while(inhabitance.inhabitants.length + 1 >= maxPerInhabitancy) {
+                    index = Math.floor(Math.random() * this.inhabitances.length);
+                    inhabitance = this.inhabitances[index];
+                }
+
+                inhabitance.addInhabitants(currentPairing);
+                currentPairing.forEach((person) => {
+                   pairedPeople.push(person);
+                });
+            }
+
+            currentPairing = [];
+        }
+
+        let remainingPeople = thisPeople.filter((item) => {
+           return pairedPeople.indexOf(item) === -1;
+        });
+
+        this.assignPeopleToInhabitancesRandomly(maxPerInhabitancy, remainingPeople);
     }
 }
 
@@ -128,6 +186,12 @@ class Inhabitance {
 
     addInhabitant(person) {
         this.inhabitants.push(person);
+    }
+
+    addInhabitants(people) {
+        for (let i = 0; i < people.length; i++) {
+            this.addInhabitant(people[i]);
+        }
     }
 }
 

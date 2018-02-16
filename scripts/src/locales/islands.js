@@ -2,8 +2,8 @@
  *
  *  Paradise/Locales/Islands
  *  Declan Tyson
- *  v0.0.48
- *  12/02/2018
+ *  v0.0.54
+ *  16/02/2018
  *
  */
 
@@ -38,7 +38,9 @@ class Islands extends Locale {
         this.terrainPaint(54, 70, 1, 5, 'VerticalRoad');
         this.terrainPaint(55, 74, 2, 1, 'HorizontalRoad');
 
-        this.addDecoration(new Tree(60, 74));
+        this.terrainPaint(52, 76, 11, 3, 'CoastalSands')
+
+        this.addDecoration(new Tree(60, 77));
 
         this.inhabitances.push(
             new Inhabitance('GroveStreet1', '1 Grove Street', 53, 59, { x: 54, y: 60 }),
@@ -49,7 +51,7 @@ class Islands extends Locale {
         );
 
         this.drawInhabitances();
-        this.assignPeopleToInhabitances();
+        this.assignPairedPeopleToInhabitancesRandomly(2);
     }
 }
 

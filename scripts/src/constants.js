@@ -2,7 +2,7 @@
  *
  *  Paradise/Constants
  *  Declan Tyson
- *  v0.0.53
+ *  v0.0.54
  *  16/02/2018
  *
  */
@@ -18,7 +18,8 @@ export const colours = {
     darkbrown: '#291006',
     grey: '#cdcdcd',
     red: '#ff0000',
-    fuschia: '#ff00ff'
+    fuschia: '#ff00ff',
+    gold: '#ffc14b'
 };
 
 export const directions = {
@@ -58,3 +59,22 @@ export const posessivePronouns = {
     F   : 'her',
     A   : 'xleir'
 };
+
+export const relationships = {
+    acquaintance: "Acquaintace",
+    wife: "Wife",
+    husband: "Husband",
+    sister: "Sister",
+    brother: "Brother",
+    mother: "Mother",
+    father: "Father",
+    daughter: "Daughter",
+    son: "Son",
+    friend: "Friend",
+    closefriend: "Close Friend",
+    roommate: "Roommate"
+};
+
+export const pairedRelationships = [
+    relationships.wife, relationships.husband, relationships.roommate
+];

@@ -17,7 +17,7 @@ class Zenith extends Person {
         this.colour = colours.green;
         this.relationships = {
             'Quazar' : {
-                description : 'Brother',
+                description : 'Roommate',
                 value: 85
             }
         };

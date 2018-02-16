@@ -2,8 +2,8 @@
  *
  *  Paradise/Locales/4 Grove Street
  *  Declan Tyson
- *  v0.0.23
- *  06/02/2018
+ *  v0.0.54
+ *  16/02/2018
  *
  */
 
@@ -15,14 +15,14 @@ class GroveStreet4 extends GroveStreetTemplate {
         super(player, people, inhabitance);
 
         this.id = 'GroveStreet4';
-        this.entryPoints.frontDoor = { x: 26, y: 48 };
+        this.entryPoints.frontDoor = { x: 26, y: 36 };
 
-        this.entrances[25][48] = {
+        this.entrances[25][36] = {
             locale: new Islands(player, people),
             entryPoint: 'groveStreet4'
         };
 
-        this.terrainPaint(25, 48, 1, 1, 'WoodenFloor');
+        this.terrainPaint(25, 36, 1, 1, 'WoodenFloor');
     }
 }
 

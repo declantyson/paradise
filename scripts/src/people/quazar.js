@@ -17,7 +17,7 @@ class Quazar extends Person {
         this.colour = colours.green;
         this.relationships = {
             'Zenith' : {
-                description : 'Brother',
+                description : 'Roommate',
                 value: 85
             }
         };

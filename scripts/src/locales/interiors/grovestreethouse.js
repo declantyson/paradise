@@ -2,8 +2,8 @@
  *
  *  Paradise/Locales/Grove Street House Template
  *  Declan Tyson
- *  v0.0.20
- *  05/02/2018
+ *  v0.0.54
+ *  16/02/2018
  *
  */
 
@@ -15,16 +15,12 @@ class GroveStreetTemplate extends Interior {
 
         this.initialise(100, 100);
 
-        this.spawnPoints.push({ x: 33, y: 35 });
-        this.spawnPoints.push({ x: 39, y: 36 });
-        this.spawnPoints.push({ x: 45, y: 32 });
-        this.spawnPoints.push({ x: 28, y: 33 });
+        this.addSpawnPoint(31, 35);
+        this.addSpawnPoint(29, 34);
 
         this.terrainPaint(0, 0, 100, 100, 'Blank');
-        this.terrainPaint(25, 25, 25, 25, 'Wall');
-        this.terrainPaint(26, 26, 11, 23, 'WoodenFloor');
-        this.terrainPaint(38, 26, 11, 23, 'WoodenFloor');
-        this.terrainPaint(37, 37, 1, 1, 'WoodenFloor');
+        this.terrainPaint(25, 25, 13, 13, 'Wall');
+        this.terrainPaint(26, 26, 11, 11, 'WoodenFloor');
     }
 }
 

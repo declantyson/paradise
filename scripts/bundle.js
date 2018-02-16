@@ -117,7 +117,7 @@ let tileStep = (settings.terrain.tileSize / settings.character.stepsPerTile);
  *
  *  Paradise/Constants
  *  Declan Tyson
- *  v0.0.53
+ *  v0.0.54
  *  16/02/2018
  *
  */
@@ -131,7 +131,8 @@ const colours = {
     darkbrown: '#291006',
     grey: '#cdcdcd',
     red: '#ff0000',
-    fuschia: '#ff00ff'
+    fuschia: '#ff00ff',
+    gold: '#ffc14b'
 };
 
 const directions = {
@@ -167,6 +168,25 @@ const posessivePronouns = {
     F   : 'her',
     A   : 'xleir'
 };
+
+const relationships = {
+    acquaintance: "Acquaintace",
+    wife: "Wife",
+    husband: "Husband",
+    sister: "Sister",
+    brother: "Brother",
+    mother: "Mother",
+    father: "Father",
+    daughter: "Daughter",
+    son: "Son",
+    friend: "Friend",
+    closefriend: "Close Friend",
+    roommate: "Roommate"
+};
+
+const pairedRelationships = [
+    relationships.wife, relationships.husband, relationships.roommate
+];
 
 /*
  *
@@ -274,7 +294,7 @@ class Player {
  *
  *  Paradise/Terrain
  *  Declan Tyson
- *  v0.0.38
+ *  v0.0.54
  *  12/02/2018
  *
  */
@@ -383,12 +403,21 @@ class WoodenFloor extends Terrain {
     }
 }
 
+class CoastalSands extends Terrain {
+    constructor(neighbours) {
+        super(neighbours);
+        this.id = 'CoastalSands';
+        this.passable = true;
+        this.colour = colours.gold;
+    }
+}
+
 /*
  *
  *  Paradise/Terrain
  *  Declan Tyson
- *  v0.0.38
- *  08/02/2018
+ *  v0.0.54
+ *  16/02/2018
  *
  */
 
@@ -400,7 +429,8 @@ let terrains = {
     'VerticalRoad' : VerticalRoad,
     'HorizontalRoad' : HorizontalRoad,
     'Doorway' : Doorway,
-    'WoodenFloor' : WoodenFloor
+    'WoodenFloor' : WoodenFloor,
+    'CoastalSands' : CoastalSands
 };
 
 /*
@@ -809,675 +839,6 @@ class WorldMap extends Scene {
 
 /*
  *
- *  Paradise/Locales/Base
- *  Declan Tyson
- *  v0.0.48
- *  15/02/2018
- *
- */
-
-class Locale {
-    constructor(player, people) {
-        this.player = player;
-        this.people = people;
-        this.entryPoints = {};
-        this.spawnPoints = [];
-        this.inhabitances = [];
-        this.decorative = [];
-    }
-
-    initialise(width, height) {
-        let map = [],
-            enc = [],
-            ent = [];
-        for(let i = 0; i < width; i++) {
-            map.push([]);
-            enc.push([]);
-            ent.push([]);
-            for(let j = 0; j < height; j++) {
-                map[i].push(['Blank']);
-                enc[i].push(false);
-                ent[i].push(false);
-            }
-        }
-
-        this.map = map;
-        this.encounters = enc;
-        this.entrances = ent;
-        this.width = width;
-        this.height = height;
-    }
-
-    terrainPaint(startX, startY, width, height, terrain) {
-        for(let x = startX; x < startX + width; x++) {
-            for(let y = startY; y < startY + height; y++) {
-                this.map[x][y] = terrain;
-            }
-        }
-    }
-
-    randomEncounterPatch(startX, startY, width, height, rate, enemies) {
-        for(let x = startX; x < startX + width; x++) {
-            for (let y = startY; y < startY + height; y++) {
-                this.encounters[x][y] = {
-                    rate: rate,
-                    enemies: enemies
-                };
-            }
-        }
-    }
-
-    addInhabitance(startX, startY, width, height, inhabitance) {
-        let doorway = inhabitance.doorway;
-        this.terrainPaint(startX, startY, width, height, 'Wall');
-        this.terrainPaint(doorway.x, doorway.y, 1, 1, 'Doorway');
-        this.entrances[doorway.x][doorway.y] = {
-            locale : inhabitance,
-            entryPoint : 'frontDoor'
-        };
-    }
-
-    enterLocaleAt(entryPoint) {
-        this.player.stepX = 0;
-        this.player.stepY = 0;
-        this.player.setPlacement(this.entryPoints[entryPoint].x, this.entryPoints[entryPoint].y, true);
-    }
-
-    addDecoration(decoration) {
-        this.decorative.push(decoration);
-    }
-
-    drawInhabitances() {
-        for(let i = 0; i < this.inhabitances.length; i++) {
-            let inhabitance = this.inhabitances[i];
-            this.addInhabitance(inhabitance.x, inhabitance.y, inhabitance.sizeX, inhabitance.sizeY, inhabitance);
-        }
-    }
-
-    assignPeopleToInhabitances() {
-        if(this.inhabitances.length === 0 || this.people.length === 0) return;
-
-        for(let i = 0; i < this.people.length; i++) {
-            let person = this.people[i],
-                index = Math.floor(Math.random() * this.inhabitances.length),
-                inhabitance = this.inhabitances[index];
-
-            inhabitance.addInhabitant(person);
-        }
-    }
-}
-
-class Interior extends Locale {
-    constructor(player, people, inhabitance) {
-        super(player, people);
-        this.inhabitance = inhabitance;
-        Util.log(`Welcome to ${inhabitance.name}.`);
-
-        for(let i = 0; i < inhabitance.inhabitants.length; i++) {
-            let inhabitant = inhabitance.inhabitants[i];
-            Util.log(`${inhabitant} lives here.`);
-        }
-    }
-}
-
-class Inhabitance {
-    constructor(id, name, x, y, doorway, sizeX = settings.defaultInhabitanceSize, sizeY = settings.defaultInhabitanceSize) {
-        this.id = id;
-        this.name = name;
-        this.x = x;
-        this.y = y;
-        this.doorway = doorway;
-        this.inhabitants = [];
-        this.sizeX = sizeX;
-        this.sizeY = sizeY;
-    }
-
-    addInhabitant(person) {
-        this.inhabitants.push(person);
-    }
-}
-
-/*
- *
- *  Paradise/Locales/Grove Street House Template
- *  Declan Tyson
- *  v0.0.20
- *  05/02/2018
- *
- */
-
-class GroveStreetTemplate extends Interior {
-    constructor(player, people, inhabitance) {
-        super(player, people, inhabitance);
-
-        this.initialise(100, 100);
-
-        this.spawnPoints.push({ x: 33, y: 35 });
-        this.spawnPoints.push({ x: 39, y: 36 });
-        this.spawnPoints.push({ x: 45, y: 32 });
-        this.spawnPoints.push({ x: 28, y: 33 });
-
-        this.terrainPaint(0, 0, 100, 100, 'Blank');
-        this.terrainPaint(25, 25, 25, 25, 'Wall');
-        this.terrainPaint(26, 26, 11, 23, 'WoodenFloor');
-        this.terrainPaint(38, 26, 11, 23, 'WoodenFloor');
-        this.terrainPaint(37, 37, 1, 1, 'WoodenFloor');
-    }
-}
-
-/*
- *
- *  Paradise/Locales/Town Hall
- *  Declan Tyson
- *  v0.0.25
- *  07/02/2018
- *
- */
-
-class TownHall extends GroveStreetTemplate {
-    constructor(player, people, inhabitance) {
-        super(player, people, inhabitance);
-
-        this.id = 'TownHall';
-        this.entryPoints.frontDoor = { x: 48, y: 48 };
-
-        this.entrances[49][48] = {
-            locale: new Village(player, people),
-            entryPoint: 'townHall'
-        };
-
-        this.terrainPaint(49, 48, 1, 1, 'WoodenFloor');
-    }
-}
-
-/*
- *
- *  Paradise/Locales/Village
- *  Declan Tyson
- *  v0.0.25
- *  07/02/2018
- *
- */
-class Village extends Locale {
-    constructor(player, people) {
-        super(player, people);
-
-        this.entryPoints.beginningOfGame = { x: 30, y: 30 };
-        this.entryPoints.townHall = { x: 31, y: 62 };
-
-        this.initialise(300, 300);
-
-        this.terrainPaint(0, 0, 300, 300, 'Water');
-        this.terrainPaint(20, 27, 15, 90, 'Grass');
-        this.terrainPaint(35, 35, 2, 40, 'Grass');
-        this.terrainPaint(37, 37, 2, 36, 'Grass');
-        this.terrainPaint(39, 39, 2, 32, 'Grass');
-
-        this.inhabitances.push(
-            new Inhabitance('TownHall', 'Town Hall', 30, 59, { x: 31, y: 62 }, 2, 4)
-        );
-
-        this.drawInhabitances();
-        this.assignPeopleToInhabitances();
-    }
-}
-
-/*
- *
- *  Paradise/Scene-ObjectInteraction
- *  Declan Tyson
- *  v0.0.53
- *  16/02/2018
- *
- */
-
-class ObjectInteraction extends Scene {
-    constructor(decoration) {
-        super();
-
-        this.decoration = decoration;
-
-        // calculate these values based on mood etc....;
-        this.lines = this.decoration.lines || [];
-        this.conversationOptions = this.decoration.conversationOptions || [];
-
-        this.selectedConversationOption = 0;
-
-        this.keyHeld = true;
-        this.exiting = false;
-
-        this.actions.up = this.previousOption.bind(this);
-        this.actions.down = this.nextOption.bind(this);
-        this.actions.action = this.sendResponse.bind(this);
-    }
-
-    draw(ctx) {
-        // World map should be overlaid
-        this.worldMap.draw(ctx);
-
-        if(!this.game.keyHeld) this.keyHeld = false;
-
-        this.drawConversationTextArea(ctx);
-        this.drawConversation(ctx);
-        this.drawOptions(ctx);
-    }
-
-    drawConversationTextArea(ctx) {
-        ctx.rect(0, canvasProperties.height - interactionTextArea.height, interactionTextArea.width, interactionTextArea.height);
-        ctx.fillStyle = interactionTextArea.background;
-        ctx.globalAlpha = interactionTextArea.alpha;
-        ctx.fill();
-        ctx.globalAlpha = 1;
-    }
-
-    drawConversation(ctx) {
-        let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.badgeOffsetY) * 2;
-        ctx.font = settings.fonts.small;
-        ctx.fillStyle = colours.white;
-        this.lines.forEach((line, index) => {
-            ctx.fillText(line, interactionTextArea.badgeOffsetX, y + (index * interactionTextArea.lineHeight));
-        });
-    }
-
-    drawOptions(ctx) {
-        let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.optionsOffsetY);
-        ctx.font = settings.fonts.small;
-        ctx.fillStyle = colours.white;
-        this.conversationOptions.forEach((conversationOption, index) => {
-            ctx.fillText(conversationOption.value, interactionTextArea.optionsOffsetX, y + (index * interactionTextArea.optionHeight));
-            if(index === this.selectedConversationOption) {
-                ctx.strokeStyle = colours.white;
-                ctx.strokeRect(interactionTextArea.optionsOffsetX - interactionTextArea.optionHeight / 2,  y + (index * interactionTextArea.optionHeight) - (interactionTextArea.optionHeight / 1.5), 250 + interactionTextArea.optionHeight, interactionTextArea.optionHeight);
-            }
-        });
-    }
-
-    nextOption() {
-        if(this.keyHeld) return;
-
-        if(this.selectedConversationOption < this.conversationOptions.length - 1) this.selectedConversationOption++;
-        this.keyHeld = true;
-    }
-
-    previousOption() {
-        if(this.keyHeld) return;
-
-        if(this.selectedConversationOption > 0) this.selectedConversationOption--;
-        this.keyHeld = true;
-    }
-
-    sendResponse() {
-        if(this.keyHeld) return;
-
-        this.decoration.sendResponse(this.conversationOptions[this.selectedConversationOption], this);
-        this.keyHeld = true;
-    }
-
-    returnToWorldMap() {
-        this.worldMap.leavingInteraction = true;
-        setTimeout(() => {
-            this.worldMap.leavingInteraction = false;
-        }, 250);
-        this.game.setScene(this.worldMap);
-    }
-}
-
-/*
- *
- *  Paradise/Decorative
- *  Declan Tyson
- *  v0.0.50
- *  15/02/2018
- *
- */
-
-class Decorative {
-    constructor(name, description, src, x, y, passMap = [false], canWalkBehind = true) {
-        this.name = name;
-        this.description = description;
-        let image = new Image();
-        image.src = src;
-        this.image = image;
-        this.items = [];
-        this.colour = colours.red;
-        this.passMap = passMap;
-        this.canWalkBehind = canWalkBehind;
-
-        this.lines = [];
-        this.conversationOptions = [];
-        this.responses = {};
-
-        this.x = x;
-        this.y = y;
-    }
-
-    addItem(item) {
-        this.items.push(item);
-    }
-
-    draw(ctx, player, mapOffsetX, mapOffsetY, map) {
-        let decorationX =  this.x * settings.terrain.tileSize - mapOffsetX,
-            decorationY =  this.y * settings.terrain.tileSize - mapOffsetY,
-            offsetX = player.stepX * tileStep,
-            offsetY = player.stepY * tileStep,
-            height = this.image.naturalHeight; // we draw this from the bottom
-
-        ctx.drawImage(this.image, decorationX - offsetX, decorationY - offsetY - height + settings.terrain.tileSize);
-
-        for(let i = 0; i < this.passMap.length; i++) {
-            let mapEntry = map[this.x + i][this.y];
-            mapEntry.passable = this.passMap[i];
-            mapEntry.decoration = this;
-
-            if(window.debug && !this.passMap[i]) {
-                let debugX =  (this.x + i) * settings.terrain.tileSize - mapOffsetX;
-
-                ctx.beginPath();
-                ctx.fillStyle = this.colour;
-                ctx.strokeStyle = this.colour;
-                ctx.rect(debugX - offsetX, decorationY - offsetY, settings.terrain.tileSize, settings.terrain.tileSize);
-                ctx.fill();
-                ctx.stroke();
-            }
-        }
-    }
-
-    startInteraction(worldMap) {
-        let interaction = new ObjectInteraction(this);
-        interaction.worldMap = worldMap;
-
-        return interaction;
-    }
-
-    sendResponse(conversationOption, interaction) {
-        Util.log(conversationOption.value);
-
-        if(!this.responses[conversationOption.key]) {
-            interaction.returnToWorldMap();
-        } else {
-            let response = this.responses[conversationOption.key];
-            interaction.selectedConversationOption = 0;
-            interaction.lines = response.lines;
-            interaction.conversationOptions = response.conversationOptions;
-        }
-    }
-}
-
-/*
- *
- *  Paradise/Decorative/Tree
- *  Declan Tyson
- *  v0.0.48
- *  15/02/2018
- *
- */
-
-class Tree extends Decorative {
-    constructor(x, y) {
-        super('Tree', 'a tropical palm tree', '/oob/Decorative/tree.png', x, y, [true, false, true]);
-    }
-}
-
-/*
- *
- *  Paradise/Locales/Islands
- *  Declan Tyson
- *  v0.0.48
- *  12/02/2018
- *
- */
-
-class Islands extends Locale {
-    constructor(player, people) {
-        super(player, people);
-
-        this.id = 'Islands';
-        this.entryPoints.beginningOfGame = { x: 57, y: 60 };
-        this.entryPoints.groveStreet1 = { x: 55, y: 60 };
-        this.entryPoints.groveStreet2 = { x: 58, y: 60 };
-        this.entryPoints.groveStreet3 = { x: 55, y: 63 };
-        this.entryPoints.groveStreet4 = { x: 58, y: 63 };
-        this.entryPoints.ballManor = { x: 56, y: 74 };
-
-        this.initialise(300, 300);
-
-        this.terrainPaint(0, 0, 300, 300, 'Water');
-        this.terrainPaint(52, 57, 11, 20, 'Grass');
-        this.terrainPaint(42, 35, 2, 8, 'Grass');
-        this.terrainPaint(57, 60, 1, 16, 'VerticalRoad');
-        this.terrainPaint(55, 60, 2, 1, 'HorizontalRoad');
-        this.terrainPaint(58, 60, 2, 1, 'HorizontalRoad');
-        this.terrainPaint(55, 63, 2, 1, 'HorizontalRoad');
-        this.terrainPaint(58, 63, 2, 1, 'HorizontalRoad');
-
-        this.terrainPaint(55, 70, 2, 1, 'HorizontalRoad');
-        this.terrainPaint(54, 70, 1, 5, 'VerticalRoad');
-        this.terrainPaint(55, 74, 2, 1, 'HorizontalRoad');
-
-        this.addDecoration(new Tree(60, 74));
-
-        this.inhabitances.push(
-            new Inhabitance('GroveStreet1', '1 Grove Street', 53, 59, { x: 54, y: 60 }),
-            new Inhabitance('GroveStreet2', '2 Grove Street', 60, 59, { x: 60, y: 60 }),
-            new Inhabitance('GroveStreet3', '3 Grove Street', 53, 62, { x: 54, y: 63 }),
-            new Inhabitance('GroveStreet4', '4 Grove Street', 60, 62, { x: 60, y: 63 }),
-            new Inhabitance('BallManor', 'Ball Manor', 55, 72, { x: 56, y: 73 })
-        );
-
-        this.drawInhabitances();
-        this.assignPeopleToInhabitances();
-    }
-}
-
-/*
- *
- *  Paradise/Locales/1 Grove Street
- *  Declan Tyson
- *  v0.0.23
- *  06/02/2018
- *
- */
-
-class GroveStreet1 extends GroveStreetTemplate {
-    constructor(player, people, inhabitance) {
-        super(player, people, inhabitance);
-
-        this.id = 'GroveStreet1';
-        this.entryPoints.frontDoor = { x: 48, y: 48 };
-
-        this.entrances[49][48] = {
-            locale: new Islands(player, people),
-            entryPoint: 'groveStreet1'
-        };
-
-        this.terrainPaint(49, 48, 1, 1, 'WoodenFloor');
-    }
-}
-
-/*
- *
- *  Paradise/Locales/1 Grove Street
- *  Declan Tyson
- *  v0.0.23
- *  06/02/2018
- *
- */
-
-class GroveStreet2 extends GroveStreetTemplate {
-    constructor(player, people, inhabitance) {
-        super(player, people, inhabitance);
-
-        this.id = 'GroveStreet2';
-        this.entryPoints.frontDoor = { x: 26, y: 48 };
-
-        this.entrances[25][48] = {
-            locale: new Islands(player, people),
-            entryPoint: 'groveStreet2'
-        };
-
-        this.terrainPaint(25, 48, 1, 1, 'WoodenFloor');
-    }
-}
-
-/*
- *
- *  Paradise/Locales/1 Grove Street
- *  Declan Tyson
- *  v0.0.23
- *  06/02/2018
- *
- */
-
-class GroveStreet3 extends GroveStreetTemplate {
-    constructor(player, people, inhabitance) {
-        super(player, people, inhabitance);
-
-        this.id = 'GroveStreet3';
-        this.entryPoints.frontDoor = { x: 48, y: 48 };
-
-        this.entrances[49][48] = {
-            locale: new Islands(player, people),
-            entryPoint: 'groveStreet3'
-        };
-
-        this.terrainPaint(49, 48, 1, 1, 'WoodenFloor');
-    }
-}
-
-/*
- *
- *  Paradise/Locales/4 Grove Street
- *  Declan Tyson
- *  v0.0.23
- *  06/02/2018
- *
- */
-
-class GroveStreet4 extends GroveStreetTemplate {
-    constructor(player, people, inhabitance) {
-        super(player, people, inhabitance);
-
-        this.id = 'GroveStreet4';
-        this.entryPoints.frontDoor = { x: 26, y: 48 };
-
-        this.entrances[25][48] = {
-            locale: new Islands(player, people),
-            entryPoint: 'groveStreet4'
-        };
-
-        this.terrainPaint(25, 48, 1, 1, 'WoodenFloor');
-    }
-}
-
-/*
- *
- *  Paradise/Decorative/Dresser
- *  Declan Tyson
- *  v0.0.50
- *  15/02/2018
- *
- */
-
-class Dresser extends Decorative {
-    constructor(x, y) {
-        super('Dresser', 'a fancy dresser', '/oob/Decorative/dresser.png', x, y, [false, false]);
-        this.lines = [`It's a fancy dresser.`];
-        this.conversationOptions = [{
-            "key" : "Search",
-            "value" : "Open the drawers"
-        },{
-            "key" : "Leave",
-            "value" : "That's nice."
-        }];
-        this.responses = {
-            "Search" : {
-                "lines" : ["You find nothing but a dead fly."],
-                "conversationOptions" : [{
-                    "key" : "Leave",
-                    "value" : "Shut the drawer and go elsewhere."
-                }]
-            }
-        };
-    }
-}
-
-/*
- *
- *  Paradise/Decorative/Rug
- *  Declan Tyson
- *  v0.0.49
- *  15/02/2018
- *
- */
-
-class Rug extends Decorative {
-    constructor(x, y) {
-        super('Rug', 'a fancy rug', '/oob/Decorative/rug.png', x, y, [], false);
-    }
-}
-
-/*
- *
- *  Paradise/Locales/Ball Manor
- *  Declan Tyson
- *  v0.0.38
- *  12/02/2018
- *
- */
-
-class BallManor extends GroveStreetTemplate {
-    constructor(player, people, inhabitance) {
-        super(player, people, inhabitance);
-
-        this.id = 'BallManor';
-        this.entryPoints.frontDoor = { x: 48, y: 48 };
-
-        this.entrances[48][49] = {
-            locale: new Islands(player, people),
-            entryPoint: 'ballManor'
-        };
-
-        this.terrainPaint(48, 49, 1, 1, 'WoodenFloor');
-
-        this.addDecoration(new Dresser(38, 26));
-        this.addDecoration(new Rug(44, 32));
-    }
-}
-
-/*
- *
- *  Paradise/Locales
- *  Declan Tyson
- *  v0.0.49
- *  15/02/2018
- *
- */
-
-const startingMaps = {
-    'Village' : Village,
-    'Islands' : Islands
-};
-
-const locales = {
-    'Village' : Village,
-    'Islands' : Islands,
-    'GroveStreet1' : GroveStreet1,
-    'GroveStreet2' : GroveStreet2,
-    'GroveStreet3' : GroveStreet3,
-    'GroveStreet4' : GroveStreet4,
-    'BallManor' : BallManor,
-    'TownHall' : TownHall
-};
-
-const chooseStartingMap = () => {
-    let locale = Util.pickRandomProperty(startingMaps);
-    Util.log('Choosing starting map...');
-    Util.log(`Map is ${locale}.`);
-    return locale;
-};
-
-/*
- *
  *  Paradise/Portrait
  *  Declan Tyson
  *  v0.0.46
@@ -1854,7 +1215,7 @@ class Quazar extends Person {
         this.colour = colours.green;
         this.relationships = {
             'Zenith' : {
-                description : 'Brother',
+                description : 'Roommate',
                 value: 85
             }
         };
@@ -1877,7 +1238,7 @@ class Zenith extends Person {
         this.colour = colours.green;
         this.relationships = {
             'Quazar' : {
-                description : 'Brother',
+                description : 'Roommate',
                 value: 85
             }
         };
@@ -1956,6 +1317,735 @@ let people = {
     'Petey'   : Petey,
     'Quazar'  : Quazar,
     'Zenith'  : Zenith
+};
+
+/*
+ *
+ *  Paradise/Locales/Base
+ *  Declan Tyson
+ *  v0.0.54
+ *  16/02/2018
+ *
+ */
+
+class Locale {
+    constructor(player, activePeople) {
+        this.player = player;
+        this.people = activePeople;
+        this.entryPoints = {};
+        this.spawnPoints = [];
+        this.inhabitances = [];
+        this.decorative = [];
+    }
+
+    initialise(width, height) {
+        let map = [],
+            enc = [],
+            ent = [];
+        for(let i = 0; i < width; i++) {
+            map.push([]);
+            enc.push([]);
+            ent.push([]);
+            for(let j = 0; j < height; j++) {
+                map[i].push(['Blank']);
+                enc[i].push(false);
+                ent[i].push(false);
+            }
+        }
+
+        this.map = map;
+        this.encounters = enc;
+        this.entrances = ent;
+        this.width = width;
+        this.height = height;
+    }
+
+    terrainPaint(startX, startY, width, height, terrain) {
+        for(let x = startX; x < startX + width; x++) {
+            for(let y = startY; y < startY + height; y++) {
+                this.map[x][y] = terrain;
+            }
+        }
+    }
+
+    randomEncounterPatch(startX, startY, width, height, rate, enemies) {
+        for(let x = startX; x < startX + width; x++) {
+            for (let y = startY; y < startY + height; y++) {
+                this.encounters[x][y] = {
+                    rate: rate,
+                    enemies: enemies
+                };
+            }
+        }
+    }
+
+    addInhabitance(startX, startY, width, height, inhabitance) {
+        let doorway = inhabitance.doorway;
+        this.terrainPaint(startX, startY, width, height, 'Wall');
+        this.terrainPaint(doorway.x, doorway.y, 1, 1, 'Doorway');
+        this.entrances[doorway.x][doorway.y] = {
+            locale : inhabitance,
+            entryPoint : 'frontDoor'
+        };
+    }
+
+    enterLocaleAt(entryPoint) {
+        this.player.stepX = 0;
+        this.player.stepY = 0;
+        this.player.setPlacement(this.entryPoints[entryPoint].x, this.entryPoints[entryPoint].y, true);
+    }
+
+    addDecoration(decoration) {
+        this.decorative.push(decoration);
+    }
+
+    addSpawnPoint(x, y) {
+        this.spawnPoints.push({
+            x: x,
+            y: y
+        });
+    }
+
+    drawInhabitances() {
+        for(let i = 0; i < this.inhabitances.length; i++) {
+            let inhabitance = this.inhabitances[i];
+            this.addInhabitance(inhabitance.x, inhabitance.y, inhabitance.sizeX, inhabitance.sizeY, inhabitance);
+        }
+    }
+
+    assignPeopleToInhabitancesRandomly(maxPerInhabitancy, thisPeople = this.people) {
+        if(this.inhabitances.length === 0 || thisPeople.length === 0) return;
+
+        for(let i = 0; i < thisPeople.length; i++) {
+            let person = thisPeople[i],
+                index = Math.floor(Math.random() * this.inhabitances.length),
+                inhabitance = this.inhabitances[index];
+
+            while(inhabitance.inhabitants.length >= maxPerInhabitancy) {
+                index = Math.floor(Math.random() * this.inhabitances.length);
+                inhabitance = this.inhabitances[index];
+            }
+
+            inhabitance.addInhabitant(person);
+        }
+    }
+
+    assignPairedPeopleToInhabitancesRandomly(maxPerInhabitancy) {
+        if(this.inhabitances.length === 0 || this.people.length === 0) return;
+
+        let thisPeople = this.people.slice(0),
+            pairedPeople = [],
+            currentPairing = [];
+
+        for(let i = 0; i < thisPeople.length; i++) {
+            let person = thisPeople[i];
+            if(pairedPeople.indexOf(person) === -1) {
+                currentPairing.push(person);
+                let thisPerson = new people[person]();
+                Object.keys(thisPerson.relationships).forEach((relationship) => {
+                    if(pairedRelationships.indexOf(thisPerson.relationships[relationship].description) !== -1 && this.people.indexOf(relationship) !== -1) {
+                        currentPairing.push(relationship);
+                    }
+                });
+            }
+
+            if(currentPairing.length === maxPerInhabitancy) {
+                let index = Math.floor(Math.random() * this.inhabitances.length),
+                    inhabitance = this.inhabitances[index];
+
+                while(inhabitance.inhabitants.length + 1 >= maxPerInhabitancy) {
+                    index = Math.floor(Math.random() * this.inhabitances.length);
+                    inhabitance = this.inhabitances[index];
+                }
+
+                inhabitance.addInhabitants(currentPairing);
+                currentPairing.forEach((person) => {
+                   pairedPeople.push(person);
+                });
+            }
+
+            currentPairing = [];
+        }
+
+        let remainingPeople = thisPeople.filter((item) => {
+           return pairedPeople.indexOf(item) === -1;
+        });
+
+        this.assignPeopleToInhabitancesRandomly(maxPerInhabitancy, remainingPeople);
+    }
+}
+
+class Interior extends Locale {
+    constructor(player, people$$1, inhabitance) {
+        super(player, people$$1);
+        this.inhabitance = inhabitance;
+        Util.log(`Welcome to ${inhabitance.name}.`);
+
+        for(let i = 0; i < inhabitance.inhabitants.length; i++) {
+            let inhabitant = inhabitance.inhabitants[i];
+            Util.log(`${inhabitant} lives here.`);
+        }
+    }
+}
+
+class Inhabitance {
+    constructor(id, name, x, y, doorway, sizeX = settings.defaultInhabitanceSize, sizeY = settings.defaultInhabitanceSize) {
+        this.id = id;
+        this.name = name;
+        this.x = x;
+        this.y = y;
+        this.doorway = doorway;
+        this.inhabitants = [];
+        this.sizeX = sizeX;
+        this.sizeY = sizeY;
+    }
+
+    addInhabitant(person) {
+        this.inhabitants.push(person);
+    }
+
+    addInhabitants(people$$1) {
+        for (let i = 0; i < people$$1.length; i++) {
+            this.addInhabitant(people$$1[i]);
+        }
+    }
+}
+
+/*
+ *
+ *  Paradise/Locales/Grove Street House Template
+ *  Declan Tyson
+ *  v0.0.54
+ *  16/02/2018
+ *
+ */
+
+class GroveStreetTemplate extends Interior {
+    constructor(player, people, inhabitance) {
+        super(player, people, inhabitance);
+
+        this.initialise(100, 100);
+
+        this.addSpawnPoint(31, 35);
+        this.addSpawnPoint(29, 34);
+
+        this.terrainPaint(0, 0, 100, 100, 'Blank');
+        this.terrainPaint(25, 25, 13, 13, 'Wall');
+        this.terrainPaint(26, 26, 11, 11, 'WoodenFloor');
+    }
+}
+
+/*
+ *
+ *  Paradise/Locales/Town Hall
+ *  Declan Tyson
+ *  v0.0.54
+ *  16/02/2018
+ *
+ */
+
+class TownHall extends GroveStreetTemplate {
+    constructor(player, people, inhabitance) {
+        super(player, people, inhabitance);
+
+        this.id = 'TownHall';
+        this.entryPoints.frontDoor = { x: 36, y: 36 };
+
+        this.entrances[36][37] = {
+            locale: new Village(player, people),
+            entryPoint: 'townHall'
+        };
+
+        this.terrainPaint(36, 37, 1, 1, 'WoodenFloor');
+    }
+}
+
+/*
+ *
+ *  Paradise/Locales/Village
+ *  Declan Tyson
+ *  v0.0.25
+ *  07/02/2018
+ *
+ */
+class Village extends Locale {
+    constructor(player, people) {
+        super(player, people);
+
+        this.entryPoints.beginningOfGame = { x: 30, y: 30 };
+        this.entryPoints.townHall = { x: 31, y: 62 };
+
+        this.initialise(300, 300);
+
+        this.terrainPaint(0, 0, 300, 300, 'Water');
+        this.terrainPaint(20, 27, 15, 90, 'Grass');
+        this.terrainPaint(35, 35, 2, 40, 'Grass');
+        this.terrainPaint(37, 37, 2, 36, 'Grass');
+        this.terrainPaint(39, 39, 2, 32, 'Grass');
+
+        this.inhabitances.push(
+            new Inhabitance('TownHall', 'Town Hall', 30, 59, { x: 31, y: 62 }, 2, 4)
+        );
+
+        this.drawInhabitances();
+        this.assignPeopleToInhabitancesRandomly(4);
+    }
+}
+
+/*
+ *
+ *  Paradise/Scene-ObjectInteraction
+ *  Declan Tyson
+ *  v0.0.53
+ *  16/02/2018
+ *
+ */
+
+class ObjectInteraction extends Scene {
+    constructor(decoration) {
+        super();
+
+        this.decoration = decoration;
+
+        // calculate these values based on mood etc....;
+        this.lines = this.decoration.lines || [];
+        this.conversationOptions = this.decoration.conversationOptions || [];
+
+        this.selectedConversationOption = 0;
+
+        this.keyHeld = true;
+        this.exiting = false;
+
+        this.actions.up = this.previousOption.bind(this);
+        this.actions.down = this.nextOption.bind(this);
+        this.actions.action = this.sendResponse.bind(this);
+    }
+
+    draw(ctx) {
+        // World map should be overlaid
+        this.worldMap.draw(ctx);
+
+        if(!this.game.keyHeld) this.keyHeld = false;
+
+        this.drawConversationTextArea(ctx);
+        this.drawConversation(ctx);
+        this.drawOptions(ctx);
+    }
+
+    drawConversationTextArea(ctx) {
+        ctx.rect(0, canvasProperties.height - interactionTextArea.height, interactionTextArea.width, interactionTextArea.height);
+        ctx.fillStyle = interactionTextArea.background;
+        ctx.globalAlpha = interactionTextArea.alpha;
+        ctx.fill();
+        ctx.globalAlpha = 1;
+    }
+
+    drawConversation(ctx) {
+        let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.badgeOffsetY) * 2;
+        ctx.font = settings.fonts.small;
+        ctx.fillStyle = colours.white;
+        this.lines.forEach((line, index) => {
+            ctx.fillText(line, interactionTextArea.badgeOffsetX, y + (index * interactionTextArea.lineHeight));
+        });
+    }
+
+    drawOptions(ctx) {
+        let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.optionsOffsetY);
+        ctx.font = settings.fonts.small;
+        ctx.fillStyle = colours.white;
+        this.conversationOptions.forEach((conversationOption, index) => {
+            ctx.fillText(conversationOption.value, interactionTextArea.optionsOffsetX, y + (index * interactionTextArea.optionHeight));
+            if(index === this.selectedConversationOption) {
+                ctx.strokeStyle = colours.white;
+                ctx.strokeRect(interactionTextArea.optionsOffsetX - interactionTextArea.optionHeight / 2,  y + (index * interactionTextArea.optionHeight) - (interactionTextArea.optionHeight / 1.5), 250 + interactionTextArea.optionHeight, interactionTextArea.optionHeight);
+            }
+        });
+    }
+
+    nextOption() {
+        if(this.keyHeld) return;
+
+        if(this.selectedConversationOption < this.conversationOptions.length - 1) this.selectedConversationOption++;
+        this.keyHeld = true;
+    }
+
+    previousOption() {
+        if(this.keyHeld) return;
+
+        if(this.selectedConversationOption > 0) this.selectedConversationOption--;
+        this.keyHeld = true;
+    }
+
+    sendResponse() {
+        if(this.keyHeld) return;
+
+        this.decoration.sendResponse(this.conversationOptions[this.selectedConversationOption], this);
+        this.keyHeld = true;
+    }
+
+    returnToWorldMap() {
+        this.worldMap.leavingInteraction = true;
+        setTimeout(() => {
+            this.worldMap.leavingInteraction = false;
+        }, 250);
+        this.game.setScene(this.worldMap);
+    }
+}
+
+/*
+ *
+ *  Paradise/Decorative
+ *  Declan Tyson
+ *  v0.0.50
+ *  15/02/2018
+ *
+ */
+
+class Decorative {
+    constructor(name, description, src, x, y, passMap = [false], canWalkBehind = true) {
+        this.name = name;
+        this.description = description;
+        let image = new Image();
+        image.src = src;
+        this.image = image;
+        this.items = [];
+        this.colour = colours.red;
+        this.passMap = passMap;
+        this.canWalkBehind = canWalkBehind;
+
+        this.lines = [];
+        this.conversationOptions = [];
+        this.responses = {};
+
+        this.x = x;
+        this.y = y;
+    }
+
+    addItem(item) {
+        this.items.push(item);
+    }
+
+    draw(ctx, player, mapOffsetX, mapOffsetY, map) {
+        let decorationX =  this.x * settings.terrain.tileSize - mapOffsetX,
+            decorationY =  this.y * settings.terrain.tileSize - mapOffsetY,
+            offsetX = player.stepX * tileStep,
+            offsetY = player.stepY * tileStep,
+            height = this.image.naturalHeight; // we draw this from the bottom
+
+        ctx.drawImage(this.image, decorationX - offsetX, decorationY - offsetY - height + settings.terrain.tileSize);
+
+        for(let i = 0; i < this.passMap.length; i++) {
+            let mapEntry = map[this.x + i][this.y];
+            mapEntry.passable = this.passMap[i];
+            mapEntry.decoration = this;
+
+            if(window.debug && !this.passMap[i]) {
+                let debugX =  (this.x + i) * settings.terrain.tileSize - mapOffsetX;
+
+                ctx.beginPath();
+                ctx.fillStyle = this.colour;
+                ctx.strokeStyle = this.colour;
+                ctx.rect(debugX - offsetX, decorationY - offsetY, settings.terrain.tileSize, settings.terrain.tileSize);
+                ctx.fill();
+                ctx.stroke();
+            }
+        }
+    }
+
+    startInteraction(worldMap) {
+        let interaction = new ObjectInteraction(this);
+        interaction.worldMap = worldMap;
+
+        return interaction;
+    }
+
+    sendResponse(conversationOption, interaction) {
+        Util.log(conversationOption.value);
+
+        if(!this.responses[conversationOption.key]) {
+            interaction.returnToWorldMap();
+        } else {
+            let response = this.responses[conversationOption.key];
+            interaction.selectedConversationOption = 0;
+            interaction.lines = response.lines;
+            interaction.conversationOptions = response.conversationOptions;
+        }
+    }
+}
+
+/*
+ *
+ *  Paradise/Decorative/Tree
+ *  Declan Tyson
+ *  v0.0.48
+ *  15/02/2018
+ *
+ */
+
+class Tree extends Decorative {
+    constructor(x, y) {
+        super('Tree', 'a tropical palm tree', '/oob/Decorative/tree.png', x, y, [true, false, true]);
+    }
+}
+
+/*
+ *
+ *  Paradise/Locales/Islands
+ *  Declan Tyson
+ *  v0.0.54
+ *  16/02/2018
+ *
+ */
+
+class Islands extends Locale {
+    constructor(player, people) {
+        super(player, people);
+
+        this.id = 'Islands';
+        this.entryPoints.beginningOfGame = { x: 57, y: 60 };
+        this.entryPoints.groveStreet1 = { x: 55, y: 60 };
+        this.entryPoints.groveStreet2 = { x: 58, y: 60 };
+        this.entryPoints.groveStreet3 = { x: 55, y: 63 };
+        this.entryPoints.groveStreet4 = { x: 58, y: 63 };
+        this.entryPoints.ballManor = { x: 56, y: 74 };
+
+        this.initialise(300, 300);
+
+        this.terrainPaint(0, 0, 300, 300, 'Water');
+        this.terrainPaint(52, 57, 11, 20, 'Grass');
+        this.terrainPaint(42, 35, 2, 8, 'Grass');
+        this.terrainPaint(57, 60, 1, 16, 'VerticalRoad');
+        this.terrainPaint(55, 60, 2, 1, 'HorizontalRoad');
+        this.terrainPaint(58, 60, 2, 1, 'HorizontalRoad');
+        this.terrainPaint(55, 63, 2, 1, 'HorizontalRoad');
+        this.terrainPaint(58, 63, 2, 1, 'HorizontalRoad');
+
+        this.terrainPaint(55, 70, 2, 1, 'HorizontalRoad');
+        this.terrainPaint(54, 70, 1, 5, 'VerticalRoad');
+        this.terrainPaint(55, 74, 2, 1, 'HorizontalRoad');
+
+        this.terrainPaint(52, 76, 11, 3, 'CoastalSands');
+
+        this.addDecoration(new Tree(60, 77));
+
+        this.inhabitances.push(
+            new Inhabitance('GroveStreet1', '1 Grove Street', 53, 59, { x: 54, y: 60 }),
+            new Inhabitance('GroveStreet2', '2 Grove Street', 60, 59, { x: 60, y: 60 }),
+            new Inhabitance('GroveStreet3', '3 Grove Street', 53, 62, { x: 54, y: 63 }),
+            new Inhabitance('GroveStreet4', '4 Grove Street', 60, 62, { x: 60, y: 63 }),
+            new Inhabitance('BallManor', 'Ball Manor', 55, 72, { x: 56, y: 73 })
+        );
+
+        this.drawInhabitances();
+        this.assignPairedPeopleToInhabitancesRandomly(2);
+    }
+}
+
+/*
+ *
+ *  Paradise/Locales/1 Grove Street
+ *  Declan Tyson
+ *  v0.0.54
+ *  16/02/2018
+ *
+ */
+
+class GroveStreet1 extends GroveStreetTemplate {
+    constructor(player, people, inhabitance) {
+        super(player, people, inhabitance);
+
+        this.id = 'GroveStreet1';
+        this.entryPoints.frontDoor = { x: 36, y: 36 };
+
+        this.entrances[37][36] = {
+            locale: new Islands(player, people),
+            entryPoint: 'groveStreet1'
+        };
+
+        this.terrainPaint(37, 36, 1, 1, 'WoodenFloor');
+    }
+}
+
+/*
+ *
+ *  Paradise/Locales/1 Grove Street
+ *  Declan Tyson
+ *  v0.0.54
+ *  16/02/2018
+ *
+ */
+
+class GroveStreet2 extends GroveStreetTemplate {
+    constructor(player, people, inhabitance) {
+        super(player, people, inhabitance);
+
+        this.id = 'GroveStreet2';
+        this.entryPoints.frontDoor = { x: 26, y: 36 };
+
+        this.entrances[25][36] = {
+            locale: new Islands(player, people),
+            entryPoint: 'groveStreet2'
+        };
+
+        this.terrainPaint(25, 36, 1, 1, 'WoodenFloor');
+    }
+}
+
+/*
+ *
+ *  Paradise/Locales/1 Grove Street
+ *  Declan Tyson
+ *  v0.0.54
+ *  16/02/2018
+ *
+ */
+
+class GroveStreet3 extends GroveStreetTemplate {
+    constructor(player, people, inhabitance) {
+        super(player, people, inhabitance);
+
+        this.id = 'GroveStreet3';
+        this.entryPoints.frontDoor = { x: 36, y: 36 };
+
+        this.entrances[37][36] = {
+            locale: new Islands(player, people),
+            entryPoint: 'groveStreet3'
+        };
+
+        this.terrainPaint(37, 36, 1, 1, 'WoodenFloor');
+    }
+}
+
+/*
+ *
+ *  Paradise/Locales/4 Grove Street
+ *  Declan Tyson
+ *  v0.0.54
+ *  16/02/2018
+ *
+ */
+
+class GroveStreet4 extends GroveStreetTemplate {
+    constructor(player, people, inhabitance) {
+        super(player, people, inhabitance);
+
+        this.id = 'GroveStreet4';
+        this.entryPoints.frontDoor = { x: 26, y: 36 };
+
+        this.entrances[25][36] = {
+            locale: new Islands(player, people),
+            entryPoint: 'groveStreet4'
+        };
+
+        this.terrainPaint(25, 36, 1, 1, 'WoodenFloor');
+    }
+}
+
+/*
+ *
+ *  Paradise/Decorative/Dresser
+ *  Declan Tyson
+ *  v0.0.50
+ *  15/02/2018
+ *
+ */
+
+class Dresser extends Decorative {
+    constructor(x, y) {
+        super('Dresser', 'a fancy dresser', '/oob/Decorative/dresser.png', x, y, [false, false]);
+        this.lines = [`It's a fancy dresser.`];
+        this.conversationOptions = [{
+            "key" : "Search",
+            "value" : "Open the drawers"
+        },{
+            "key" : "Leave",
+            "value" : "That's nice."
+        }];
+        this.responses = {
+            "Search" : {
+                "lines" : ["You find nothing but a dead fly."],
+                "conversationOptions" : [{
+                    "key" : "Leave",
+                    "value" : "Shut the drawer and go elsewhere."
+                }]
+            }
+        };
+    }
+}
+
+/*
+ *
+ *  Paradise/Decorative/Rug
+ *  Declan Tyson
+ *  v0.0.49
+ *  15/02/2018
+ *
+ */
+
+class Rug extends Decorative {
+    constructor(x, y) {
+        super('Rug', 'a fancy rug', '/oob/Decorative/rug.png', x, y, [], false);
+    }
+}
+
+/*
+ *
+ *  Paradise/Locales/Ball Manor
+ *  Declan Tyson
+ *  v0.0.54
+ *  16/02/2018
+ *
+ */
+
+class BallManor extends GroveStreetTemplate {
+    constructor(player, people, inhabitance) {
+        super(player, people, inhabitance);
+
+        this.id = 'BallManor';
+        this.entryPoints.frontDoor = { x: 36, y: 36 };
+
+        this.entrances[36][37] = {
+            locale: new Islands(player, people),
+            entryPoint: 'ballManor'
+        };
+
+        this.terrainPaint(36, 37, 1, 1, 'WoodenFloor');
+
+        this.addDecoration(new Dresser(26, 26));
+        this.addDecoration(new Rug(32, 32));
+    }
+}
+
+/*
+ *
+ *  Paradise/Locales
+ *  Declan Tyson
+ *  v0.0.49
+ *  15/02/2018
+ *
+ */
+
+const startingMaps = {
+    'Village' : Village,
+    'Islands' : Islands
+};
+
+const locales = {
+    'Village' : Village,
+    'Islands' : Islands,
+    'GroveStreet1' : GroveStreet1,
+    'GroveStreet2' : GroveStreet2,
+    'GroveStreet3' : GroveStreet3,
+    'GroveStreet4' : GroveStreet4,
+    'BallManor' : BallManor,
+    'TownHall' : TownHall
+};
+
+const chooseStartingMap = () => {
+    let locale = Util.pickRandomProperty(startingMaps);
+    Util.log('Choosing starting map...');
+    Util.log(`Map is ${locale}.`);
+    return locale;
 };
 
 /*
@@ -2127,7 +2217,6 @@ const choosePeople = () => {
  */
 
 // Engine
-// Demo data
 
 exports.StartGame = StartGame;
 exports.Interaction = Interaction;

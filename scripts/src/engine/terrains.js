@@ -2,12 +2,12 @@
  *
  *  Paradise/Terrain
  *  Declan Tyson
- *  v0.0.38
- *  08/02/2018
+ *  v0.0.54
+ *  16/02/2018
  *
  */
 
-import { Blank, Doorway, Grass, VerticalRoad, HorizontalRoad, Wall, Water, WoodenFloor } from "./terrain";
+import { Blank, Doorway, Grass, VerticalRoad, HorizontalRoad, Wall, Water, WoodenFloor, CoastalSands } from "./terrain";
 
 export let terrains = {
     'Blank' : Blank,
@@ -17,5 +17,6 @@ export let terrains = {
     'VerticalRoad' : VerticalRoad,
     'HorizontalRoad' : HorizontalRoad,
     'Doorway' : Doorway,
-    'WoodenFloor' : WoodenFloor
+    'WoodenFloor' : WoodenFloor,
+    'CoastalSands' : CoastalSands
 };

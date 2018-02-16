@@ -2,8 +2,8 @@
  *
  *  Paradise/Locales/Town Hall
  *  Declan Tyson
- *  v0.0.25
- *  07/02/2018
+ *  v0.0.54
+ *  16/02/2018
  *
  */
 
@@ -15,14 +15,14 @@ class TownHall extends GroveStreetTemplate {
         super(player, people, inhabitance);
 
         this.id = 'TownHall';
-        this.entryPoints.frontDoor = { x: 48, y: 48 };
+        this.entryPoints.frontDoor = { x: 36, y: 36 };
 
-        this.entrances[49][48] = {
+        this.entrances[36][37] = {
             locale: new Village(player, people),
             entryPoint: 'townHall'
         };
 
-        this.terrainPaint(49, 48, 1, 1, 'WoodenFloor');
+        this.terrainPaint(36, 37, 1, 1, 'WoodenFloor');
     }
 }
 

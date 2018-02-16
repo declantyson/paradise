@@ -2,8 +2,8 @@
  *
  *  Paradise/Locales/Ball Manor
  *  Declan Tyson
- *  v0.0.38
- *  12/02/2018
+ *  v0.0.54
+ *  16/02/2018
  *
  */
 
@@ -17,17 +17,17 @@ class BallManor extends GroveStreetTemplate {
         super(player, people, inhabitance);
 
         this.id = 'BallManor';
-        this.entryPoints.frontDoor = { x: 48, y: 48 };
+        this.entryPoints.frontDoor = { x: 36, y: 36 };
 
-        this.entrances[48][49] = {
+        this.entrances[36][37] = {
             locale: new Islands(player, people),
             entryPoint: 'ballManor'
         };
 
-        this.terrainPaint(48, 49, 1, 1, 'WoodenFloor');
+        this.terrainPaint(36, 37, 1, 1, 'WoodenFloor');
 
-        this.addDecoration(new Dresser(38, 26));
-        this.addDecoration(new Rug(44, 32));
+        this.addDecoration(new Dresser(26, 26));
+        this.addDecoration(new Rug(32, 32));
     }
 }
 

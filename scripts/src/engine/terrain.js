@@ -2,7 +2,7 @@
  *
  *  Paradise/Terrain
  *  Declan Tyson
- *  v0.0.38
+ *  v0.0.54
  *  12/02/2018
  *
  */
@@ -113,4 +113,13 @@ class WoodenFloor extends Terrain {
     }
 }
 
-export { Blank, Grass, Water, VerticalRoad, HorizontalRoad, Wall, Doorway, WoodenFloor };
+class CoastalSands extends Terrain {
+    constructor(neighbours) {
+        super(neighbours);
+        this.id = 'CoastalSands';
+        this.passable = true;
+        this.colour = colours.gold;
+    }
+}
+
+export { Blank, Grass, Water, VerticalRoad, HorizontalRoad, Wall, Doorway, WoodenFloor, CoastalSands };
