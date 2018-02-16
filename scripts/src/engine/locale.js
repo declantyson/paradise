@@ -2,7 +2,7 @@
  *
  *  Paradise/Locales/Base
  *  Declan Tyson
- *  v0.0.54
+ *  v0.0.55
  *  16/02/2018
  *
  */
@@ -10,7 +10,6 @@
 import { Util } from './util';
 import { pairedRelationships } from '../constants';
 import { settings } from '../settings';
-import { people } from '../people/people';
 
 class Locale {
     constructor(player, activePeople) {
@@ -125,7 +124,7 @@ class Locale {
             let person = thisPeople[i];
             if(pairedPeople.indexOf(person) === -1) {
                 currentPairing.push(person);
-                let thisPerson = new people[person]();
+                let thisPerson = new window.game.people[person]();
                 Object.keys(thisPerson.relationships).forEach((relationship) => {
                     if(pairedRelationships.indexOf(thisPerson.relationships[relationship].description) !== -1 && this.people.indexOf(relationship) !== -1) {
                         currentPairing.push(relationship);

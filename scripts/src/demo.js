@@ -2,8 +2,8 @@
  *
  *  Paradise
  *  Declan Tyson
- *  v0.0.33
- *  09/02/2018
+ *  v0.0.55
+ *  16/02/2018
  *
  */
 
@@ -18,7 +18,7 @@ window.startGame = (locale, people) => {
     let player = new Player(),
         worldMap = new WorldMap(player);
 
-    window.game = StartGame(locale, people, player, worldMap);
+    StartGame(locale, people, player, worldMap);
 
     document.querySelectorAll('button').forEach((button) => {
         button.blur();

@@ -2,8 +2,8 @@
  *
  *  Paradise/Game
  *  Declan Tyson
- *  v0.0.47
- *  14/02/2018
+ *  v0.0.55
+ *  16/02/2018
  *
  */
 
@@ -20,23 +20,22 @@ import { settings, canvasProperties } from '../settings';
 export const StartGame = (locale, activePeople, player, scene, renderer) => {
     clearInterval(window.drawScene);
 
-    player = player || new Player();
-    scene = scene || new WorldMap(player);
-    renderer = renderer || new Renderer('world', canvasProperties.width, canvasProperties.height);
-
-    let start = new locale(player, activePeople),
-        game = new Game(renderer, scene, canvasProperties.centerPoint);
-
-    game.locales = locales;
-    game.people = people;
-    game.scene.setCurrentLocale(start, 'beginningOfGame');
-    game.initTerrainSprites();
-
     if(window.debug) {
         document.getElementById('log').style.display = 'block';
     }
 
-    return game;
+    player = player || new Player();
+    scene = scene || new WorldMap(player);
+    renderer = renderer || new Renderer('world', canvasProperties.width, canvasProperties.height);
+
+    let game = new Game(renderer, scene, canvasProperties.centerPoint);
+    window.game = game;
+
+    game.locales = locales;
+    game.people = people;
+    let start = new locale(player, activePeople);
+    game.scene.setCurrentLocale(start, 'beginningOfGame');
+    game.initTerrainSprites();
 };
 
 class Renderer {

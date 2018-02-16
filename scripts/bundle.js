@@ -839,491 +839,9 @@ class WorldMap extends Scene {
 
 /*
  *
- *  Paradise/Portrait
- *  Declan Tyson
- *  v0.0.46
- *  14/02/2018
- *
- */
-
-class Portrait {
-    constructor(imageSrc) {
-        let image = new Image();
-        image.src = imageSrc;
-        this.image = image;
-        this.src = imageSrc;
-        this.entering = false;
-        this.exiting = false;
-        this.frame = 0;
-        this.frameIncrement = 1;
-        this.maxFrames = 30;
-    }
-
-    draw(ctx) {
-        if(this.entering) this.enter();
-        if(this.exiting) this.exit();
-
-        ctx.globalAlpha = this.frame / this.maxFrames;
-        ctx.drawImage(this.image, 0, 0, canvasProperties.width, canvasProperties.height, canvasProperties.width - (this.frame * ((canvasProperties.width / 2) / this.maxFrames)), 0, canvasProperties.width, canvasProperties.height);
-        ctx.globalAlpha = 1;
-    }
-
-    enter() {
-        if(this.frame < this.maxFrames) {
-            this.entering = true;
-            this.frame += this.frameIncrement;
-        } else {
-            this.entering = false;
-        }
-    }
-
-    enterWithoutAnimation() {
-        this.frame = this.maxFrames;
-        this.entering = false;
-    }
-
-    exitWithoutAnimation() {
-        this.frame = 0;
-        this.exiting = false;
-    }
-
-    exit() {
-        if(this.frame > 0) {
-            this.frame -= this.frameIncrement;
-        } else {
-            this.exiting = false;
-        }
-    }
-}
-
-/*
- *
- *  Paradise/Scene-Interaction
- *  Declan Tyson
- *  v0.0.53
- *  16/02/2018
- *
- */
-
-class Interaction extends Scene {
-    constructor(person) {
-        super();
-
-        this.person = person;
-
-        // calculate these values based on mood etc....;
-        this.lines = this.person.lines || [];
-        this.conversationOptions = this.person.conversationOptions || [];
-
-        this.selectedConversationOption = 0;
-
-        this.exiting = false;
-
-        this.actions.up = this.previousOption.bind(this);
-        this.actions.down = this.nextOption.bind(this);
-        this.actions.action = this.sendResponse.bind(this);
-        // this.actions.back = this.returnToWorldMap.bind(this);
-
-        Util.log(`Entering interaction with ${this.person.name}`);
-    }
-
-    draw(ctx) {
-        // World map should be overlaid
-        this.worldMap.draw(ctx);
-        this.person.currentPortrait.draw(ctx);
-
-        if(this.exiting && !this.person.currentPortrait.exiting) {
-            this.exit();
-        }
-
-        if(!this.game.keyHeld) this.keyHeld = false;
-
-        this.drawConversationTextArea(ctx);
-        this.drawBadge(ctx);
-        this.drawConversation(ctx);
-        this.drawOptions(ctx);
-    }
-
-    drawConversationTextArea(ctx) {
-        ctx.rect(0, canvasProperties.height - interactionTextArea.height, interactionTextArea.width, interactionTextArea.height);
-        ctx.fillStyle = interactionTextArea.background;
-        ctx.globalAlpha = interactionTextArea.alpha;
-        ctx.fill();
-        ctx.globalAlpha = 1;
-    }
-
-    drawBadge(ctx) {
-        ctx.font = settings.fonts.large;
-        ctx.fillStyle = colours.white;
-        ctx.fillText(this.person.name, interactionTextArea.badgeOffsetX, canvasProperties.height - interactionTextArea.height + interactionTextArea.badgeOffsetY);
-    }
-
-    drawConversation(ctx) {
-        let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.badgeOffsetY) * 2;
-        ctx.font = settings.fonts.small;
-        ctx.fillStyle = colours.white;
-        this.lines.forEach((line, index) => {
-            ctx.fillText(line, interactionTextArea.badgeOffsetX, y + (index * interactionTextArea.lineHeight));
-        });
-    }
-
-    drawOptions(ctx) {
-        let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.optionsOffsetY);
-        ctx.font = settings.fonts.small;
-        ctx.fillStyle = colours.white;
-        this.conversationOptions.forEach((conversationOption, index) => {
-            ctx.fillText(conversationOption.value, interactionTextArea.optionsOffsetX, y + (index * interactionTextArea.optionHeight));
-            if(index === this.selectedConversationOption) {
-                ctx.strokeStyle = colours.white;
-                ctx.strokeRect(interactionTextArea.optionsOffsetX - interactionTextArea.optionHeight / 2,  y + (index * interactionTextArea.optionHeight) - (interactionTextArea.optionHeight / 1.5), 250 + interactionTextArea.optionHeight, interactionTextArea.optionHeight);
-            }
-        });
-    }
-
-    nextOption() {
-        if(this.keyHeld) return;
-
-        if(this.selectedConversationOption < this.conversationOptions.length - 1) this.selectedConversationOption++;
-        this.keyHeld = true;
-    }
-
-    previousOption() {
-        if(this.keyHeld) return;
-
-        if(this.selectedConversationOption > 0) this.selectedConversationOption--;
-        this.keyHeld = true;
-    }
-
-    sendResponse() {
-        if(this.keyHeld || this.person.currentPortrait.entering || this.person.currentPortrait.exiting) return;
-
-        this.person.sendResponse(this.conversationOptions[this.selectedConversationOption], this);
-        this.keyHeld = true;
-    }
-
-    returnToWorldMap() {
-        if (!this.worldMap) return;
-        this.exiting = true;
-        this.person.currentPortrait.exiting = true;
-        this.conversationOptions = [];
-    }
-
-    exit() {
-        this.game.setScene(this.worldMap);
-    }
-}
-
-/*
- *
- *  Paradise/Person
- *  Declan Tyson
- *  v0.0.46
- *  14/02/2018
- *
- */
-
-class Person {
-    constructor(name, gender, mood = 'neutral') {
-        this.id = name;
-        this.name = name;
-        this.gender = gender;
-        this.mood = mood;
-        this.colour = colours.black;
-        this.responses = {};
-        this.lines = ["I'm a default character, short and stout.", "Here's my handle, here's my spout."];
-        this.conversationOptions = [{
-            "key" : "Kettle",
-            "value" : "I'll go put the kettle on"
-        }];
-        this.portraitFolder = '/oob/Portraits/Test';
-        this.portraits = {
-            neutral : new Portrait(`${this.portraitFolder}/default.png`, this),
-            angry : new Portrait(`${this.portraitFolder}/angry.png`, this),
-        };
-        this.currentPortrait = this.portraits[this.mood];
-
-        this.relationships = {};
-    }
-
-    randomizeRelationships() {
-        Object.keys(this.relationships).forEach((name) => {
-            let relationship = this.relationships[name],
-                oldValue = relationship.value,
-                newValue = Math.floor(Math.random() * 99);
-
-            Util.log(`${this.name}'s relationship with ${posessivePronouns[this.gender]} ${relationship.description}, ${name}, goes from ${oldValue} to ${newValue}.`);
-            this.relationships[name].value = newValue;
-        });
-    }
-
-    addAcquaintanceRelationship(person) {
-       this.relationships[person] = {
-           description : 'Acquaintance',
-           value: 50
-       };
-    }
-
-    startInteraction(worldMap) {
-        let interaction = new Interaction(this);
-        interaction.worldMap = worldMap;
-        this.currentPortrait = this.portraits[this.mood];
-        this.currentPortrait.enter();
-
-        return interaction;
-    }
-
-    sendResponse(conversationOption, interaction) {
-        Util.log(conversationOption.value);
-
-        if(!this.responses[conversationOption.key]) {
-            interaction.returnToWorldMap();
-        } else {
-            let response = this.responses[conversationOption.key];
-            interaction.selectedConversationOption = 0;
-            interaction.lines = response.lines;
-
-            let mood = response.mood;
-            if(!this.portraits[mood]) mood = 'neutral';
-            this.currentPortrait.exitWithoutAnimation();
-            this.currentPortrait = this.portraits[mood];
-            this.currentPortrait.enterWithoutAnimation();
-
-            interaction.conversationOptions = response.conversationOptions;
-        }
-    }
-}
-
-/*
- *
- *  Paradise/Person/Evelyn
- *  Declan Tyson
- *  v0.0.23
- *  06/02/2018
- *
- */
-
-
-class Evelyn extends Person {
-    constructor() {
-        super('Evelyn', genders.female);
-    }
-}
-
-/*
- *
- *  Paradise/Person/Jill
- *  Declan Tyson
- *  v0.0.24
- *  06/02/2018
- *
- */
-
-
-class Jill extends Person {
-    constructor() {
-        super('Jill', genders.female);
-
-        this.relationships = {
-            'John' : {
-                description : 'Husband',
-                value: 45
-            }
-        };
-    }
-}
-
-/*
- *
- *  Paradise/Person/John
- *  Declan Tyson
- *  v0.0.24
- *  06/02/2018
- *
- */
-
-class John extends Person {
-    constructor() {
-        super('John', genders.male);
-
-        this.relationships = {
-            'Jill' : {
-                description : 'Wife',
-                value: 45
-            }
-        };
-    }
-}
-
-/*
- *
- *  Paradise/Person/Neil
- *  Declan Tyson
- *  v0.0.23
- *  06/02/2018
- *
- */
-
-class Neil extends Person {
-    constructor() {
-        super('Neil', genders.male);
-    }
-}
-
-/*
- *
- *  Paradise/Person/Pauline
- *  Declan Tyson
- *  v0.0.23
- *  06/02/2018
- *
- */
-
-class Pauline extends Person {
-    constructor() {
-        super('Pauline', genders.female);
-    }
-}
-
-/*
- *
- *  Paradise/Person/Petey
- *  Declan Tyson
- *  v0.0.23
- *  06/02/2018
- *
- */
-
-class Petey extends Person {
-    constructor() {
-        super('Petey', genders.male);
-    }
-}
-
-/*
- *
- *  Paradise/Person/Zenith
- *  Declan Tyson
- *  v0.0.23
- *  06/02/2018
- *
- */
-
-class Quazar extends Person {
-    constructor() {
-        super('Quazar', genders.alien);
-
-        this.colour = colours.green;
-        this.relationships = {
-            'Zenith' : {
-                description : 'Roommate',
-                value: 85
-            }
-        };
-    }
-}
-
-/*
- *
- *  Paradise/Person/Zenith
- *  Declan Tyson
- *  v0.0.46
- *  14/02/2018
- *
- */
-
-class Zenith extends Person {
-    constructor() {
-        super('Zenith', genders.alien);
-
-        this.colour = colours.green;
-        this.relationships = {
-            'Quazar' : {
-                description : 'Roommate',
-                value: 85
-            }
-        };
-        this.lines = ["I am so lonely..."];
-        this.conversationOptions = [{
-                "key" : "Nice",
-                "value" : "Happy Valentine's Day!"
-            },{
-                "key" : "Truth",
-                "value" : "You're going to die alone"
-            },{
-                "key" : "Mean",
-                "value" : "LOL!"
-            }];
-        this.responses = {
-            "Nice" : {
-                "mood" : "neutral",
-                "lines" : ["<3"],
-                "conversationOptions" : [{
-                    "key" : "Goodbye",
-                    "value" : "Goodbye"
-                }]
-            },
-            "Truth" : {
-                "mood" : "neutral",
-                "lines" : ["I know... :("],
-                "conversationOptions" : [{
-                    "key" : "Goodbye",
-                    "value" : "Goodbye"
-                }]
-            },
-            "Mean" : {
-                "mood" : "angry",
-                "lines" : ["Screw you! >:("],
-                "conversationOptions" : [{
-                    "key" : "Confront",
-                    "value" : "What are you gonna do!?"
-                },{
-                    "key" : "Goodbye",
-                    "value" : "Goodbye"
-                }]
-            },
-            "Confront" : {
-                "mood" : "sad",
-                "lines" : ["Nothing... I'm so lonely..."],
-                "conversationOptions" : [{
-                    "key" : "Nice",
-                    "value" : "Happy Valentine's Day!"
-                },{
-                    "key" : "Truth",
-                    "value" : "You're going to die alone"
-                },{
-                    "key" : "Mean",
-                    "value" : "LOL!"
-                }]
-            },
-        };
-    }
-}
-
-/*
- *
- *  Paradise/People
- *  Declan Tyson
- *  v0.0.25
- *  07/02/2018
- *
- */
-
-let people = {
-    'Evelyn'  : Evelyn,
-    'Jill'    : Jill,
-    'John'    : John,
-    'Neil'    : Neil,
-    'Pauline' : Pauline,
-    'Petey'   : Petey,
-    'Quazar'  : Quazar,
-    'Zenith'  : Zenith
-};
-
-/*
- *
  *  Paradise/Locales/Base
  *  Declan Tyson
- *  v0.0.54
+ *  v0.0.55
  *  16/02/2018
  *
  */
@@ -1441,7 +959,7 @@ class Locale {
             let person = thisPeople[i];
             if(pairedPeople.indexOf(person) === -1) {
                 currentPairing.push(person);
-                let thisPerson = new people[person]();
+                let thisPerson = new window.game.people[person]();
                 Object.keys(thisPerson.relationships).forEach((relationship) => {
                     if(pairedRelationships.indexOf(thisPerson.relationships[relationship].description) !== -1 && this.people.indexOf(relationship) !== -1) {
                         currentPairing.push(relationship);
@@ -1476,8 +994,8 @@ class Locale {
 }
 
 class Interior extends Locale {
-    constructor(player, people$$1, inhabitance) {
-        super(player, people$$1);
+    constructor(player, people, inhabitance) {
+        super(player, people);
         this.inhabitance = inhabitance;
         Util.log(`Welcome to ${inhabitance.name}.`);
 
@@ -1504,9 +1022,9 @@ class Inhabitance {
         this.inhabitants.push(person);
     }
 
-    addInhabitants(people$$1) {
-        for (let i = 0; i < people$$1.length; i++) {
-            this.addInhabitant(people$$1[i]);
+    addInhabitants(people) {
+        for (let i = 0; i < people.length; i++) {
+            this.addInhabitant(people[i]);
         }
     }
 }
@@ -2050,33 +1568,514 @@ const chooseStartingMap = () => {
 
 /*
  *
+ *  Paradise/Portrait
+ *  Declan Tyson
+ *  v0.0.46
+ *  14/02/2018
+ *
+ */
+
+class Portrait {
+    constructor(imageSrc) {
+        let image = new Image();
+        image.src = imageSrc;
+        this.image = image;
+        this.src = imageSrc;
+        this.entering = false;
+        this.exiting = false;
+        this.frame = 0;
+        this.frameIncrement = 1;
+        this.maxFrames = 30;
+    }
+
+    draw(ctx) {
+        if(this.entering) this.enter();
+        if(this.exiting) this.exit();
+
+        ctx.globalAlpha = this.frame / this.maxFrames;
+        ctx.drawImage(this.image, 0, 0, canvasProperties.width, canvasProperties.height, canvasProperties.width - (this.frame * ((canvasProperties.width / 2) / this.maxFrames)), 0, canvasProperties.width, canvasProperties.height);
+        ctx.globalAlpha = 1;
+    }
+
+    enter() {
+        if(this.frame < this.maxFrames) {
+            this.entering = true;
+            this.frame += this.frameIncrement;
+        } else {
+            this.entering = false;
+        }
+    }
+
+    enterWithoutAnimation() {
+        this.frame = this.maxFrames;
+        this.entering = false;
+    }
+
+    exitWithoutAnimation() {
+        this.frame = 0;
+        this.exiting = false;
+    }
+
+    exit() {
+        if(this.frame > 0) {
+            this.frame -= this.frameIncrement;
+        } else {
+            this.exiting = false;
+        }
+    }
+}
+
+/*
+ *
+ *  Paradise/Scene-Interaction
+ *  Declan Tyson
+ *  v0.0.53
+ *  16/02/2018
+ *
+ */
+
+class Interaction extends Scene {
+    constructor(person) {
+        super();
+
+        this.person = person;
+
+        // calculate these values based on mood etc....;
+        this.lines = this.person.lines || [];
+        this.conversationOptions = this.person.conversationOptions || [];
+
+        this.selectedConversationOption = 0;
+
+        this.exiting = false;
+
+        this.actions.up = this.previousOption.bind(this);
+        this.actions.down = this.nextOption.bind(this);
+        this.actions.action = this.sendResponse.bind(this);
+        // this.actions.back = this.returnToWorldMap.bind(this);
+
+        Util.log(`Entering interaction with ${this.person.name}`);
+    }
+
+    draw(ctx) {
+        // World map should be overlaid
+        this.worldMap.draw(ctx);
+        this.person.currentPortrait.draw(ctx);
+
+        if(this.exiting && !this.person.currentPortrait.exiting) {
+            this.exit();
+        }
+
+        if(!this.game.keyHeld) this.keyHeld = false;
+
+        this.drawConversationTextArea(ctx);
+        this.drawBadge(ctx);
+        this.drawConversation(ctx);
+        this.drawOptions(ctx);
+    }
+
+    drawConversationTextArea(ctx) {
+        ctx.rect(0, canvasProperties.height - interactionTextArea.height, interactionTextArea.width, interactionTextArea.height);
+        ctx.fillStyle = interactionTextArea.background;
+        ctx.globalAlpha = interactionTextArea.alpha;
+        ctx.fill();
+        ctx.globalAlpha = 1;
+    }
+
+    drawBadge(ctx) {
+        ctx.font = settings.fonts.large;
+        ctx.fillStyle = colours.white;
+        ctx.fillText(this.person.name, interactionTextArea.badgeOffsetX, canvasProperties.height - interactionTextArea.height + interactionTextArea.badgeOffsetY);
+    }
+
+    drawConversation(ctx) {
+        let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.badgeOffsetY) * 2;
+        ctx.font = settings.fonts.small;
+        ctx.fillStyle = colours.white;
+        this.lines.forEach((line, index) => {
+            ctx.fillText(line, interactionTextArea.badgeOffsetX, y + (index * interactionTextArea.lineHeight));
+        });
+    }
+
+    drawOptions(ctx) {
+        let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.optionsOffsetY);
+        ctx.font = settings.fonts.small;
+        ctx.fillStyle = colours.white;
+        this.conversationOptions.forEach((conversationOption, index) => {
+            ctx.fillText(conversationOption.value, interactionTextArea.optionsOffsetX, y + (index * interactionTextArea.optionHeight));
+            if(index === this.selectedConversationOption) {
+                ctx.strokeStyle = colours.white;
+                ctx.strokeRect(interactionTextArea.optionsOffsetX - interactionTextArea.optionHeight / 2,  y + (index * interactionTextArea.optionHeight) - (interactionTextArea.optionHeight / 1.5), 250 + interactionTextArea.optionHeight, interactionTextArea.optionHeight);
+            }
+        });
+    }
+
+    nextOption() {
+        if(this.keyHeld) return;
+
+        if(this.selectedConversationOption < this.conversationOptions.length - 1) this.selectedConversationOption++;
+        this.keyHeld = true;
+    }
+
+    previousOption() {
+        if(this.keyHeld) return;
+
+        if(this.selectedConversationOption > 0) this.selectedConversationOption--;
+        this.keyHeld = true;
+    }
+
+    sendResponse() {
+        if(this.keyHeld || this.person.currentPortrait.entering || this.person.currentPortrait.exiting) return;
+
+        this.person.sendResponse(this.conversationOptions[this.selectedConversationOption], this);
+        this.keyHeld = true;
+    }
+
+    returnToWorldMap() {
+        if (!this.worldMap) return;
+        this.exiting = true;
+        this.person.currentPortrait.exiting = true;
+        this.conversationOptions = [];
+    }
+
+    exit() {
+        this.game.setScene(this.worldMap);
+    }
+}
+
+/*
+ *
+ *  Paradise/Person
+ *  Declan Tyson
+ *  v0.0.46
+ *  14/02/2018
+ *
+ */
+
+class Person {
+    constructor(name, gender, mood = 'neutral') {
+        this.id = name;
+        this.name = name;
+        this.gender = gender;
+        this.mood = mood;
+        this.colour = colours.black;
+        this.responses = {};
+        this.lines = ["I'm a default character, short and stout.", "Here's my handle, here's my spout."];
+        this.conversationOptions = [{
+            "key" : "Kettle",
+            "value" : "I'll go put the kettle on"
+        }];
+        this.portraitFolder = '/oob/Portraits/Test';
+        this.portraits = {
+            neutral : new Portrait(`${this.portraitFolder}/default.png`, this),
+            angry : new Portrait(`${this.portraitFolder}/angry.png`, this),
+        };
+        this.currentPortrait = this.portraits[this.mood];
+
+        this.relationships = {};
+    }
+
+    randomizeRelationships() {
+        Object.keys(this.relationships).forEach((name) => {
+            let relationship = this.relationships[name],
+                oldValue = relationship.value,
+                newValue = Math.floor(Math.random() * 99);
+
+            Util.log(`${this.name}'s relationship with ${posessivePronouns[this.gender]} ${relationship.description}, ${name}, goes from ${oldValue} to ${newValue}.`);
+            this.relationships[name].value = newValue;
+        });
+    }
+
+    addAcquaintanceRelationship(person) {
+       this.relationships[person] = {
+           description : 'Acquaintance',
+           value: 50
+       };
+    }
+
+    startInteraction(worldMap) {
+        let interaction = new Interaction(this);
+        interaction.worldMap = worldMap;
+        this.currentPortrait = this.portraits[this.mood];
+        this.currentPortrait.enter();
+
+        return interaction;
+    }
+
+    sendResponse(conversationOption, interaction) {
+        Util.log(conversationOption.value);
+
+        if(!this.responses[conversationOption.key]) {
+            interaction.returnToWorldMap();
+        } else {
+            let response = this.responses[conversationOption.key];
+            interaction.selectedConversationOption = 0;
+            interaction.lines = response.lines;
+
+            let mood = response.mood;
+            if(!this.portraits[mood]) mood = 'neutral';
+            this.currentPortrait.exitWithoutAnimation();
+            this.currentPortrait = this.portraits[mood];
+            this.currentPortrait.enterWithoutAnimation();
+
+            interaction.conversationOptions = response.conversationOptions;
+        }
+    }
+}
+
+/*
+ *
+ *  Paradise/Person/Evelyn
+ *  Declan Tyson
+ *  v0.0.23
+ *  06/02/2018
+ *
+ */
+
+
+class Evelyn extends Person {
+    constructor() {
+        super('Evelyn', genders.female);
+    }
+}
+
+/*
+ *
+ *  Paradise/Person/Jill
+ *  Declan Tyson
+ *  v0.0.24
+ *  06/02/2018
+ *
+ */
+
+
+class Jill extends Person {
+    constructor() {
+        super('Jill', genders.female);
+
+        this.relationships = {
+            'John' : {
+                description : 'Husband',
+                value: 45
+            }
+        };
+    }
+}
+
+/*
+ *
+ *  Paradise/Person/John
+ *  Declan Tyson
+ *  v0.0.24
+ *  06/02/2018
+ *
+ */
+
+class John extends Person {
+    constructor() {
+        super('John', genders.male);
+
+        this.relationships = {
+            'Jill' : {
+                description : 'Wife',
+                value: 45
+            }
+        };
+    }
+}
+
+/*
+ *
+ *  Paradise/Person/Neil
+ *  Declan Tyson
+ *  v0.0.23
+ *  06/02/2018
+ *
+ */
+
+class Neil extends Person {
+    constructor() {
+        super('Neil', genders.male);
+    }
+}
+
+/*
+ *
+ *  Paradise/Person/Pauline
+ *  Declan Tyson
+ *  v0.0.23
+ *  06/02/2018
+ *
+ */
+
+class Pauline extends Person {
+    constructor() {
+        super('Pauline', genders.female);
+    }
+}
+
+/*
+ *
+ *  Paradise/Person/Petey
+ *  Declan Tyson
+ *  v0.0.23
+ *  06/02/2018
+ *
+ */
+
+class Petey extends Person {
+    constructor() {
+        super('Petey', genders.male);
+    }
+}
+
+/*
+ *
+ *  Paradise/Person/Zenith
+ *  Declan Tyson
+ *  v0.0.23
+ *  06/02/2018
+ *
+ */
+
+class Quazar extends Person {
+    constructor() {
+        super('Quazar', genders.alien);
+
+        this.colour = colours.green;
+        this.relationships = {
+            'Zenith' : {
+                description : 'Roommate',
+                value: 85
+            }
+        };
+    }
+}
+
+/*
+ *
+ *  Paradise/Person/Zenith
+ *  Declan Tyson
+ *  v0.0.46
+ *  14/02/2018
+ *
+ */
+
+class Zenith extends Person {
+    constructor() {
+        super('Zenith', genders.alien);
+
+        this.colour = colours.green;
+        this.relationships = {
+            'Quazar' : {
+                description : 'Roommate',
+                value: 85
+            }
+        };
+        this.lines = ["I am so lonely..."];
+        this.conversationOptions = [{
+                "key" : "Nice",
+                "value" : "Happy Valentine's Day!"
+            },{
+                "key" : "Truth",
+                "value" : "You're going to die alone"
+            },{
+                "key" : "Mean",
+                "value" : "LOL!"
+            }];
+        this.responses = {
+            "Nice" : {
+                "mood" : "neutral",
+                "lines" : ["<3"],
+                "conversationOptions" : [{
+                    "key" : "Goodbye",
+                    "value" : "Goodbye"
+                }]
+            },
+            "Truth" : {
+                "mood" : "neutral",
+                "lines" : ["I know... :("],
+                "conversationOptions" : [{
+                    "key" : "Goodbye",
+                    "value" : "Goodbye"
+                }]
+            },
+            "Mean" : {
+                "mood" : "angry",
+                "lines" : ["Screw you! >:("],
+                "conversationOptions" : [{
+                    "key" : "Confront",
+                    "value" : "What are you gonna do!?"
+                },{
+                    "key" : "Goodbye",
+                    "value" : "Goodbye"
+                }]
+            },
+            "Confront" : {
+                "mood" : "sad",
+                "lines" : ["Nothing... I'm so lonely..."],
+                "conversationOptions" : [{
+                    "key" : "Nice",
+                    "value" : "Happy Valentine's Day!"
+                },{
+                    "key" : "Truth",
+                    "value" : "You're going to die alone"
+                },{
+                    "key" : "Mean",
+                    "value" : "LOL!"
+                }]
+            },
+        };
+    }
+}
+
+/*
+ *
+ *  Paradise/People
+ *  Declan Tyson
+ *  v0.0.25
+ *  07/02/2018
+ *
+ */
+
+let people = {
+    'Evelyn'  : Evelyn,
+    'Jill'    : Jill,
+    'John'    : John,
+    'Neil'    : Neil,
+    'Pauline' : Pauline,
+    'Petey'   : Petey,
+    'Quazar'  : Quazar,
+    'Zenith'  : Zenith
+};
+
+/*
+ *
  *  Paradise/Game
  *  Declan Tyson
- *  v0.0.47
- *  14/02/2018
+ *  v0.0.55
+ *  16/02/2018
  *
  */
 
 const StartGame = (locale, activePeople, player, scene, renderer) => {
     clearInterval(window.drawScene);
 
-    player = player || new Player();
-    scene = scene || new WorldMap(player);
-    renderer = renderer || new Renderer('world', canvasProperties.width, canvasProperties.height);
-
-    let start = new locale(player, activePeople),
-        game = new Game(renderer, scene, canvasProperties.centerPoint);
-
-    game.locales = locales;
-    game.people = people;
-    game.scene.setCurrentLocale(start, 'beginningOfGame');
-    game.initTerrainSprites();
-
     if(window.debug) {
         document.getElementById('log').style.display = 'block';
     }
 
-    return game;
+    player = player || new Player();
+    scene = scene || new WorldMap(player);
+    renderer = renderer || new Renderer('world', canvasProperties.width, canvasProperties.height);
+
+    let game = new Game(renderer, scene, canvasProperties.centerPoint);
+    window.game = game;
+
+    game.locales = locales;
+    game.people = people;
+    let start = new locale(player, activePeople);
+    game.scene.setCurrentLocale(start, 'beginningOfGame');
+    game.initTerrainSprites();
 };
 
 class Renderer {
