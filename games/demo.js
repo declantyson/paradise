@@ -2208,6 +2208,7 @@ const choosePeople = () => {
  */
 
 // Engine
+// Demo data
 
 /*
  *
@@ -2227,6 +2228,7 @@ window.startGame = (locale, people$$1) => {
     let player = new Player(),
         worldMap = new WorldMap(player);
 
+    console.log(people$$1);
     StartGame(locale, people$$1, player, worldMap);
 
     document.querySelectorAll('button').forEach((button) => {

@@ -8,7 +8,7 @@
  */
 
 // Engine
-import { StartGame } from './engine/game';
+import { StartGame, Renderer, Game } from './engine/game';
 import { Interaction } from "./engine/interaction";
 import { Item } from './engine/item';
 import { Locale, Inhabitance, Interior } from "./engine/locale";
@@ -20,7 +20,7 @@ import { terrains } from './engine/terrains';
 import { Util } from './engine/util';
 import { WorldMap } from './engine/worldmap';
 import { Decorative } from './engine/decorative';
-import { settings } from './settings';
+import { settings, canvasProperties, tileStep, portraitWidth } from './settings';
 
 // Demo data
 import { startingMaps, chooseStartingMap } from "./locales/locales";
@@ -38,7 +38,8 @@ import { Dresser } from "./locales/decorative/dresser";
 import { Rug } from "./locales/decorative/rug";
 
 export {
-    StartGame, Interaction, Item, Locale, Inhabitance, Interior, Player, choosePeople, Person, Scene, terrains, Util, WorldMap, Decorative, settings,
+    StartGame, Interaction, Item, Locale, Inhabitance, Interior, Player, choosePeople, Person, Scene, terrains, Util, WorldMap, Decorative, Renderer, Game,
+    settings, canvasProperties, tileStep, portraitWidth,
     startingMaps, chooseStartingMap,
     people, Evelyn, Jill, John, Neil, Pauline, Petey, Quazar, Zenith,
     Dresser, Rug, Tree

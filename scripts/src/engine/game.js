@@ -38,7 +38,7 @@ export const StartGame = (locale, activePeople, player, scene, renderer) => {
     game.initTerrainSprites();
 };
 
-class Renderer {
+export class Renderer {
     constructor(element, width, height) {
         this.canvas = document.getElementById(element);
         this.canvas.style.width = width;
@@ -51,7 +51,7 @@ class Renderer {
     }
 }
 
-class Game {
+export class Game {
     constructor(renderer, scene, centerPoint) {
         this.actionTimeout = settings.actionTimeoutLimit;
         this.renderer = renderer;

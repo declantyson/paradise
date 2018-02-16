@@ -112,6 +112,7 @@ let canvasProperties = {
 };
 
 let tileStep = (settings.terrain.tileSize / settings.character.stepsPerTile);
+let portraitWidth = canvasProperties.width / 2;
 
 /*
  *
@@ -2216,6 +2217,7 @@ const choosePeople = () => {
  */
 
 // Engine
+// Demo data
 
 exports.StartGame = StartGame;
 exports.Interaction = Interaction;
@@ -2231,7 +2233,12 @@ exports.terrains = terrains;
 exports.Util = Util;
 exports.WorldMap = WorldMap;
 exports.Decorative = Decorative;
+exports.Renderer = Renderer;
+exports.Game = Game;
 exports.settings = settings;
+exports.canvasProperties = canvasProperties;
+exports.tileStep = tileStep;
+exports.portraitWidth = portraitWidth;
 exports.startingMaps = startingMaps;
 exports.chooseStartingMap = chooseStartingMap;
 exports.people = people;

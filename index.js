@@ -109,6 +109,7 @@ let canvasProperties = {
 };
 
 let tileStep = (settings.terrain.tileSize / settings.character.stepsPerTile);
+let portraitWidth = canvasProperties.width / 2;
 
 /*
  *
@@ -2213,5 +2214,6 @@ const choosePeople = () => {
  */
 
 // Engine
+// Demo data
 
-export { StartGame, Interaction, Item, Locale, Inhabitance, Interior, Player, choosePeople, Person, Scene, terrains, Util, WorldMap, Decorative, settings, startingMaps, chooseStartingMap, people, Evelyn, Jill, John, Neil, Pauline, Petey, Quazar, Zenith, Dresser, Rug, Tree };
+export { StartGame, Interaction, Item, Locale, Inhabitance, Interior, Player, choosePeople, Person, Scene, terrains, Util, WorldMap, Decorative, Renderer, Game, settings, canvasProperties, tileStep, portraitWidth, startingMaps, chooseStartingMap, people, Evelyn, Jill, John, Neil, Pauline, Petey, Quazar, Zenith, Dresser, Rug, Tree };
