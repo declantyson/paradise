@@ -2,8 +2,8 @@
  *
  *  Paradise/Util
  *  Declan Tyson
- *  v0.0.23
- *  06/02/2018
+ *  v0.0.53
+ *  16/02/2018
  *
  */
 
@@ -30,6 +30,10 @@ class Util {
 
     static clearLog() {
         document.getElementById('log').innerHTML = '';
+    }
+
+    static capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
     }
 }
 

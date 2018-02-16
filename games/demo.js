@@ -33,8 +33,8 @@ window.addEventListener('keyup', (e) => {
  *
  *  Paradise/Util
  *  Declan Tyson
- *  v0.0.23
- *  06/02/2018
+ *  v0.0.53
+ *  16/02/2018
  *
  */
 
@@ -62,14 +62,18 @@ class Util {
     static clearLog() {
         document.getElementById('log').innerHTML = '';
     }
+
+    static capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
 }
 
 /*
  *
  *  Paradise/Settings
  *  Declan Tyson
- *  v0.0.47
- *  14/02/2018
+ *  v0.0.53
+ *  16/02/2018
  *
  */
 
@@ -90,7 +94,12 @@ let settings = {
     personCount : 4,
     defaultInhabitanceSize : 2,
     loadingScreen: '/oob/loading.png',
-    minLoadingTime: 2000
+    minLoadingTime: 2000,
+    fonts : {
+        large: '24px "Roboto Condensed"',
+        small: '16px "Roboto"',
+        death: '24px "Permanent Marker"'
+    }
 };
 
 let canvasProperties = {
@@ -108,8 +117,8 @@ let tileStep = (settings.terrain.tileSize / settings.character.stepsPerTile);
  *
  *  Paradise/Constants
  *  Declan Tyson
- *  v0.0.48
- *  15/02/2018
+ *  v0.0.53
+ *  16/02/2018
  *
  */
 
@@ -130,12 +139,6 @@ const directions = {
     down: 'down',
     left: 'left',
     right: 'right'
-};
-
-const fonts = {
-    large: '24px "Roboto Condensed"',
-    small: '16px "Roboto"',
-    death: '24px "Permanent Marker"'
 };
 
 const interactionTextArea = {
@@ -1015,8 +1018,8 @@ class Village extends Locale {
  *
  *  Paradise/Scene-ObjectInteraction
  *  Declan Tyson
- *  v0.0.50
- *  15/02/2018
+ *  v0.0.53
+ *  16/02/2018
  *
  */
 
@@ -1061,7 +1064,7 @@ class ObjectInteraction extends Scene {
 
     drawConversation(ctx) {
         let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.badgeOffsetY) * 2;
-        ctx.font = fonts.small;
+        ctx.font = settings.fonts.small;
         ctx.fillStyle = colours.white;
         this.lines.forEach((line, index) => {
             ctx.fillText(line, interactionTextArea.badgeOffsetX, y + (index * interactionTextArea.lineHeight));
@@ -1070,7 +1073,7 @@ class ObjectInteraction extends Scene {
 
     drawOptions(ctx) {
         let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.optionsOffsetY);
-        ctx.font = fonts.small;
+        ctx.font = settings.fonts.small;
         ctx.fillStyle = colours.white;
         this.conversationOptions.forEach((conversationOption, index) => {
             ctx.fillText(conversationOption.value, interactionTextArea.optionsOffsetX, y + (index * interactionTextArea.optionHeight));
@@ -1528,8 +1531,8 @@ class Portrait {
  *
  *  Paradise/Scene-Interaction
  *  Declan Tyson
- *  v0.0.46
- *  14/02/2018
+ *  v0.0.53
+ *  16/02/2018
  *
  */
 
@@ -1581,14 +1584,14 @@ class Interaction extends Scene {
     }
 
     drawBadge(ctx) {
-        ctx.font = fonts.large;
+        ctx.font = settings.fonts.large;
         ctx.fillStyle = colours.white;
         ctx.fillText(this.person.name, interactionTextArea.badgeOffsetX, canvasProperties.height - interactionTextArea.height + interactionTextArea.badgeOffsetY);
     }
 
     drawConversation(ctx) {
         let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.badgeOffsetY) * 2;
-        ctx.font = fonts.small;
+        ctx.font = settings.fonts.small;
         ctx.fillStyle = colours.white;
         this.lines.forEach((line, index) => {
             ctx.fillText(line, interactionTextArea.badgeOffsetX, y + (index * interactionTextArea.lineHeight));
@@ -1597,7 +1600,7 @@ class Interaction extends Scene {
 
     drawOptions(ctx) {
         let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.optionsOffsetY);
-        ctx.font = fonts.small;
+        ctx.font = settings.fonts.small;
         ctx.fillStyle = colours.white;
         this.conversationOptions.forEach((conversationOption, index) => {
             ctx.fillText(conversationOption.value, interactionTextArea.optionsOffsetX, y + (index * interactionTextArea.optionHeight));

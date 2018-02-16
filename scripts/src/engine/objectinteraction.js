@@ -2,16 +2,16 @@
  *
  *  Paradise/Scene-ObjectInteraction
  *  Declan Tyson
- *  v0.0.50
- *  15/02/2018
+ *  v0.0.53
+ *  16/02/2018
  *
  */
 
 import { Util } from './util';
 
 import { Scene } from './scene';
-import { interactionTextArea, fonts, colours } from '../constants';
-import { canvasProperties } from '../settings';
+import { interactionTextArea, colours } from '../constants';
+import { settings, canvasProperties } from '../settings';
 
 class ObjectInteraction extends Scene {
     constructor(decoration) {
@@ -54,7 +54,7 @@ class ObjectInteraction extends Scene {
 
     drawConversation(ctx) {
         let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.badgeOffsetY) * 2;
-        ctx.font = fonts.small;
+        ctx.font = settings.fonts.small;
         ctx.fillStyle = colours.white;
         this.lines.forEach((line, index) => {
             ctx.fillText(line, interactionTextArea.badgeOffsetX, y + (index * interactionTextArea.lineHeight));
@@ -63,7 +63,7 @@ class ObjectInteraction extends Scene {
 
     drawOptions(ctx) {
         let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.optionsOffsetY);
-        ctx.font = fonts.small;
+        ctx.font = settings.fonts.small;
         ctx.fillStyle = colours.white;
         this.conversationOptions.forEach((conversationOption, index) => {
             ctx.fillText(conversationOption.value, interactionTextArea.optionsOffsetX, y + (index * interactionTextArea.optionHeight));

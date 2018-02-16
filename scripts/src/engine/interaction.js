@@ -2,16 +2,16 @@
  *
  *  Paradise/Scene-Interaction
  *  Declan Tyson
- *  v0.0.46
- *  14/02/2018
+ *  v0.0.53
+ *  16/02/2018
  *
  */
 
 import { Util } from './util';
 
 import { Scene } from './scene';
-import { interactionTextArea, fonts, colours } from '../constants';
-import { canvasProperties } from '../settings';
+import { interactionTextArea, colours } from '../constants';
+import { settings, canvasProperties } from '../settings';
 
 class Interaction extends Scene {
     constructor(person) {
@@ -61,14 +61,14 @@ class Interaction extends Scene {
     }
 
     drawBadge(ctx) {
-        ctx.font = fonts.large;
+        ctx.font = settings.fonts.large;
         ctx.fillStyle = colours.white;
         ctx.fillText(this.person.name, interactionTextArea.badgeOffsetX, canvasProperties.height - interactionTextArea.height + interactionTextArea.badgeOffsetY);
     }
 
     drawConversation(ctx) {
         let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.badgeOffsetY) * 2;
-        ctx.font = fonts.small;
+        ctx.font = settings.fonts.small;
         ctx.fillStyle = colours.white;
         this.lines.forEach((line, index) => {
             ctx.fillText(line, interactionTextArea.badgeOffsetX, y + (index * interactionTextArea.lineHeight));
@@ -77,7 +77,7 @@ class Interaction extends Scene {
 
     drawOptions(ctx) {
         let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.optionsOffsetY);
-        ctx.font = fonts.small;
+        ctx.font = settings.fonts.small;
         ctx.fillStyle = colours.white;
         this.conversationOptions.forEach((conversationOption, index) => {
             ctx.fillText(conversationOption.value, interactionTextArea.optionsOffsetX, y + (index * interactionTextArea.optionHeight));

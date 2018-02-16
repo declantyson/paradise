@@ -2,8 +2,8 @@
  *
  *  Paradise/Settings
  *  Declan Tyson
- *  v0.0.47
- *  14/02/2018
+ *  v0.0.53
+ *  16/02/2018
  *
  */
 
@@ -24,7 +24,12 @@ export let settings = {
     personCount : 4,
     defaultInhabitanceSize : 2,
     loadingScreen: '/oob/loading.png',
-    minLoadingTime: 2000
+    minLoadingTime: 2000,
+    fonts : {
+        large: '24px "Roboto Condensed"',
+        small: '16px "Roboto"',
+        death: '24px "Permanent Marker"'
+    }
 };
 
 export let canvasProperties = {

@@ -2,8 +2,8 @@
  *
  *  Paradise/Constants
  *  Declan Tyson
- *  v0.0.48
- *  15/02/2018
+ *  v0.0.53
+ *  16/02/2018
  *
  */
 
@@ -26,12 +26,6 @@ export const directions = {
     down: 'down',
     left: 'left',
     right: 'right'
-};
-
-export const fonts = {
-    large: '24px "Roboto Condensed"',
-    small: '16px "Roboto"',
-    death: '24px "Permanent Marker"'
 };
 
 export const interactionTextArea = {
