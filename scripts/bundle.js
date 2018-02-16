@@ -842,7 +842,7 @@ class WorldMap extends Scene {
  *
  *  Paradise/Locales/Base
  *  Declan Tyson
- *  v0.0.55
+ *  v0.0.56
  *  16/02/2018
  *
  */
@@ -995,8 +995,11 @@ class Locale {
 }
 
 class Interior extends Locale {
-    constructor(player, people, inhabitance) {
+    constructor(player, people, inhabitance = null) {
         super(player, people);
+
+        if(!inhabitance) return;
+
         this.inhabitance = inhabitance;
         Util.log(`Welcome to ${inhabitance.name}.`);
 
