@@ -2,8 +2,8 @@
  *
  *  Paradise/Decorative
  *  Declan Tyson
- *  v0.0.50
- *  15/02/2018
+ *  v0.0.57
+ *  17/02/2018
  *
  */
 
@@ -30,6 +30,12 @@ class Decorative {
 
         this.x = x;
         this.y = y;
+    }
+
+    updateImage(src) {
+        let image = new Image();
+        image.src = src;
+        this.image = image;
     }
 
     addItem(item) {
