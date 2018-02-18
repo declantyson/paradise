@@ -1747,8 +1747,8 @@ class Interaction extends Scene {
  *
  *  Paradise/Person
  *  Declan Tyson
- *  v0.0.46
- *  14/02/2018
+ *  v0.0.58
+ *  18/02/2018
  *
  */
 
@@ -1763,7 +1763,10 @@ class Person {
         this.lines = ["I'm a default character, short and stout.", "Here's my handle, here's my spout."];
         this.conversationOptions = [{
             "key" : "Kettle",
-            "value" : "I'll go put the kettle on"
+            "value" : "I'll go put the kettle on",
+            "callback" : () => {
+                alert('DING! Tea\'s ready!');
+            }
         }];
         this.portraitFolder = '/oob/Portraits/Test';
         this.portraits = {
@@ -1804,6 +1807,10 @@ class Person {
 
     sendResponse(conversationOption, interaction) {
         Util.log(conversationOption.value);
+
+        if(conversationOption.callback) {
+            conversationOption.callback();
+        }
 
         if(!this.responses[conversationOption.key]) {
             interaction.returnToWorldMap();
@@ -1956,8 +1963,8 @@ class Quazar extends Person {
  *
  *  Paradise/Person/Zenith
  *  Declan Tyson
- *  v0.0.46
- *  14/02/2018
+ *  v0.0.58
+ *  18/02/2018
  *
  */
 
@@ -1978,7 +1985,10 @@ class Zenith extends Person {
                 "value" : "Happy Valentine's Day!"
             },{
                 "key" : "Truth",
-                "value" : "You're going to die alone"
+                "value" : "You're going to die alone",
+                "callback" : () => {
+                    alert('Ding ding!');
+                }
             },{
                 "key" : "Mean",
                 "value" : "LOL!"
@@ -2015,14 +2025,8 @@ class Zenith extends Person {
                 "mood" : "sad",
                 "lines" : ["Nothing... I'm so lonely..."],
                 "conversationOptions" : [{
-                    "key" : "Nice",
-                    "value" : "Happy Valentine's Day!"
-                },{
-                    "key" : "Truth",
-                    "value" : "You're going to die alone"
-                },{
-                    "key" : "Mean",
-                    "value" : "LOL!"
+                    "key" : "Regret",
+                    "value" : "I feel a bit bad now."
                 }]
             },
         };
@@ -2237,7 +2241,6 @@ window.startGame = (locale, people$$1) => {
     let player = new Player(),
         worldMap = new WorldMap(player);
 
-    console.log(people$$1);
     StartGame(locale, people$$1, player, worldMap);
 
     document.querySelectorAll('button').forEach((button) => {
