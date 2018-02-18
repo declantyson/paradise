@@ -2,8 +2,8 @@
  *
  *  Paradise/Decorative/Dresser
  *  Declan Tyson
- *  v0.0.50
- *  15/02/2018
+ *  v0.0.59
+ *  18/02/2018
  *
  */
 
@@ -15,11 +15,20 @@ class Dresser extends Decorative {
         this.lines = [`It's a fancy dresser.`];
         this.conversationOptions = [{
             "key" : "Search",
-            "value" : "Open the drawers"
-        },{
+            "value" : "Open the drawers",
+        },
+        {
+            "key" : "FreakOut",
+            "value" : "Touch the mysterious looking button",
+            "callback" : () => {
+                this.scream();
+            }
+        }
+        ,{
             "key" : "Leave",
             "value" : "That's nice."
         }];
+
         this.responses = {
             "Search" : {
                 "lines" : ["You find nothing but a dead fly."],
@@ -27,8 +36,25 @@ class Dresser extends Decorative {
                     "key" : "Leave",
                     "value" : "Shut the drawer and go elsewhere."
                 }]
+            },
+            "FreakOut" : {
+                "lines" : ["Well that was horrifying."],
+                "conversationOptions" : [{
+                    "key" : "Leave",
+                    "value" : "Go elsewhere."
+                },{
+                    "key" : "FreakOut",
+                    "value" : "Press the button again",
+                    "callback" : () => {
+                        this.scream();
+                    }
+                }]
             }
         }
+    }
+
+    scream() {
+        alert("Y O U H A V E N O P O W E R H E R E");
     }
 }
 

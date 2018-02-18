@@ -2,15 +2,15 @@
  *
  *  Paradise/Decorative
  *  Declan Tyson
- *  v0.0.57
- *  17/02/2018
+ *  v0.0.59
+ *  18/02/2018
  *
  */
 
 import { colours } from '../constants';
 import { settings, tileStep } from '../settings';
 import { ObjectInteraction } from './objectinteraction';
-import {Util} from './util';
+import { Util } from './util';
 
 class Decorative {
     constructor(name, description, src, x, y, passMap = [false], canWalkBehind = true) {
@@ -78,6 +78,10 @@ class Decorative {
 
     sendResponse(conversationOption, interaction) {
         Util.log(conversationOption.value);
+
+        if(conversationOption.callback) {
+            conversationOption.callback();
+        }
 
         if(!this.responses[conversationOption.key]) {
             interaction.returnToWorldMap();
