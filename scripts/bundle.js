@@ -118,8 +118,8 @@ let portraitWidth = canvasProperties.width / 2;
  *
  *  Paradise/Constants
  *  Declan Tyson
- *  v0.0.54
- *  16/02/2018
+ *  v0.0.60
+ *  19/02/2018
  *
  */
 
@@ -144,16 +144,16 @@ const directions = {
 };
 
 const interactionTextArea = {
-    width: canvasProperties.width,
-    height: canvasProperties.height / 3,
+    width: canvasProperties.width / 2,
+    height: canvasProperties.height,
     background: colours.black,
     alpha: 0.4,
     badgeOffsetX: 20,
     badgeOffsetY: 40,
-    optionsOffsetX: canvasProperties.width - 300,
-    optionsOffsetY: 40,
+    optionsOffsetX: 40,
+    optionsOffsetY: 100,
     optionHeight: 36,
-    lineHeight: 18
+    lineHeight: 22
 };
 
 const genders = {
@@ -1118,8 +1118,8 @@ class Village extends Locale {
  *
  *  Paradise/Scene-ObjectInteraction
  *  Declan Tyson
- *  v0.0.53
- *  16/02/2018
+ *  v0.0.60
+ *  19/02/2018
  *
  */
 
@@ -1163,7 +1163,7 @@ class ObjectInteraction extends Scene {
     }
 
     drawConversation(ctx) {
-        let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.badgeOffsetY) * 2;
+        let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.badgeOffsetY);
         ctx.font = settings.fonts.small;
         ctx.fillStyle = colours.white;
         this.lines.forEach((line, index) => {
@@ -1172,7 +1172,7 @@ class ObjectInteraction extends Scene {
     }
 
     drawOptions(ctx) {
-        let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.optionsOffsetY);
+        let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.optionsOffsetY) - interactionTextArea.badgeOffsetY + (this.lines.length * interactionTextArea.lineHeight);
         ctx.font = settings.fonts.small;
         ctx.fillStyle = colours.white;
         this.conversationOptions.forEach((conversationOption, index) => {
@@ -1477,8 +1477,8 @@ class GroveStreet4 extends GroveStreetTemplate {
  *
  *  Paradise/Decorative/Dresser
  *  Declan Tyson
- *  v0.0.59
- *  18/02/2018
+ *  v0.0.60
+ *  19/02/2018
  *
  */
 
@@ -1504,7 +1504,7 @@ class Dresser extends Decorative {
 
         this.responses = {
             "Search" : {
-                "lines" : ["You find nothing but a dead fly."],
+                "lines" : ["You find nothing but a dead fly.", "Hopefully he had a fulfilling life."],
                 "conversationOptions" : [{
                     "key" : "Leave",
                     "value" : "Shut the drawer and go elsewhere."
@@ -1669,8 +1669,8 @@ class Portrait {
  *
  *  Paradise/Scene-Interaction
  *  Declan Tyson
- *  v0.0.53
- *  16/02/2018
+ *  v0.0.60
+ *  19/02/2018
  *
  */
 
@@ -1737,7 +1737,7 @@ class Interaction extends Scene {
     }
 
     drawOptions(ctx) {
-        let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.optionsOffsetY);
+        let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.optionsOffsetY) + (this.lines.length * interactionTextArea.lineHeight);
         ctx.font = settings.fonts.small;
         ctx.fillStyle = colours.white;
         this.conversationOptions.forEach((conversationOption, index) => {
@@ -1786,8 +1786,8 @@ class Interaction extends Scene {
  *
  *  Paradise/Person
  *  Declan Tyson
- *  v0.0.58
- *  18/02/2018
+ *  v0.0.60
+ *  19/02/2018
  *
  */
 
@@ -1802,10 +1802,7 @@ class Person {
         this.lines = ["I'm a default character, short and stout.", "Here's my handle, here's my spout."];
         this.conversationOptions = [{
             "key" : "Kettle",
-            "value" : "I'll go put the kettle on",
-            "callback" : () => {
-                alert('DING! Tea\'s ready!');
-            }
+            "value" : "I'll go put the kettle on"
         }];
         this.portraitFolder = '/oob/Portraits/Test';
         this.portraits = {
@@ -1979,8 +1976,8 @@ class Petey extends Person {
  *
  *  Paradise/Person/Zenith
  *  Declan Tyson
- *  v0.0.23
- *  06/02/2018
+ *  v0.0.60
+ *  19/02/2018
  *
  */
 
@@ -1995,6 +1992,14 @@ class Quazar extends Person {
                 value: 85
             }
         };
+        this.lines = [
+            'Now this is the story',
+            'all about how my',
+            'life got flipped, turned upside down,',
+            'and I\'d like to take a minute,',
+            'just sit right there,',
+            'I\'ll tell how I became the prince of a town called Bel-Air.'
+        ];
     }
 }
 
@@ -2260,7 +2265,6 @@ const choosePeople = () => {
  */
 
 // Engine
-// Demo data
 
 exports.StartGame = StartGame;
 exports.Interaction = Interaction;

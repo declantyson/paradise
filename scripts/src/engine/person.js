@@ -2,8 +2,8 @@
  *
  *  Paradise/Person
  *  Declan Tyson
- *  v0.0.58
- *  18/02/2018
+ *  v0.0.60
+ *  19/02/2018
  *
  */
 
@@ -23,10 +23,7 @@ class Person {
         this.lines = ["I'm a default character, short and stout.", "Here's my handle, here's my spout."];
         this.conversationOptions = [{
             "key" : "Kettle",
-            "value" : "I'll go put the kettle on",
-            "callback" : () => {
-                alert('DING! Tea\'s ready!');
-            }
+            "value" : "I'll go put the kettle on"
         }];
         this.portraitFolder = '/oob/Portraits/Test';
         this.portraits = {

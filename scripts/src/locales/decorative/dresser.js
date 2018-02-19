@@ -2,8 +2,8 @@
  *
  *  Paradise/Decorative/Dresser
  *  Declan Tyson
- *  v0.0.59
- *  18/02/2018
+ *  v0.0.60
+ *  19/02/2018
  *
  */
 
@@ -31,7 +31,7 @@ class Dresser extends Decorative {
 
         this.responses = {
             "Search" : {
-                "lines" : ["You find nothing but a dead fly."],
+                "lines" : ["You find nothing but a dead fly.", "Hopefully he had a fulfilling life."],
                 "conversationOptions" : [{
                     "key" : "Leave",
                     "value" : "Shut the drawer and go elsewhere."

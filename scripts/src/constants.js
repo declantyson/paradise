@@ -2,8 +2,8 @@
  *
  *  Paradise/Constants
  *  Declan Tyson
- *  v0.0.54
- *  16/02/2018
+ *  v0.0.60
+ *  19/02/2018
  *
  */
 
@@ -30,16 +30,16 @@ export const directions = {
 };
 
 export const interactionTextArea = {
-    width: canvasProperties.width,
-    height: canvasProperties.height / 3,
+    width: canvasProperties.width / 2,
+    height: canvasProperties.height,
     background: colours.black,
     alpha: 0.4,
     badgeOffsetX: 20,
     badgeOffsetY: 40,
-    optionsOffsetX: canvasProperties.width - 300,
-    optionsOffsetY: 40,
+    optionsOffsetX: 40,
+    optionsOffsetY: 100,
     optionHeight: 36,
-    lineHeight: 18
+    lineHeight: 22
 };
 
 export const genders = {

@@ -2,8 +2,8 @@
  *
  *  Paradise/Person/Zenith
  *  Declan Tyson
- *  v0.0.23
- *  06/02/2018
+ *  v0.0.60
+ *  19/02/2018
  *
  */
 
@@ -21,6 +21,14 @@ class Quazar extends Person {
                 value: 85
             }
         };
+        this.lines = [
+            'Now this is the story',
+            'all about how my',
+            'life got flipped, turned upside down,',
+            'and I\'d like to take a minute,',
+            'just sit right there,',
+            'I\'ll tell how I became the prince of a town called Bel-Air.'
+        ]
     }
 }
 

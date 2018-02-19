@@ -2,8 +2,8 @@
  *
  *  Paradise/Scene-Interaction
  *  Declan Tyson
- *  v0.0.53
- *  16/02/2018
+ *  v0.0.60
+ *  19/02/2018
  *
  */
 
@@ -76,7 +76,7 @@ class Interaction extends Scene {
     }
 
     drawOptions(ctx) {
-        let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.optionsOffsetY);
+        let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.optionsOffsetY) + (this.lines.length * interactionTextArea.lineHeight);
         ctx.font = settings.fonts.small;
         ctx.fillStyle = colours.white;
         this.conversationOptions.forEach((conversationOption, index) => {

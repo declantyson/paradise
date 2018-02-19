@@ -2,8 +2,8 @@
  *
  *  Paradise/Scene-ObjectInteraction
  *  Declan Tyson
- *  v0.0.53
- *  16/02/2018
+ *  v0.0.60
+ *  19/02/2018
  *
  */
 
@@ -53,7 +53,7 @@ class ObjectInteraction extends Scene {
     }
 
     drawConversation(ctx) {
-        let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.badgeOffsetY) * 2;
+        let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.badgeOffsetY);
         ctx.font = settings.fonts.small;
         ctx.fillStyle = colours.white;
         this.lines.forEach((line, index) => {
@@ -62,7 +62,7 @@ class ObjectInteraction extends Scene {
     }
 
     drawOptions(ctx) {
-        let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.optionsOffsetY);
+        let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.optionsOffsetY) - interactionTextArea.badgeOffsetY + (this.lines.length * interactionTextArea.lineHeight);
         ctx.font = settings.fonts.small;
         ctx.fillStyle = colours.white;
         this.conversationOptions.forEach((conversationOption, index) => {
