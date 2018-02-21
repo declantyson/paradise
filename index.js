@@ -2262,5 +2262,6 @@ const choosePeople = () => {
  */
 
 // Engine
+// Demo data
 
-export { StartGame, Interaction, Item, Locale, Inhabitance, Interior, Player, choosePeople, Person, Scene, terrains, Util, WorldMap, Decorative, Renderer, Game, settings, canvasProperties, tileStep, portraitWidth, startingMaps, chooseStartingMap, people, Evelyn, Jill, John, Neil, Pauline, Petey, Quazar, Zenith, Dresser, Rug, Tree };
+export { StartGame, Interaction, Item, Locale, Inhabitance, Interior, Player, choosePeople, Person, Scene, terrains, Util, WorldMap, Decorative, Renderer, Game, Portrait, settings, canvasProperties, tileStep, portraitWidth, startingMaps, chooseStartingMap, people, Evelyn, Jill, John, Neil, Pauline, Petey, Quazar, Zenith, Dresser, Rug, Tree };

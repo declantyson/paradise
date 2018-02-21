@@ -2265,6 +2265,7 @@ const choosePeople = () => {
  */
 
 // Engine
+// Demo data
 
 exports.StartGame = StartGame;
 exports.Interaction = Interaction;
@@ -2282,6 +2283,7 @@ exports.WorldMap = WorldMap;
 exports.Decorative = Decorative;
 exports.Renderer = Renderer;
 exports.Game = Game;
+exports.Portrait = Portrait;
 exports.settings = settings;
 exports.canvasProperties = canvasProperties;
 exports.tileStep = tileStep;
