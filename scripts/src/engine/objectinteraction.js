@@ -2,12 +2,10 @@
  *
  *  Paradise/Scene-ObjectInteraction
  *  Declan Tyson
- *  v0.0.60
- *  19/02/2018
+ *  v0.0.65
+ *  26/02/2018
  *
  */
-
-import { Util } from './util';
 
 import { Scene } from './scene';
 import { interactionTextArea, colours } from '../constants';
@@ -69,7 +67,7 @@ class ObjectInteraction extends Scene {
             ctx.fillText(conversationOption.value, interactionTextArea.optionsOffsetX, y + (index * interactionTextArea.optionHeight));
             if(index === this.selectedConversationOption) {
                 ctx.strokeStyle = colours.white;
-                ctx.strokeRect(interactionTextArea.optionsOffsetX - interactionTextArea.optionHeight / 2,  y + (index * interactionTextArea.optionHeight) - (interactionTextArea.optionHeight / 1.5), 250 + interactionTextArea.optionHeight, interactionTextArea.optionHeight);
+                ctx.strokeRect(interactionTextArea.optionsOffsetX - interactionTextArea.optionHeight / 2,  y + (index * interactionTextArea.optionHeight) - (interactionTextArea.optionHeight / 1.5), interactionTextArea.width - interactionTextArea.optionsOffsetX, interactionTextArea.optionHeight);
             }
         });
     }
