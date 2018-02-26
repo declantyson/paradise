@@ -70,13 +70,32 @@ class Interaction extends Scene {
         let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.badgeOffsetY) * 2;
         ctx.font = settings.fonts.small;
         ctx.fillStyle = colours.white;
-        this.lines.forEach((line, index) => {
+        let lines = [];
+        this.lines.forEach((line) => {
+           if(line.length < 60) lines.push(line);
+           else {
+               let chunks = line.split(/( )/),
+                   chunkedLine = '';
+               chunks.forEach((chunk) => {
+                   if(chunkedLine.length + chunk.length > 60) {
+                       lines.push(chunkedLine);
+                       chunkedLine = '';
+                   }
+                   chunkedLine += chunk;
+               });
+               lines.push(chunkedLine);
+           }
+        });
+
+        lines.forEach((line, index) => {
             ctx.fillText(line, interactionTextArea.badgeOffsetX, y + (index * interactionTextArea.lineHeight));
         });
+
+        this.chunkedLines = lines;
     }
 
     drawOptions(ctx) {
-        let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.optionsOffsetY) + (this.lines.length * interactionTextArea.lineHeight);
+        let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.optionsOffsetY) + (this.chunkedLines.length * interactionTextArea.lineHeight);
         ctx.font = settings.fonts.small;
         ctx.fillStyle = colours.white;
         this.conversationOptions.forEach((conversationOption, index) => {
