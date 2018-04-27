@@ -2,8 +2,8 @@
  *
  *  Paradise/Scene-Interaction
  *  Declan Tyson
- *  v0.0.67
- *  27/04/2018
+ *  v0.0.68
+ *  28/04/2018
  *
  */
 
@@ -11,7 +11,7 @@ import { Util } from './util';
 
 import { Scene } from './scene';
 import { colours } from '../constants';
-import { settings, canvasProperties } from '../settings';
+import { settings } from '../settings';
 
 class Interaction extends Scene {
   constructor(person) {
@@ -70,13 +70,13 @@ class Interaction extends Scene {
     ctx.fillStyle = colours.white;
     ctx.fillText(
       this.person.name,
-      settings.interactionTextArea.badgeOffsetX,
-      canvasProperties.height - settings.interactionTextArea.height + settings.interactionTextArea.badgeOffsetY
+      settings.interactionTextArea.x + settings.interactionTextArea.badgeOffsetX,
+      settings.interactionTextArea.y + settings.interactionTextArea.badgeOffsetY
     );
   }
 
   drawConversation(ctx) {
-    let y = canvasProperties.height - settings.interactionTextArea.height + settings.interactionTextArea.badgeOffsetY * 2;
+    let y = settings.interactionTextArea.y + settings.interactionTextArea.badgeOffsetY * 2;
     ctx.font = settings.fonts.small;
     ctx.fillStyle = colours.white;
     let lines = [];
@@ -97,7 +97,7 @@ class Interaction extends Scene {
     });
 
     lines.forEach((line, index) => {
-      ctx.fillText(line, settings.interactionTextArea.badgeOffsetX, y + index * settings.interactionTextArea.lineHeight);
+      ctx.fillText(line, settings.interactionTextArea.x + settings.interactionTextArea.badgeOffsetX, y + index * settings.interactionTextArea.lineHeight);
     });
 
     this.chunkedLines = lines;
@@ -105,8 +105,7 @@ class Interaction extends Scene {
 
   drawOptions(ctx) {
     let y =
-      canvasProperties.height -
-      settings.interactionTextArea.height +
+      settings.interactionTextArea.y +
       settings.interactionTextArea.optionsOffsetY +
       this.chunkedLines.length * settings.interactionTextArea.lineHeight;
     ctx.font = settings.fonts.small;
@@ -114,13 +113,13 @@ class Interaction extends Scene {
     this.conversationOptions.forEach((conversationOption, index) => {
       ctx.fillText(
         conversationOption.value,
-        settings.interactionTextArea.optionsOffsetX,
+        settings.interactionTextArea.x + settings.interactionTextArea.optionsOffsetX,
         y + index * settings.interactionTextArea.optionHeight
       );
       if (index === this.selectedConversationOption) {
         ctx.strokeStyle = colours.white;
         ctx.strokeRect(
-          settings.interactionTextArea.optionsOffsetX - settings.interactionTextArea.optionHeight / 2,
+          settings.interactionTextArea.x + settings.interactionTextArea.optionsOffsetX - settings.interactionTextArea.optionHeight / 2,
           y + index * settings.interactionTextArea.optionHeight - settings.interactionTextArea.optionHeight / 1.5,
           settings.interactionTextArea.width - settings.interactionTextArea.optionsOffsetX,
           settings.interactionTextArea.optionHeight
