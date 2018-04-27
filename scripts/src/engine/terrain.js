@@ -122,4 +122,4 @@ class CoastalSands extends Terrain {
   }
 }
 
-export { Blank, Grass, Water, VerticalRoad, HorizontalRoad, Wall, Doorway, WoodenFloor, CoastalSands };
+export { Terrain, Blank, Grass, Water, VerticalRoad, HorizontalRoad, Wall, Doorway, WoodenFloor, CoastalSands };

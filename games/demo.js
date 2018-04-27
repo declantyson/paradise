@@ -1887,8 +1887,8 @@ class Interaction extends Scene {
  *
  *  Paradise/Person
  *  Declan Tyson
- *  v0.0.64
- *  26/02/2018
+ *  v0.0.65
+ *  27/04/2018
  *
  */
 
@@ -2021,13 +2021,12 @@ class Person {
   }
 
   addResponse(key, lines, mood = 'neutral') {
-    if(typeof lines === 'string') lines = [lines];
+    if (typeof lines === 'string') lines = [lines];
     this.responses[key] = { mood, lines, conversationOptions: [] };
   }
 
   importInteractionData() {
     // TODO: Import data from json file
-
   }
 }
 
@@ -2167,8 +2166,8 @@ class Quazar extends Person {
  *
  *  Paradise/Person/Zenith
  *  Declan Tyson
- *  v0.0.58
- *  18/02/2018
+ *  v0.0.65
+ *  27/04/2018
  *
  */
 
@@ -2188,7 +2187,7 @@ class Zenith extends Person {
 
     this.resetInteractions();
 
-    this.addConversationOption('Nice', 'Happy Valentine\'s Day!');
+    this.addConversationOption('Nice', "Happy Valentine's Day!");
     this.addResponse('Nice', '<3');
     this.addConversationOption('Goodbye', 'Goodbye', 'Nice');
 
@@ -2199,9 +2198,9 @@ class Zenith extends Person {
     this.addConversationOption('Mean', 'LOL!');
     this.addResponse('Mean', 'Why you little fuckface!', 'angry');
     this.addConversationOption('Confront', 'What are you going to do about it?', 'Mean');
-    this.addResponse('Confront', 'Nothing, I guess... I\'m so lonely...');
+    this.addResponse('Confront', "Nothing, I guess... I'm so lonely...");
     this.addConversationOption('Regret', 'I feel a bit bad now.', 'Confront');
-    this.addConversationOption('Laughter', 'Who\'s the fuckface now, eh?', 'Confront');
+    this.addConversationOption('Laughter', "Who's the fuckface now, eh?", 'Confront');
   }
 }
 
@@ -2393,6 +2392,7 @@ const choosePeople = () => {
  */
 
 // Engine
+// Demo data
 
 /*
  *

@@ -17,6 +17,7 @@ import { choosePeople } from './engine/people';
 import { Person } from './engine/person';
 import { Portrait } from './engine/portrait';
 import { Scene } from './engine/scene';
+import { Terrain } from './engine/terrain';
 import { terrains } from './engine/terrains';
 import { Util } from './engine/util';
 import { WorldMap } from './engine/worldmap';
@@ -74,4 +75,5 @@ export {
   Dresser,
   Rug,
   Tree,
+  Terrain
 };
