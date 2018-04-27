@@ -2,10 +2,12 @@
  *
  *  Paradise/Settings
  *  Declan Tyson
- *  v0.0.53
- *  16/02/2018
+ *  v0.0.67
+ *  27/04/2018
  *
  */
+
+import { colours } from './constants';
 
 export let settings = {
   fps: 45,
@@ -39,6 +41,19 @@ export let canvasProperties = {
     x: settings.terrain.tileSize * settings.terrain.tilesWide / 2 - settings.terrain.tileSize / 2,
     y: settings.terrain.tileSize * settings.terrain.tilesHigh / 2 - settings.terrain.tileSize / 2,
   },
+};
+
+settings.interactionTextArea = {
+  width: canvasProperties.width / 2,
+  height: canvasProperties.height,
+  background: colours.black,
+  alpha: 0.4,
+  badgeOffsetX: 20,
+  badgeOffsetY: 40,
+  optionsOffsetX: 40,
+  optionsOffsetY: 100,
+  optionHeight: 36,
+  lineHeight: 22,
 };
 
 export let tileStep = settings.terrain.tileSize / settings.character.stepsPerTile;

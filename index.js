@@ -67,56 +67,10 @@ class Util {
 
 /*
  *
- *  Paradise/Settings
- *  Declan Tyson
- *  v0.0.53
- *  16/02/2018
- *
- */
-
-let settings = {
-  fps: 45,
-  actionTimeoutLimit: 2,
-  terrain: {
-    tileSize: 20,
-    tilesWide: 50,
-    tilesHigh: 28,
-  },
-  character: {
-    spriteSize: 40,
-    frameSize: 64,
-    frameCount: 9,
-    stepsPerTile: 5,
-  },
-  personCount: 4,
-  defaultInhabitanceSize: 2,
-  loadingScreen: '/oob/loading.png',
-  minLoadingTime: 2000,
-  fonts: {
-    large: '24px "Roboto Condensed"',
-    small: '16px "Roboto"',
-    death: '24px "Permanent Marker"',
-  },
-};
-
-let canvasProperties = {
-  width: settings.terrain.tileSize * settings.terrain.tilesWide,
-  height: settings.terrain.tileSize * settings.terrain.tilesHigh,
-  centerPoint: {
-    x: settings.terrain.tileSize * settings.terrain.tilesWide / 2 - settings.terrain.tileSize / 2,
-    y: settings.terrain.tileSize * settings.terrain.tilesHigh / 2 - settings.terrain.tileSize / 2,
-  },
-};
-
-let tileStep = settings.terrain.tileSize / settings.character.stepsPerTile;
-let portraitWidth = canvasProperties.width / 2;
-
-/*
- *
  *  Paradise/Constants
  *  Declan Tyson
- *  v0.0.60
- *  19/02/2018
+ *  v0.0.66
+ *  27/04/2018
  *
  */
 
@@ -140,26 +94,11 @@ const directions = {
   right: 'right',
 };
 
-const interactionTextArea = {
-  width: canvasProperties.width / 2,
-  height: canvasProperties.height,
-  background: colours.black,
-  alpha: 0.4,
-  badgeOffsetX: 20,
-  badgeOffsetY: 40,
-  optionsOffsetX: 40,
-  optionsOffsetY: 100,
-  optionHeight: 36,
-  lineHeight: 22,
-};
-
 const genders = {
   male: 'M',
   female: 'F',
   alien: 'A',
 };
-
-
 
 const posessivePronouns = {
   M: 'his',
@@ -200,6 +139,65 @@ class Item {
     this.colour = colours.black;
   }
 }
+
+/*
+ *
+ *  Paradise/Settings
+ *  Declan Tyson
+ *  v0.0.67
+ *  27/04/2018
+ *
+ */
+
+let settings = {
+  fps: 45,
+  actionTimeoutLimit: 2,
+  terrain: {
+    tileSize: 20,
+    tilesWide: 50,
+    tilesHigh: 28,
+  },
+  character: {
+    spriteSize: 40,
+    frameSize: 64,
+    frameCount: 9,
+    stepsPerTile: 5,
+  },
+  personCount: 4,
+  defaultInhabitanceSize: 2,
+  loadingScreen: '/oob/loading.png',
+  minLoadingTime: 2000,
+  fonts: {
+    large: '24px "Roboto Condensed"',
+    small: '16px "Roboto"',
+    death: '24px "Permanent Marker"',
+  },
+};
+
+let canvasProperties = {
+  width: settings.terrain.tileSize * settings.terrain.tilesWide,
+  height: settings.terrain.tileSize * settings.terrain.tilesHigh,
+  centerPoint: {
+    x: settings.terrain.tileSize * settings.terrain.tilesWide / 2 - settings.terrain.tileSize / 2,
+    y: settings.terrain.tileSize * settings.terrain.tilesHigh / 2 - settings.terrain.tileSize / 2,
+  },
+};
+
+settings.interactionTextArea = {
+  width: canvasProperties.width / 2,
+  height: canvasProperties.height,
+  background: colours.black,
+  alpha: 0.4,
+  badgeOffsetX: 20,
+  badgeOffsetY: 40,
+  optionsOffsetX: 40,
+  optionsOffsetY: 100,
+  optionHeight: 36,
+  lineHeight: 22,
+};
+
+let tileStep = settings.terrain.tileSize / settings.character.stepsPerTile;
+let portraitWidth = canvasProperties.width / 2;
 
 /*
  *
@@ -1103,6 +1101,7 @@ class TownHall extends GroveStreetTemplate {
  *  07/02/2018
  *
  */
+
 class Village extends Locale {
   constructor(player, people) {
     super(player, people);
@@ -1168,18 +1167,18 @@ class ObjectInteraction extends Scene {
   drawConversationTextArea(ctx) {
     ctx.rect(
       0,
-      canvasProperties.height - interactionTextArea.height,
-      interactionTextArea.width,
-      interactionTextArea.height
+      canvasProperties.height - settings.interactionTextArea.height,
+      settings.interactionTextArea.width,
+      settings.interactionTextArea.height
     );
-    ctx.fillStyle = interactionTextArea.background;
-    ctx.globalAlpha = interactionTextArea.alpha;
+    ctx.fillStyle = settings.interactionTextArea.background;
+    ctx.globalAlpha = settings.interactionTextArea.alpha;
     ctx.fill();
     ctx.globalAlpha = 1;
   }
 
   drawConversation(ctx) {
-    let y = canvasProperties.height - interactionTextArea.height + interactionTextArea.badgeOffsetY;
+    let y = canvasProperties.height - settings.interactionTextArea.height + settings.interactionTextArea.badgeOffsetY;
     ctx.font = settings.fonts.small;
     ctx.fillStyle = colours.white;
     let lines = [];
@@ -1200,7 +1199,7 @@ class ObjectInteraction extends Scene {
     });
 
     lines.forEach((line, index) => {
-      ctx.fillText(line, interactionTextArea.badgeOffsetX, y + index * interactionTextArea.lineHeight);
+      ctx.fillText(line, settings.interactionTextArea.badgeOffsetX, y + index * settings.interactionTextArea.lineHeight);
     });
 
     this.chunkedLines = lines;
@@ -1209,25 +1208,25 @@ class ObjectInteraction extends Scene {
   drawOptions(ctx) {
     let y =
       canvasProperties.height -
-      interactionTextArea.height +
-      interactionTextArea.optionsOffsetY -
-      interactionTextArea.badgeOffsetY +
-      this.chunkedLines.length * interactionTextArea.lineHeight;
+      settings.interactionTextArea.height +
+      settings.interactionTextArea.optionsOffsetY -
+      settings.interactionTextArea.badgeOffsetY +
+      this.chunkedLines.length * settings.interactionTextArea.lineHeight;
     ctx.font = settings.fonts.small;
     ctx.fillStyle = colours.white;
     this.conversationOptions.forEach((conversationOption, index) => {
       ctx.fillText(
         conversationOption.value,
-        interactionTextArea.optionsOffsetX,
-        y + index * interactionTextArea.optionHeight
+        settings.interactionTextArea.optionsOffsetX,
+        y + index * settings.interactionTextArea.optionHeight
       );
       if (index === this.selectedConversationOption) {
         ctx.strokeStyle = colours.white;
         ctx.strokeRect(
-          interactionTextArea.optionsOffsetX - interactionTextArea.optionHeight / 2,
-          y + index * interactionTextArea.optionHeight - interactionTextArea.optionHeight / 1.5,
-          interactionTextArea.width - interactionTextArea.optionsOffsetX,
-          interactionTextArea.optionHeight
+          settings.interactionTextArea.optionsOffsetX - settings.interactionTextArea.optionHeight / 2,
+          y + index * settings.interactionTextArea.optionHeight - settings.interactionTextArea.optionHeight / 1.5,
+          settings.interactionTextArea.width - settings.interactionTextArea.optionsOffsetX,
+          settings.interactionTextArea.optionHeight
         );
       }
     });
@@ -1782,12 +1781,12 @@ class Interaction extends Scene {
   drawConversationTextArea(ctx) {
     ctx.rect(
       0,
-      canvasProperties.height - interactionTextArea.height,
-      interactionTextArea.width,
-      interactionTextArea.height
+      canvasProperties.height - settings.interactionTextArea.height,
+      settings.interactionTextArea.width,
+      settings.interactionTextArea.height
     );
-    ctx.fillStyle = interactionTextArea.background;
-    ctx.globalAlpha = interactionTextArea.alpha;
+    ctx.fillStyle = settings.interactionTextArea.background;
+    ctx.globalAlpha = settings.interactionTextArea.alpha;
     ctx.fill();
     ctx.globalAlpha = 1;
   }
@@ -1797,13 +1796,13 @@ class Interaction extends Scene {
     ctx.fillStyle = colours.white;
     ctx.fillText(
       this.person.name,
-      interactionTextArea.badgeOffsetX,
-      canvasProperties.height - interactionTextArea.height + interactionTextArea.badgeOffsetY
+      settings.interactionTextArea.badgeOffsetX,
+      canvasProperties.height - settings.interactionTextArea.height + settings.interactionTextArea.badgeOffsetY
     );
   }
 
   drawConversation(ctx) {
-    let y = canvasProperties.height - interactionTextArea.height + interactionTextArea.badgeOffsetY * 2;
+    let y = canvasProperties.height - settings.interactionTextArea.height + settings.interactionTextArea.badgeOffsetY * 2;
     ctx.font = settings.fonts.small;
     ctx.fillStyle = colours.white;
     let lines = [];
@@ -1824,7 +1823,7 @@ class Interaction extends Scene {
     });
 
     lines.forEach((line, index) => {
-      ctx.fillText(line, interactionTextArea.badgeOffsetX, y + index * interactionTextArea.lineHeight);
+      ctx.fillText(line, settings.interactionTextArea.badgeOffsetX, y + index * settings.interactionTextArea.lineHeight);
     });
 
     this.chunkedLines = lines;
@@ -1833,24 +1832,24 @@ class Interaction extends Scene {
   drawOptions(ctx) {
     let y =
       canvasProperties.height -
-      interactionTextArea.height +
-      interactionTextArea.optionsOffsetY +
-      this.chunkedLines.length * interactionTextArea.lineHeight;
+      settings.interactionTextArea.height +
+      settings.interactionTextArea.optionsOffsetY +
+      this.chunkedLines.length * settings.interactionTextArea.lineHeight;
     ctx.font = settings.fonts.small;
     ctx.fillStyle = colours.white;
     this.conversationOptions.forEach((conversationOption, index) => {
       ctx.fillText(
         conversationOption.value,
-        interactionTextArea.optionsOffsetX,
-        y + index * interactionTextArea.optionHeight
+        settings.interactionTextArea.optionsOffsetX,
+        y + index * settings.interactionTextArea.optionHeight
       );
       if (index === this.selectedConversationOption) {
         ctx.strokeStyle = colours.white;
         ctx.strokeRect(
-          interactionTextArea.optionsOffsetX - interactionTextArea.optionHeight / 2,
-          y + index * interactionTextArea.optionHeight - interactionTextArea.optionHeight / 1.5,
-          interactionTextArea.width - interactionTextArea.optionsOffsetX,
-          interactionTextArea.optionHeight
+          settings.interactionTextArea.optionsOffsetX - settings.interactionTextArea.optionHeight / 2,
+          y + index * settings.interactionTextArea.optionHeight - settings.interactionTextArea.optionHeight / 1.5,
+          settings.interactionTextArea.width - settings.interactionTextArea.optionsOffsetX,
+          settings.interactionTextArea.optionHeight
         );
       }
     });
@@ -2396,8 +2395,5 @@ const choosePeople = () => {
  *  15/02/2018
  *
  */
-
-// Engine
-// Demo data
 
 export { StartGame, Interaction, Item, Locale, Inhabitance, Interior, Player, choosePeople, Person, Scene, terrains, Util, WorldMap, Decorative, Renderer, Game, Portrait, settings, canvasProperties, tileStep, portraitWidth, startingMaps, chooseStartingMap, people, Evelyn, Jill, John, Neil, Pauline, Petey, Quazar, Zenith, Dresser, Rug, Tree, Terrain };

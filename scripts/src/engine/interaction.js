@@ -10,7 +10,7 @@
 import { Util } from './util';
 
 import { Scene } from './scene';
-import { interactionTextArea, colours } from '../constants';
+import { colours } from '../constants';
 import { settings, canvasProperties } from '../settings';
 
 class Interaction extends Scene {
@@ -55,12 +55,12 @@ class Interaction extends Scene {
   drawConversationTextArea(ctx) {
     ctx.rect(
       0,
-      canvasProperties.height - interactionTextArea.height,
-      interactionTextArea.width,
-      interactionTextArea.height
+      canvasProperties.height - settings.interactionTextArea.height,
+      settings.interactionTextArea.width,
+      settings.interactionTextArea.height
     );
-    ctx.fillStyle = interactionTextArea.background;
-    ctx.globalAlpha = interactionTextArea.alpha;
+    ctx.fillStyle = settings.interactionTextArea.background;
+    ctx.globalAlpha = settings.interactionTextArea.alpha;
     ctx.fill();
     ctx.globalAlpha = 1;
   }
@@ -70,13 +70,13 @@ class Interaction extends Scene {
     ctx.fillStyle = colours.white;
     ctx.fillText(
       this.person.name,
-      interactionTextArea.badgeOffsetX,
-      canvasProperties.height - interactionTextArea.height + interactionTextArea.badgeOffsetY
+      settings.interactionTextArea.badgeOffsetX,
+      canvasProperties.height - settings.interactionTextArea.height + settings.interactionTextArea.badgeOffsetY
     );
   }
 
   drawConversation(ctx) {
-    let y = canvasProperties.height - interactionTextArea.height + interactionTextArea.badgeOffsetY * 2;
+    let y = canvasProperties.height - settings.interactionTextArea.height + settings.interactionTextArea.badgeOffsetY * 2;
     ctx.font = settings.fonts.small;
     ctx.fillStyle = colours.white;
     let lines = [];
@@ -97,7 +97,7 @@ class Interaction extends Scene {
     });
 
     lines.forEach((line, index) => {
-      ctx.fillText(line, interactionTextArea.badgeOffsetX, y + index * interactionTextArea.lineHeight);
+      ctx.fillText(line, settings.interactionTextArea.badgeOffsetX, y + index * settings.interactionTextArea.lineHeight);
     });
 
     this.chunkedLines = lines;
@@ -106,24 +106,24 @@ class Interaction extends Scene {
   drawOptions(ctx) {
     let y =
       canvasProperties.height -
-      interactionTextArea.height +
-      interactionTextArea.optionsOffsetY +
-      this.chunkedLines.length * interactionTextArea.lineHeight;
+      settings.interactionTextArea.height +
+      settings.interactionTextArea.optionsOffsetY +
+      this.chunkedLines.length * settings.interactionTextArea.lineHeight;
     ctx.font = settings.fonts.small;
     ctx.fillStyle = colours.white;
     this.conversationOptions.forEach((conversationOption, index) => {
       ctx.fillText(
         conversationOption.value,
-        interactionTextArea.optionsOffsetX,
-        y + index * interactionTextArea.optionHeight
+        settings.interactionTextArea.optionsOffsetX,
+        y + index * settings.interactionTextArea.optionHeight
       );
       if (index === this.selectedConversationOption) {
         ctx.strokeStyle = colours.white;
         ctx.strokeRect(
-          interactionTextArea.optionsOffsetX - interactionTextArea.optionHeight / 2,
-          y + index * interactionTextArea.optionHeight - interactionTextArea.optionHeight / 1.5,
-          interactionTextArea.width - interactionTextArea.optionsOffsetX,
-          interactionTextArea.optionHeight
+          settings.interactionTextArea.optionsOffsetX - settings.interactionTextArea.optionHeight / 2,
+          y + index * settings.interactionTextArea.optionHeight - settings.interactionTextArea.optionHeight / 1.5,
+          settings.interactionTextArea.width - settings.interactionTextArea.optionsOffsetX,
+          settings.interactionTextArea.optionHeight
         );
       }
     });

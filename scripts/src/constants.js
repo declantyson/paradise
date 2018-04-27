@@ -2,12 +2,10 @@
  *
  *  Paradise/Constants
  *  Declan Tyson
- *  v0.0.60
- *  19/02/2018
+ *  v0.0.66
+ *  27/04/2018
  *
  */
-
-import { canvasProperties } from './settings';
 
 export const colours = {
   black: '#000000',
@@ -27,19 +25,6 @@ export const directions = {
   down: 'down',
   left: 'left',
   right: 'right',
-};
-
-export const interactionTextArea = {
-  width: canvasProperties.width / 2,
-  height: canvasProperties.height,
-  background: colours.black,
-  alpha: 0.4,
-  badgeOffsetX: 20,
-  badgeOffsetY: 40,
-  optionsOffsetX: 40,
-  optionsOffsetY: 100,
-  optionHeight: 36,
-  lineHeight: 22,
 };
 
 export const genders = {

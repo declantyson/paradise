@@ -75,5 +75,5 @@ export {
   Dresser,
   Rug,
   Tree,
-  Terrain
+  Terrain,
 };
