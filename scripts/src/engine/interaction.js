@@ -2,7 +2,7 @@
  *
  *  Paradise/Scene-Interaction
  *  Declan Tyson
- *  v0.0.68
+ *  v0.0.69
  *  28/04/2018
  *
  */
@@ -86,7 +86,7 @@ class Interaction extends Scene {
         let chunks = line.split(/( )/),
           chunkedLine = '';
         chunks.forEach(chunk => {
-          if (chunkedLine.length + chunk.length > 60) {
+          if (chunkedLine.length + chunk.length > settings.interactionTextArea.lineLength) {
             lines.push(chunkedLine);
             chunkedLine = '';
           }

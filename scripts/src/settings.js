@@ -2,7 +2,7 @@
  *
  *  Paradise/Settings
  *  Declan Tyson
- *  v0.0.67
+ *  v0.0.69
  *  27/04/2018
  *
  */
@@ -56,6 +56,7 @@ settings.interactionTextArea = {
   optionsOffsetY: 100,
   optionHeight: 36,
   lineHeight: 22,
+  lineLength: 60,
 };
 
 export let tileStep = settings.terrain.tileSize / settings.character.stepsPerTile;

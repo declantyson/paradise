@@ -139,7 +139,7 @@
    *
    *  Paradise/Settings
    *  Declan Tyson
-   *  v0.0.67
+   *  v0.0.69
    *  27/04/2018
    *
    */
@@ -191,6 +191,7 @@
     optionsOffsetY: 100,
     optionHeight: 36,
     lineHeight: 22,
+    lineLength: 60,
   };
 
   let tileStep = settings.terrain.tileSize / settings.character.stepsPerTile;
@@ -1730,7 +1731,7 @@
    *
    *  Paradise/Scene-Interaction
    *  Declan Tyson
-   *  v0.0.68
+   *  v0.0.69
    *  28/04/2018
    *
    */
@@ -1808,7 +1809,7 @@
           let chunks = line.split(/( )/),
             chunkedLine = '';
           chunks.forEach(chunk => {
-            if (chunkedLine.length + chunk.length > 60) {
+            if (chunkedLine.length + chunk.length > settings.interactionTextArea.lineLength) {
               lines.push(chunkedLine);
               chunkedLine = '';
             }
