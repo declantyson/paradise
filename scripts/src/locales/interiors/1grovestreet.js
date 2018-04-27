@@ -11,19 +11,19 @@ import { Islands } from '../islands';
 import { GroveStreetTemplate } from './grovestreethouse';
 
 class GroveStreet1 extends GroveStreetTemplate {
-    constructor(player, people, inhabitance) {
-        super(player, people, inhabitance);
+  constructor(player, people, inhabitance) {
+    super(player, people, inhabitance);
 
-        this.id = 'GroveStreet1';
-        this.entryPoints.frontDoor = { x: 36, y: 36 };
+    this.id = 'GroveStreet1';
+    this.entryPoints.frontDoor = { x: 36, y: 36 };
 
-        this.entrances[37][36] = {
-            locale: new Islands(player, people),
-            entryPoint: 'groveStreet1'
-        };
+    this.entrances[37][36] = {
+      locale: new Islands(player, people),
+      entryPoint: 'groveStreet1',
+    };
 
-        this.terrainPaint(37, 36, 1, 1, 'WoodenFloor');
-    }
+    this.terrainPaint(37, 36, 1, 1, 'WoodenFloor');
+  }
 }
 
 export { GroveStreet1 };

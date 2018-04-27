@@ -13,21 +13,21 @@ import { canvasProperties } from '../settings';
 import '../enemies/enemydirectory';
 
 class Encounter extends Scene {
-    constructor(enemies) {
-        super();
+  constructor(enemies) {
+    super();
 
-        this.enemies = [];
-        let self = this;
-        enemies.forEach((enemy) => {
-             self.enemies.push(new window.enemies[enemy]());
-        });
-    }
+    this.enemies = [];
+    let self = this;
+    enemies.forEach(enemy => {
+      self.enemies.push(new window.enemies[enemy]());
+    });
+  }
 
-    draw(ctx) {
-        ctx.strokeStyle = colours.black;
-        ctx.rect(0, 0, canvasProperties.width, canvasProperties.height);
-        ctx.fill();
-    }
+  draw(ctx) {
+    ctx.strokeStyle = colours.black;
+    ctx.rect(0, 0, canvasProperties.width, canvasProperties.height);
+    ctx.fill();
+  }
 }
 
 export { Encounter };

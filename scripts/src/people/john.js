@@ -11,16 +11,16 @@ import { genders } from '../constants';
 import { Person } from '../engine/person';
 
 class John extends Person {
-    constructor() {
-        super('John', genders.male);
+  constructor() {
+    super('John', genders.male);
 
-        this.relationships = {
-            'Jill' : {
-                description : 'Wife',
-                value: 45
-            }
-        };
-    }
+    this.relationships = {
+      Jill: {
+        description: 'Wife',
+        value: 45,
+      },
+    };
+  }
 }
 
 export { John };

@@ -8,36 +8,34 @@
  */
 
 class Scene {
-    constructor() {
-        this.actions = {
-            up:     this.empty,
-            down:   this.empty,
-            left:   this.empty,
-            right:  this.empty,
-            action: this.empty,
-            back:   this.empty
-        };
-        this.keyHeld = false;
-    }
+  constructor() {
+    this.actions = {
+      up: this.empty,
+      down: this.empty,
+      left: this.empty,
+      right: this.empty,
+      action: this.empty,
+      back: this.empty,
+    };
+    this.keyHeld = false;
+  }
 
-    empty() {
-        return null;
-    }
+  empty() {
+    return null;
+  }
 
-    doActions(action) {
-        if(!this.game || !action) return;
-        this.game.triggerActionTimeout();
+  doActions(action) {
+    if (!this.game || !action) return;
+    this.game.triggerActionTimeout();
 
-        this.actions[action]();
-    }
+    this.actions[action]();
+  }
 
-    draw(ctx) {
+  draw(ctx) {}
 
-    }
-
-    setGame(game) {
-        this.game = game;
-    }
+  setGame(game) {
+    this.game = game;
+  }
 }
 
 export { Scene };

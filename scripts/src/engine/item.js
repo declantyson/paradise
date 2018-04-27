@@ -11,11 +11,11 @@ import { Util } from './util';
 import { colours } from '../constants';
 
 class Item {
-    constructor(name, description) {
-        this.name = name;
-        this.description = description;
-        this.colour = colours.black;
-    }
+  constructor(name, description) {
+    this.name = name;
+    this.description = description;
+    this.colour = colours.black;
+  }
 }
 
 export { Item };

@@ -16,28 +16,28 @@ import { GroveStreet1 } from './interiors/1grovestreet';
 import { GroveStreet2 } from './interiors/2grovestreet';
 import { GroveStreet3 } from './interiors/3grovestreet';
 import { GroveStreet4 } from './interiors/4grovestreet';
-import { TownHall } from "./interiors/townhall";
+import { TownHall } from './interiors/townhall';
 import { BallManor } from './interiors/ballmanor';
 
 export const startingMaps = {
-    'Village' : Village,
-    'Islands' : Islands
+  Village: Village,
+  Islands: Islands,
 };
 
 export const locales = {
-    'Village' : Village,
-    'Islands' : Islands,
-    'GroveStreet1' : GroveStreet1,
-    'GroveStreet2' : GroveStreet2,
-    'GroveStreet3' : GroveStreet3,
-    'GroveStreet4' : GroveStreet4,
-    'BallManor' : BallManor,
-    'TownHall' : TownHall
+  Village: Village,
+  Islands: Islands,
+  GroveStreet1: GroveStreet1,
+  GroveStreet2: GroveStreet2,
+  GroveStreet3: GroveStreet3,
+  GroveStreet4: GroveStreet4,
+  BallManor: BallManor,
+  TownHall: TownHall,
 };
 
 export const chooseStartingMap = () => {
-    let locale = Util.pickRandomProperty(startingMaps);
-    Util.log('Choosing starting map...');
-    Util.log(`Map is ${locale}.`);
-    return locale;
+  let locale = Util.pickRandomProperty(startingMaps);
+  Util.log('Choosing starting map...');
+  Util.log(`Map is ${locale}.`);
+  return locale;
 };

@@ -13,22 +13,22 @@ import { Dresser } from '../decorative/dresser';
 import { Rug } from '../decorative/rug';
 
 class BallManor extends GroveStreetTemplate {
-    constructor(player, people, inhabitance) {
-        super(player, people, inhabitance);
+  constructor(player, people, inhabitance) {
+    super(player, people, inhabitance);
 
-        this.id = 'BallManor';
-        this.entryPoints.frontDoor = { x: 36, y: 36 };
+    this.id = 'BallManor';
+    this.entryPoints.frontDoor = { x: 36, y: 36 };
 
-        this.entrances[36][37] = {
-            locale: new Islands(player, people),
-            entryPoint: 'ballManor'
-        };
+    this.entrances[36][37] = {
+      locale: new Islands(player, people),
+      entryPoint: 'ballManor',
+    };
 
-        this.terrainPaint(36, 37, 1, 1, 'WoodenFloor');
+    this.terrainPaint(36, 37, 1, 1, 'WoodenFloor');
 
-        this.addDecoration(new Dresser(26, 26));
-        this.addDecoration(new Rug(32, 32));
-    }
+    this.addDecoration(new Dresser(26, 26));
+    this.addDecoration(new Rug(32, 32));
+  }
 }
 
 export { BallManor };

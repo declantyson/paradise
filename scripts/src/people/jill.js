@@ -7,21 +7,20 @@
  *
  */
 
-
 import { genders } from '../constants';
 import { Person } from '../engine/person';
 
 class Jill extends Person {
-    constructor() {
-        super('Jill', genders.female);
+  constructor() {
+    super('Jill', genders.female);
 
-        this.relationships = {
-            'John' : {
-                description : 'Husband',
-                value: 45
-            }
-        };
-    }
+    this.relationships = {
+      John: {
+        description: 'Husband',
+        value: 45,
+      },
+    };
+  }
 }
 
 export { Jill };

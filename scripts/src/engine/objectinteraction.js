@@ -12,113 +12,132 @@ import { interactionTextArea, colours } from '../constants';
 import { settings, canvasProperties } from '../settings';
 
 class ObjectInteraction extends Scene {
-    constructor(decoration) {
-        super();
+  constructor(decoration) {
+    super();
 
-        this.decoration = decoration;
+    this.decoration = decoration;
 
-        // calculate these values based on mood etc....;
-        this.lines = this.decoration.lines || [];
-        this.conversationOptions = this.decoration.conversationOptions || [];
+    // calculate these values based on mood etc....;
+    this.lines = this.decoration.lines || [];
+    this.conversationOptions = this.decoration.conversationOptions || [];
 
-        this.selectedConversationOption = 0;
+    this.selectedConversationOption = 0;
 
-        this.keyHeld = true;
-        this.exiting = false;
+    this.keyHeld = true;
+    this.exiting = false;
 
-        this.actions.up = this.previousOption.bind(this);
-        this.actions.down = this.nextOption.bind(this);
-        this.actions.action = this.sendResponse.bind(this);
-    }
+    this.actions.up = this.previousOption.bind(this);
+    this.actions.down = this.nextOption.bind(this);
+    this.actions.action = this.sendResponse.bind(this);
+  }
 
-    draw(ctx) {
-        // World map should be overlaid
-        this.worldMap.draw(ctx);
+  draw(ctx) {
+    // World map should be overlaid
+    this.worldMap.draw(ctx);
 
-        if(!this.game.keyHeld) this.keyHeld = false;
+    if (!this.game.keyHeld) this.keyHeld = false;
 
-        this.drawConversationTextArea(ctx);
-        this.drawConversation(ctx);
-        this.drawOptions(ctx);
-    }
+    this.drawConversationTextArea(ctx);
+    this.drawConversation(ctx);
+    this.drawOptions(ctx);
+  }
 
-    drawConversationTextArea(ctx) {
-        ctx.rect(0, canvasProperties.height - interactionTextArea.height, interactionTextArea.width, interactionTextArea.height);
-        ctx.fillStyle = interactionTextArea.background;
-        ctx.globalAlpha = interactionTextArea.alpha;
-        ctx.fill();
-        ctx.globalAlpha = 1;
-    }
+  drawConversationTextArea(ctx) {
+    ctx.rect(
+      0,
+      canvasProperties.height - interactionTextArea.height,
+      interactionTextArea.width,
+      interactionTextArea.height
+    );
+    ctx.fillStyle = interactionTextArea.background;
+    ctx.globalAlpha = interactionTextArea.alpha;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  }
 
-    drawConversation(ctx) {
-        let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.badgeOffsetY);
-        ctx.font = settings.fonts.small;
-        ctx.fillStyle = colours.white;
-        let lines = [];
-        this.lines.forEach((line) => {
-            if(line.length < 60) lines.push(line);
-            else {
-                let chunks = line.split(/( )/),
-                    chunkedLine = '';
-                chunks.forEach((chunk) => {
-                    if(chunkedLine.length + chunk.length > 60) {
-                        lines.push(chunkedLine);
-                        chunkedLine = '';
-                    }
-                    chunkedLine += chunk;
-                });
-                lines.push(chunkedLine);
-            }
+  drawConversation(ctx) {
+    let y = canvasProperties.height - interactionTextArea.height + interactionTextArea.badgeOffsetY;
+    ctx.font = settings.fonts.small;
+    ctx.fillStyle = colours.white;
+    let lines = [];
+    this.lines.forEach(line => {
+      if (line.length < 60) lines.push(line);
+      else {
+        let chunks = line.split(/( )/),
+          chunkedLine = '';
+        chunks.forEach(chunk => {
+          if (chunkedLine.length + chunk.length > 60) {
+            lines.push(chunkedLine);
+            chunkedLine = '';
+          }
+          chunkedLine += chunk;
         });
+        lines.push(chunkedLine);
+      }
+    });
 
-        lines.forEach((line, index) => {
-            ctx.fillText(line, interactionTextArea.badgeOffsetX, y + (index * interactionTextArea.lineHeight));
-        });
+    lines.forEach((line, index) => {
+      ctx.fillText(line, interactionTextArea.badgeOffsetX, y + index * interactionTextArea.lineHeight);
+    });
 
-        this.chunkedLines = lines;
-    }
+    this.chunkedLines = lines;
+  }
 
-    drawOptions(ctx) {
-        let y = canvasProperties.height - interactionTextArea.height + (interactionTextArea.optionsOffsetY) - interactionTextArea.badgeOffsetY + (this.chunkedLines.length * interactionTextArea.lineHeight);
-        ctx.font = settings.fonts.small;
-        ctx.fillStyle = colours.white;
-        this.conversationOptions.forEach((conversationOption, index) => {
-            ctx.fillText(conversationOption.value, interactionTextArea.optionsOffsetX, y + (index * interactionTextArea.optionHeight));
-            if(index === this.selectedConversationOption) {
-                ctx.strokeStyle = colours.white;
-                ctx.strokeRect(interactionTextArea.optionsOffsetX - interactionTextArea.optionHeight / 2,  y + (index * interactionTextArea.optionHeight) - (interactionTextArea.optionHeight / 1.5), interactionTextArea.width - interactionTextArea.optionsOffsetX, interactionTextArea.optionHeight);
-            }
-        });
-    }
+  drawOptions(ctx) {
+    let y =
+      canvasProperties.height -
+      interactionTextArea.height +
+      interactionTextArea.optionsOffsetY -
+      interactionTextArea.badgeOffsetY +
+      this.chunkedLines.length * interactionTextArea.lineHeight;
+    ctx.font = settings.fonts.small;
+    ctx.fillStyle = colours.white;
+    this.conversationOptions.forEach((conversationOption, index) => {
+      ctx.fillText(
+        conversationOption.value,
+        interactionTextArea.optionsOffsetX,
+        y + index * interactionTextArea.optionHeight
+      );
+      if (index === this.selectedConversationOption) {
+        ctx.strokeStyle = colours.white;
+        ctx.strokeRect(
+          interactionTextArea.optionsOffsetX - interactionTextArea.optionHeight / 2,
+          y + index * interactionTextArea.optionHeight - interactionTextArea.optionHeight / 1.5,
+          interactionTextArea.width - interactionTextArea.optionsOffsetX,
+          interactionTextArea.optionHeight
+        );
+      }
+    });
+  }
 
-    nextOption() {
-        if(this.keyHeld) return;
+  nextOption() {
+    if (this.keyHeld) return;
 
-        if(this.selectedConversationOption < this.conversationOptions.length - 1) this.selectedConversationOption++;
-        this.keyHeld = true;
-    }
+    if (this.selectedConversationOption < this.conversationOptions.length - 1) this.selectedConversationOption++;
+    this.keyHeld = true;
+  }
 
-    previousOption() {
-        if(this.keyHeld) return;
+  previousOption() {
+    if (this.keyHeld) return;
 
-        if(this.selectedConversationOption > 0) this.selectedConversationOption--;
-        this.keyHeld = true;
-    }
+    if (this.selectedConversationOption > 0) this.selectedConversationOption--;
+    this.keyHeld = true;
+  }
 
-    sendResponse() {
-        if(this.keyHeld) return;
+  sendResponse() {
+    if (this.keyHeld) return;
 
-        this.decoration.sendResponse(this.conversationOptions[this.selectedConversationOption], this);
-        this.keyHeld = true;
-    }
+    this.decoration.sendResponse(this.conversationOptions[this.selectedConversationOption], this);
+    this.keyHeld = true;
+  }
 
-    returnToWorldMap() {
-        this.worldMap.leavingInteraction = true;
-        setTimeout(() => {
-            this.worldMap.leavingInteraction = false;
-        }, 250);
-        this.game.setScene(this.worldMap);
-    }
+  returnToWorldMap() {
+    this.worldMap.leavingInteraction = true;
+    setTimeout(() => {
+      this.worldMap.leavingInteraction = false;
+    }, 250);
+    this.game.setScene(this.worldMap);
+  }
 }
 
 export { ObjectInteraction };

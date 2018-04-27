@@ -10,17 +10,17 @@
 import { Util, startingMaps, chooseStartingMap, choosePeople, Player, WorldMap, StartGame } from './main';
 
 window.startGame = (locale, people) => {
-    Util.clearLog();
+  Util.clearLog();
 
-    locale = startingMaps[locale] || startingMaps[chooseStartingMap()];
-    people = people || choosePeople();
+  locale = startingMaps[locale] || startingMaps[chooseStartingMap()];
+  people = people || choosePeople();
 
-    let player = new Player(),
-        worldMap = new WorldMap(player);
+  let player = new Player(),
+    worldMap = new WorldMap(player);
 
-    StartGame(locale, people, player, worldMap);
+  StartGame(locale, people, player, worldMap);
 
-    document.querySelectorAll('button').forEach((button) => {
-        button.blur();
-    });
+  document.querySelectorAll('button').forEach(button => {
+    button.blur();
+  });
 };

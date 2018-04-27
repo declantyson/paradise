@@ -7,14 +7,13 @@
  *
  */
 
-
 import { genders } from '../constants';
-import {Person} from '../engine/person';
+import { Person } from '../engine/person';
 
 class Evelyn extends Person {
-    constructor() {
-        super('Evelyn', genders.female);
-    }
+  constructor() {
+    super('Evelyn', genders.female);
+  }
 }
 
 export { Evelyn };

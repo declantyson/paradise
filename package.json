@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier --trailing-comma es5 --single-quote --print-width 120 --write 'scripts/src/{,!(assets)/**/}*.{js,scss}'"
   },
   "keywords": [],
   "author": "",
@@ -13,12 +14,9 @@
     "ejs": "^2.5.2",
     "express": "^4.14.0",
     "fs": "0.0.1-security",
-    "grunt": "^1.0.1",
-    "grunt-contrib-cssmin": "^1.0.2",
-    "grunt-contrib-jshint": "^1.0.0",
-    "grunt-contrib-sass": "^1.0.0",
-    "grunt-contrib-watch": "^1.0.0",
-    "grunt-notify": "^0.4.5",
     "rollup-plugin-commonjs": "^8.3.0"
+  },
+  "dependencies": {
+    "prettier": "^1.12.1"
   }
 }

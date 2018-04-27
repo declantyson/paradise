@@ -17,12 +17,12 @@ import { Quazar } from './quazar';
 import { Zenith } from './zenith';
 
 export let people = {
-    'Evelyn'  : Evelyn,
-    'Jill'    : Jill,
-    'John'    : John,
-    'Neil'    : Neil,
-    'Pauline' : Pauline,
-    'Petey'   : Petey,
-    'Quazar'  : Quazar,
-    'Zenith'  : Zenith
+  Evelyn: Evelyn,
+  Jill: Jill,
+  John: John,
+  Neil: Neil,
+  Pauline: Pauline,
+  Petey: Petey,
+  Quazar: Quazar,
+  Zenith: Zenith,
 };

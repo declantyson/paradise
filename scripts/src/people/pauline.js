@@ -11,9 +11,9 @@ import { genders } from '../constants';
 import { Person } from '../engine/person';
 
 class Pauline extends Person {
-    constructor() {
-        super('Pauline', genders.female);
-    }
+  constructor() {
+    super('Pauline', genders.female);
+  }
 }
 
 export { Pauline };

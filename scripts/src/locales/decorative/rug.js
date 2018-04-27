@@ -10,9 +10,9 @@
 import { Decorative } from '../../engine/decorative';
 
 class Rug extends Decorative {
-    constructor(x, y) {
-        super('Rug', 'a fancy rug', '/oob/Decorative/rug.png', x, y, [], false);
-    }
+  constructor(x, y) {
+    super('Rug', 'a fancy rug', '/oob/Decorative/rug.png', x, y, [], false);
+  }
 }
 
 export { Rug };

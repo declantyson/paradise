@@ -7,23 +7,23 @@
  *
  */
 
-import { Village } from "../village";
+import { Village } from '../village';
 import { GroveStreetTemplate } from './grovestreethouse';
 
 class TownHall extends GroveStreetTemplate {
-    constructor(player, people, inhabitance) {
-        super(player, people, inhabitance);
+  constructor(player, people, inhabitance) {
+    super(player, people, inhabitance);
 
-        this.id = 'TownHall';
-        this.entryPoints.frontDoor = { x: 36, y: 36 };
+    this.id = 'TownHall';
+    this.entryPoints.frontDoor = { x: 36, y: 36 };
 
-        this.entrances[36][37] = {
-            locale: new Village(player, people),
-            entryPoint: 'townHall'
-        };
+    this.entrances[36][37] = {
+      locale: new Village(player, people),
+      entryPoint: 'townHall',
+    };
 
-        this.terrainPaint(36, 37, 1, 1, 'WoodenFloor');
-    }
+    this.terrainPaint(36, 37, 1, 1, 'WoodenFloor');
+  }
 }
 
 export { TownHall };
