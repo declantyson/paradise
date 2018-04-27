@@ -2,8 +2,8 @@
  *
  *  Paradise/Scene-ObjectInteraction
  *  Declan Tyson
- *  v0.0.65
- *  26/02/2018
+ *  v0.0.67
+ *  27/04/2018
  *
  */
 
@@ -44,8 +44,8 @@ class ObjectInteraction extends Scene {
 
   drawConversationTextArea(ctx) {
     ctx.rect(
-      0,
-      canvasProperties.height - settings.interactionTextArea.height,
+      settings.interactionTextArea.x,
+      settings.interactionTextArea.y,
       settings.interactionTextArea.width,
       settings.interactionTextArea.height
     );

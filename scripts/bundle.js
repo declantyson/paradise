@@ -187,6 +187,8 @@ var Paradise = (function (exports) {
   };
 
   settings.interactionTextArea = {
+    x: 0,
+    y: 0,
     width: canvasProperties.width / 2,
     height: canvasProperties.height,
     background: colours.black,
@@ -1131,8 +1133,8 @@ var Paradise = (function (exports) {
    *
    *  Paradise/Scene-ObjectInteraction
    *  Declan Tyson
-   *  v0.0.65
-   *  26/02/2018
+   *  v0.0.67
+   *  27/04/2018
    *
    */
 
@@ -1169,8 +1171,8 @@ var Paradise = (function (exports) {
 
     drawConversationTextArea(ctx) {
       ctx.rect(
-        0,
-        canvasProperties.height - settings.interactionTextArea.height,
+        settings.interactionTextArea.x,
+        settings.interactionTextArea.y,
         settings.interactionTextArea.width,
         settings.interactionTextArea.height
       );
@@ -1737,8 +1739,8 @@ var Paradise = (function (exports) {
    *
    *  Paradise/Scene-Interaction
    *  Declan Tyson
-   *  v0.0.65
-   *  26/02/2018
+   *  v0.0.67
+   *  27/04/2018
    *
    */
 
@@ -1783,8 +1785,8 @@ var Paradise = (function (exports) {
 
     drawConversationTextArea(ctx) {
       ctx.rect(
-        0,
-        canvasProperties.height - settings.interactionTextArea.height,
+        settings.interactionTextArea.x,
+        settings.interactionTextArea.y,
         settings.interactionTextArea.width,
         settings.interactionTextArea.height
       );

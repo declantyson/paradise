@@ -179,6 +179,8 @@
   };
 
   settings.interactionTextArea = {
+    x: 0,
+    y: 0,
     width: canvasProperties.width / 2,
     height: canvasProperties.height,
     background: colours.black,
@@ -1122,8 +1124,8 @@
    *
    *  Paradise/Scene-ObjectInteraction
    *  Declan Tyson
-   *  v0.0.65
-   *  26/02/2018
+   *  v0.0.67
+   *  27/04/2018
    *
    */
 
@@ -1160,8 +1162,8 @@
 
     drawConversationTextArea(ctx) {
       ctx.rect(
-        0,
-        canvasProperties.height - settings.interactionTextArea.height,
+        settings.interactionTextArea.x,
+        settings.interactionTextArea.y,
         settings.interactionTextArea.width,
         settings.interactionTextArea.height
       );
@@ -1728,8 +1730,8 @@
    *
    *  Paradise/Scene-Interaction
    *  Declan Tyson
-   *  v0.0.65
-   *  26/02/2018
+   *  v0.0.67
+   *  27/04/2018
    *
    */
 
@@ -1774,8 +1776,8 @@
 
     drawConversationTextArea(ctx) {
       ctx.rect(
-        0,
-        canvasProperties.height - settings.interactionTextArea.height,
+        settings.interactionTextArea.x,
+        settings.interactionTextArea.y,
         settings.interactionTextArea.width,
         settings.interactionTextArea.height
       );

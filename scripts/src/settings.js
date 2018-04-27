@@ -44,6 +44,8 @@ export let canvasProperties = {
 };
 
 settings.interactionTextArea = {
+  x: 0,
+  y: 0,
   width: canvasProperties.width / 2,
   height: canvasProperties.height,
   background: colours.black,
