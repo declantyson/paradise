@@ -2,8 +2,8 @@
  *
  *  Paradise/Decorative
  *  Declan Tyson
- *  v0.0.59
- *  18/02/2018
+ *  v0.0.71
+ *  30/04/2018
  *
  */
 
@@ -91,6 +91,27 @@ class Decorative {
       interaction.lines = response.lines;
       interaction.conversationOptions = response.conversationOptions;
     }
+  }
+
+  resetInteractions() {
+    this.conversationOptions = [];
+    this.responses = {};
+  }
+
+  addConversationOption(key, value, parentKey = null) {
+    let destination = this.conversationOptions;
+    if (parentKey) destination = this.responses[parentKey].conversationOptions;
+
+    destination.push({ key, value, callback: () => {} });
+  }
+
+  addResponse(key, lines) {
+    if (typeof lines === 'string') lines = [lines];
+    this.responses[key] = { lines, conversationOptions: [] };
+  }
+
+  importInteractionData() {
+    // TODO: Import data from json file
   }
 }
 

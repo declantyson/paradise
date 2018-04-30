@@ -1355,6 +1355,27 @@ class Decorative {
       interaction.conversationOptions = response.conversationOptions;
     }
   }
+
+  resetInteractions() {
+    this.conversationOptions = [];
+    this.responses = {};
+  }
+
+  addConversationOption(key, value, parentKey = null) {
+    let destination = this.conversationOptions;
+    if (parentKey) destination = this.responses[parentKey].conversationOptions;
+
+    destination.push({ key, value, callback: () => {} });
+  }
+
+  addResponse(key, lines) {
+    if (typeof lines === 'string') lines = [lines];
+    this.responses[key] = { lines, conversationOptions: [] };
+  }
+
+  importInteractionData() {
+    // TODO: Import data from json file
+  }
 }
 
 /*
@@ -1538,55 +1559,19 @@ class Dresser extends Decorative {
   constructor(x, y) {
     super('Dresser', 'a fancy dresser', '/oob/Decorative/dresser.png', x, y, [false, false]);
     this.lines = [`It's a fancy dresser.`];
-    this.conversationOptions = [
-      {
-        key: 'Search',
-        value: 'Open the drawers',
-      },
-      {
-        key: 'FreakOut',
-        value: 'Touch the mysterious looking button',
-        callback: () => {
-          this.scream();
-        },
-      },
-      {
-        key: 'Leave',
-        value: "That's nice.",
-      },
-    ];
 
-    this.responses = {
-      Search: {
-        lines: ['You find nothing but a dead fly.', 'Hopefully he had a fulfilling life.'],
-        conversationOptions: [
-          {
-            key: 'Leave',
-            value: 'Shut the drawer and go elsewhere.',
-          },
-        ],
-      },
-      FreakOut: {
-        lines: ['Well that was horrifying.'],
-        conversationOptions: [
-          {
-            key: 'Leave',
-            value: 'Go elsewhere.',
-          },
-          {
-            key: 'FreakOut',
-            value: 'Press the button again',
-            callback: () => {
-              this.scream();
-            },
-          },
-        ],
-      },
-    };
-  }
+    this.resetInteractions();
 
-  scream() {
-    alert('Y O U H A V E N O P O W E R H E R E');
+    this.addConversationOption('Search', 'Open the drawers');
+    this.addResponse('Search', 'You find nothing but a dead fly. You hope he had a fulfilling life.');
+    this.addConversationOption('Leave', 'Shut the drawer and go elsewhere.', 'Search');
+
+    this.addConversationOption('FreakOut', 'Touch the mysterious looking button');
+    this.addResponse('FreakOut', 'You are now scarred for life.');
+    this.addConversationOption('FreakOut', 'Press the button again', 'FreakOut');
+    this.addConversationOption('Leave', 'Break the cycle', 'FreakOut');
+
+    this.addConversationOption('Leave', 'Indeed it is.');
   }
 }
 
@@ -2394,8 +2379,8 @@ const choosePeople = () => {
  *
  *  Paradise
  *  Declan Tyson
- *  v0.0.52
- *  15/02/2018
+ *  v0.0.70
+ *  30/04/2018
  *
  */
 
