@@ -2,14 +2,15 @@
  *
  *  Paradise
  *  Declan Tyson
- *  v0.0.52
- *  15/02/2018
+ *  v0.0.70
+ *  30/04/2018
  *
  */
 
 // Engine
 import { StartGame, Renderer, Game } from './engine/game';
 import { Interaction } from './engine/interaction';
+import { ObjectInteraction } from './engine/objectinteraction';
 import { Item } from './engine/item';
 import { Locale, Inhabitance, Interior } from './engine/locale';
 import { Player } from './engine/player';
@@ -42,6 +43,7 @@ import { Rug } from './locales/decorative/rug';
 export {
   StartGame,
   Interaction,
+  ObjectInteraction,
   Item,
   Locale,
   Inhabitance,

@@ -100,6 +100,8 @@ const genders = {
   alien: 'A',
 };
 
+
+
 const posessivePronouns = {
   M: 'his',
   F: 'her',
@@ -1104,7 +1106,6 @@ class TownHall extends GroveStreetTemplate {
  *  07/02/2018
  *
  */
-
 class Village extends Locale {
   constructor(player, people) {
     super(player, people);
@@ -2398,4 +2399,7 @@ const choosePeople = () => {
  *
  */
 
-export { StartGame, Interaction, Item, Locale, Inhabitance, Interior, Player, choosePeople, Person, Scene, terrains, Util, WorldMap, Decorative, Renderer, Game, Portrait, settings, canvasProperties, tileStep, portraitWidth, startingMaps, chooseStartingMap, people, Evelyn, Jill, John, Neil, Pauline, Petey, Quazar, Zenith, Dresser, Rug, Tree, Terrain };
+// Engine
+// Demo data
+
+export { StartGame, Interaction, ObjectInteraction, Item, Locale, Inhabitance, Interior, Player, choosePeople, Person, Scene, terrains, Util, WorldMap, Decorative, Renderer, Game, Portrait, settings, canvasProperties, tileStep, portraitWidth, startingMaps, chooseStartingMap, people, Evelyn, Jill, John, Neil, Pauline, Petey, Quazar, Zenith, Dresser, Rug, Tree, Terrain };
