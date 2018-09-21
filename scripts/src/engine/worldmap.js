@@ -2,8 +2,8 @@
  *
  *  Paradise/Scene-WorldMap
  *  Declan Tyson
- *  v0.0.64
- *  26/02/2018
+ *  v0.0.73
+ *  21/09/2018
  *
  */
 
@@ -198,18 +198,22 @@ class WorldMap extends Scene {
             ctx.fill();
             ctx.stroke();
           } else {
-            ctx.strokeStyle = null;
-            ctx.drawImage(
-              tile,
-              0,
-              0,
-              45,
-              45,
-              tileX - offsetX,
-              tileY - offsetY,
-              settings.terrain.tileSize,
-              settings.terrain.tileSize
-            );
+            try {
+              ctx.strokeStyle = null;
+              ctx.drawImage(
+                tile,
+                0,
+                0,
+                45,
+                45,
+                tileX - offsetX,
+                tileY - offsetY,
+                settings.terrain.tileSize,
+                settings.terrain.tileSize,
+              );
+            } catch(e) {
+              console.warn(e, tile);
+            }
           }
         }
       }

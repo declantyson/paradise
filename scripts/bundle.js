@@ -478,8 +478,8 @@ class Scene {
  *
  *  Paradise/Scene-WorldMap
  *  Declan Tyson
- *  v0.0.64
- *  26/02/2018
+ *  v0.0.73
+ *  21/09/2018
  *
  */
 
@@ -669,18 +669,22 @@ class WorldMap extends Scene {
             ctx.fill();
             ctx.stroke();
           } else {
-            ctx.strokeStyle = null;
-            ctx.drawImage(
-              tile,
-              0,
-              0,
-              45,
-              45,
-              tileX - offsetX,
-              tileY - offsetY,
-              settings.terrain.tileSize,
-              settings.terrain.tileSize
-            );
+            try {
+              ctx.strokeStyle = null;
+              ctx.drawImage(
+                tile,
+                0,
+                0,
+                45,
+                45,
+                tileX - offsetX,
+                tileY - offsetY,
+                settings.terrain.tileSize,
+                settings.terrain.tileSize,
+              );
+            } catch(e) {
+              console.warn(e, tile);
+            }
           }
         }
       }
@@ -2389,7 +2393,7 @@ const choosePeople = () => {
  *
  *  Paradise/Scene-Menu
  *  Declan Tyson
- *  v0.0.72
+ *  v0.0.73
  *  21/09/2018
  *
  */
@@ -2441,13 +2445,13 @@ class Menu extends Scene {
     this.menuItems.forEach((menuItems, index) => {
       ctx.fillText(
         menuItems.value,
-        this.optionsArea.optionsOffsetX,
+        this.optionsArea.x + this.optionsArea.optionsOffsetX,
         y + index * this.optionsArea.optionHeight
       );
       if (index === this.selectedMenuItem) {
         ctx.strokeStyle = colours.white;
         ctx.strokeRect(
-          this.optionsArea.optionsOffsetX - this.optionsArea.optionHeight / 2,
+          this.optionsArea.x + this.optionsArea.optionsOffsetX - this.optionsArea.optionHeight / 2,
           y + index * this.optionsArea.optionHeight - this.optionsArea.optionHeight / 1.5,
           this.optionsArea.width - this.optionsArea.optionsOffsetX,
           this.optionsArea.optionHeight
@@ -2493,7 +2497,15 @@ class Menu extends Scene {
 
 class TestMenu extends Menu {
   constructor() {
-    super('/img/loading.png');
+    super('/img/loading.png',  {
+      x: canvasProperties.width / 2,
+      y: 0,
+      width: canvasProperties.width / 2,
+      height: canvasProperties.height,
+      optionsOffsetX: 40,
+      optionsOffsetY: 250,
+      optionHeight: 36,
+    });
 
     this.addMenuItem('random', 'Start with random', () => {
       this.startGame();

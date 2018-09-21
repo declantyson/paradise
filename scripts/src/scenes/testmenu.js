@@ -12,12 +12,21 @@ import { choosePeople } from '../engine/people';
 import { Player } from '../engine/player';
 import { WorldMap } from '../engine/worldmap';
 import { Menu } from '../engine/menu';
+import { canvasProperties } from '../settings';
 
 import { startingMaps, chooseStartingMap } from '../locales/locales';
 
 class TestMenu extends Menu {
   constructor() {
-    super('/img/loading.png');
+    super('/img/loading.png',  {
+      x: canvasProperties.width / 2,
+      y: 0,
+      width: canvasProperties.width / 2,
+      height: canvasProperties.height,
+      optionsOffsetX: 40,
+      optionsOffsetY: 250,
+      optionHeight: 36,
+    });
 
     this.addMenuItem('random', 'Start with random', () => {
       this.startGame();

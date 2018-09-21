@@ -2,8 +2,8 @@
  *
  *  Paradise
  *  Declan Tyson
- *  v0.0.72
- *  21/09/2018
+ *  v0.0.73
+ *  16/09/2018
  *
  */
 
@@ -13,5 +13,5 @@ window.startGame = () => {
   Util.clearLog();
 
   let testMenu = new TestMenu();
-  StartGame(testMenu, null, null, null);
+  StartGame(testMenu);
 };
