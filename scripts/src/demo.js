@@ -2,25 +2,16 @@
  *
  *  Paradise
  *  Declan Tyson
- *  v0.0.55
- *  16/02/2018
+ *  v0.0.72
+ *  21/09/2018
  *
  */
 
-import { Util, startingMaps, chooseStartingMap, choosePeople, Player, WorldMap, StartGame } from './main';
+import { Util, TestMenu, StartGame } from './main';
 
-window.startGame = (locale, people) => {
+window.startGame = () => {
   Util.clearLog();
 
-  locale = startingMaps[locale] || startingMaps[chooseStartingMap()];
-  people = people || choosePeople();
-
-  let player = new Player(),
-    worldMap = new WorldMap(player);
-
-  StartGame(locale, people, player, worldMap);
-
-  document.querySelectorAll('button').forEach(button => {
-    button.blur();
-  });
+  let testMenu = new TestMenu();
+  StartGame(testMenu, null, null, null);
 };

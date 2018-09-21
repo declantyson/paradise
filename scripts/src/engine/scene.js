@@ -25,7 +25,7 @@ class Scene {
   }
 
   doActions(action) {
-    if (!this.game || !action) return;
+    if (!this.game || this.game.loading || !action) return;
     this.game.triggerActionTimeout();
 
     this.actions[action]();

@@ -124,7 +124,9 @@ class Locale {
       let person = thisPeople[i];
       if (pairedPeople.indexOf(person) === -1) {
         currentPairing.push(person);
+
         let thisPerson = new window.game.people[person]();
+
         Object.keys(thisPerson.relationships).forEach(relationship => {
           if (
             pairedRelationships.indexOf(thisPerson.relationships[relationship].description) !== -1 &&

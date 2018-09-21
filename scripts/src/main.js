@@ -2,8 +2,8 @@
  *
  *  Paradise
  *  Declan Tyson
- *  v0.0.70
- *  30/04/2018
+ *  v0.0.72
+ *  21/09/2018
  *
  */
 
@@ -23,6 +23,7 @@ import { terrains } from './engine/terrains';
 import { Util } from './engine/util';
 import { WorldMap } from './engine/worldmap';
 import { Decorative } from './engine/decorative';
+import { Menu } from './engine/menu';
 import { settings, canvasProperties, tileStep, portraitWidth } from './settings';
 
 // Demo data
@@ -39,6 +40,7 @@ import { Zenith } from './people/zenith';
 import { Tree } from './locales/decorative/tree';
 import { Dresser } from './locales/decorative/dresser';
 import { Rug } from './locales/decorative/rug';
+import { TestMenu } from './scenes/testmenu';
 
 export {
   StartGame,
@@ -78,4 +80,6 @@ export {
   Rug,
   Tree,
   Terrain,
+  Menu,
+  TestMenu,
 };

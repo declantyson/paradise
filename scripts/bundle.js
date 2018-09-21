@@ -461,7 +461,7 @@ class Scene {
   }
 
   doActions(action) {
-    if (!this.game || !action) return;
+    if (!this.game || this.game.loading || !action) return;
     this.game.triggerActionTimeout();
 
     this.actions[action]();
@@ -968,7 +968,9 @@ class Locale {
       let person = thisPeople[i];
       if (pairedPeople.indexOf(person) === -1) {
         currentPairing.push(person);
+
         let thisPerson = new window.game.people[person]();
+
         Object.keys(thisPerson.relationships).forEach(relationship => {
           if (
             pairedRelationships.indexOf(thisPerson.relationships[relationship].description) !== -1 &&
@@ -1273,8 +1275,8 @@ class ObjectInteraction extends Scene {
  *
  *  Paradise/Decorative
  *  Declan Tyson
- *  v0.0.59
- *  18/02/2018
+ *  v0.0.71
+ *  30/04/2018
  *
  */
 
@@ -1553,8 +1555,8 @@ class GroveStreet4 extends GroveStreetTemplate {
  *
  *  Paradise/Decorative/Dresser
  *  Declan Tyson
- *  v0.0.60
- *  19/02/2018
+ *  v0.0.71
+ *  30/04/2018
  *
  */
 
@@ -2224,12 +2226,12 @@ let people = {
  *
  *  Paradise/Game
  *  Declan Tyson
- *  v0.0.55
- *  16/02/2018
+ *  v0.0.72
+ *  21/09/2018
  *
  */
 
-const StartGame = (locale, activePeople, player, scene, renderer) => {
+const StartGame = (scene, locale = null, activePeople, player, renderer) => {
   clearInterval(window.drawScene);
 
   if (window.debug) {
@@ -2242,9 +2244,14 @@ const StartGame = (locale, activePeople, player, scene, renderer) => {
 
   let game = new Game(renderer, scene, canvasProperties.centerPoint);
   window.game = game;
-
-  game.locales = locales;
   game.people = people;
+  game.locales = locales;
+
+  if(!locale) {
+    game.loading = false;
+    return;
+  }
+
   let start = new locale(player, activePeople);
   game.scene.setCurrentLocale(start, 'beginningOfGame');
   game.initTerrainSprites();
@@ -2380,15 +2387,156 @@ const choosePeople = () => {
 
 /*
  *
+ *  Paradise/Scene-Menu
+ *  Declan Tyson
+ *  v0.0.72
+ *  21/09/2018
+ *
+ */
+
+class Menu extends Scene {
+  constructor(backgroundImageSrc, optionsArea) {
+    super();
+
+    this.selectedMenuItem = 0;
+
+    this.keyHeld = true;
+    this.menuItems = [];
+
+    let backgroundImage = new Image();
+    backgroundImage.src = backgroundImageSrc;
+    this.backgroundImage = backgroundImage;
+
+    this.actions.up = this.previousOption.bind(this);
+    this.actions.down = this.nextOption.bind(this);
+    this.actions.action = this.chooseOption.bind(this);
+    
+    this.optionsArea = optionsArea ||  {
+      x: 0,
+      y: 0,
+      width: canvasProperties.width / 2,
+      height: canvasProperties.height,
+      optionsOffsetX: 40,
+      optionsOffsetY: 100,
+      optionHeight: 36,
+    };
+  }
+
+  draw(ctx) {
+    if (!this.game.keyHeld) this.keyHeld = false;
+
+    ctx.drawImage(this.backgroundImage, 0, 0, canvasProperties.width, canvasProperties.height);
+    this.drawOptions(ctx);
+  }
+
+  drawOptions(ctx) {
+    let y =
+      canvasProperties.height -
+      this.optionsArea.height +
+      this.optionsArea.optionsOffsetY;
+
+    ctx.font = settings.fonts.small;
+    ctx.fillStyle = colours.white;
+
+    this.menuItems.forEach((menuItems, index) => {
+      ctx.fillText(
+        menuItems.value,
+        this.optionsArea.optionsOffsetX,
+        y + index * this.optionsArea.optionHeight
+      );
+      if (index === this.selectedMenuItem) {
+        ctx.strokeStyle = colours.white;
+        ctx.strokeRect(
+          this.optionsArea.optionsOffsetX - this.optionsArea.optionHeight / 2,
+          y + index * this.optionsArea.optionHeight - this.optionsArea.optionHeight / 1.5,
+          this.optionsArea.width - this.optionsArea.optionsOffsetX,
+          this.optionsArea.optionHeight
+        );
+      }
+    });
+  }
+
+  nextOption() {
+    if (this.keyHeld) return;
+
+    if (this.selectedMenuItem < this.menuItems.length - 1) this.selectedMenuItem++;
+    this.keyHeld = true;
+  }
+
+  previousOption() {
+    if (this.keyHeld) return;
+
+    if (this.selectedMenuItem > 0) this.selectedMenuItem--;
+    this.keyHeld = true;
+  }
+
+  chooseOption() {
+    if (this.keyHeld) return;
+
+    this.menuItems[this.selectedMenuItem].callback();
+    this.keyHeld = true;
+  }
+
+  addMenuItem(key, value, callback = () => {}) {
+    this.menuItems.push({ key, value, callback });
+  }
+}
+
+/*
+ *
+ *  Paradise/Scene-Menu/Test Menu
+ *  Declan Tyson
+ *  v0.0.72
+ *  21/09/2018
+ *
+ */
+
+class TestMenu extends Menu {
+  constructor() {
+    super('/img/loading.png');
+
+    this.addMenuItem('random', 'Start with random', () => {
+      this.startGame();
+    });
+
+    this.addMenuItem('random', 'Start with test data', () => {
+      this.startGame('Islands', ['Zenith', 'Quazar', 'Jill', 'John']);
+    });
+
+    this.addMenuItem('random', 'Start in full debug mode', () => {
+      window.debug = true;
+      this.startGame('Islands', ['Zenith', 'Quazar', 'Jill', 'John']);
+    });
+  }
+
+  startGame(locale, people) {
+    Util.clearLog();
+
+    locale = startingMaps[locale] || startingMaps[chooseStartingMap()];
+
+    people = people || choosePeople();
+
+    let player = new Player(),
+        worldMap = new WorldMap(player),
+        start = new locale(player, people);
+
+    window.game.setScene(worldMap);
+    window.game.scene.setCurrentLocale(start, 'beginningOfGame');
+    window.game.loading = true;
+    window.game.initTerrainSprites();
+  }
+}
+
+/*
+ *
  *  Paradise
  *  Declan Tyson
- *  v0.0.70
- *  30/04/2018
+ *  v0.0.72
+ *  21/09/2018
  *
  */
 
 // Engine
-// Demo data
 
 exports.StartGame = StartGame;
 exports.Interaction = Interaction;
@@ -2427,6 +2575,8 @@ exports.Dresser = Dresser;
 exports.Rug = Rug;
 exports.Tree = Tree;
 exports.Terrain = Terrain;
+exports.Menu = Menu;
+exports.TestMenu = TestMenu;
 
 return exports;
 
