@@ -2,14 +2,15 @@
  *
  *  Paradise/Locales/Islands
  *  Declan Tyson
- *  v0.0.54
- *  16/02/2018
+ *  v0.0.77
+ *  24/09/2018
  *
  */
 
 import { Inhabitance } from '../engine/locale';
 import { Locale } from '../engine/locale';
 import { Tree } from './decorative/tree';
+import { people } from '../people/people';
 
 class Islands extends Locale {
   constructor(player, people) {
@@ -52,6 +53,10 @@ class Islands extends Locale {
 
     this.drawInhabitances();
     this.assignPairedPeopleToInhabitancesRandomly(2);
+  }
+
+  onLoad() {
+    window.game.scene.startInteraction(new people.Quazar());
   }
 }
 

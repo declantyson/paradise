@@ -2,8 +2,8 @@
  *
  *  Paradise/Locales/Base
  *  Declan Tyson
- *  v0.0.56
- *  16/02/2018
+ *  v0.0.77
+ *  24/09/2018
  *
  */
 
@@ -160,6 +160,10 @@ class Locale {
     });
 
     this.assignPeopleToInhabitancesRandomly(maxPerInhabitancy, remainingPeople);
+  }
+
+  onLoad() {
+    // extend this function
   }
 }
 

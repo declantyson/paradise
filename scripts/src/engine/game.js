@@ -2,8 +2,8 @@
  *
  *  Paradise/Game
  *  Declan Tyson
- *  v0.0.72
- *  21/09/2018
+ *  v0.0.77
+ *  24/09/2018
  *
  */
 
@@ -98,6 +98,8 @@ export class Game {
         }
       }
     }
+
+    this.onLoad();
   }
 
   draw() {
@@ -143,5 +145,9 @@ export class Game {
       clearInterval(this.actionTimeoutCounterInterval);
       this.actionTimeout = settings.actionTimeoutLimit;
     }
+  }
+
+  onLoad() {
+    this.scene.onLoad();
   }
 }

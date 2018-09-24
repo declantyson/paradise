@@ -2,8 +2,8 @@
  *
  *  Paradise/Scene
  *  Declan Tyson
- *  v0.0.44
- *  13/02/2018
+ *  v0.0.77
+ *  24/09/2018
  *
  */
 
@@ -35,6 +35,11 @@ class Scene {
 
   setGame(game) {
     this.game = game;
+  }
+
+  onLoad() {
+    console.log('ballsacks')
+    // extend this function
   }
 }
 

@@ -2,8 +2,8 @@
  *
  *  Paradise/Scene-WorldMap
  *  Declan Tyson
- *  v0.0.73
- *  21/09/2018
+ *  v0.0.77
+ *  24/09/2018
  *
  */
 
@@ -376,6 +376,11 @@ class WorldMap extends Scene {
         this.localeMap[x][y] = terrain;
       }
     }
+  }
+
+  onLoad() {
+    // extend this function
+    this.locale.onLoad();
   }
 }
 

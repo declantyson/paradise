@@ -429,8 +429,8 @@ let terrains = {
  *
  *  Paradise/Scene
  *  Declan Tyson
- *  v0.0.44
- *  13/02/2018
+ *  v0.0.77
+ *  24/09/2018
  *
  */
 
@@ -463,14 +463,19 @@ class Scene {
   setGame(game) {
     this.game = game;
   }
+
+  onLoad() {
+    console.log('ballsacks');
+    // extend this function
+  }
 }
 
 /*
  *
  *  Paradise/Scene-WorldMap
  *  Declan Tyson
- *  v0.0.73
- *  21/09/2018
+ *  v0.0.77
+ *  24/09/2018
  *
  */
 
@@ -839,14 +844,19 @@ class WorldMap extends Scene {
       }
     }
   }
+
+  onLoad() {
+    // extend this function
+    this.locale.onLoad();
+  }
 }
 
 /*
  *
  *  Paradise/Locales/Base
  *  Declan Tyson
- *  v0.0.56
- *  16/02/2018
+ *  v0.0.77
+ *  24/09/2018
  *
  */
 
@@ -999,6 +1009,10 @@ class Locale {
     });
 
     this.assignPeopleToInhabitancesRandomly(maxPerInhabitancy, remainingPeople);
+  }
+
+  onLoad() {
+    // extend this function
   }
 }
 
@@ -1392,263 +1406,6 @@ class Tree extends Decorative {
     super('Tree', 'a tropical palm tree', '/oob/Decorative/tree.png', x, y, [true, false, true]);
   }
 }
-
-/*
- *
- *  Paradise/Locales/Islands
- *  Declan Tyson
- *  v0.0.54
- *  16/02/2018
- *
- */
-
-class Islands extends Locale {
-  constructor(player, people) {
-    super(player, people);
-
-    this.id = 'Islands';
-    this.entryPoints.beginningOfGame = { x: 57, y: 60 };
-    this.entryPoints.groveStreet1 = { x: 55, y: 60 };
-    this.entryPoints.groveStreet2 = { x: 58, y: 60 };
-    this.entryPoints.groveStreet3 = { x: 55, y: 63 };
-    this.entryPoints.groveStreet4 = { x: 58, y: 63 };
-    this.entryPoints.ballManor = { x: 56, y: 74 };
-
-    this.initialise(300, 300);
-
-    this.terrainPaint(0, 0, 300, 300, 'Water');
-    this.terrainPaint(52, 57, 11, 20, 'Grass');
-    this.terrainPaint(42, 35, 2, 8, 'Grass');
-    this.terrainPaint(57, 60, 1, 16, 'VerticalRoad');
-    this.terrainPaint(55, 60, 2, 1, 'HorizontalRoad');
-    this.terrainPaint(58, 60, 2, 1, 'HorizontalRoad');
-    this.terrainPaint(55, 63, 2, 1, 'HorizontalRoad');
-    this.terrainPaint(58, 63, 2, 1, 'HorizontalRoad');
-
-    this.terrainPaint(55, 70, 2, 1, 'HorizontalRoad');
-    this.terrainPaint(54, 70, 1, 5, 'VerticalRoad');
-    this.terrainPaint(55, 74, 2, 1, 'HorizontalRoad');
-
-    this.terrainPaint(52, 76, 11, 3, 'CoastalSands');
-
-    this.addDecoration(new Tree(60, 77));
-
-    this.inhabitances.push(
-      new Inhabitance('GroveStreet1', '1 Grove Street', 53, 59, { x: 54, y: 60 }),
-      new Inhabitance('GroveStreet2', '2 Grove Street', 60, 59, { x: 60, y: 60 }),
-      new Inhabitance('GroveStreet3', '3 Grove Street', 53, 62, { x: 54, y: 63 }),
-      new Inhabitance('GroveStreet4', '4 Grove Street', 60, 62, { x: 60, y: 63 }),
-      new Inhabitance('BallManor', 'Ball Manor', 55, 72, { x: 56, y: 73 })
-    );
-
-    this.drawInhabitances();
-    this.assignPairedPeopleToInhabitancesRandomly(2);
-  }
-}
-
-/*
- *
- *  Paradise/Locales/1 Grove Street
- *  Declan Tyson
- *  v0.0.54
- *  16/02/2018
- *
- */
-
-class GroveStreet1 extends GroveStreetTemplate {
-  constructor(player, people, inhabitance) {
-    super(player, people, inhabitance);
-
-    this.id = 'GroveStreet1';
-    this.entryPoints.frontDoor = { x: 36, y: 36 };
-
-    this.entrances[37][36] = {
-      locale: new Islands(player, people),
-      entryPoint: 'groveStreet1',
-    };
-
-    this.terrainPaint(37, 36, 1, 1, 'WoodenFloor');
-  }
-}
-
-/*
- *
- *  Paradise/Locales/1 Grove Street
- *  Declan Tyson
- *  v0.0.54
- *  16/02/2018
- *
- */
-
-class GroveStreet2 extends GroveStreetTemplate {
-  constructor(player, people, inhabitance) {
-    super(player, people, inhabitance);
-
-    this.id = 'GroveStreet2';
-    this.entryPoints.frontDoor = { x: 26, y: 36 };
-
-    this.entrances[25][36] = {
-      locale: new Islands(player, people),
-      entryPoint: 'groveStreet2',
-    };
-
-    this.terrainPaint(25, 36, 1, 1, 'WoodenFloor');
-  }
-}
-
-/*
- *
- *  Paradise/Locales/1 Grove Street
- *  Declan Tyson
- *  v0.0.54
- *  16/02/2018
- *
- */
-
-class GroveStreet3 extends GroveStreetTemplate {
-  constructor(player, people, inhabitance) {
-    super(player, people, inhabitance);
-
-    this.id = 'GroveStreet3';
-    this.entryPoints.frontDoor = { x: 36, y: 36 };
-
-    this.entrances[37][36] = {
-      locale: new Islands(player, people),
-      entryPoint: 'groveStreet3',
-    };
-
-    this.terrainPaint(37, 36, 1, 1, 'WoodenFloor');
-  }
-}
-
-/*
- *
- *  Paradise/Locales/4 Grove Street
- *  Declan Tyson
- *  v0.0.54
- *  16/02/2018
- *
- */
-
-class GroveStreet4 extends GroveStreetTemplate {
-  constructor(player, people, inhabitance) {
-    super(player, people, inhabitance);
-
-    this.id = 'GroveStreet4';
-    this.entryPoints.frontDoor = { x: 26, y: 36 };
-
-    this.entrances[25][36] = {
-      locale: new Islands(player, people),
-      entryPoint: 'groveStreet4',
-    };
-
-    this.terrainPaint(25, 36, 1, 1, 'WoodenFloor');
-  }
-}
-
-/*
- *
- *  Paradise/Decorative/Dresser
- *  Declan Tyson
- *  v0.0.71
- *  30/04/2018
- *
- */
-
-class Dresser extends Decorative {
-  constructor(x, y) {
-    super('Dresser', 'a fancy dresser', '/oob/Decorative/dresser.png', x, y, [false, false]);
-    this.lines = [`It's a fancy dresser.`];
-
-    this.resetInteractions();
-
-    this.addConversationOption('Search', 'Open the drawers');
-    this.addResponse('Search', 'You find nothing but a dead fly. You hope he had a fulfilling life.');
-    this.addConversationOption('Leave', 'Shut the drawer and go elsewhere.', 'Search');
-
-    this.addConversationOption('FreakOut', 'Touch the mysterious looking button');
-    this.addResponse('FreakOut', 'You are now scarred for life.');
-    this.addConversationOption('FreakOut', 'Press the button again', 'FreakOut');
-    this.addConversationOption('Leave', 'Break the cycle', 'FreakOut');
-
-    this.addConversationOption('Leave', 'Indeed it is.');
-  }
-}
-
-/*
- *
- *  Paradise/Decorative/Rug
- *  Declan Tyson
- *  v0.0.49
- *  15/02/2018
- *
- */
-
-class Rug extends Decorative {
-  constructor(x, y) {
-    super('Rug', 'a fancy rug', '/oob/Decorative/rug.png', x, y, [], false);
-  }
-}
-
-/*
- *
- *  Paradise/Locales/Ball Manor
- *  Declan Tyson
- *  v0.0.54
- *  16/02/2018
- *
- */
-
-class BallManor extends GroveStreetTemplate {
-  constructor(player, people, inhabitance) {
-    super(player, people, inhabitance);
-
-    this.id = 'BallManor';
-    this.entryPoints.frontDoor = { x: 36, y: 36 };
-
-    this.entrances[36][37] = {
-      locale: new Islands(player, people),
-      entryPoint: 'ballManor',
-    };
-
-    this.terrainPaint(36, 37, 1, 1, 'WoodenFloor');
-
-    this.addDecoration(new Dresser(26, 26));
-    this.addDecoration(new Rug(32, 32));
-  }
-}
-
-/*
- *
- *  Paradise/Locales
- *  Declan Tyson
- *  v0.0.49
- *  15/02/2018
- *
- */
-
-const startingMaps = {
-  Village: Village,
-  Islands: Islands,
-};
-
-const locales = {
-  Village: Village,
-  Islands: Islands,
-  GroveStreet1: GroveStreet1,
-  GroveStreet2: GroveStreet2,
-  GroveStreet3: GroveStreet3,
-  GroveStreet4: GroveStreet4,
-  BallManor: BallManor,
-  TownHall: TownHall,
-};
-
-const chooseStartingMap = () => {
-  let locale = Util.pickRandomProperty(startingMaps);
-  Util.log('Choosing starting map...');
-  Util.log(`Map is ${locale}.`);
-  return locale;
-};
 
 /*
  *
@@ -2219,10 +1976,271 @@ let people = {
 
 /*
  *
+ *  Paradise/Locales/Islands
+ *  Declan Tyson
+ *  v0.0.77
+ *  24/09/2018
+ *
+ */
+
+class Islands extends Locale {
+  constructor(player, people$$1) {
+    super(player, people$$1);
+
+    this.id = 'Islands';
+    this.entryPoints.beginningOfGame = { x: 57, y: 60 };
+    this.entryPoints.groveStreet1 = { x: 55, y: 60 };
+    this.entryPoints.groveStreet2 = { x: 58, y: 60 };
+    this.entryPoints.groveStreet3 = { x: 55, y: 63 };
+    this.entryPoints.groveStreet4 = { x: 58, y: 63 };
+    this.entryPoints.ballManor = { x: 56, y: 74 };
+
+    this.initialise(300, 300);
+
+    this.terrainPaint(0, 0, 300, 300, 'Water');
+    this.terrainPaint(52, 57, 11, 20, 'Grass');
+    this.terrainPaint(42, 35, 2, 8, 'Grass');
+    this.terrainPaint(57, 60, 1, 16, 'VerticalRoad');
+    this.terrainPaint(55, 60, 2, 1, 'HorizontalRoad');
+    this.terrainPaint(58, 60, 2, 1, 'HorizontalRoad');
+    this.terrainPaint(55, 63, 2, 1, 'HorizontalRoad');
+    this.terrainPaint(58, 63, 2, 1, 'HorizontalRoad');
+
+    this.terrainPaint(55, 70, 2, 1, 'HorizontalRoad');
+    this.terrainPaint(54, 70, 1, 5, 'VerticalRoad');
+    this.terrainPaint(55, 74, 2, 1, 'HorizontalRoad');
+
+    this.terrainPaint(52, 76, 11, 3, 'CoastalSands');
+
+    this.addDecoration(new Tree(60, 77));
+
+    this.inhabitances.push(
+      new Inhabitance('GroveStreet1', '1 Grove Street', 53, 59, { x: 54, y: 60 }),
+      new Inhabitance('GroveStreet2', '2 Grove Street', 60, 59, { x: 60, y: 60 }),
+      new Inhabitance('GroveStreet3', '3 Grove Street', 53, 62, { x: 54, y: 63 }),
+      new Inhabitance('GroveStreet4', '4 Grove Street', 60, 62, { x: 60, y: 63 }),
+      new Inhabitance('BallManor', 'Ball Manor', 55, 72, { x: 56, y: 73 })
+    );
+
+    this.drawInhabitances();
+    this.assignPairedPeopleToInhabitancesRandomly(2);
+  }
+
+  onLoad() {
+    window.game.scene.startInteraction(new people.Quazar());
+  }
+}
+
+/*
+ *
+ *  Paradise/Locales/1 Grove Street
+ *  Declan Tyson
+ *  v0.0.54
+ *  16/02/2018
+ *
+ */
+
+class GroveStreet1 extends GroveStreetTemplate {
+  constructor(player, people, inhabitance) {
+    super(player, people, inhabitance);
+
+    this.id = 'GroveStreet1';
+    this.entryPoints.frontDoor = { x: 36, y: 36 };
+
+    this.entrances[37][36] = {
+      locale: new Islands(player, people),
+      entryPoint: 'groveStreet1',
+    };
+
+    this.terrainPaint(37, 36, 1, 1, 'WoodenFloor');
+  }
+}
+
+/*
+ *
+ *  Paradise/Locales/1 Grove Street
+ *  Declan Tyson
+ *  v0.0.54
+ *  16/02/2018
+ *
+ */
+
+class GroveStreet2 extends GroveStreetTemplate {
+  constructor(player, people, inhabitance) {
+    super(player, people, inhabitance);
+
+    this.id = 'GroveStreet2';
+    this.entryPoints.frontDoor = { x: 26, y: 36 };
+
+    this.entrances[25][36] = {
+      locale: new Islands(player, people),
+      entryPoint: 'groveStreet2',
+    };
+
+    this.terrainPaint(25, 36, 1, 1, 'WoodenFloor');
+  }
+}
+
+/*
+ *
+ *  Paradise/Locales/1 Grove Street
+ *  Declan Tyson
+ *  v0.0.54
+ *  16/02/2018
+ *
+ */
+
+class GroveStreet3 extends GroveStreetTemplate {
+  constructor(player, people, inhabitance) {
+    super(player, people, inhabitance);
+
+    this.id = 'GroveStreet3';
+    this.entryPoints.frontDoor = { x: 36, y: 36 };
+
+    this.entrances[37][36] = {
+      locale: new Islands(player, people),
+      entryPoint: 'groveStreet3',
+    };
+
+    this.terrainPaint(37, 36, 1, 1, 'WoodenFloor');
+  }
+}
+
+/*
+ *
+ *  Paradise/Locales/4 Grove Street
+ *  Declan Tyson
+ *  v0.0.54
+ *  16/02/2018
+ *
+ */
+
+class GroveStreet4 extends GroveStreetTemplate {
+  constructor(player, people, inhabitance) {
+    super(player, people, inhabitance);
+
+    this.id = 'GroveStreet4';
+    this.entryPoints.frontDoor = { x: 26, y: 36 };
+
+    this.entrances[25][36] = {
+      locale: new Islands(player, people),
+      entryPoint: 'groveStreet4',
+    };
+
+    this.terrainPaint(25, 36, 1, 1, 'WoodenFloor');
+  }
+}
+
+/*
+ *
+ *  Paradise/Decorative/Dresser
+ *  Declan Tyson
+ *  v0.0.71
+ *  30/04/2018
+ *
+ */
+
+class Dresser extends Decorative {
+  constructor(x, y) {
+    super('Dresser', 'a fancy dresser', '/oob/Decorative/dresser.png', x, y, [false, false]);
+    this.lines = [`It's a fancy dresser.`];
+
+    this.resetInteractions();
+
+    this.addConversationOption('Search', 'Open the drawers');
+    this.addResponse('Search', 'You find nothing but a dead fly. You hope he had a fulfilling life.');
+    this.addConversationOption('Leave', 'Shut the drawer and go elsewhere.', 'Search');
+
+    this.addConversationOption('FreakOut', 'Touch the mysterious looking button');
+    this.addResponse('FreakOut', 'You are now scarred for life.');
+    this.addConversationOption('FreakOut', 'Press the button again', 'FreakOut');
+    this.addConversationOption('Leave', 'Break the cycle', 'FreakOut');
+
+    this.addConversationOption('Leave', 'Indeed it is.');
+  }
+}
+
+/*
+ *
+ *  Paradise/Decorative/Rug
+ *  Declan Tyson
+ *  v0.0.49
+ *  15/02/2018
+ *
+ */
+
+class Rug extends Decorative {
+  constructor(x, y) {
+    super('Rug', 'a fancy rug', '/oob/Decorative/rug.png', x, y, [], false);
+  }
+}
+
+/*
+ *
+ *  Paradise/Locales/Ball Manor
+ *  Declan Tyson
+ *  v0.0.54
+ *  16/02/2018
+ *
+ */
+
+class BallManor extends GroveStreetTemplate {
+  constructor(player, people, inhabitance) {
+    super(player, people, inhabitance);
+
+    this.id = 'BallManor';
+    this.entryPoints.frontDoor = { x: 36, y: 36 };
+
+    this.entrances[36][37] = {
+      locale: new Islands(player, people),
+      entryPoint: 'ballManor',
+    };
+
+    this.terrainPaint(36, 37, 1, 1, 'WoodenFloor');
+
+    this.addDecoration(new Dresser(26, 26));
+    this.addDecoration(new Rug(32, 32));
+  }
+}
+
+/*
+ *
+ *  Paradise/Locales
+ *  Declan Tyson
+ *  v0.0.49
+ *  15/02/2018
+ *
+ */
+
+const startingMaps = {
+  Village: Village,
+  Islands: Islands,
+};
+
+const locales = {
+  Village: Village,
+  Islands: Islands,
+  GroveStreet1: GroveStreet1,
+  GroveStreet2: GroveStreet2,
+  GroveStreet3: GroveStreet3,
+  GroveStreet4: GroveStreet4,
+  BallManor: BallManor,
+  TownHall: TownHall,
+};
+
+const chooseStartingMap = () => {
+  let locale = Util.pickRandomProperty(startingMaps);
+  Util.log('Choosing starting map...');
+  Util.log(`Map is ${locale}.`);
+  return locale;
+};
+
+/*
+ *
  *  Paradise/Game
  *  Declan Tyson
- *  v0.0.72
- *  21/09/2018
+ *  v0.0.77
+ *  24/09/2018
  *
  */
 
@@ -2308,6 +2326,8 @@ class Game {
         }
       }
     }
+
+    this.onLoad();
   }
 
   draw() {
@@ -2353,6 +2373,10 @@ class Game {
       clearInterval(this.actionTimeoutCounterInterval);
       this.actionTimeout = settings.actionTimeoutLimit;
     }
+  }
+
+  onLoad() {
+    this.scene.onLoad();
   }
 }
 
