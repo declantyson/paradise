@@ -2,14 +2,11 @@
  *
  *  Paradise/Game
  *  Declan Tyson
- *  v0.0.77
+ *  v0.0.78
  *  24/09/2018
  *
  */
 
-import * as input from './inputs';
-
-import { Item } from './item';
 import { Player } from './player';
 import { WorldMap } from './worldmap';
 import { locales } from '../locales/locales';
@@ -98,8 +95,6 @@ export class Game {
         }
       }
     }
-
-    this.onLoad();
   }
 
   draw() {

@@ -2,8 +2,8 @@
  *
  *  Paradise/Scene-Menu/Test Menu
  *  Declan Tyson
- *  v0.0.72
- *  21/09/2018
+ *  v0.0.78
+ *  24/09/2018
  *
  */
 
@@ -57,6 +57,8 @@ class TestMenu extends Menu {
     window.game.scene.setCurrentLocale(start, 'beginningOfGame');
     window.game.loading = true;
     window.game.initTerrainSprites();
+
+    window.game.onLoad();
   }
 }
 

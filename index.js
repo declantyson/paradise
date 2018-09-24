@@ -1,72 +1,5 @@
 /*
  *
- *  Paradise/Inputs
- *  Declan Tyson
- *  v0.0.21
- *  06/02/2018
- *
- */
-
-const actions = {
-  38: 'up',
-  40: 'down',
-  37: 'left',
-  39: 'right',
-  32: 'action',
-  27: 'back',
-};
-
-window.addEventListener('keydown', e => {
-  if (!actions[e.keyCode] || !window.game) return;
-  window.game.sendInput(actions[e.keyCode]);
-});
-
-window.addEventListener('keyup', e => {
-  if (!window.game) return;
-  window.game.sendInput(null);
-});
-
-/*
- *
- *  Paradise/Util
- *  Declan Tyson
- *  v0.0.53
- *  16/02/2018
- *
- */
-
-class Util {
-  static dieRoll(sides) {
-    return Math.floor(Math.random() * sides);
-  }
-
-  static pickRandomProperty(obj) {
-    let result,
-      count = 0;
-
-    for (let prop in obj) {
-      if (Math.random() < 1 / ++count) result = prop;
-    }
-    return result;
-  }
-
-  static log(str) {
-    let log = document.getElementById('log');
-    log.innerHTML += `${str}<hr/>`;
-    log.scrollTop = log.scrollHeight;
-  }
-
-  static clearLog() {
-    document.getElementById('log').innerHTML = '';
-  }
-
-  static capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
-}
-
-/*
- *
  *  Paradise/Constants
  *  Declan Tyson
  *  v0.0.66
@@ -124,23 +57,6 @@ const relationships = {
 };
 
 const pairedRelationships = [relationships.wife, relationships.husband, relationships.roommate];
-
-/*
- *
- *  Paradise/Item
- *  Declan Tyson
- *  v0.0.22
- *  06/02/2018
- *
- */
-
-class Item {
-  constructor(name, description) {
-    this.name = name;
-    this.description = description;
-    this.colour = colours.black;
-  }
-}
 
 /*
  *
@@ -854,6 +770,45 @@ class WorldMap extends Scene {
   onLoad() {
     // extend this function
     this.locale.onLoad();
+  }
+}
+
+/*
+ *
+ *  Paradise/Util
+ *  Declan Tyson
+ *  v0.0.53
+ *  16/02/2018
+ *
+ */
+
+class Util {
+  static dieRoll(sides) {
+    return Math.floor(Math.random() * sides);
+  }
+
+  static pickRandomProperty(obj) {
+    let result,
+      count = 0;
+
+    for (let prop in obj) {
+      if (Math.random() < 1 / ++count) result = prop;
+    }
+    return result;
+  }
+
+  static log(str) {
+    let log = document.getElementById('log');
+    log.innerHTML += `${str}<hr/>`;
+    log.scrollTop = log.scrollHeight;
+  }
+
+  static clearLog() {
+    document.getElementById('log').innerHTML = '';
+  }
+
+  static capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
   }
 }
 
@@ -2245,7 +2200,7 @@ const chooseStartingMap = () => {
  *
  *  Paradise/Game
  *  Declan Tyson
- *  v0.0.77
+ *  v0.0.78
  *  24/09/2018
  *
  */
@@ -2332,8 +2287,6 @@ class Game {
         }
       }
     }
-
-    this.onLoad();
   }
 
   draw() {
@@ -2383,6 +2336,23 @@ class Game {
 
   onLoad() {
     this.scene.onLoad();
+  }
+}
+
+/*
+ *
+ *  Paradise/Item
+ *  Declan Tyson
+ *  v0.0.22
+ *  06/02/2018
+ *
+ */
+
+class Item {
+  constructor(name, description) {
+    this.name = name;
+    this.description = description;
+    this.colour = colours.black;
   }
 }
 
@@ -2511,8 +2481,8 @@ class Menu extends Scene {
  *
  *  Paradise/Scene-Menu/Test Menu
  *  Declan Tyson
- *  v0.0.72
- *  21/09/2018
+ *  v0.0.78
+ *  24/09/2018
  *
  */
 
@@ -2557,6 +2527,8 @@ class TestMenu extends Menu {
     window.game.scene.setCurrentLocale(start, 'beginningOfGame');
     window.game.loading = true;
     window.game.initTerrainSprites();
+
+    window.game.onLoad();
   }
 }
 
