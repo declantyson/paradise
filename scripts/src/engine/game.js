@@ -2,10 +2,16 @@
  *
  *  Paradise/Game
  *  Declan Tyson
- *  v0.0.78
+ *  v0.0.79
  *  24/09/2018
  *
  */
+
+
+/* Do not remove these despite what IntelliJ says!! */
+import * as input from './inputs';
+import { Item } from './item';
+/* END Do not remove these despite what IntelliJ says!! */
 
 import { Player } from './player';
 import { WorldMap } from './worldmap';
