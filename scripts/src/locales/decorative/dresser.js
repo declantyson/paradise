@@ -2,8 +2,8 @@
  *
  *  Paradise/Decorative/Dresser
  *  Declan Tyson
- *  v0.0.71
- *  30/04/2018
+ *  v0.0.80
+ *  17/01/2019
  *
  */
 
@@ -20,12 +20,16 @@ class Dresser extends Decorative {
     this.addResponse('Search', 'You find nothing but a dead fly. You hope he had a fulfilling life.');
     this.addConversationOption('Leave', 'Shut the drawer and go elsewhere.', 'Search');
 
-    this.addConversationOption('FreakOut', 'Touch the mysterious looking button');
+    this.addConversationOption('FreakOut', 'Touch the mysterious looking button', null, this.scream);
     this.addResponse('FreakOut', 'You are now scarred for life.');
-    this.addConversationOption('FreakOut', 'Press the button again', 'FreakOut');
+    this.addConversationOption('FreakOut', 'Press the button again', 'FreakOut', this.scream);
     this.addConversationOption('Leave', 'Break the cycle', 'FreakOut');
 
     this.addConversationOption('Leave', 'Indeed it is.');
+  }
+
+  scream() {
+    alert('AHHAHHHHHH!!!!!!');
   }
 }
 

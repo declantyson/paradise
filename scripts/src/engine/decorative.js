@@ -2,8 +2,8 @@
  *
  *  Paradise/Decorative
  *  Declan Tyson
- *  v0.0.71
- *  30/04/2018
+ *  v0.0.80
+ *  17/01/2019
  *
  */
 
@@ -98,11 +98,11 @@ class Decorative {
     this.responses = {};
   }
 
-  addConversationOption(key, value, parentKey = null) {
+  addConversationOption(key, value, parentKey = null, callback = () => {}) {
     let destination = this.conversationOptions;
     if (parentKey) destination = this.responses[parentKey].conversationOptions;
 
-    destination.push({ key, value, callback: () => {} });
+    destination.push({ key, value, callback });
   }
 
   addResponse(key, lines) {

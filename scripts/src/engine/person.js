@@ -2,8 +2,8 @@
  *
  *  Paradise/Person
  *  Declan Tyson
- *  v0.0.65
- *  27/04/2018
+ *  v0.0.80
+ *  17/01/2019
  *
  */
 
@@ -134,11 +134,11 @@ class Person {
     this.responses = {};
   }
 
-  addConversationOption(key, value, parentKey = null) {
+  addConversationOption(key, value, parentKey = null, callback = () => {}) {
     let destination = this.conversationOptions;
     if (parentKey) destination = this.responses[parentKey].conversationOptions;
 
-    destination.push({ key, value, callback: () => {} });
+    destination.push({ key, value, callback });
   }
 
   addResponse(key, lines, mood = 'neutral') {

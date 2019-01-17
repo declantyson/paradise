@@ -1284,8 +1284,8 @@ class ObjectInteraction extends Scene {
  *
  *  Paradise/Decorative
  *  Declan Tyson
- *  v0.0.71
- *  30/04/2018
+ *  v0.0.80
+ *  17/01/2019
  *
  */
 
@@ -1375,11 +1375,11 @@ class Decorative {
     this.responses = {};
   }
 
-  addConversationOption(key, value, parentKey = null) {
+  addConversationOption(key, value, parentKey = null, callback = () => {}) {
     let destination = this.conversationOptions;
     if (parentKey) destination = this.responses[parentKey].conversationOptions;
 
-    destination.push({ key, value, callback: () => {} });
+    destination.push({ key, value, callback });
   }
 
   addResponse(key, lines) {
@@ -1637,8 +1637,8 @@ class Interaction extends Scene {
  *
  *  Paradise/Person
  *  Declan Tyson
- *  v0.0.65
- *  27/04/2018
+ *  v0.0.80
+ *  17/01/2019
  *
  */
 
@@ -1763,11 +1763,11 @@ class Person {
     this.responses = {};
   }
 
-  addConversationOption(key, value, parentKey = null) {
+  addConversationOption(key, value, parentKey = null, callback = () => {}) {
     let destination = this.conversationOptions;
     if (parentKey) destination = this.responses[parentKey].conversationOptions;
 
-    destination.push({ key, value, callback: () => {} });
+    destination.push({ key, value, callback });
   }
 
   addResponse(key, lines, mood = 'neutral') {
@@ -1916,8 +1916,8 @@ class Quazar extends Person {
  *
  *  Paradise/Person/Zenith
  *  Declan Tyson
- *  v0.0.65
- *  27/04/2018
+ *  v0.0.80
+ *  17/01/2019
  *
  */
 
@@ -1945,12 +1945,16 @@ class Zenith extends Person {
     this.addResponse('Truth', 'I know... :(');
     this.addConversationOption('Goodbye', 'Goodbye', 'Truth');
 
-    this.addConversationOption('Mean', 'LOL!');
+    this.addConversationOption('Mean', 'LOL!', null, this.scream);
     this.addResponse('Mean', 'Why you little fuckface!', 'angry');
     this.addConversationOption('Confront', 'What are you going to do about it?', 'Mean');
     this.addResponse('Confront', "Nothing, I guess... I'm so lonely...");
     this.addConversationOption('Regret', 'I feel a bit bad now.', 'Confront');
     this.addConversationOption('Laughter', "Who's the fuckface now, eh?", 'Confront');
+  }
+
+  scream() {
+    alert("!!!!");
   }
 }
 
@@ -2135,8 +2139,8 @@ class GroveStreet4 extends GroveStreetTemplate {
  *
  *  Paradise/Decorative/Dresser
  *  Declan Tyson
- *  v0.0.71
- *  30/04/2018
+ *  v0.0.80
+ *  17/01/2019
  *
  */
 
@@ -2151,12 +2155,16 @@ class Dresser extends Decorative {
     this.addResponse('Search', 'You find nothing but a dead fly. You hope he had a fulfilling life.');
     this.addConversationOption('Leave', 'Shut the drawer and go elsewhere.', 'Search');
 
-    this.addConversationOption('FreakOut', 'Touch the mysterious looking button');
+    this.addConversationOption('FreakOut', 'Touch the mysterious looking button', null, this.scream);
     this.addResponse('FreakOut', 'You are now scarred for life.');
-    this.addConversationOption('FreakOut', 'Press the button again', 'FreakOut');
+    this.addConversationOption('FreakOut', 'Press the button again', 'FreakOut', this.scream);
     this.addConversationOption('Leave', 'Break the cycle', 'FreakOut');
 
     this.addConversationOption('Leave', 'Indeed it is.');
+  }
+
+  scream() {
+    alert('AHHAHHHHHH!!!!!!');
   }
 }
 
