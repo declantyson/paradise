@@ -2,7 +2,7 @@
  *
  *  Paradise/Person
  *  Declan Tyson
- *  v0.0.91
+ *  v0.0.92
  *  21/10/2019
  *
  */
@@ -125,11 +125,12 @@ class Person {
   }
 
   setDirection(direction) {
+    const character = settings.get('character');
     if (direction === directions.left || direction === directions.right) {
-      if (this.stepX >= settings.character.stepsPerTile) this.stepX = settings.character.stepsPerTile - 1;
+      if (this.stepX >= character.stepsPerTile) this.stepX = character.stepsPerTile - 1;
       if (this.stepX < 0) this.stepX = 0;
     } else if (direction === directions.up || direction === directions.down) {
-      if (this.stepY >= settings.character.stepsPerTile) this.stepY = settings.character.stepsPerTile - 1;
+      if (this.stepY >= character.stepsPerTile) this.stepY = character.stepsPerTile - 1;
       if (this.stepY < 0) this.stepY = 0;
     }
 

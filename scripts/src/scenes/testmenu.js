@@ -12,12 +12,13 @@ import { choosePeople } from '../engine/people';
 import { Player } from '../engine/player';
 import { WorldMap } from '../engine/worldmap';
 import { Menu } from '../engine/menu';
-import { canvasProperties } from '../settings';
+import { settings } from '../settings';
 
 import { startingMaps, chooseStartingMap } from '../locales/locales';
 
 class TestMenu extends Menu {
   constructor() {
+    const canvasProperties = settings.canvasProperties();
     super('/img/loading.png',  {
       x: canvasProperties.width / 2,
       y: 0,

@@ -2,12 +2,12 @@
  *
  *  Paradise/Portrait
  *  Declan Tyson
- *  v0.0.46
- *  14/02/2018
+ *  v0.0.92
+ *  21/10/2019
  *
  */
 
-import { canvasProperties } from '../settings';
+import { settings } from '../settings';
 
 class Portrait {
   constructor(imageSrc) {
@@ -23,6 +23,8 @@ class Portrait {
   }
 
   draw(ctx) {
+    const canvasProperties = settings.canvasProperties();
+
     if (this.entering) this.enter();
     if (this.exiting) this.exit();
 

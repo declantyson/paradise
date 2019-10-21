@@ -147,12 +147,12 @@ var Paradise = (function (exports) {
    *
    *  Paradise/Settings
    *  Declan Tyson
-   *  v0.0.69
-   *  27/04/2018
+   *  v0.0.92
+   *  21/10/2019
    *
    */
 
-  let settings = {
+  let _settings = {
     fps: 45,
     actionTimeoutLimit: 2,
     terrain: {
@@ -177,16 +177,39 @@ var Paradise = (function (exports) {
     },
   };
 
-  let canvasProperties = {
-    width: settings.terrain.tileSize * settings.terrain.tilesWide,
-    height: settings.terrain.tileSize * settings.terrain.tilesHigh,
-    centerPoint: {
-      x: settings.terrain.tileSize * settings.terrain.tilesWide / 2 - settings.terrain.tileSize / 2,
-      y: settings.terrain.tileSize * settings.terrain.tilesHigh / 2 - settings.terrain.tileSize / 2,
+  const settings = {
+    get: setting => {
+      return _settings[setting];
+    },
+
+    set: (setting, value) => {
+      _settings[setting] = value;
+    },
+
+    canvasProperties: () => {
+      return {
+        width: _settings.terrain.tileSize * _settings.terrain.tilesWide,
+        height: _settings.terrain.tileSize * _settings.terrain.tilesHigh,
+        centerPoint: {
+          x: _settings.terrain.tileSize * _settings.terrain.tilesWide / 2 - _settings.terrain.tileSize / 2,
+          y: _settings.terrain.tileSize * _settings.terrain.tilesHigh / 2 - _settings.terrain.tileSize / 2,
+        },
+      };
+    },
+
+    tileStep: () => {
+      const terrain = _settings.terrain;
+      const character = _settings.character;
+      return terrain.tileSize / character.stepsPerTile;
+    },
+
+    portraitWidth: () => {
+      return settings.canvasProperties().width / 2;
     },
   };
 
-  settings.interactionTextArea = {
+  const canvasProperties = settings.canvasProperties();
+  settings.set('interactionTextArea', {
     x: 0,
     y: 0,
     width: canvasProperties.width / 2,
@@ -200,17 +223,14 @@ var Paradise = (function (exports) {
     optionHeight: 36,
     lineHeight: 22,
     lineLength: 60,
-  };
-
-  let tileStep = settings.terrain.tileSize / settings.character.stepsPerTile;
-  let portraitWidth = canvasProperties.width / 2;
+  });
 
   /*
    *
    *  Paradise/Player
    *  Declan Tyson
-   *  v0.0.41
-   *  13/02/2018
+   *  v0.0.92
+   *  21/10/2019
    *
    */
 
@@ -239,8 +259,9 @@ var Paradise = (function (exports) {
     }
 
     advanceFrame() {
-      let newSpriteX = this.sprite.x + settings.character.frameSize;
-      if (newSpriteX >= settings.character.frameSize * settings.character.frameCount) {
+      const character = settings.get('character');
+      let newSpriteX = this.sprite.x + character.frameSize;
+      if (newSpriteX >= character.frameSize * character.frameCount) {
         newSpriteX = 0;
       }
 
@@ -252,11 +273,12 @@ var Paradise = (function (exports) {
     }
 
     setPlacement(x, y, init = false) {
+      const character = settings.get('character');
       if (x !== this.x) {
-        if (this.stepX >= settings.character.stepsPerTile || this.stepX < 0 || init) {
+        if (this.stepX >= character.stepsPerTile || this.stepX < 0 || init) {
           this.x = x;
-          if (this.stepX >= settings.character.stepsPerTile) this.stepX = 0;
-          if (this.stepX < 0) this.stepX = settings.character.stepsPerTile - 1;
+          if (this.stepX >= character.stepsPerTile) this.stepX = 0;
+          if (this.stepX < 0) this.stepX = character.stepsPerTile - 1;
         } else {
           if (x > this.x) this.stepX++;
           if (x < this.x) this.stepX--;
@@ -264,10 +286,10 @@ var Paradise = (function (exports) {
       }
 
       if (y !== this.y) {
-        if (this.stepY >= settings.character.stepsPerTile || this.stepY < 0 || init) {
+        if (this.stepY >= character.stepsPerTile || this.stepY < 0 || init) {
           this.y = y;
-          if (this.stepY >= settings.character.stepsPerTile) this.stepY = 0;
-          if (this.stepY < 0) this.stepY = settings.character.stepsPerTile - 1;
+          if (this.stepY >= character.stepsPerTile) this.stepY = 0;
+          if (this.stepY < 0) this.stepY = character.stepsPerTile - 1;
         } else {
           if (y > this.y) this.stepY++;
           if (y < this.y) this.stepY--;
@@ -276,11 +298,12 @@ var Paradise = (function (exports) {
     }
 
     setDirection(direction) {
+      const character = settings.get('character');
       if (direction === directions.left || direction === directions.right) {
-        if (this.stepX >= settings.character.stepsPerTile) this.stepX = settings.character.stepsPerTile - 1;
+        if (this.stepX >= character.stepsPerTile) this.stepX = character.stepsPerTile - 1;
         if (this.stepX < 0) this.stepX = 0;
       } else if (direction === directions.up || direction === directions.down) {
-        if (this.stepY >= settings.character.stepsPerTile) this.stepY = settings.character.stepsPerTile - 1;
+        if (this.stepY >= character.stepsPerTile) this.stepY = character.stepsPerTile - 1;
         if (this.stepY < 0) this.stepY = 0;
       }
 
@@ -481,7 +504,7 @@ var Paradise = (function (exports) {
    *
    *  Paradise/Scene-WorldMap
    *  Declan Tyson
-   *  v0.0.91
+   *  v0.0.92
    *  21/10/2019
    *
    */
@@ -583,12 +606,13 @@ var Paradise = (function (exports) {
     }
 
     draw(ctx) {
+      const terrain = settings.get('terrain');
       this.game.redraw = true;
 
-      this.offsetX = this.player.x * settings.terrain.tileSize - this.game.centerPoint.x;
-      this.offsetY = this.player.y * settings.terrain.tileSize - this.game.centerPoint.y;
-      this.viewportStartX = this.player.x - settings.terrain.tilesWide / 2;
-      this.viewportStartY = this.player.y - settings.terrain.tilesHigh / 2;
+      this.offsetX = this.player.x * terrain.tileSize - this.game.centerPoint.x;
+      this.offsetY = this.player.y * terrain.tileSize - this.game.centerPoint.y;
+      this.viewportStartX = this.player.x - terrain.tilesWide / 2;
+      this.viewportStartY = this.player.y - terrain.tilesHigh / 2;
 
       this.drawLocale(ctx);
 
@@ -600,9 +624,12 @@ var Paradise = (function (exports) {
 
     drawPlayer(ctx) {
       // Player is always at center of screen
+      const terrain = settings.get('terrain');
+      const character = settings.get('character');
+      
       let sprite = this.player.sprite,
-        playerX = this.game.centerPoint.x - settings.terrain.tileSize / 2,
-        playerY = this.game.centerPoint.y - settings.terrain.tileSize;
+        playerX = this.game.centerPoint.x - terrain.tileSize / 2,
+        playerY = this.game.centerPoint.y - terrain.tileSize;
 
       ctx.drawImage(
         sprite.image,
@@ -612,8 +639,8 @@ var Paradise = (function (exports) {
         64,
         playerX,
         playerY,
-        settings.character.spriteSize,
-        settings.character.spriteSize
+        character.spriteSize,
+        character.spriteSize
       );
     }
 
@@ -640,6 +667,9 @@ var Paradise = (function (exports) {
     drawLocale(ctx) {
       if (!this.locale || this.game.loading) return;
 
+      const terrainSettings = settings.get('terrain');
+      const tileStep = settings.tileStep();
+
       let viewportStartX = this.viewportStartX - 1,
         viewportStartY = this.viewportStartY - 1;
 
@@ -648,8 +678,8 @@ var Paradise = (function (exports) {
       if (viewportStartX >= this.locale.width) viewportStartX = this.locale.width;
       if (viewportStartY >= this.locale.height) viewportStartY = this.locale.height;
 
-      let viewportEndX = viewportStartX + settings.terrain.tilesWide + 2,
-        viewportEndY = viewportStartY + settings.terrain.tilesHigh + 2;
+      let viewportEndX = viewportStartX + terrainSettings.tilesWide + 2,
+        viewportEndY = viewportStartY + terrainSettings.tilesHigh + 2;
 
       if (viewportEndX >= this.locale.width) viewportEndX = this.locale.width;
       if (viewportEndY >= this.locale.height) viewportEndY = this.locale.height;
@@ -658,8 +688,8 @@ var Paradise = (function (exports) {
         for (let y = viewportStartY; y <= viewportEndY; y++) {
           let terrain = this.localeMap[x][y];
           if (typeof terrain !== 'undefined') {
-            let tileX = x * settings.terrain.tileSize - this.offsetX,
-              tileY = y * settings.terrain.tileSize - this.offsetY,
+            let tileX = x * terrainSettings.tileSize - this.offsetX,
+              tileY = y * terrainSettings.tileSize - this.offsetY,
               offsetX = this.player.stepX * tileStep,
               offsetY = this.player.stepY * tileStep,
               tile = window.game.terrainSprites[terrain.image];
@@ -668,7 +698,7 @@ var Paradise = (function (exports) {
               ctx.beginPath();
               ctx.fillStyle = terrain.colour;
               ctx.strokeStyle = terrain.colour;
-              ctx.rect(tileX - offsetX, tileY - offsetY, settings.terrain.tileSize, settings.terrain.tileSize);
+              ctx.rect(tileX - offsetX, tileY - offsetY, terrainSettings.tileSize, terrainSettings.tileSize);
               ctx.fill();
               ctx.stroke();
             } else {
@@ -682,8 +712,8 @@ var Paradise = (function (exports) {
                   45,
                   tileX - offsetX,
                   tileY - offsetY,
-                  settings.terrain.tileSize,
-                  settings.terrain.tileSize,
+                  terrainSettings.tileSize,
+                  terrainSettings.tileSize,
                 );
               } catch(e) {
                 console.warn(e, tile);
@@ -694,17 +724,19 @@ var Paradise = (function (exports) {
       }
     }
 
-
     drawPeople(ctx) {
       if (this.presentPeople.length === 0) return;
+      const terrain = settings.get('terrain');
+      const character = settings.get('character');
+      const tileStep = settings.tileStep();
 
       let playerOffsetX = this.player.stepX * tileStep,
           playerOffsetY = this.player.stepY * tileStep;
 
       this.presentPeople.forEach(person => {
         let sprite = person.sprite,
-            personX = person.x * settings.terrain.tileSize - this.offsetX - playerOffsetX - settings.terrain.tileSize / 2,
-            personY = person.y * settings.terrain.tileSize - this.offsetY - playerOffsetY - settings.terrain.tileSize / 2;
+            personX = person.x * terrain.tileSize - this.offsetX - playerOffsetX - terrain.tileSize / 2,
+            personY = person.y * terrain.tileSize - this.offsetY - playerOffsetY - terrain.tileSize / 2;
 
         ctx.drawImage(
             sprite.image,
@@ -714,8 +746,8 @@ var Paradise = (function (exports) {
             64,
             personX + (person.stepX * tileStep),
             personY + (person.stepY * tileStep),
-            settings.character.spriteSize,
-            settings.character.spriteSize
+            character.spriteSize,
+            character.spriteSize
         );
 
         this.localeMap[person.x][person.y].passable = false;
@@ -1047,8 +1079,8 @@ var Paradise = (function (exports) {
       x,
       y,
       doorway,
-      sizeX = settings.defaultInhabitanceSize,
-      sizeY = settings.defaultInhabitanceSize
+      sizeX = settings.get('defaultInhabitanceSize'),
+      sizeY = settings.get('defaultInhabitanceSize')
     ) {
       this.id = id;
       this.name = name;
@@ -1155,8 +1187,8 @@ var Paradise = (function (exports) {
    *
    *  Paradise/Scene-ObjectInteraction
    *  Declan Tyson
-   *  v0.0.67
-   *  27/04/2018
+   *  v0.0.92
+   *  21/10/2019
    *
    */
 
@@ -1192,21 +1224,27 @@ var Paradise = (function (exports) {
     }
 
     drawConversationTextArea(ctx) {
+      const interactionTextArea = settings.get('interactionTextArea');
+
       ctx.rect(
-        settings.interactionTextArea.x,
-        settings.interactionTextArea.y,
-        settings.interactionTextArea.width,
-        settings.interactionTextArea.height
+        interactionTextArea.x,
+        interactionTextArea.y,
+        interactionTextArea.width,
+        interactionTextArea.height
       );
-      ctx.fillStyle = settings.interactionTextArea.background;
-      ctx.globalAlpha = settings.interactionTextArea.alpha;
+      ctx.fillStyle = interactionTextArea.background;
+      ctx.globalAlpha = interactionTextArea.alpha;
       ctx.fill();
       ctx.globalAlpha = 1;
     }
 
     drawConversation(ctx) {
-      let y = canvasProperties.height - settings.interactionTextArea.height + settings.interactionTextArea.badgeOffsetY;
-      ctx.font = settings.fonts.small;
+      const interactionTextArea = settings.get('interactionTextArea');
+      const fonts = settings.get('fonts');
+      const canvasProperties = settings.canvasProperties();
+
+      let y = canvasProperties.height - interactionTextArea.height + interactionTextArea.badgeOffsetY;
+      ctx.font = fonts.small;
       ctx.fillStyle = colours.white;
       let lines = [];
       this.lines.forEach(line => {
@@ -1226,34 +1264,38 @@ var Paradise = (function (exports) {
       });
 
       lines.forEach((line, index) => {
-        ctx.fillText(line, settings.interactionTextArea.badgeOffsetX, y + index * settings.interactionTextArea.lineHeight);
+        ctx.fillText(line, interactionTextArea.badgeOffsetX, y + index * interactionTextArea.lineHeight);
       });
 
       this.chunkedLines = lines;
     }
 
     drawOptions(ctx) {
+      const canvasProperties = settings.canvasProperties();
+      const interactionTextArea = settings.get('interactionTextArea');
+      const fonts = settings.get('fonts');
+
       let y =
         canvasProperties.height -
-        settings.interactionTextArea.height +
-        settings.interactionTextArea.optionsOffsetY -
-        settings.interactionTextArea.badgeOffsetY +
-        this.chunkedLines.length * settings.interactionTextArea.lineHeight;
-      ctx.font = settings.fonts.small;
+        interactionTextArea.height +
+        interactionTextArea.optionsOffsetY -
+        interactionTextArea.badgeOffsetY +
+        this.chunkedLines.length * interactionTextArea.lineHeight;
+      ctx.font = fonts.small;
       ctx.fillStyle = colours.white;
       this.conversationOptions.forEach((conversationOption, index) => {
         ctx.fillText(
           conversationOption.value,
-          settings.interactionTextArea.optionsOffsetX,
-          y + index * settings.interactionTextArea.optionHeight
+          interactionTextArea.optionsOffsetX,
+          y + index * interactionTextArea.optionHeight
         );
         if (index === this.selectedConversationOption) {
           ctx.strokeStyle = colours.white;
           ctx.strokeRect(
-            settings.interactionTextArea.optionsOffsetX - settings.interactionTextArea.optionHeight / 2,
-            y + index * settings.interactionTextArea.optionHeight - settings.interactionTextArea.optionHeight / 1.5,
-            settings.interactionTextArea.width - settings.interactionTextArea.optionsOffsetX,
-            settings.interactionTextArea.optionHeight
+            interactionTextArea.optionsOffsetX - interactionTextArea.optionHeight / 2,
+            y + index * interactionTextArea.optionHeight - interactionTextArea.optionHeight / 1.5,
+            interactionTextArea.width - interactionTextArea.optionsOffsetX,
+            interactionTextArea.optionHeight
           );
         }
       });
@@ -1293,8 +1335,8 @@ var Paradise = (function (exports) {
    *
    *  Paradise/Decorative
    *  Declan Tyson
-   *  v0.0.80
-   *  17/01/2019
+   *  v0.0.92
+   *  21/10/2019
    *
    */
 
@@ -1329,13 +1371,15 @@ var Paradise = (function (exports) {
     }
 
     draw(ctx, player, mapOffsetX, mapOffsetY, map) {
-      let decorationX = this.x * settings.terrain.tileSize - mapOffsetX,
-        decorationY = this.y * settings.terrain.tileSize - mapOffsetY,
-        offsetX = player.stepX * tileStep,
-        offsetY = player.stepY * tileStep,
+      const terrain = settings.get('terrain');
+
+      let decorationX = this.x * terrain.tileSize - mapOffsetX,
+        decorationY = this.y * terrain.tileSize - mapOffsetY,
+        offsetX = player.stepX * settings.tileStep(),
+        offsetY = player.stepY * settings.tileStep(),
         height = this.image.naturalHeight; // we draw this from the bottom
 
-      ctx.drawImage(this.image, decorationX - offsetX, decorationY - offsetY - height + settings.terrain.tileSize);
+      ctx.drawImage(this.image, decorationX - offsetX, decorationY - offsetY - height + terrain.tileSize);
 
       for (let i = 0; i < this.passMap.length; i++) {
         let mapEntry = map[this.x + i][this.y];
@@ -1343,12 +1387,12 @@ var Paradise = (function (exports) {
         mapEntry.decoration = this;
 
         if (window.debug && !this.passMap[i]) {
-          let debugX = (this.x + i) * settings.terrain.tileSize - mapOffsetX;
+          let debugX = (this.x + i) * terrain.tileSize - mapOffsetX;
 
           ctx.beginPath();
           ctx.fillStyle = this.colour;
           ctx.strokeStyle = this.colour;
-          ctx.rect(debugX - offsetX, decorationY - offsetY, settings.terrain.tileSize, settings.terrain.tileSize);
+          ctx.rect(debugX - offsetX, decorationY - offsetY, terrain.tileSize, terrain.tileSize);
           ctx.fill();
           ctx.stroke();
         }
@@ -1420,8 +1464,8 @@ var Paradise = (function (exports) {
    *
    *  Paradise/Portrait
    *  Declan Tyson
-   *  v0.0.46
-   *  14/02/2018
+   *  v0.0.92
+   *  21/10/2019
    *
    */
 
@@ -1439,6 +1483,8 @@ var Paradise = (function (exports) {
     }
 
     draw(ctx) {
+      const canvasProperties = settings.canvasProperties();
+
       if (this.entering) this.enter();
       if (this.exiting) this.exit();
 
@@ -1489,8 +1535,8 @@ var Paradise = (function (exports) {
    *
    *  Paradise/Scene-Interaction
    *  Declan Tyson
-   *  v0.0.69
-   *  28/04/2018
+   *  v0.0.92
+   *  21/10/2019
    *
    */
 
@@ -1534,31 +1580,39 @@ var Paradise = (function (exports) {
     }
 
     drawConversationTextArea(ctx) {
+      const interactionTextArea = settings.get('interactionTextArea');
+
       ctx.rect(
-        settings.interactionTextArea.x,
-        settings.interactionTextArea.y,
-        settings.interactionTextArea.width,
-        settings.interactionTextArea.height
+        interactionTextArea.x,
+        interactionTextArea.y,
+        interactionTextArea.width,
+        interactionTextArea.height
       );
-      ctx.fillStyle = settings.interactionTextArea.background;
-      ctx.globalAlpha = settings.interactionTextArea.alpha;
+      ctx.fillStyle = interactionTextArea.background;
+      ctx.globalAlpha = interactionTextArea.alpha;
       ctx.fill();
       ctx.globalAlpha = 1;
     }
 
     drawBadge(ctx) {
-      ctx.font = settings.fonts.large;
+      const interactionTextArea = settings.get('interactionTextArea');
+      const fonts = settings.get('fonts');
+
+      ctx.font = fonts.large;
       ctx.fillStyle = colours.white;
       ctx.fillText(
         this.person.name,
-        settings.interactionTextArea.x + settings.interactionTextArea.badgeOffsetX,
-        settings.interactionTextArea.y + settings.interactionTextArea.badgeOffsetY
+        interactionTextArea.x + interactionTextArea.badgeOffsetX,
+        interactionTextArea.y + interactionTextArea.badgeOffsetY
       );
     }
 
     drawConversation(ctx) {
-      let y = settings.interactionTextArea.y + settings.interactionTextArea.badgeOffsetY * 2;
-      ctx.font = settings.fonts.small;
+      const interactionTextArea = settings.get('interactionTextArea');
+      const fonts = settings.get('fonts');
+
+      let y = interactionTextArea.y + interactionTextArea.badgeOffsetY * 2;
+      ctx.font = fonts.small;
       ctx.fillStyle = colours.white;
       let lines = [];
       this.lines.forEach(line => {
@@ -1567,7 +1621,7 @@ var Paradise = (function (exports) {
           let chunks = line.split(/( )/),
             chunkedLine = '';
           chunks.forEach(chunk => {
-            if (chunkedLine.length + chunk.length > settings.interactionTextArea.lineLength) {
+            if (chunkedLine.length + chunk.length > interactionTextArea.lineLength) {
               lines.push(chunkedLine);
               chunkedLine = '';
             }
@@ -1578,32 +1632,35 @@ var Paradise = (function (exports) {
       });
 
       lines.forEach((line, index) => {
-        ctx.fillText(line, settings.interactionTextArea.x + settings.interactionTextArea.badgeOffsetX, y + index * settings.interactionTextArea.lineHeight);
+        ctx.fillText(line, interactionTextArea.x + interactionTextArea.badgeOffsetX, y + index * interactionTextArea.lineHeight);
       });
 
       this.chunkedLines = lines;
     }
 
     drawOptions(ctx) {
+      const interactionTextArea = settings.get('interactionTextArea');
+      const fonts = settings.get('fonts');
+
       let y =
-        settings.interactionTextArea.y +
-        settings.interactionTextArea.optionsOffsetY +
-        this.chunkedLines.length * settings.interactionTextArea.lineHeight;
-      ctx.font = settings.fonts.small;
+        interactionTextArea.y +
+        interactionTextArea.optionsOffsetY +
+        this.chunkedLines.length * interactionTextArea.lineHeight;
+      ctx.font = fonts.small;
       ctx.fillStyle = colours.white;
       this.conversationOptions.forEach((conversationOption, index) => {
         ctx.fillText(
           conversationOption.value,
-          settings.interactionTextArea.x + settings.interactionTextArea.optionsOffsetX,
-          y + index * settings.interactionTextArea.optionHeight
+          interactionTextArea.x + interactionTextArea.optionsOffsetX,
+          y + index * interactionTextArea.optionHeight
         );
         if (index === this.selectedConversationOption) {
           ctx.strokeStyle = colours.white;
           ctx.strokeRect(
-            settings.interactionTextArea.x + settings.interactionTextArea.optionsOffsetX - settings.interactionTextArea.optionHeight / 2,
-            y + index * settings.interactionTextArea.optionHeight - settings.interactionTextArea.optionHeight / 1.5,
-            settings.interactionTextArea.width - settings.interactionTextArea.optionsOffsetX,
-            settings.interactionTextArea.optionHeight
+            interactionTextArea.x + interactionTextArea.optionsOffsetX - interactionTextArea.optionHeight / 2,
+            y + index * interactionTextArea.optionHeight - interactionTextArea.optionHeight / 1.5,
+            interactionTextArea.width - interactionTextArea.optionsOffsetX,
+            interactionTextArea.optionHeight
           );
         }
       });
@@ -1646,7 +1703,7 @@ var Paradise = (function (exports) {
    *
    *  Paradise/Person
    *  Declan Tyson
-   *  v0.0.91
+   *  v0.0.92
    *  21/10/2019
    *
    */
@@ -1763,11 +1820,12 @@ var Paradise = (function (exports) {
     }
 
     setDirection(direction) {
+      const character = settings.get('character');
       if (direction === directions.left || direction === directions.right) {
-        if (this.stepX >= settings.character.stepsPerTile) this.stepX = settings.character.stepsPerTile - 1;
+        if (this.stepX >= character.stepsPerTile) this.stepX = character.stepsPerTile - 1;
         if (this.stepX < 0) this.stepX = 0;
       } else if (direction === directions.up || direction === directions.down) {
-        if (this.stepY >= settings.character.stepsPerTile) this.stepY = settings.character.stepsPerTile - 1;
+        if (this.stepY >= character.stepsPerTile) this.stepY = character.stepsPerTile - 1;
         if (this.stepY < 0) this.stepY = 0;
       }
 
@@ -2264,17 +2322,20 @@ var Paradise = (function (exports) {
    *
    *  Paradise/Game
    *  Declan Tyson
-   *  v0.0.79
-   *  24/09/2018
+   *  v0.0.92
+   *  21/10/2019
    *
    */
 
   const StartGame = (scene, locale = null, activePeople, player, renderer) => {
     clearInterval(window.drawScene);
+    const canvasProperties = settings.canvasProperties();
 
     if (window.debug) {
       document.getElementById('log').style.display = 'block';
     }
+
+    console.log(canvasProperties);
 
     player = player || new Player();
     scene = scene || new WorldMap(player);
@@ -2303,14 +2364,14 @@ var Paradise = (function (exports) {
       this.canvas.style.display = 'block';
       this.canvas.width = width;
       this.canvas.height = height;
-      this.fps = settings.fps;
+      this.fps = settings.get('fps');
       this.ctx = this.canvas.getContext('2d');
     }
   }
 
   class Game {
     constructor(renderer, scene, centerPoint) {
-      this.actionTimeout = settings.actionTimeoutLimit;
+      this.actionTimeout = settings.get('actionTimeoutLimit');
       this.renderer = renderer;
       this.setScene(scene);
       this.centerPoint = centerPoint;
@@ -2341,7 +2402,7 @@ var Paradise = (function (exports) {
               if (this.spritesLoaded >= Object.keys(this.terrainSprites).length) {
                 setTimeout(() => {
                   this.loading = false;
-                }, settings.minLoadingTime);
+                }, settings.get('minLoadingTime'));
               }
             };
             tile.onerror = () => {
@@ -2366,7 +2427,7 @@ var Paradise = (function (exports) {
 
       if (this.loading) {
         let loading = new Image();
-        loading.src = settings.loadingScreen;
+        loading.src = settings.get('loadingScreen');
         this.cachedCanvas = loading;
       } else if (this.redraw) {
         this.cachedCanvas = pre_canvas;
@@ -2394,7 +2455,7 @@ var Paradise = (function (exports) {
       this.actionTimeout--;
       if (this.actionTimeout === 0) {
         clearInterval(this.actionTimeoutCounterInterval);
-        this.actionTimeout = settings.actionTimeoutLimit;
+        this.actionTimeout = settings.get('actionTimeoutLimit');
       }
     }
 
@@ -2407,16 +2468,17 @@ var Paradise = (function (exports) {
    *
    *  Paradise/People
    *  Declan Tyson
-   *  v0.0.37
-   *  12/02/2018
+   *  v0.0.92
+   *  21/10/2019
    *
    */
 
   const choosePeople = () => {
+    const personCount = settings.get('personCount');
     let chosenPeople = [];
-    Util.log(`Choosing ${settings.personCount} people...`);
+    Util.log(`Choosing ${personCount} people...`);
     let person;
-    while (chosenPeople.length < settings.personCount) {
+    while (chosenPeople.length < personCount) {
       person = Util.pickRandomProperty(people);
       if (chosenPeople.indexOf(person) === -1) {
         chosenPeople.push(person);
@@ -2431,14 +2493,16 @@ var Paradise = (function (exports) {
    *
    *  Paradise/Scene-Menu
    *  Declan Tyson
-   *  v0.0.73
-   *  21/09/2018
+   *  v0.0.92
+   *  21/10/2019
    *
    */
 
   class Menu extends Scene {
     constructor(backgroundImageSrc, optionsArea) {
       super();
+
+      const canvasProperties = settings.canvasProperties();
 
       this.selectedMenuItem = 0;
 
@@ -2466,18 +2530,21 @@ var Paradise = (function (exports) {
 
     draw(ctx) {
       if (!this.game.keyHeld) this.keyHeld = false;
+      const canvasProperties = settings.canvasProperties();
 
       ctx.drawImage(this.backgroundImage, 0, 0, canvasProperties.width, canvasProperties.height);
       this.drawOptions(ctx);
     }
 
     drawOptions(ctx) {
+      const canvasProperties = settings.canvasProperties();
+
       let y =
         canvasProperties.height -
         this.optionsArea.height +
         this.optionsArea.optionsOffsetY;
 
-      ctx.font = settings.fonts.small;
+      ctx.font = settings.get('fonts').small;
       ctx.fillStyle = colours.white;
 
       this.menuItems.forEach((menuItems, index) => {
@@ -2535,6 +2602,7 @@ var Paradise = (function (exports) {
 
   class TestMenu extends Menu {
     constructor() {
+      const canvasProperties = settings.canvasProperties();
       super('/img/loading.png',  {
         x: canvasProperties.width / 2,
         y: 0,
@@ -2609,15 +2677,12 @@ var Paradise = (function (exports) {
   exports.Util = Util;
   exports.WorldMap = WorldMap;
   exports.Zenith = Zenith;
-  exports.canvasProperties = canvasProperties;
   exports.choosePeople = choosePeople;
   exports.chooseStartingMap = chooseStartingMap;
   exports.people = people;
-  exports.portraitWidth = portraitWidth;
   exports.settings = settings;
   exports.startingMaps = startingMaps;
   exports.terrains = terrains;
-  exports.tileStep = tileStep;
 
   return exports;
 

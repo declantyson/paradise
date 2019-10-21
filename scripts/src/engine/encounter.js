@@ -2,14 +2,14 @@
  *
  *  Paradise/Scene-Encounter
  *  Declan Tyson
- *  v0.0.37
- *  12/02/2018
+ *  v0.0.92
+ *  21/10/2019
  *
  */
 
 import { Scene } from './scene';
 import { colours } from '../constants';
-import { canvasProperties } from '../settings';
+import { settings } from '../settings';
 import '../enemies/enemydirectory';
 
 class Encounter extends Scene {
@@ -24,6 +24,7 @@ class Encounter extends Scene {
   }
 
   draw(ctx) {
+    const canvasProperties = settings.canvasProperties();
     ctx.strokeStyle = colours.black;
     ctx.rect(0, 0, canvasProperties.width, canvasProperties.height);
     ctx.fill();

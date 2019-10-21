@@ -2,8 +2,8 @@
  *
  *  Paradise/Scene-Interaction
  *  Declan Tyson
- *  v0.0.69
- *  28/04/2018
+ *  v0.0.92
+ *  21/10/2019
  *
  */
 
@@ -53,31 +53,39 @@ class Interaction extends Scene {
   }
 
   drawConversationTextArea(ctx) {
+    const interactionTextArea = settings.get('interactionTextArea');
+
     ctx.rect(
-      settings.interactionTextArea.x,
-      settings.interactionTextArea.y,
-      settings.interactionTextArea.width,
-      settings.interactionTextArea.height
+      interactionTextArea.x,
+      interactionTextArea.y,
+      interactionTextArea.width,
+      interactionTextArea.height
     );
-    ctx.fillStyle = settings.interactionTextArea.background;
-    ctx.globalAlpha = settings.interactionTextArea.alpha;
+    ctx.fillStyle = interactionTextArea.background;
+    ctx.globalAlpha = interactionTextArea.alpha;
     ctx.fill();
     ctx.globalAlpha = 1;
   }
 
   drawBadge(ctx) {
-    ctx.font = settings.fonts.large;
+    const interactionTextArea = settings.get('interactionTextArea');
+    const fonts = settings.get('fonts');
+
+    ctx.font = fonts.large;
     ctx.fillStyle = colours.white;
     ctx.fillText(
       this.person.name,
-      settings.interactionTextArea.x + settings.interactionTextArea.badgeOffsetX,
-      settings.interactionTextArea.y + settings.interactionTextArea.badgeOffsetY
+      interactionTextArea.x + interactionTextArea.badgeOffsetX,
+      interactionTextArea.y + interactionTextArea.badgeOffsetY
     );
   }
 
   drawConversation(ctx) {
-    let y = settings.interactionTextArea.y + settings.interactionTextArea.badgeOffsetY * 2;
-    ctx.font = settings.fonts.small;
+    const interactionTextArea = settings.get('interactionTextArea');
+    const fonts = settings.get('fonts');
+
+    let y = interactionTextArea.y + interactionTextArea.badgeOffsetY * 2;
+    ctx.font = fonts.small;
     ctx.fillStyle = colours.white;
     let lines = [];
     this.lines.forEach(line => {
@@ -86,7 +94,7 @@ class Interaction extends Scene {
         let chunks = line.split(/( )/),
           chunkedLine = '';
         chunks.forEach(chunk => {
-          if (chunkedLine.length + chunk.length > settings.interactionTextArea.lineLength) {
+          if (chunkedLine.length + chunk.length > interactionTextArea.lineLength) {
             lines.push(chunkedLine);
             chunkedLine = '';
           }
@@ -97,32 +105,35 @@ class Interaction extends Scene {
     });
 
     lines.forEach((line, index) => {
-      ctx.fillText(line, settings.interactionTextArea.x + settings.interactionTextArea.badgeOffsetX, y + index * settings.interactionTextArea.lineHeight);
+      ctx.fillText(line, interactionTextArea.x + interactionTextArea.badgeOffsetX, y + index * interactionTextArea.lineHeight);
     });
 
     this.chunkedLines = lines;
   }
 
   drawOptions(ctx) {
+    const interactionTextArea = settings.get('interactionTextArea');
+    const fonts = settings.get('fonts');
+
     let y =
-      settings.interactionTextArea.y +
-      settings.interactionTextArea.optionsOffsetY +
-      this.chunkedLines.length * settings.interactionTextArea.lineHeight;
-    ctx.font = settings.fonts.small;
+      interactionTextArea.y +
+      interactionTextArea.optionsOffsetY +
+      this.chunkedLines.length * interactionTextArea.lineHeight;
+    ctx.font = fonts.small;
     ctx.fillStyle = colours.white;
     this.conversationOptions.forEach((conversationOption, index) => {
       ctx.fillText(
         conversationOption.value,
-        settings.interactionTextArea.x + settings.interactionTextArea.optionsOffsetX,
-        y + index * settings.interactionTextArea.optionHeight
+        interactionTextArea.x + interactionTextArea.optionsOffsetX,
+        y + index * interactionTextArea.optionHeight
       );
       if (index === this.selectedConversationOption) {
         ctx.strokeStyle = colours.white;
         ctx.strokeRect(
-          settings.interactionTextArea.x + settings.interactionTextArea.optionsOffsetX - settings.interactionTextArea.optionHeight / 2,
-          y + index * settings.interactionTextArea.optionHeight - settings.interactionTextArea.optionHeight / 1.5,
-          settings.interactionTextArea.width - settings.interactionTextArea.optionsOffsetX,
-          settings.interactionTextArea.optionHeight
+          interactionTextArea.x + interactionTextArea.optionsOffsetX - interactionTextArea.optionHeight / 2,
+          y + index * interactionTextArea.optionHeight - interactionTextArea.optionHeight / 1.5,
+          interactionTextArea.width - interactionTextArea.optionsOffsetX,
+          interactionTextArea.optionHeight
         );
       }
     });

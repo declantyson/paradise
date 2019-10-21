@@ -2,8 +2,8 @@
  *
  *  Paradise/Game
  *  Declan Tyson
- *  v0.0.79
- *  24/09/2018
+ *  v0.0.92
+ *  21/10/2019
  *
  */
 
@@ -17,14 +17,17 @@ import { Player } from './player';
 import { WorldMap } from './worldmap';
 import { locales } from '../locales/locales';
 import { people } from '../people/people';
-import { settings, canvasProperties } from '../settings';
+import { settings } from '../settings';
 
 export const StartGame = (scene, locale = null, activePeople, player, renderer) => {
   clearInterval(window.drawScene);
+  const canvasProperties = settings.canvasProperties();
 
   if (window.debug) {
     document.getElementById('log').style.display = 'block';
   }
+
+  console.log(canvasProperties)
 
   player = player || new Player();
   scene = scene || new WorldMap(player);
@@ -53,14 +56,14 @@ export class Renderer {
     this.canvas.style.display = 'block';
     this.canvas.width = width;
     this.canvas.height = height;
-    this.fps = settings.fps;
+    this.fps = settings.get('fps');
     this.ctx = this.canvas.getContext('2d');
   }
 }
 
 export class Game {
   constructor(renderer, scene, centerPoint) {
-    this.actionTimeout = settings.actionTimeoutLimit;
+    this.actionTimeout = settings.get('actionTimeoutLimit');
     this.renderer = renderer;
     this.setScene(scene);
     this.centerPoint = centerPoint;
@@ -91,7 +94,7 @@ export class Game {
             if (this.spritesLoaded >= Object.keys(this.terrainSprites).length) {
               setTimeout(() => {
                 this.loading = false;
-              }, settings.minLoadingTime);
+              }, settings.get('minLoadingTime'));
             }
           };
           tile.onerror = () => {
@@ -116,7 +119,7 @@ export class Game {
 
     if (this.loading) {
       let loading = new Image();
-      loading.src = settings.loadingScreen;
+      loading.src = settings.get('loadingScreen');
       this.cachedCanvas = loading;
     } else if (this.redraw) {
       this.cachedCanvas = pre_canvas;
@@ -144,7 +147,7 @@ export class Game {
     this.actionTimeout--;
     if (this.actionTimeout === 0) {
       clearInterval(this.actionTimeoutCounterInterval);
-      this.actionTimeout = settings.actionTimeoutLimit;
+      this.actionTimeout = settings.get('actionTimeoutLimit');
     }
   }
 

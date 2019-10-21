@@ -2,13 +2,13 @@
  *
  *  Paradise/Decorative
  *  Declan Tyson
- *  v0.0.80
- *  17/01/2019
+ *  v0.0.92
+ *  21/10/2019
  *
  */
 
 import { colours } from '../constants';
-import { settings, tileStep } from '../settings';
+import { settings } from '../settings';
 import { ObjectInteraction } from './objectinteraction';
 import { Util } from './util';
 
@@ -43,13 +43,15 @@ class Decorative {
   }
 
   draw(ctx, player, mapOffsetX, mapOffsetY, map) {
-    let decorationX = this.x * settings.terrain.tileSize - mapOffsetX,
-      decorationY = this.y * settings.terrain.tileSize - mapOffsetY,
-      offsetX = player.stepX * tileStep,
-      offsetY = player.stepY * tileStep,
+    const terrain = settings.get('terrain');
+
+    let decorationX = this.x * terrain.tileSize - mapOffsetX,
+      decorationY = this.y * terrain.tileSize - mapOffsetY,
+      offsetX = player.stepX * settings.tileStep(),
+      offsetY = player.stepY * settings.tileStep(),
       height = this.image.naturalHeight; // we draw this from the bottom
 
-    ctx.drawImage(this.image, decorationX - offsetX, decorationY - offsetY - height + settings.terrain.tileSize);
+    ctx.drawImage(this.image, decorationX - offsetX, decorationY - offsetY - height + terrain.tileSize);
 
     for (let i = 0; i < this.passMap.length; i++) {
       let mapEntry = map[this.x + i][this.y];
@@ -57,12 +59,12 @@ class Decorative {
       mapEntry.decoration = this;
 
       if (window.debug && !this.passMap[i]) {
-        let debugX = (this.x + i) * settings.terrain.tileSize - mapOffsetX;
+        let debugX = (this.x + i) * terrain.tileSize - mapOffsetX;
 
         ctx.beginPath();
         ctx.fillStyle = this.colour;
         ctx.strokeStyle = this.colour;
-        ctx.rect(debugX - offsetX, decorationY - offsetY, settings.terrain.tileSize, settings.terrain.tileSize);
+        ctx.rect(debugX - offsetX, decorationY - offsetY, terrain.tileSize, terrain.tileSize);
         ctx.fill();
         ctx.stroke();
       }

@@ -2,14 +2,14 @@
  *
  *  Paradise/Settings
  *  Declan Tyson
- *  v0.0.69
- *  27/04/2018
+ *  v0.0.92
+ *  21/10/2019
  *
  */
 
 import { colours } from './constants';
 
-export let settings = {
+let _settings = {
   fps: 45,
   actionTimeoutLimit: 2,
   terrain: {
@@ -34,16 +34,39 @@ export let settings = {
   },
 };
 
-export let canvasProperties = {
-  width: settings.terrain.tileSize * settings.terrain.tilesWide,
-  height: settings.terrain.tileSize * settings.terrain.tilesHigh,
-  centerPoint: {
-    x: settings.terrain.tileSize * settings.terrain.tilesWide / 2 - settings.terrain.tileSize / 2,
-    y: settings.terrain.tileSize * settings.terrain.tilesHigh / 2 - settings.terrain.tileSize / 2,
+const settings = {
+  get: setting => {
+    return _settings[setting];
+  },
+
+  set: (setting, value) => {
+    _settings[setting] = value;
+  },
+
+  canvasProperties: () => {
+    return {
+      width: _settings.terrain.tileSize * _settings.terrain.tilesWide,
+      height: _settings.terrain.tileSize * _settings.terrain.tilesHigh,
+      centerPoint: {
+        x: _settings.terrain.tileSize * _settings.terrain.tilesWide / 2 - _settings.terrain.tileSize / 2,
+        y: _settings.terrain.tileSize * _settings.terrain.tilesHigh / 2 - _settings.terrain.tileSize / 2,
+      },
+    };
+  },
+
+  tileStep: () => {
+    const terrain = _settings.terrain;
+    const character = _settings.character;
+    return terrain.tileSize / character.stepsPerTile;
+  },
+
+  portraitWidth: () => {
+    return settings.canvasProperties().width / 2;
   },
 };
 
-settings.interactionTextArea = {
+const canvasProperties = settings.canvasProperties();
+settings.set('interactionTextArea', {
   x: 0,
   y: 0,
   width: canvasProperties.width / 2,
@@ -57,7 +80,6 @@ settings.interactionTextArea = {
   optionHeight: 36,
   lineHeight: 22,
   lineLength: 60,
-};
+});
 
-export let tileStep = settings.terrain.tileSize / settings.character.stepsPerTile;
-export let portraitWidth = canvasProperties.width / 2;
+export { settings };

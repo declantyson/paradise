@@ -2,18 +2,20 @@
  *
  *  Paradise/Scene-Menu
  *  Declan Tyson
- *  v0.0.73
- *  21/09/2018
+ *  v0.0.92
+ *  21/10/2019
  *
  */
 
 import { Scene } from './scene';
-import { settings, canvasProperties } from '../settings';
+import { settings } from '../settings';
 import { colours } from '../constants';
 
 class Menu extends Scene {
   constructor(backgroundImageSrc, optionsArea) {
     super();
+
+    const canvasProperties = settings.canvasProperties();
 
     this.selectedMenuItem = 0;
 
@@ -41,18 +43,21 @@ class Menu extends Scene {
 
   draw(ctx) {
     if (!this.game.keyHeld) this.keyHeld = false;
+    const canvasProperties = settings.canvasProperties();
 
     ctx.drawImage(this.backgroundImage, 0, 0, canvasProperties.width, canvasProperties.height);
     this.drawOptions(ctx);
   }
 
   drawOptions(ctx) {
+    const canvasProperties = settings.canvasProperties();
+
     let y =
       canvasProperties.height -
       this.optionsArea.height +
       this.optionsArea.optionsOffsetY;
 
-    ctx.font = settings.fonts.small;
+    ctx.font = settings.get('fonts').small;
     ctx.fillStyle = colours.white;
 
     this.menuItems.forEach((menuItems, index) => {

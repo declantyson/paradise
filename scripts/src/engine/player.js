@@ -2,8 +2,8 @@
  *
  *  Paradise/Player
  *  Declan Tyson
- *  v0.0.41
- *  13/02/2018
+ *  v0.0.92
+ *  21/10/2019
  *
  */
 
@@ -35,8 +35,9 @@ class Player {
   }
 
   advanceFrame() {
-    let newSpriteX = this.sprite.x + settings.character.frameSize;
-    if (newSpriteX >= settings.character.frameSize * settings.character.frameCount) {
+    const character = settings.get('character');
+    let newSpriteX = this.sprite.x + character.frameSize;
+    if (newSpriteX >= character.frameSize * character.frameCount) {
       newSpriteX = 0;
     }
 
@@ -48,11 +49,12 @@ class Player {
   }
 
   setPlacement(x, y, init = false) {
+    const character = settings.get('character');
     if (x !== this.x) {
-      if (this.stepX >= settings.character.stepsPerTile || this.stepX < 0 || init) {
+      if (this.stepX >= character.stepsPerTile || this.stepX < 0 || init) {
         this.x = x;
-        if (this.stepX >= settings.character.stepsPerTile) this.stepX = 0;
-        if (this.stepX < 0) this.stepX = settings.character.stepsPerTile - 1;
+        if (this.stepX >= character.stepsPerTile) this.stepX = 0;
+        if (this.stepX < 0) this.stepX = character.stepsPerTile - 1;
       } else {
         if (x > this.x) this.stepX++;
         if (x < this.x) this.stepX--;
@@ -60,10 +62,10 @@ class Player {
     }
 
     if (y !== this.y) {
-      if (this.stepY >= settings.character.stepsPerTile || this.stepY < 0 || init) {
+      if (this.stepY >= character.stepsPerTile || this.stepY < 0 || init) {
         this.y = y;
-        if (this.stepY >= settings.character.stepsPerTile) this.stepY = 0;
-        if (this.stepY < 0) this.stepY = settings.character.stepsPerTile - 1;
+        if (this.stepY >= character.stepsPerTile) this.stepY = 0;
+        if (this.stepY < 0) this.stepY = character.stepsPerTile - 1;
       } else {
         if (y > this.y) this.stepY++;
         if (y < this.y) this.stepY--;
@@ -72,11 +74,12 @@ class Player {
   }
 
   setDirection(direction) {
+    const character = settings.get('character');
     if (direction === directions.left || direction === directions.right) {
-      if (this.stepX >= settings.character.stepsPerTile) this.stepX = settings.character.stepsPerTile - 1;
+      if (this.stepX >= character.stepsPerTile) this.stepX = character.stepsPerTile - 1;
       if (this.stepX < 0) this.stepX = 0;
     } else if (direction === directions.up || direction === directions.down) {
-      if (this.stepY >= settings.character.stepsPerTile) this.stepY = settings.character.stepsPerTile - 1;
+      if (this.stepY >= character.stepsPerTile) this.stepY = character.stepsPerTile - 1;
       if (this.stepY < 0) this.stepY = 0;
     }
 

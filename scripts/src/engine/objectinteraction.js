@@ -2,14 +2,14 @@
  *
  *  Paradise/Scene-ObjectInteraction
  *  Declan Tyson
- *  v0.0.67
- *  27/04/2018
+ *  v0.0.92
+ *  21/10/2019
  *
  */
 
 import { Scene } from './scene';
 import { colours } from '../constants';
-import { settings, canvasProperties } from '../settings';
+import { settings } from '../settings';
 
 class ObjectInteraction extends Scene {
   constructor(decoration) {
@@ -43,21 +43,27 @@ class ObjectInteraction extends Scene {
   }
 
   drawConversationTextArea(ctx) {
+    const interactionTextArea = settings.get('interactionTextArea');
+
     ctx.rect(
-      settings.interactionTextArea.x,
-      settings.interactionTextArea.y,
-      settings.interactionTextArea.width,
-      settings.interactionTextArea.height
+      interactionTextArea.x,
+      interactionTextArea.y,
+      interactionTextArea.width,
+      interactionTextArea.height
     );
-    ctx.fillStyle = settings.interactionTextArea.background;
-    ctx.globalAlpha = settings.interactionTextArea.alpha;
+    ctx.fillStyle = interactionTextArea.background;
+    ctx.globalAlpha = interactionTextArea.alpha;
     ctx.fill();
     ctx.globalAlpha = 1;
   }
 
   drawConversation(ctx) {
-    let y = canvasProperties.height - settings.interactionTextArea.height + settings.interactionTextArea.badgeOffsetY;
-    ctx.font = settings.fonts.small;
+    const interactionTextArea = settings.get('interactionTextArea');
+    const fonts = settings.get('fonts');
+    const canvasProperties = settings.canvasProperties();
+
+    let y = canvasProperties.height - interactionTextArea.height + interactionTextArea.badgeOffsetY;
+    ctx.font = fonts.small;
     ctx.fillStyle = colours.white;
     let lines = [];
     this.lines.forEach(line => {
@@ -77,34 +83,38 @@ class ObjectInteraction extends Scene {
     });
 
     lines.forEach((line, index) => {
-      ctx.fillText(line, settings.interactionTextArea.badgeOffsetX, y + index * settings.interactionTextArea.lineHeight);
+      ctx.fillText(line, interactionTextArea.badgeOffsetX, y + index * interactionTextArea.lineHeight);
     });
 
     this.chunkedLines = lines;
   }
 
   drawOptions(ctx) {
+    const canvasProperties = settings.canvasProperties();
+    const interactionTextArea = settings.get('interactionTextArea');
+    const fonts = settings.get('fonts');
+
     let y =
       canvasProperties.height -
-      settings.interactionTextArea.height +
-      settings.interactionTextArea.optionsOffsetY -
-      settings.interactionTextArea.badgeOffsetY +
-      this.chunkedLines.length * settings.interactionTextArea.lineHeight;
-    ctx.font = settings.fonts.small;
+      interactionTextArea.height +
+      interactionTextArea.optionsOffsetY -
+      interactionTextArea.badgeOffsetY +
+      this.chunkedLines.length * interactionTextArea.lineHeight;
+    ctx.font = fonts.small;
     ctx.fillStyle = colours.white;
     this.conversationOptions.forEach((conversationOption, index) => {
       ctx.fillText(
         conversationOption.value,
-        settings.interactionTextArea.optionsOffsetX,
-        y + index * settings.interactionTextArea.optionHeight
+        interactionTextArea.optionsOffsetX,
+        y + index * interactionTextArea.optionHeight
       );
       if (index === this.selectedConversationOption) {
         ctx.strokeStyle = colours.white;
         ctx.strokeRect(
-          settings.interactionTextArea.optionsOffsetX - settings.interactionTextArea.optionHeight / 2,
-          y + index * settings.interactionTextArea.optionHeight - settings.interactionTextArea.optionHeight / 1.5,
-          settings.interactionTextArea.width - settings.interactionTextArea.optionsOffsetX,
-          settings.interactionTextArea.optionHeight
+          interactionTextArea.optionsOffsetX - interactionTextArea.optionHeight / 2,
+          y + index * interactionTextArea.optionHeight - interactionTextArea.optionHeight / 1.5,
+          interactionTextArea.width - interactionTextArea.optionsOffsetX,
+          interactionTextArea.optionHeight
         );
       }
     });

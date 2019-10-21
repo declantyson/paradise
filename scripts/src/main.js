@@ -24,7 +24,7 @@ import { Util } from './engine/util';
 import { WorldMap } from './engine/worldmap';
 import { Decorative } from './engine/decorative';
 import { Menu } from './engine/menu';
-import { settings, canvasProperties, tileStep, portraitWidth } from './settings';
+import { settings } from './settings';
 
 // Demo data
 import { startingMaps, chooseStartingMap } from './locales/locales';
@@ -62,9 +62,6 @@ export {
   Game,
   Portrait,
   settings,
-  canvasProperties,
-  tileStep,
-  portraitWidth,
   startingMaps,
   chooseStartingMap,
   people,

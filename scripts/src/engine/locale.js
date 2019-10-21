@@ -190,8 +190,8 @@ class Inhabitance {
     x,
     y,
     doorway,
-    sizeX = settings.defaultInhabitanceSize,
-    sizeY = settings.defaultInhabitanceSize
+    sizeX = settings.get('defaultInhabitanceSize'),
+    sizeY = settings.get('defaultInhabitanceSize')
   ) {
     this.id = id;
     this.name = name;
