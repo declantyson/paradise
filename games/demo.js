@@ -1687,7 +1687,7 @@
    *
    *  Paradise/Person
    *  Declan Tyson
-   *  v0.0.92
+   *  v0.0.94
    *  21/10/2019
    *
    */
@@ -1832,6 +1832,38 @@
     addResponse(key, lines, mood = 'neutral') {
       if (typeof lines === 'string') lines = [lines];
       this.responses[key] = { mood, lines, conversationOptions: [] };
+    }
+
+    setPlacement(x, y, init = false) {
+      const character = settings.get('character');
+
+      if (x !== this.x) {
+        if (this.stepX >= character.stepsPerTile || this.stepX < 0 || init) {
+          window.game.scene.localeMap[this.x][this.y].passable = true;
+          window.game.scene.localeMap[this.x][this.y].person = null;
+
+          this.x = x;
+          if (this.stepX >= character.stepsPerTile) this.stepX = 0;
+          if (this.stepX < 0) this.stepX = character.stepsPerTile - 1;
+        } else {
+          if (x > this.x) this.stepX++;
+          if (x < this.x) this.stepX--;
+        }
+      }
+
+      if (y !== this.y) {
+        if (this.stepY >= character.stepsPerTile || this.stepY < 0 || init) {
+          window.game.scene.localeMap[this.x][this.y].passable = true;
+          window.game.scene.localeMap[this.x][this.y].person = null;
+
+          this.y = y;
+          if (this.stepY >= character.stepsPerTile) this.stepY = 0;
+          if (this.stepY < 0) this.stepY = character.stepsPerTile - 1;
+        } else {
+          if (y > this.y) this.stepY++;
+          if (y < this.y) this.stepY--;
+        }
+      }
     }
 
     importInteractionData() {
