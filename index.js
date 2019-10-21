@@ -100,8 +100,6 @@ const genders = {
   alien: 'A',
 };
 
-
-
 const posessivePronouns = {
   M: 'his',
   F: 'her',
@@ -435,8 +433,8 @@ let terrains = {
  *
  *  Paradise/Scene
  *  Declan Tyson
- *  v0.0.77
- *  24/09/2018
+ *  v0.0.91
+ *  21/10/2019
  *
  */
 
@@ -458,7 +456,7 @@ class Scene {
   }
 
   doActions(action) {
-    if (!this.game || this.game.loading || !action) return;
+    if (!this.game || this.game.loading || !action || !this.actions[action]) return;
     this.game.triggerActionTimeout();
 
     this.actions[action]();
@@ -480,8 +478,8 @@ class Scene {
  *
  *  Paradise/Scene-WorldMap
  *  Declan Tyson
- *  v0.0.77
- *  24/09/2018
+ *  v0.0.91
+ *  21/10/2019
  *
  */
 
@@ -693,27 +691,28 @@ class WorldMap extends Scene {
     }
   }
 
+
   drawPeople(ctx) {
     if (this.presentPeople.length === 0) return;
 
     let playerOffsetX = this.player.stepX * tileStep,
-      playerOffsetY = this.player.stepY * tileStep;
+        playerOffsetY = this.player.stepY * tileStep;
 
     this.presentPeople.forEach(person => {
       let sprite = person.sprite,
-        personX = person.x * settings.terrain.tileSize - this.offsetX - playerOffsetX - settings.terrain.tileSize / 2,
-        personY = person.y * settings.terrain.tileSize - this.offsetY - playerOffsetY - settings.terrain.tileSize / 2;
+          personX = person.x * settings.terrain.tileSize - this.offsetX - playerOffsetX - settings.terrain.tileSize / 2,
+          personY = person.y * settings.terrain.tileSize - this.offsetY - playerOffsetY - settings.terrain.tileSize / 2;
 
       ctx.drawImage(
-        sprite.image,
-        sprite.x,
-        sprite.y,
-        64,
-        64,
-        personX,
-        personY,
-        settings.character.spriteSize,
-        settings.character.spriteSize
+          sprite.image,
+          sprite.x,
+          sprite.y,
+          64,
+          64,
+          personX + (person.stepX * tileStep),
+          personY + (person.stepY * tileStep),
+          settings.character.spriteSize,
+          settings.character.spriteSize
       );
 
       this.localeMap[person.x][person.y].passable = false;
@@ -1126,6 +1125,7 @@ class TownHall extends GroveStreetTemplate {
  *  07/02/2018
  *
  */
+
 class Village extends Locale {
   constructor(player, people) {
     super(player, people);
@@ -1643,8 +1643,8 @@ class Interaction extends Scene {
  *
  *  Paradise/Person
  *  Declan Tyson
- *  v0.0.80
- *  17/01/2019
+ *  v0.0.91
+ *  21/10/2019
  *
  */
 
@@ -1666,6 +1666,14 @@ class Person {
     spriteMap_test[directions.down] = 128;
     spriteMap_test[directions.left] = 64;
     spriteMap_test[directions.right] = 192;
+
+    this.stepX = 0;
+    this.stepY = 0;
+
+    this.currentJob = null;
+
+    this.xBlocked = false;
+    this.yBlocked = false;
 
     this.spriteMap = spriteMap_test;
     this.sprite = {
@@ -1994,8 +2002,8 @@ let people = {
  */
 
 class Islands extends Locale {
-  constructor(player, people$$1) {
-    super(player, people$$1);
+  constructor(player, people) {
+    super(player, people);
 
     this.id = 'Islands';
     this.entryPoints.beginningOfGame = { x: 57, y: 60 };
@@ -2258,8 +2266,6 @@ const chooseStartingMap = () => {
  *
  */
 
-
-/* Do not remove these despite what IntelliJ says!! */
 const StartGame = (scene, locale = null, activePeople, player, renderer) => {
   clearInterval(window.drawScene);
 
@@ -2570,15 +2576,4 @@ class TestMenu extends Menu {
   }
 }
 
-/*
- *
- *  Paradise
- *  Declan Tyson
- *  v0.0.72
- *  21/09/2018
- *
- */
-
-// Engine
-
-export { StartGame, Interaction, ObjectInteraction, Item, Locale, Inhabitance, Interior, Player, choosePeople, Person, Scene, terrains, Util, WorldMap, Decorative, Renderer, Game, Portrait, settings, canvasProperties, tileStep, portraitWidth, startingMaps, chooseStartingMap, people, Evelyn, Jill, John, Neil, Pauline, Petey, Quazar, Zenith, Dresser, Rug, Tree, Terrain, Menu, TestMenu };
+export { Decorative, Dresser, Evelyn, Game, Inhabitance, Interaction, Interior, Item, Jill, John, Locale, Menu, Neil, ObjectInteraction, Pauline, Person, Petey, Player, Portrait, Quazar, Renderer, Rug, Scene, StartGame, Terrain, TestMenu, Tree, Util, WorldMap, Zenith, canvasProperties, choosePeople, chooseStartingMap, people, portraitWidth, settings, startingMaps, terrains, tileStep };

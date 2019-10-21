@@ -2,8 +2,8 @@
  *
  *  Paradise/Scene-WorldMap
  *  Declan Tyson
- *  v0.0.77
- *  24/09/2018
+ *  v0.0.91
+ *  21/10/2019
  *
  */
 
@@ -220,27 +220,28 @@ class WorldMap extends Scene {
     }
   }
 
+
   drawPeople(ctx) {
     if (this.presentPeople.length === 0) return;
 
     let playerOffsetX = this.player.stepX * tileStep,
-      playerOffsetY = this.player.stepY * tileStep;
+        playerOffsetY = this.player.stepY * tileStep;
 
     this.presentPeople.forEach(person => {
       let sprite = person.sprite,
-        personX = person.x * settings.terrain.tileSize - this.offsetX - playerOffsetX - settings.terrain.tileSize / 2,
-        personY = person.y * settings.terrain.tileSize - this.offsetY - playerOffsetY - settings.terrain.tileSize / 2;
+          personX = person.x * settings.terrain.tileSize - this.offsetX - playerOffsetX - settings.terrain.tileSize / 2,
+          personY = person.y * settings.terrain.tileSize - this.offsetY - playerOffsetY - settings.terrain.tileSize / 2;
 
       ctx.drawImage(
-        sprite.image,
-        sprite.x,
-        sprite.y,
-        64,
-        64,
-        personX,
-        personY,
-        settings.character.spriteSize,
-        settings.character.spriteSize
+          sprite.image,
+          sprite.x,
+          sprite.y,
+          64,
+          64,
+          personX + (person.stepX * tileStep),
+          personY + (person.stepY * tileStep),
+          settings.character.spriteSize,
+          settings.character.spriteSize
       );
 
       this.localeMap[person.x][person.y].passable = false;

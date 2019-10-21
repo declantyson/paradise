@@ -2,8 +2,8 @@
  *
  *  Paradise/Person
  *  Declan Tyson
- *  v0.0.80
- *  17/01/2019
+ *  v0.0.91
+ *  21/10/2019
  *
  */
 
@@ -31,6 +31,14 @@ class Person {
     spriteMap_test[directions.down] = 128;
     spriteMap_test[directions.left] = 64;
     spriteMap_test[directions.right] = 192;
+
+    this.stepX = 0;
+    this.stepY = 0;
+
+    this.currentJob = null;
+
+    this.xBlocked = false;
+    this.yBlocked = false;
 
     this.spriteMap = spriteMap_test;
     this.sprite = {

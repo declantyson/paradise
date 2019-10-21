@@ -2,8 +2,8 @@
  *
  *  Paradise/Scene
  *  Declan Tyson
- *  v0.0.77
- *  24/09/2018
+ *  v0.0.91
+ *  21/10/2019
  *
  */
 
@@ -25,7 +25,7 @@ class Scene {
   }
 
   doActions(action) {
-    if (!this.game || this.game.loading || !action) return;
+    if (!this.game || this.game.loading || !action || !this.actions[action]) return;
     this.game.triggerActionTimeout();
 
     this.actions[action]();
