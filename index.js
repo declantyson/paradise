@@ -144,7 +144,7 @@ class Item {
  *
  *  Paradise/Settings
  *  Declan Tyson
- *  v0.0.92
+ *  v0.0.93
  *  21/10/2019
  *
  */
@@ -184,14 +184,7 @@ const settings = {
   },
 
   canvasProperties: () => {
-    return {
-      width: _settings.terrain.tileSize * _settings.terrain.tilesWide,
-      height: _settings.terrain.tileSize * _settings.terrain.tilesHigh,
-      centerPoint: {
-        x: _settings.terrain.tileSize * _settings.terrain.tilesWide / 2 - _settings.terrain.tileSize / 2,
-        y: _settings.terrain.tileSize * _settings.terrain.tilesHigh / 2 - _settings.terrain.tileSize / 2,
-      },
-    };
+    return _settings.canvasProperties;
   },
 
   tileStep: () => {
@@ -205,12 +198,20 @@ const settings = {
   },
 };
 
-const canvasProperties = settings.canvasProperties();
+settings.set('canvasProperties', {
+  width: _settings.terrain.tileSize * _settings.terrain.tilesWide,
+  height: _settings.terrain.tileSize * _settings.terrain.tilesHigh,
+  centerPoint: {
+    x: _settings.terrain.tileSize * _settings.terrain.tilesWide / 2 - _settings.terrain.tileSize / 2,
+    y: _settings.terrain.tileSize * _settings.terrain.tilesHigh / 2 - _settings.terrain.tileSize / 2,
+  },
+});
+
 settings.set('interactionTextArea', {
   x: 0,
   y: 0,
-  width: canvasProperties.width / 2,
-  height: canvasProperties.height,
+  width: _settings.canvasProperties.width / 2,
+  height: _settings.canvasProperties.height,
   background: colours.black,
   alpha: 0.4,
   badgeOffsetX: 20,
