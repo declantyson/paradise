@@ -2,15 +2,15 @@
  *
  *  Paradise/Scene-Encounter
  *  Declan Tyson
- *  v0.0.97
+ *  v0.0.98
  *  06/05/2020
  *
  */
 
 import { Scene } from './scene';
-import { colours } from '../constants';
 import { settings } from '../settings';
 import { enemies } from '../enemies/enemies';
+import { colours } from '../constants';
 
 class Encounter extends Scene {
   constructor(worldMap, enemyGroupOptions, scenery) {
@@ -21,12 +21,16 @@ class Encounter extends Scene {
     this.enemies = [];
     this.party = window.game.currentParty;
     this.actions.back = this.exit.bind(this);
+    this.turnMeters = [];
+    this.fullMeterValue = 100;
+    this.currentTurn = null;
 
     let background = new Image();
     background.src = scenery;
     this.scenery = background;
 
     this.chooseEnemyGroup();
+    this.initializeTurnMeters();
   }
 
   chooseEnemyGroup() {
@@ -44,6 +48,41 @@ class Encounter extends Scene {
     });
   }
 
+  initializeTurnMeters() {
+    let topSpeed = 1;
+    this.party.forEach(member => {
+      if (member.speed > topSpeed) topSpeed = member.speed;
+      this.turnMeters.push({
+        actor: member,
+        fill: 0,
+      });
+    });
+
+    this.enemies.forEach(enemy => {
+      if (enemy.speed > topSpeed) topSpeed = enemy.speed;
+      this.turnMeters.push({
+        actor: enemy,
+        fill: 0,
+      });
+    });
+
+    this.fullMeterValue *= topSpeed;
+  }
+
+  incrementTurnMeters() {
+    if (this.currentTurn) return;
+
+    this.turnMeters.forEach(turnMeter => {
+      if (this.currentTurn) return;
+
+      turnMeter.fill += turnMeter.actor.speed;
+      if (turnMeter.fill > this.fullMeterValue) {
+        turnMeter.fill = this.fullMeterValue;
+        this.currentTurn = turnMeter;
+      }
+    });
+  }
+
   draw(ctx) {
     const canvasProperties = settings.canvasProperties();
 
@@ -51,6 +90,37 @@ class Encounter extends Scene {
 
     this.drawParty(ctx);
     this.drawEnemies(ctx);
+    this.drawEncounterTextArea(ctx);
+
+    this.incrementTurnMeters();
+
+    this.drawTurnMeters(ctx);
+  }
+
+  drawEncounterTextArea(ctx) {
+    const encounterTextArea = settings.get('encounterTextArea');
+    const fonts = settings.get('fonts');
+
+    ctx.rect(
+      encounterTextArea.x,
+      encounterTextArea.y,
+      encounterTextArea.width,
+      encounterTextArea.height
+    );
+    ctx.fillStyle = encounterTextArea.background;
+    ctx.globalAlpha = encounterTextArea.alpha;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    if(this.currentTurn) {
+        ctx.font = fonts.small;
+        ctx.fillStyle = colours.white;
+        ctx.fillText(
+            this.currentTurn.actor.name,
+            encounterTextArea.x + encounterTextArea.optionsOffsetX,
+            encounterTextArea.y + encounterTextArea.optionHeight
+        );
+    }
   }
 
   drawParty(ctx) {
@@ -99,6 +169,42 @@ class Encounter extends Scene {
       startX += encounterSettings.spriteSpacing + encounterSettings.spriteSize;
       startY += encounterSettings.spriteSpacing;
     });
+  }
+
+  drawTurnMeters(ctx) {
+      const canvasProperties = settings.get('canvasProperties');
+      const encounterTextArea = settings.get('encounterTextArea');
+      const fonts = settings.get('fonts');
+
+      let startX = canvasProperties.width / 2 + encounterTextArea.optionsOffsetX;
+      let startY = encounterTextArea.y + encounterTextArea.optionsOffsetY;
+
+      this.turnMeters.forEach(turnMeter => {
+          ctx.font = fonts.small;
+          ctx.fillStyle = colours.white;
+          ctx.fillText(
+              turnMeter.actor.name,
+              startX,
+              startY
+          );
+
+          ctx.fillStyle = colours.green;
+          ctx.fillRect(
+            startX + encounterTextArea.lineLength,
+            startY - encounterTextArea.lineHeight / 2,
+            (turnMeter.fill / this.fullMeterValue) * 100,
+            encounterTextArea.lineHeight / 2
+          );
+          ctx.strokeStyle = colours.white;
+          ctx.strokeRect(
+              startX + encounterTextArea.lineLength - 1,
+              startY - encounterTextArea.lineHeight / 2 - 1,
+              102,
+              encounterTextArea.lineHeight / 2 + 2
+          );
+
+          startY += encounterTextArea.lineHeight;
+      });
   }
 
   exit() {

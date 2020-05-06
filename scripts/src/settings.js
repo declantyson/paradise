@@ -2,7 +2,7 @@
  *
  *  Paradise/Settings
  *  Declan Tyson
- *  v0.0.96
+ *  v0.0.98
  *  06/05/2020
  *
  */
@@ -84,6 +84,20 @@ settings.set('interactionTextArea', {
   badgeOffsetY: 40,
   optionsOffsetX: 40,
   optionsOffsetY: 100,
+  optionHeight: 36,
+  lineHeight: 22,
+  lineLength: 60,
+});
+
+settings.set('encounterTextArea', {
+  x: 0,
+  y: _settings.canvasProperties.height - _settings.canvasProperties.height / 4,
+  width: _settings.canvasProperties.width,
+  height: _settings.canvasProperties.height / 4,
+  background: colours.black,
+  alpha: 0.4,
+  optionsOffsetX: 40,
+  optionsOffsetY: 40,
   optionHeight: 36,
   lineHeight: 22,
   lineLength: 60,
