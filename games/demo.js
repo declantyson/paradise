@@ -486,10 +486,107 @@
 
   /*
    *
+   *  Paradise/Enemy
+   *  Declan Tyson
+   *  v0.0.95
+   *  06/05/2020
+   *
+   */
+
+  class Enemy {
+    constructor(name, health, attack, defence) {
+      this.id = name;
+      this.name = name;
+      this.health = health;
+      this.attack = attack;
+      this.defence = defence;
+      this.colour = colours.black;
+    }
+
+    attack(target) {
+      let attackValue = this.attack - target.defence;
+      if (attackValue < 0) attackValue = 1;
+
+      target.health -= attackValue;
+    }
+  }
+
+  /*
+   *
+   *  Paradise/Enemies/Slime
+   *  Declan Tyson
+   *  v0.0.95
+   *  06/05/2020
+   *
+   */
+
+  class Slime extends Enemy {
+    constructor() {
+      super('Slime', 20, 5, 2);
+    }
+  }
+
+  /*
+   *
+   *  Paradise/Enemies
+   *  Declan Tyson
+   *  v0.0.95
+   *  06/05/2020
+   *
+   */
+
+  let enemies = {
+    Slime,
+  };
+
+  /*
+   *
+   *  Paradise/Scene-Encounter
+   *  Declan Tyson
+   *  v0.0.95
+   *  06/05/2020
+   *
+   */
+
+  class Encounter extends Scene {
+    constructor(enemyGroupOptions) {
+      super();
+
+      this.enemyGroupOptions = enemyGroupOptions;
+      this.enemies = [];
+
+      this.chooseEnemyGroup();
+    }
+
+    chooseEnemyGroup() {
+      let numOptions = this.enemyGroupOptions.length;
+      if (numOptions > 1) {
+        this.setEnemies(Math.floor(Math.random() * numOptions));
+      } else {
+        this.setEnemies(0);
+      }
+    }
+
+    setEnemies(enemyGroupIndex) {
+      this.enemyGroupOptions[enemyGroupIndex].forEach(enemy => {
+        this.enemies.push(new enemies[enemy]());
+      });
+    }
+
+    draw(ctx) {
+      const canvasProperties = settings.canvasProperties();
+      ctx.strokeStyle = colours.black;
+      ctx.rect(0, 0, canvasProperties.width, canvasProperties.height);
+      ctx.fill();
+    }
+  }
+
+  /*
+   *
    *  Paradise/Scene-WorldMap
    *  Declan Tyson
-   *  v0.0.92
-   *  21/10/2019
+   *  v0.0.95
+   *  06/05/2020
    *
    */
 
@@ -610,7 +707,7 @@
       // Player is always at center of screen
       const terrain = settings.get('terrain');
       const character = settings.get('character');
-      
+
       let sprite = this.player.sprite,
         playerX = this.game.centerPoint.x - terrain.tileSize / 2,
         playerY = this.game.centerPoint.y - terrain.tileSize;
@@ -697,9 +794,9 @@
                   tileX - offsetX,
                   tileY - offsetY,
                   terrainSettings.tileSize,
-                  terrainSettings.tileSize,
+                  terrainSettings.tileSize
                 );
-              } catch(e) {
+              } catch (e) {
                 console.warn(e, tile);
               }
             }
@@ -715,23 +812,23 @@
       const tileStep = settings.tileStep();
 
       let playerOffsetX = this.player.stepX * tileStep,
-          playerOffsetY = this.player.stepY * tileStep;
+        playerOffsetY = this.player.stepY * tileStep;
 
       this.presentPeople.forEach(person => {
         let sprite = person.sprite,
-            personX = person.x * terrain.tileSize - this.offsetX - playerOffsetX - terrain.tileSize / 2,
-            personY = person.y * terrain.tileSize - this.offsetY - playerOffsetY - terrain.tileSize / 2;
+          personX = person.x * terrain.tileSize - this.offsetX - playerOffsetX - terrain.tileSize / 2,
+          personY = person.y * terrain.tileSize - this.offsetY - playerOffsetY - terrain.tileSize / 2;
 
         ctx.drawImage(
-            sprite.image,
-            sprite.x,
-            sprite.y,
-            64,
-            64,
-            personX + (person.stepX * tileStep),
-            personY + (person.stepY * tileStep),
-            character.spriteSize,
-            character.spriteSize
+          sprite.image,
+          sprite.x,
+          sprite.y,
+          64,
+          64,
+          personX + person.stepX * tileStep,
+          personY + person.stepY * tileStep,
+          character.spriteSize,
+          character.spriteSize
         );
 
         this.localeMap[person.x][person.y].passable = false;
@@ -1210,12 +1307,7 @@
     drawConversationTextArea(ctx) {
       const interactionTextArea = settings.get('interactionTextArea');
 
-      ctx.rect(
-        interactionTextArea.x,
-        interactionTextArea.y,
-        interactionTextArea.width,
-        interactionTextArea.height
-      );
+      ctx.rect(interactionTextArea.x, interactionTextArea.y, interactionTextArea.width, interactionTextArea.height);
       ctx.fillStyle = interactionTextArea.background;
       ctx.globalAlpha = interactionTextArea.alpha;
       ctx.fill();
@@ -1566,12 +1658,7 @@
     drawConversationTextArea(ctx) {
       const interactionTextArea = settings.get('interactionTextArea');
 
-      ctx.rect(
-        interactionTextArea.x,
-        interactionTextArea.y,
-        interactionTextArea.width,
-        interactionTextArea.height
-      );
+      ctx.rect(interactionTextArea.x, interactionTextArea.y, interactionTextArea.width, interactionTextArea.height);
       ctx.fillStyle = interactionTextArea.background;
       ctx.globalAlpha = interactionTextArea.alpha;
       ctx.fill();
@@ -1616,7 +1703,11 @@
       });
 
       lines.forEach((line, index) => {
-        ctx.fillText(line, interactionTextArea.x + interactionTextArea.badgeOffsetX, y + index * interactionTextArea.lineHeight);
+        ctx.fillText(
+          line,
+          interactionTextArea.x + interactionTextArea.badgeOffsetX,
+          y + index * interactionTextArea.lineHeight
+        );
       });
 
       this.chunkedLines = lines;
@@ -2045,7 +2136,7 @@
     }
 
     scream() {
-      alert("!!!!");
+      alert('!!!!');
     }
   }
 
@@ -2053,28 +2144,28 @@
    *
    *  Paradise/People
    *  Declan Tyson
-   *  v0.0.25
-   *  07/02/2018
+   *  v0.0.95
+   *  06/05/2020
    *
    */
 
   let people = {
-    Evelyn: Evelyn,
-    Jill: Jill,
-    John: John,
-    Neil: Neil,
-    Pauline: Pauline,
-    Petey: Petey,
-    Quazar: Quazar,
-    Zenith: Zenith,
+    Evelyn,
+    Jill,
+    John,
+    Neil,
+    Pauline,
+    Petey,
+    Quazar,
+    Zenith,
   };
 
   /*
    *
    *  Paradise/Locales/Islands
    *  Declan Tyson
-   *  v0.0.77
-   *  24/09/2018
+   *  v0.0.95
+   *  06/05/2020
    *
    */
 
@@ -2106,6 +2197,7 @@
       this.terrainPaint(55, 74, 2, 1, 'HorizontalRoad');
 
       this.terrainPaint(52, 76, 11, 3, 'CoastalSands');
+      this.randomEncounterPatch(52, 76, 11, 3, 5, [['Slime'], ['Slime', 'Slime']]);
 
       this.addDecoration(new Tree(60, 77));
 
@@ -2351,8 +2443,6 @@
       document.getElementById('log').style.display = 'block';
     }
 
-    console.log(canvasProperties);
-
     player = player || new Player();
     scene = scene || new WorldMap(player);
     renderer = renderer || new Renderer('world', canvasProperties.width, canvasProperties.height);
@@ -2360,9 +2450,10 @@
     let game = new Game(renderer, scene, canvasProperties.centerPoint);
     window.game = game;
     game.people = people;
+    game.enemies = enemies;
     game.locales = locales;
 
-    if(!locale) {
+    if (!locale) {
       game.loading = false;
       return;
     }
@@ -2532,8 +2623,8 @@
       this.actions.up = this.previousOption.bind(this);
       this.actions.down = this.nextOption.bind(this);
       this.actions.action = this.chooseOption.bind(this);
-      
-      this.optionsArea = optionsArea ||  {
+
+      this.optionsArea = optionsArea || {
         x: 0,
         y: 0,
         width: canvasProperties.width / 2,
@@ -2555,10 +2646,7 @@
     drawOptions(ctx) {
       const canvasProperties = settings.canvasProperties();
 
-      let y =
-        canvasProperties.height -
-        this.optionsArea.height +
-        this.optionsArea.optionsOffsetY;
+      let y = canvasProperties.height - this.optionsArea.height + this.optionsArea.optionsOffsetY;
 
       ctx.font = settings.get('fonts').small;
       ctx.fillStyle = colours.white;
@@ -2619,7 +2707,7 @@
   class TestMenu extends Menu {
     constructor() {
       const canvasProperties = settings.canvasProperties();
-      super('/img/loading.png',  {
+      super('/img/loading.png', {
         x: canvasProperties.width / 2,
         y: 0,
         width: canvasProperties.width / 2,
@@ -2651,8 +2739,8 @@
       people = people || choosePeople();
 
       let player = new Player(),
-          worldMap = new WorldMap(player),
-          start = new locale(player, people);
+        worldMap = new WorldMap(player),
+        start = new locale(player, people);
 
       window.game.setScene(worldMap);
       window.game.scene.setCurrentLocale(start, 'beginningOfGame');

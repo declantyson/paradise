@@ -43,7 +43,7 @@ class Zenith extends Person {
   }
 
   scream() {
-    alert("!!!!");
+    alert('!!!!');
   }
 }
 

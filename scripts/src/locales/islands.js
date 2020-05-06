@@ -2,8 +2,8 @@
  *
  *  Paradise/Locales/Islands
  *  Declan Tyson
- *  v0.0.77
- *  24/09/2018
+ *  v0.0.95
+ *  06/05/2020
  *
  */
 
@@ -40,6 +40,7 @@ class Islands extends Locale {
     this.terrainPaint(55, 74, 2, 1, 'HorizontalRoad');
 
     this.terrainPaint(52, 76, 11, 3, 'CoastalSands');
+    this.randomEncounterPatch(52, 76, 11, 3, 5, [['Slime'], ['Slime', 'Slime']]);
 
     this.addDecoration(new Tree(60, 77));
 

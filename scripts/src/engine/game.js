@@ -7,7 +7,6 @@
  *
  */
 
-
 /* Do not remove these despite what IntelliJ says!! */
 import * as input from './inputs';
 import { Item } from './item';
@@ -17,6 +16,7 @@ import { Player } from './player';
 import { WorldMap } from './worldmap';
 import { locales } from '../locales/locales';
 import { people } from '../people/people';
+import { enemies } from '../enemies/enemies';
 import { settings } from '../settings';
 
 export const StartGame = (scene, locale = null, activePeople, player, renderer) => {
@@ -27,8 +27,6 @@ export const StartGame = (scene, locale = null, activePeople, player, renderer) 
     document.getElementById('log').style.display = 'block';
   }
 
-  console.log(canvasProperties)
-
   player = player || new Player();
   scene = scene || new WorldMap(player);
   renderer = renderer || new Renderer('world', canvasProperties.width, canvasProperties.height);
@@ -36,9 +34,10 @@ export const StartGame = (scene, locale = null, activePeople, player, renderer) 
   let game = new Game(renderer, scene, canvasProperties.centerPoint);
   window.game = game;
   game.people = people;
+  game.enemies = enemies;
   game.locales = locales;
 
-  if(!locale) {
+  if (!locale) {
     game.loading = false;
     return;
   }

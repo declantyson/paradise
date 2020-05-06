@@ -2,8 +2,8 @@
  *
  *  Paradise/People
  *  Declan Tyson
- *  v0.0.25
- *  07/02/2018
+ *  v0.0.95
+ *  06/05/2020
  *
  */
 
@@ -17,12 +17,12 @@ import { Quazar } from './quazar';
 import { Zenith } from './zenith';
 
 export let people = {
-  Evelyn: Evelyn,
-  Jill: Jill,
-  John: John,
-  Neil: Neil,
-  Pauline: Pauline,
-  Petey: Petey,
-  Quazar: Quazar,
-  Zenith: Zenith,
+  Evelyn,
+  Jill,
+  John,
+  Neil,
+  Pauline,
+  Petey,
+  Quazar,
+  Zenith,
 };

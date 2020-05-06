@@ -38,7 +38,7 @@ class Scene {
   }
 
   onLoad() {
-    console.log('ballsacks')
+    console.log('ballsacks');
     // extend this function
   }
 }

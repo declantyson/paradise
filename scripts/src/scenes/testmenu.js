@@ -19,7 +19,7 @@ import { startingMaps, chooseStartingMap } from '../locales/locales';
 class TestMenu extends Menu {
   constructor() {
     const canvasProperties = settings.canvasProperties();
-    super('/img/loading.png',  {
+    super('/img/loading.png', {
       x: canvasProperties.width / 2,
       y: 0,
       width: canvasProperties.width / 2,
@@ -51,8 +51,8 @@ class TestMenu extends Menu {
     people = people || choosePeople();
 
     let player = new Player(),
-        worldMap = new WorldMap(player),
-        start = new locale(player, people);
+      worldMap = new WorldMap(player),
+      start = new locale(player, people);
 
     window.game.setScene(worldMap);
     window.game.scene.setCurrentLocale(start, 'beginningOfGame');

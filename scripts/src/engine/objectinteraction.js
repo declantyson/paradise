@@ -45,12 +45,7 @@ class ObjectInteraction extends Scene {
   drawConversationTextArea(ctx) {
     const interactionTextArea = settings.get('interactionTextArea');
 
-    ctx.rect(
-      interactionTextArea.x,
-      interactionTextArea.y,
-      interactionTextArea.width,
-      interactionTextArea.height
-    );
+    ctx.rect(interactionTextArea.x, interactionTextArea.y, interactionTextArea.width, interactionTextArea.height);
     ctx.fillStyle = interactionTextArea.background;
     ctx.globalAlpha = interactionTextArea.alpha;
     ctx.fill();

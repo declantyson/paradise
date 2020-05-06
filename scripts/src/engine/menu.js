@@ -29,8 +29,8 @@ class Menu extends Scene {
     this.actions.up = this.previousOption.bind(this);
     this.actions.down = this.nextOption.bind(this);
     this.actions.action = this.chooseOption.bind(this);
-    
-    this.optionsArea = optionsArea ||  {
+
+    this.optionsArea = optionsArea || {
       x: 0,
       y: 0,
       width: canvasProperties.width / 2,
@@ -52,10 +52,7 @@ class Menu extends Scene {
   drawOptions(ctx) {
     const canvasProperties = settings.canvasProperties();
 
-    let y =
-      canvasProperties.height -
-      this.optionsArea.height +
-      this.optionsArea.optionsOffsetY;
+    let y = canvasProperties.height - this.optionsArea.height + this.optionsArea.optionsOffsetY;
 
     ctx.font = settings.get('fonts').small;
     ctx.fillStyle = colours.white;
@@ -104,4 +101,4 @@ class Menu extends Scene {
   }
 }
 
-export { Menu }
+export { Menu };

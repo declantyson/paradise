@@ -2,14 +2,15 @@
  *
  *  Paradise/Scene-WorldMap
  *  Declan Tyson
- *  v0.0.92
- *  21/10/2019
+ *  v0.0.95
+ *  06/05/2020
  *
  */
 
 import { terrains } from './terrains';
 import { directions } from '../constants';
 import { Scene } from './scene';
+import { Encounter } from './encounter';
 import { settings } from '../settings';
 
 class WorldMap extends Scene {
@@ -129,7 +130,7 @@ class WorldMap extends Scene {
     // Player is always at center of screen
     const terrain = settings.get('terrain');
     const character = settings.get('character');
-    
+
     let sprite = this.player.sprite,
       playerX = this.game.centerPoint.x - terrain.tileSize / 2,
       playerY = this.game.centerPoint.y - terrain.tileSize;
@@ -216,9 +217,9 @@ class WorldMap extends Scene {
                 tileX - offsetX,
                 tileY - offsetY,
                 terrainSettings.tileSize,
-                terrainSettings.tileSize,
+                terrainSettings.tileSize
               );
-            } catch(e) {
+            } catch (e) {
               console.warn(e, tile);
             }
           }
@@ -234,23 +235,23 @@ class WorldMap extends Scene {
     const tileStep = settings.tileStep();
 
     let playerOffsetX = this.player.stepX * tileStep,
-        playerOffsetY = this.player.stepY * tileStep;
+      playerOffsetY = this.player.stepY * tileStep;
 
     this.presentPeople.forEach(person => {
       let sprite = person.sprite,
-          personX = person.x * terrain.tileSize - this.offsetX - playerOffsetX - terrain.tileSize / 2,
-          personY = person.y * terrain.tileSize - this.offsetY - playerOffsetY - terrain.tileSize / 2;
+        personX = person.x * terrain.tileSize - this.offsetX - playerOffsetX - terrain.tileSize / 2,
+        personY = person.y * terrain.tileSize - this.offsetY - playerOffsetY - terrain.tileSize / 2;
 
       ctx.drawImage(
-          sprite.image,
-          sprite.x,
-          sprite.y,
-          64,
-          64,
-          personX + (person.stepX * tileStep),
-          personY + (person.stepY * tileStep),
-          character.spriteSize,
-          character.spriteSize
+        sprite.image,
+        sprite.x,
+        sprite.y,
+        64,
+        64,
+        personX + person.stepX * tileStep,
+        personY + person.stepY * tileStep,
+        character.spriteSize,
+        character.spriteSize
       );
 
       this.localeMap[person.x][person.y].passable = false;
