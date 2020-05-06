@@ -51,7 +51,11 @@ class Decorative {
       offsetY = player.stepY * settings.tileStep(),
       height = this.image.naturalHeight; // we draw this from the bottom
 
-    ctx.drawImage(this.image, decorationX - offsetX, decorationY - offsetY - height + terrain.tileSize);
+    ctx.drawImage(
+      this.image,
+      decorationX - offsetX,
+      decorationY - offsetY - height + terrain.tileSize
+    );
 
     for (let i = 0; i < this.passMap.length; i++) {
       let mapEntry = map[this.x + i][this.y];

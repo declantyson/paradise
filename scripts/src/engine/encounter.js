@@ -2,7 +2,7 @@
  *
  *  Paradise/Scene-Encounter
  *  Declan Tyson
- *  v0.0.95
+ *  v0.0.96
  *  06/05/2020
  *
  */
@@ -13,11 +13,17 @@ import { settings } from '../settings';
 import { enemies } from '../enemies/enemies';
 
 class Encounter extends Scene {
-  constructor(enemyGroupOptions) {
+  constructor(worldMap, enemyGroupOptions, scenery) {
     super();
 
+    this.worldMap = worldMap;
     this.enemyGroupOptions = enemyGroupOptions;
     this.enemies = [];
+    this.actions.back = this.exit.bind(this);
+
+    let background = new Image();
+    background.src = scenery;
+    this.scenery = background;
 
     this.chooseEnemyGroup();
   }
@@ -39,9 +45,33 @@ class Encounter extends Scene {
 
   draw(ctx) {
     const canvasProperties = settings.canvasProperties();
-    ctx.strokeStyle = colours.black;
-    ctx.rect(0, 0, canvasProperties.width, canvasProperties.height);
-    ctx.fill();
+
+    ctx.drawImage(this.scenery, 0, 0, canvasProperties.width, canvasProperties.height);
+
+    this.drawEnemies(ctx);
+  }
+
+  drawEnemies(ctx) {
+    const canvasProperties = settings.canvasProperties();
+    const encounterSettings = settings.get('encounter');
+
+    let spaceOfEnemies =
+      (encounterSettings.spriteSize + encounterSettings.spriteSpacing) * this.enemies.length -
+      encounterSettings.spriteSpacing;
+
+    let startX = canvasProperties.width / 2 + ((canvasProperties.width / 4) - (spaceOfEnemies / 2));
+    let startY = canvasProperties.height / 2;
+
+    this.enemies.forEach(enemy => {
+      ctx.drawImage(enemy.sprite, startX, startY, encounterSettings.spriteSize, encounterSettings.spriteSize);
+
+      startX += encounterSettings.spriteSpacing + encounterSettings.spriteSize;
+      startY += encounterSettings.spriteSpacing;
+    });
+  }
+
+  exit() {
+    this.game.setScene(this.worldMap);
   }
 }
 

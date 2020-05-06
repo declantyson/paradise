@@ -25,7 +25,9 @@ class Village extends Locale {
     this.terrainPaint(37, 37, 2, 36, 'Grass');
     this.terrainPaint(39, 39, 2, 32, 'Grass');
 
-    this.inhabitances.push(new Inhabitance('TownHall', 'Town Hall', 30, 59, { x: 31, y: 62 }, 2, 4));
+    this.inhabitances.push(
+      new Inhabitance('TownHall', 'Town Hall', 30, 59, { x: 31, y: 62 }, 2, 4)
+    );
 
     this.drawInhabitances();
     this.assignPeopleToInhabitancesRandomly(4);

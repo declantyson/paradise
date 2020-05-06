@@ -2,8 +2,8 @@
  *
  *  Paradise/Settings
  *  Declan Tyson
- *  v0.0.93
- *  21/10/2019
+ *  v0.0.96
+ *  06/05/2020
  *
  */
 
@@ -22,6 +22,10 @@ let _settings = {
     frameSize: 64,
     frameCount: 9,
     stepsPerTile: 5,
+  },
+  encounter: {
+    spriteSize: 60,
+    spriteSpacing: 30,
   },
   personCount: 4,
   defaultInhabitanceSize: 2,
@@ -62,8 +66,10 @@ settings.set('canvasProperties', {
   width: _settings.terrain.tileSize * _settings.terrain.tilesWide,
   height: _settings.terrain.tileSize * _settings.terrain.tilesHigh,
   centerPoint: {
-    x: _settings.terrain.tileSize * _settings.terrain.tilesWide / 2 - _settings.terrain.tileSize / 2,
-    y: _settings.terrain.tileSize * _settings.terrain.tilesHigh / 2 - _settings.terrain.tileSize / 2,
+    x:
+      _settings.terrain.tileSize * _settings.terrain.tilesWide / 2 - _settings.terrain.tileSize / 2,
+    y:
+      _settings.terrain.tileSize * _settings.terrain.tilesHigh / 2 - _settings.terrain.tileSize / 2,
   },
 });
 

@@ -124,7 +124,11 @@ var Paradise = (function (exports) {
     roommate: 'Roommate',
   };
 
-  const pairedRelationships = [relationships.wife, relationships.husband, relationships.roommate];
+  const pairedRelationships = [
+    relationships.wife,
+    relationships.husband,
+    relationships.roommate,
+  ];
 
   /*
    *
@@ -147,8 +151,8 @@ var Paradise = (function (exports) {
    *
    *  Paradise/Settings
    *  Declan Tyson
-   *  v0.0.93
-   *  21/10/2019
+   *  v0.0.96
+   *  06/05/2020
    *
    */
 
@@ -165,6 +169,10 @@ var Paradise = (function (exports) {
       frameSize: 64,
       frameCount: 9,
       stepsPerTile: 5,
+    },
+    encounter: {
+      spriteSize: 60,
+      spriteSpacing: 30,
     },
     personCount: 4,
     defaultInhabitanceSize: 2,
@@ -205,8 +213,10 @@ var Paradise = (function (exports) {
     width: _settings.terrain.tileSize * _settings.terrain.tilesWide,
     height: _settings.terrain.tileSize * _settings.terrain.tilesHigh,
     centerPoint: {
-      x: _settings.terrain.tileSize * _settings.terrain.tilesWide / 2 - _settings.terrain.tileSize / 2,
-      y: _settings.terrain.tileSize * _settings.terrain.tilesHigh / 2 - _settings.terrain.tileSize / 2,
+      x:
+        _settings.terrain.tileSize * _settings.terrain.tilesWide / 2 - _settings.terrain.tileSize / 2,
+      y:
+        _settings.terrain.tileSize * _settings.terrain.tilesHigh / 2 - _settings.terrain.tileSize / 2,
     },
   });
 
@@ -511,13 +521,16 @@ var Paradise = (function (exports) {
    */
 
   class Enemy {
-    constructor(name, health, attack, defence) {
+    constructor(name, health, attack, defence, sprite) {
       this.id = name;
       this.name = name;
       this.health = health;
       this.attack = attack;
       this.defence = defence;
-      this.colour = colours.black;
+
+      let image = new Image();
+      image.src = sprite;
+      this.sprite = image;
     }
 
     attack(target) {
@@ -532,14 +545,15 @@ var Paradise = (function (exports) {
    *
    *  Paradise/Enemies/Slime
    *  Declan Tyson
-   *  v0.0.95
+   *  v0.0.96
    *  06/05/2020
    *
    */
 
   class Slime extends Enemy {
     constructor() {
-      super('Slime', 20, 5, 2);
+      super('Slime', 20, 5, 2, '/img/Enemies/slime.png');
+      this.colour = colours.green;
     }
   }
 
@@ -560,17 +574,23 @@ var Paradise = (function (exports) {
    *
    *  Paradise/Scene-Encounter
    *  Declan Tyson
-   *  v0.0.95
+   *  v0.0.96
    *  06/05/2020
    *
    */
 
   class Encounter extends Scene {
-    constructor(enemyGroupOptions) {
+    constructor(worldMap, enemyGroupOptions, scenery) {
       super();
 
+      this.worldMap = worldMap;
       this.enemyGroupOptions = enemyGroupOptions;
       this.enemies = [];
+      this.actions.back = this.exit.bind(this);
+
+      let background = new Image();
+      background.src = scenery;
+      this.scenery = background;
 
       this.chooseEnemyGroup();
     }
@@ -592,9 +612,33 @@ var Paradise = (function (exports) {
 
     draw(ctx) {
       const canvasProperties = settings.canvasProperties();
-      ctx.strokeStyle = colours.black;
-      ctx.rect(0, 0, canvasProperties.width, canvasProperties.height);
-      ctx.fill();
+
+      ctx.drawImage(this.scenery, 0, 0, canvasProperties.width, canvasProperties.height);
+
+      this.drawEnemies(ctx);
+    }
+
+    drawEnemies(ctx) {
+      const canvasProperties = settings.canvasProperties();
+      const encounterSettings = settings.get('encounter');
+
+      let spaceOfEnemies =
+        (encounterSettings.spriteSize + encounterSettings.spriteSpacing) * this.enemies.length -
+        encounterSettings.spriteSpacing;
+
+      let startX = canvasProperties.width / 2 + ((canvasProperties.width / 4) - (spaceOfEnemies / 2));
+      let startY = canvasProperties.height / 2;
+
+      this.enemies.forEach(enemy => {
+        ctx.drawImage(enemy.sprite, startX, startY, encounterSettings.spriteSize, encounterSettings.spriteSize);
+
+        startX += encounterSettings.spriteSpacing + encounterSettings.spriteSize;
+        startY += encounterSettings.spriteSpacing;
+      });
+    }
+
+    exit() {
+      this.game.setScene(this.worldMap);
     }
   }
 
@@ -602,7 +646,7 @@ var Paradise = (function (exports) {
    *
    *  Paradise/Scene-WorldMap
    *  Declan Tyson
-   *  v0.0.95
+   *  v0.0.96
    *  06/05/2020
    *
    */
@@ -796,7 +840,12 @@ var Paradise = (function (exports) {
               ctx.beginPath();
               ctx.fillStyle = terrain.colour;
               ctx.strokeStyle = terrain.colour;
-              ctx.rect(tileX - offsetX, tileY - offsetY, terrainSettings.tileSize, terrainSettings.tileSize);
+              ctx.rect(
+                tileX - offsetX,
+                tileY - offsetY,
+                terrainSettings.tileSize,
+                terrainSettings.tileSize
+              );
               ctx.fill();
               ctx.stroke();
             } else {
@@ -859,12 +908,12 @@ var Paradise = (function (exports) {
 
       let chance = Math.ceil(Math.random() * potentialRandomEncounter.rate);
       if (chance === potentialRandomEncounter.rate) {
-        this.startRandomEncounter(potentialRandomEncounter.enemies);
+        this.startRandomEncounter(potentialRandomEncounter);
       }
     }
 
-    startRandomEncounter(enemies) {
-      this.game.setScene(new Encounter(enemies));
+    startRandomEncounter(encounter) {
+      this.game.setScene(new Encounter(this, encounter.enemies, encounter.scenery));
     }
 
     checkForInteraction() {
@@ -892,7 +941,8 @@ var Paradise = (function (exports) {
         decoration = this.localeMap[x][y].decoration;
 
       if (!person) {
-        if (this.player.direction === directions.up && this.player.stepX > 0) person = this.localeMap[x + 1][y].person;
+        if (this.player.direction === directions.up && this.player.stepX > 0)
+          person = this.localeMap[x + 1][y].person;
         else if (this.player.direction === directions.right && this.player.stepY > 0)
           person = this.localeMap[x][y + 1].person;
       }
@@ -993,8 +1043,8 @@ var Paradise = (function (exports) {
    *
    *  Paradise/Locales/Base
    *  Declan Tyson
-   *  v0.0.77
-   *  24/09/2018
+   *  v0.0.96
+   *  06/05/2020
    *
    */
 
@@ -1038,12 +1088,13 @@ var Paradise = (function (exports) {
       }
     }
 
-    randomEncounterPatch(startX, startY, width, height, rate, enemies) {
+    randomEncounterPatch(startX, startY, width, height, rate, enemies, scenery) {
       for (let x = startX; x < startX + width; x++) {
         for (let y = startY; y < startY + height; y++) {
           this.encounters[x][y] = {
-            rate: rate,
-            enemies: enemies,
+            rate,
+            enemies,
+            scenery,
           };
         }
       }
@@ -1079,7 +1130,13 @@ var Paradise = (function (exports) {
     drawInhabitances() {
       for (let i = 0; i < this.inhabitances.length; i++) {
         let inhabitance = this.inhabitances[i];
-        this.addInhabitance(inhabitance.x, inhabitance.y, inhabitance.sizeX, inhabitance.sizeY, inhabitance);
+        this.addInhabitance(
+          inhabitance.x,
+          inhabitance.y,
+          inhabitance.sizeX,
+          inhabitance.sizeY,
+          inhabitance
+        );
       }
     }
 
@@ -1116,7 +1173,8 @@ var Paradise = (function (exports) {
 
           Object.keys(thisPerson.relationships).forEach(relationship => {
             if (
-              pairedRelationships.indexOf(thisPerson.relationships[relationship].description) !== -1 &&
+              pairedRelationships.indexOf(thisPerson.relationships[relationship].description) !==
+                -1 &&
               this.people.indexOf(relationship) !== -1
             ) {
               currentPairing.push(relationship);
@@ -1274,7 +1332,9 @@ var Paradise = (function (exports) {
       this.terrainPaint(37, 37, 2, 36, 'Grass');
       this.terrainPaint(39, 39, 2, 32, 'Grass');
 
-      this.inhabitances.push(new Inhabitance('TownHall', 'Town Hall', 30, 59, { x: 31, y: 62 }, 2, 4));
+      this.inhabitances.push(
+        new Inhabitance('TownHall', 'Town Hall', 30, 59, { x: 31, y: 62 }, 2, 4)
+      );
 
       this.drawInhabitances();
       this.assignPeopleToInhabitancesRandomly(4);
@@ -1324,7 +1384,12 @@ var Paradise = (function (exports) {
     drawConversationTextArea(ctx) {
       const interactionTextArea = settings.get('interactionTextArea');
 
-      ctx.rect(interactionTextArea.x, interactionTextArea.y, interactionTextArea.width, interactionTextArea.height);
+      ctx.rect(
+        interactionTextArea.x,
+        interactionTextArea.y,
+        interactionTextArea.width,
+        interactionTextArea.height
+      );
       ctx.fillStyle = interactionTextArea.background;
       ctx.globalAlpha = interactionTextArea.alpha;
       ctx.fill();
@@ -1357,7 +1422,11 @@ var Paradise = (function (exports) {
       });
 
       lines.forEach((line, index) => {
-        ctx.fillText(line, interactionTextArea.badgeOffsetX, y + index * interactionTextArea.lineHeight);
+        ctx.fillText(
+          line,
+          interactionTextArea.badgeOffsetX,
+          y + index * interactionTextArea.lineHeight
+        );
       });
 
       this.chunkedLines = lines;
@@ -1397,7 +1466,8 @@ var Paradise = (function (exports) {
     nextOption() {
       if (this.keyHeld) return;
 
-      if (this.selectedConversationOption < this.conversationOptions.length - 1) this.selectedConversationOption++;
+      if (this.selectedConversationOption < this.conversationOptions.length - 1)
+        this.selectedConversationOption++;
       this.keyHeld = true;
     }
 
@@ -1472,7 +1542,11 @@ var Paradise = (function (exports) {
         offsetY = player.stepY * settings.tileStep(),
         height = this.image.naturalHeight; // we draw this from the bottom
 
-      ctx.drawImage(this.image, decorationX - offsetX, decorationY - offsetY - height + terrain.tileSize);
+      ctx.drawImage(
+        this.image,
+        decorationX - offsetX,
+        decorationY - offsetY - height + terrain.tileSize
+      );
 
       for (let i = 0; i < this.passMap.length; i++) {
         let mapEntry = map[this.x + i][this.y];
@@ -1675,7 +1749,12 @@ var Paradise = (function (exports) {
     drawConversationTextArea(ctx) {
       const interactionTextArea = settings.get('interactionTextArea');
 
-      ctx.rect(interactionTextArea.x, interactionTextArea.y, interactionTextArea.width, interactionTextArea.height);
+      ctx.rect(
+        interactionTextArea.x,
+        interactionTextArea.y,
+        interactionTextArea.width,
+        interactionTextArea.height
+      );
       ctx.fillStyle = interactionTextArea.background;
       ctx.globalAlpha = interactionTextArea.alpha;
       ctx.fill();
@@ -1749,7 +1828,9 @@ var Paradise = (function (exports) {
         if (index === this.selectedConversationOption) {
           ctx.strokeStyle = colours.white;
           ctx.strokeRect(
-            interactionTextArea.x + interactionTextArea.optionsOffsetX - interactionTextArea.optionHeight / 2,
+            interactionTextArea.x +
+              interactionTextArea.optionsOffsetX -
+              interactionTextArea.optionHeight / 2,
             y + index * interactionTextArea.optionHeight - interactionTextArea.optionHeight / 1.5,
             interactionTextArea.width - interactionTextArea.optionsOffsetX,
             interactionTextArea.optionHeight
@@ -1761,7 +1842,8 @@ var Paradise = (function (exports) {
     nextOption() {
       if (this.keyHeld) return;
 
-      if (this.selectedConversationOption < this.conversationOptions.length - 1) this.selectedConversationOption++;
+      if (this.selectedConversationOption < this.conversationOptions.length - 1)
+        this.selectedConversationOption++;
       this.keyHeld = true;
     }
 
@@ -1773,7 +1855,8 @@ var Paradise = (function (exports) {
     }
 
     sendResponse() {
-      if (this.keyHeld || this.person.currentPortrait.entering || this.person.currentPortrait.exiting) return;
+      if (this.keyHeld || this.person.currentPortrait.entering || this.person.currentPortrait.exiting)
+        return;
 
       this.person.sendResponse(this.conversationOptions[this.selectedConversationOption], this);
       this.keyHeld = true;
@@ -1834,7 +1917,10 @@ var Paradise = (function (exports) {
         y: 128,
       };
 
-      this.lines = ["I'm a default character, short and stout.", "Here's my handle, here's my spout."];
+      this.lines = [
+        "I'm a default character, short and stout.",
+        "Here's my handle, here's my spout.",
+      ];
       this.conversationOptions = [
         {
           key: 'Kettle',
@@ -2181,7 +2267,7 @@ var Paradise = (function (exports) {
    *
    *  Paradise/Locales/Islands
    *  Declan Tyson
-   *  v0.0.95
+   *  v0.0.96
    *  06/05/2020
    *
    */
@@ -2214,15 +2300,35 @@ var Paradise = (function (exports) {
       this.terrainPaint(55, 74, 2, 1, 'HorizontalRoad');
 
       this.terrainPaint(52, 76, 11, 3, 'CoastalSands');
-      this.randomEncounterPatch(52, 76, 11, 3, 5, [['Slime'], ['Slime', 'Slime']]);
+      this.randomEncounterPatch(
+        52,
+        76,
+        11,
+        3,
+        50,
+        [['Slime'], ['Slime', 'Slime']],
+        '/img/Encounter/beach.png'
+      );
 
       this.addDecoration(new Tree(60, 77));
 
       this.inhabitances.push(
-        new Inhabitance('GroveStreet1', '1 Grove Street', 53, 59, { x: 54, y: 60 }),
-        new Inhabitance('GroveStreet2', '2 Grove Street', 60, 59, { x: 60, y: 60 }),
-        new Inhabitance('GroveStreet3', '3 Grove Street', 53, 62, { x: 54, y: 63 }),
-        new Inhabitance('GroveStreet4', '4 Grove Street', 60, 62, { x: 60, y: 63 }),
+        new Inhabitance('GroveStreet1', '1 Grove Street', 53, 59, {
+          x: 54,
+          y: 60,
+        }),
+        new Inhabitance('GroveStreet2', '2 Grove Street', 60, 59, {
+          x: 60,
+          y: 60,
+        }),
+        new Inhabitance('GroveStreet3', '3 Grove Street', 53, 62, {
+          x: 54,
+          y: 63,
+        }),
+        new Inhabitance('GroveStreet4', '4 Grove Street', 60, 62, {
+          x: 60,
+          y: 63,
+        }),
         new Inhabitance('BallManor', 'Ball Manor', 55, 72, { x: 56, y: 73 })
       );
 
@@ -2352,10 +2458,18 @@ var Paradise = (function (exports) {
       this.resetInteractions();
 
       this.addConversationOption('Search', 'Open the drawers');
-      this.addResponse('Search', 'You find nothing but a dead fly. You hope he had a fulfilling life.');
+      this.addResponse(
+        'Search',
+        'You find nothing but a dead fly. You hope he had a fulfilling life.'
+      );
       this.addConversationOption('Leave', 'Shut the drawer and go elsewhere.', 'Search');
 
-      this.addConversationOption('FreakOut', 'Touch the mysterious looking button', null, this.scream);
+      this.addConversationOption(
+        'FreakOut',
+        'Touch the mysterious looking button',
+        null,
+        this.scream
+      );
       this.addResponse('FreakOut', 'You are now scarred for life.');
       this.addConversationOption('FreakOut', 'Press the button again', 'FreakOut', this.scream);
       this.addConversationOption('Leave', 'Break the cycle', 'FreakOut');
@@ -2556,7 +2670,13 @@ var Paradise = (function (exports) {
       } else if (this.redraw) {
         this.cachedCanvas = pre_canvas;
       }
-      this.renderer.ctx.drawImage(this.cachedCanvas, 0, 0, this.renderer.canvas.width, this.renderer.canvas.height);
+      this.renderer.ctx.drawImage(
+        this.cachedCanvas,
+        0,
+        0,
+        this.renderer.canvas.width,
+        this.renderer.canvas.height
+      );
 
       window.requestAnimationFrame(this.draw.bind(this));
     }
@@ -2572,7 +2692,10 @@ var Paradise = (function (exports) {
     }
 
     triggerActionTimeout() {
-      this.actionTimeoutCounterInterval = setInterval(this.actionTimeoutCounter.bind(this), 1000 / this.renderer.fps);
+      this.actionTimeoutCounterInterval = setInterval(
+        this.actionTimeoutCounter.bind(this),
+        1000 / this.renderer.fps
+      );
     }
 
     actionTimeoutCounter() {

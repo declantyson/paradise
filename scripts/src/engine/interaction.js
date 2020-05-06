@@ -55,7 +55,12 @@ class Interaction extends Scene {
   drawConversationTextArea(ctx) {
     const interactionTextArea = settings.get('interactionTextArea');
 
-    ctx.rect(interactionTextArea.x, interactionTextArea.y, interactionTextArea.width, interactionTextArea.height);
+    ctx.rect(
+      interactionTextArea.x,
+      interactionTextArea.y,
+      interactionTextArea.width,
+      interactionTextArea.height
+    );
     ctx.fillStyle = interactionTextArea.background;
     ctx.globalAlpha = interactionTextArea.alpha;
     ctx.fill();
@@ -129,7 +134,9 @@ class Interaction extends Scene {
       if (index === this.selectedConversationOption) {
         ctx.strokeStyle = colours.white;
         ctx.strokeRect(
-          interactionTextArea.x + interactionTextArea.optionsOffsetX - interactionTextArea.optionHeight / 2,
+          interactionTextArea.x +
+            interactionTextArea.optionsOffsetX -
+            interactionTextArea.optionHeight / 2,
           y + index * interactionTextArea.optionHeight - interactionTextArea.optionHeight / 1.5,
           interactionTextArea.width - interactionTextArea.optionsOffsetX,
           interactionTextArea.optionHeight
@@ -141,7 +148,8 @@ class Interaction extends Scene {
   nextOption() {
     if (this.keyHeld) return;
 
-    if (this.selectedConversationOption < this.conversationOptions.length - 1) this.selectedConversationOption++;
+    if (this.selectedConversationOption < this.conversationOptions.length - 1)
+      this.selectedConversationOption++;
     this.keyHeld = true;
   }
 
@@ -153,7 +161,8 @@ class Interaction extends Scene {
   }
 
   sendResponse() {
-    if (this.keyHeld || this.person.currentPortrait.entering || this.person.currentPortrait.exiting) return;
+    if (this.keyHeld || this.person.currentPortrait.entering || this.person.currentPortrait.exiting)
+      return;
 
     this.person.sendResponse(this.conversationOptions[this.selectedConversationOption], this);
     this.keyHeld = true;

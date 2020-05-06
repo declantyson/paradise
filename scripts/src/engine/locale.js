@@ -2,8 +2,8 @@
  *
  *  Paradise/Locales/Base
  *  Declan Tyson
- *  v0.0.77
- *  24/09/2018
+ *  v0.0.96
+ *  06/05/2020
  *
  */
 
@@ -51,12 +51,13 @@ class Locale {
     }
   }
 
-  randomEncounterPatch(startX, startY, width, height, rate, enemies) {
+  randomEncounterPatch(startX, startY, width, height, rate, enemies, scenery) {
     for (let x = startX; x < startX + width; x++) {
       for (let y = startY; y < startY + height; y++) {
         this.encounters[x][y] = {
-          rate: rate,
-          enemies: enemies,
+          rate,
+          enemies,
+          scenery,
         };
       }
     }
@@ -92,7 +93,13 @@ class Locale {
   drawInhabitances() {
     for (let i = 0; i < this.inhabitances.length; i++) {
       let inhabitance = this.inhabitances[i];
-      this.addInhabitance(inhabitance.x, inhabitance.y, inhabitance.sizeX, inhabitance.sizeY, inhabitance);
+      this.addInhabitance(
+        inhabitance.x,
+        inhabitance.y,
+        inhabitance.sizeX,
+        inhabitance.sizeY,
+        inhabitance
+      );
     }
   }
 
@@ -129,7 +136,8 @@ class Locale {
 
         Object.keys(thisPerson.relationships).forEach(relationship => {
           if (
-            pairedRelationships.indexOf(thisPerson.relationships[relationship].description) !== -1 &&
+            pairedRelationships.indexOf(thisPerson.relationships[relationship].description) !==
+              -1 &&
             this.people.indexOf(relationship) !== -1
           ) {
             currentPairing.push(relationship);

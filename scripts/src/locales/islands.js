@@ -2,7 +2,7 @@
  *
  *  Paradise/Locales/Islands
  *  Declan Tyson
- *  v0.0.95
+ *  v0.0.96
  *  06/05/2020
  *
  */
@@ -40,15 +40,35 @@ class Islands extends Locale {
     this.terrainPaint(55, 74, 2, 1, 'HorizontalRoad');
 
     this.terrainPaint(52, 76, 11, 3, 'CoastalSands');
-    this.randomEncounterPatch(52, 76, 11, 3, 5, [['Slime'], ['Slime', 'Slime']]);
+    this.randomEncounterPatch(
+      52,
+      76,
+      11,
+      3,
+      50,
+      [['Slime'], ['Slime', 'Slime']],
+      '/img/Encounter/beach.png'
+    );
 
     this.addDecoration(new Tree(60, 77));
 
     this.inhabitances.push(
-      new Inhabitance('GroveStreet1', '1 Grove Street', 53, 59, { x: 54, y: 60 }),
-      new Inhabitance('GroveStreet2', '2 Grove Street', 60, 59, { x: 60, y: 60 }),
-      new Inhabitance('GroveStreet3', '3 Grove Street', 53, 62, { x: 54, y: 63 }),
-      new Inhabitance('GroveStreet4', '4 Grove Street', 60, 62, { x: 60, y: 63 }),
+      new Inhabitance('GroveStreet1', '1 Grove Street', 53, 59, {
+        x: 54,
+        y: 60,
+      }),
+      new Inhabitance('GroveStreet2', '2 Grove Street', 60, 59, {
+        x: 60,
+        y: 60,
+      }),
+      new Inhabitance('GroveStreet3', '3 Grove Street', 53, 62, {
+        x: 54,
+        y: 63,
+      }),
+      new Inhabitance('GroveStreet4', '4 Grove Street', 60, 62, {
+        x: 60,
+        y: 63,
+      }),
       new Inhabitance('BallManor', 'Ball Manor', 55, 72, { x: 56, y: 73 })
     );
 

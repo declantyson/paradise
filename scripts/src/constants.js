@@ -60,4 +60,8 @@ export const relationships = {
   roommate: 'Roommate',
 };
 
-export const pairedRelationships = [relationships.wife, relationships.husband, relationships.roommate];
+export const pairedRelationships = [
+  relationships.wife,
+  relationships.husband,
+  relationships.roommate,
+];

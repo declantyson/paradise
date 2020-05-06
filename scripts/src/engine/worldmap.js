@@ -2,7 +2,7 @@
  *
  *  Paradise/Scene-WorldMap
  *  Declan Tyson
- *  v0.0.95
+ *  v0.0.96
  *  06/05/2020
  *
  */
@@ -202,7 +202,12 @@ class WorldMap extends Scene {
             ctx.beginPath();
             ctx.fillStyle = terrain.colour;
             ctx.strokeStyle = terrain.colour;
-            ctx.rect(tileX - offsetX, tileY - offsetY, terrainSettings.tileSize, terrainSettings.tileSize);
+            ctx.rect(
+              tileX - offsetX,
+              tileY - offsetY,
+              terrainSettings.tileSize,
+              terrainSettings.tileSize
+            );
             ctx.fill();
             ctx.stroke();
           } else {
@@ -265,12 +270,12 @@ class WorldMap extends Scene {
 
     let chance = Math.ceil(Math.random() * potentialRandomEncounter.rate);
     if (chance === potentialRandomEncounter.rate) {
-      this.startRandomEncounter(potentialRandomEncounter.enemies);
+      this.startRandomEncounter(potentialRandomEncounter);
     }
   }
 
-  startRandomEncounter(enemies) {
-    this.game.setScene(new Encounter(enemies));
+  startRandomEncounter(encounter) {
+    this.game.setScene(new Encounter(this, encounter.enemies, encounter.scenery));
   }
 
   checkForInteraction() {
@@ -298,7 +303,8 @@ class WorldMap extends Scene {
       decoration = this.localeMap[x][y].decoration;
 
     if (!person) {
-      if (this.player.direction === directions.up && this.player.stepX > 0) person = this.localeMap[x + 1][y].person;
+      if (this.player.direction === directions.up && this.player.stepX > 0)
+        person = this.localeMap[x + 1][y].person;
       else if (this.player.direction === directions.right && this.player.stepY > 0)
         person = this.localeMap[x][y + 1].person;
     }

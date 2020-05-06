@@ -47,7 +47,10 @@ class Person {
       y: 128,
     };
 
-    this.lines = ["I'm a default character, short and stout.", "Here's my handle, here's my spout."];
+    this.lines = [
+      "I'm a default character, short and stout.",
+      "Here's my handle, here's my spout.",
+    ];
     this.conversationOptions = [
       {
         key: 'Kettle',

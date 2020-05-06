@@ -10,13 +10,16 @@
 import { colours } from '../constants';
 
 class Enemy {
-  constructor(name, health, attack, defence) {
+  constructor(name, health, attack, defence, sprite) {
     this.id = name;
     this.name = name;
     this.health = health;
     this.attack = attack;
     this.defence = defence;
-    this.colour = colours.black;
+
+    let image = new Image();
+    image.src = sprite;
+    this.sprite = image;
   }
 
   attack(target) {

@@ -123,7 +123,13 @@ export class Game {
     } else if (this.redraw) {
       this.cachedCanvas = pre_canvas;
     }
-    this.renderer.ctx.drawImage(this.cachedCanvas, 0, 0, this.renderer.canvas.width, this.renderer.canvas.height);
+    this.renderer.ctx.drawImage(
+      this.cachedCanvas,
+      0,
+      0,
+      this.renderer.canvas.width,
+      this.renderer.canvas.height
+    );
 
     window.requestAnimationFrame(this.draw.bind(this));
   }
@@ -139,7 +145,10 @@ export class Game {
   }
 
   triggerActionTimeout() {
-    this.actionTimeoutCounterInterval = setInterval(this.actionTimeoutCounter.bind(this), 1000 / this.renderer.fps);
+    this.actionTimeoutCounterInterval = setInterval(
+      this.actionTimeoutCounter.bind(this),
+      1000 / this.renderer.fps
+    );
   }
 
   actionTimeoutCounter() {

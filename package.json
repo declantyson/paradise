@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "format": "prettier --trailing-comma es5 --single-quote --print-width 120 --write 'scripts/src/{,!(assets)/**/}*.{js,scss}'"
+    "format": "prettier --trailing-comma es5 --single-quote --print-width 100 --write 'scripts/src/{,!(assets)/**/}*.{js,scss}'"
   },
   "keywords": [],
   "author": "",

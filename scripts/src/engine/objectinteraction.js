@@ -45,7 +45,12 @@ class ObjectInteraction extends Scene {
   drawConversationTextArea(ctx) {
     const interactionTextArea = settings.get('interactionTextArea');
 
-    ctx.rect(interactionTextArea.x, interactionTextArea.y, interactionTextArea.width, interactionTextArea.height);
+    ctx.rect(
+      interactionTextArea.x,
+      interactionTextArea.y,
+      interactionTextArea.width,
+      interactionTextArea.height
+    );
     ctx.fillStyle = interactionTextArea.background;
     ctx.globalAlpha = interactionTextArea.alpha;
     ctx.fill();
@@ -78,7 +83,11 @@ class ObjectInteraction extends Scene {
     });
 
     lines.forEach((line, index) => {
-      ctx.fillText(line, interactionTextArea.badgeOffsetX, y + index * interactionTextArea.lineHeight);
+      ctx.fillText(
+        line,
+        interactionTextArea.badgeOffsetX,
+        y + index * interactionTextArea.lineHeight
+      );
     });
 
     this.chunkedLines = lines;
@@ -118,7 +127,8 @@ class ObjectInteraction extends Scene {
   nextOption() {
     if (this.keyHeld) return;
 
-    if (this.selectedConversationOption < this.conversationOptions.length - 1) this.selectedConversationOption++;
+    if (this.selectedConversationOption < this.conversationOptions.length - 1)
+      this.selectedConversationOption++;
     this.keyHeld = true;
   }
 
