@@ -2,8 +2,8 @@
  *
  *  Paradise/Game
  *  Declan Tyson
- *  v0.0.92
- *  21/10/2019
+ *  v0.0.97
+ *  06/05/2020
  *
  */
 
@@ -17,6 +17,7 @@ import { WorldMap } from './worldmap';
 import { locales } from '../locales/locales';
 import { people } from '../people/people';
 import { enemies } from '../enemies/enemies';
+import { partymembers } from '../partymembers/partymembers';
 import { settings } from '../settings';
 
 export const StartGame = (scene, locale = null, activePeople, player, renderer) => {
@@ -35,6 +36,7 @@ export const StartGame = (scene, locale = null, activePeople, player, renderer) 
   window.game = game;
   game.people = people;
   game.enemies = enemies;
+  game.partymembers = partymembers;
   game.locales = locales;
 
   if (!locale) {
@@ -71,6 +73,7 @@ export class Game {
     this.redraw = true;
     this.spritesLoaded = 0;
     this.loading = true;
+    this.currentParty = [];
 
     this.draw();
   }
@@ -157,6 +160,10 @@ export class Game {
       clearInterval(this.actionTimeoutCounterInterval);
       this.actionTimeout = settings.get('actionTimeoutLimit');
     }
+  }
+
+  addPartyMember(id) {
+    this.currentParty.push(new this.partymembers[id]());
   }
 
   onLoad() {

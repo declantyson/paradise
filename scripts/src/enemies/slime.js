@@ -2,7 +2,7 @@
  *
  *  Paradise/Enemies/Slime
  *  Declan Tyson
- *  v0.0.96
+ *  v0.0.97
  *  06/05/2020
  *
  */
@@ -12,7 +12,7 @@ import { colours } from '../constants';
 
 class Slime extends Enemy {
   constructor() {
-    super('Slime', 20, 5, 2, '/img/Enemies/slime.png');
+    super('Slime', 20, 5, 2, 3, '/img/Enemies/slime.png');
     this.colour = colours.green;
   }
 }

@@ -1,20 +1,23 @@
 /*
  *
- *  Paradise/Enemy
+ *  Paradise/Party Member
  *  Declan Tyson
  *  v0.0.97
  *  06/05/2020
  *
  */
 
-class Enemy {
-  constructor(name, health, attack, defence, speed, sprite) {
+class PartyMember {
+  constructor(name, health, baseAttack, baseDefence, baseSpeed, sprite) {
     this.id = name;
     this.name = name;
     this.health = health;
-    this.attack = attack;
-    this.defence = defence;
-    this.speed = speed;
+    this.attack = baseAttack;
+    this.defence = baseDefence;
+    this.speed = baseSpeed;
+
+    this.experience = 0;
+    this.level = 1;
 
     let image = new Image();
     image.src = sprite;
@@ -29,4 +32,4 @@ class Enemy {
   }
 }
 
-export { Enemy };
+export { PartyMember };

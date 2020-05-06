@@ -2,7 +2,7 @@
  *
  *  Paradise/Scene-Encounter
  *  Declan Tyson
- *  v0.0.96
+ *  v0.0.97
  *  06/05/2020
  *
  */
@@ -19,6 +19,7 @@ class Encounter extends Scene {
     this.worldMap = worldMap;
     this.enemyGroupOptions = enemyGroupOptions;
     this.enemies = [];
+    this.party = window.game.currentParty;
     this.actions.back = this.exit.bind(this);
 
     let background = new Image();
@@ -48,22 +49,52 @@ class Encounter extends Scene {
 
     ctx.drawImage(this.scenery, 0, 0, canvasProperties.width, canvasProperties.height);
 
+    this.drawParty(ctx);
     this.drawEnemies(ctx);
+  }
+
+  drawParty(ctx) {
+    const canvasProperties = settings.canvasProperties();
+    const encounterSettings = settings.get('encounter');
+
+    let startX =
+      canvasProperties.width / 4 - encounterSettings.spriteSize - encounterSettings.spriteSpacing;
+    let startY = canvasProperties.height / 2;
+
+    this.party.forEach(member => {
+      ctx.drawImage(
+        member.sprite,
+        startX,
+        startY,
+        encounterSettings.spriteSize,
+        encounterSettings.spriteSize
+      );
+
+      startX += encounterSettings.spriteSpacing + encounterSettings.spriteSize;
+      startY += encounterSettings.spriteSpacing;
+    });
   }
 
   drawEnemies(ctx) {
     const canvasProperties = settings.canvasProperties();
+    // TODO: Have multiple settings for the enemies
     const encounterSettings = settings.get('encounter');
 
     let spaceOfEnemies =
       (encounterSettings.spriteSize + encounterSettings.spriteSpacing) * this.enemies.length -
       encounterSettings.spriteSpacing;
 
-    let startX = canvasProperties.width / 2 + ((canvasProperties.width / 4) - (spaceOfEnemies / 2));
+    let startX = canvasProperties.width / 2 + (canvasProperties.width / 4 - spaceOfEnemies / 2);
     let startY = canvasProperties.height / 2;
 
     this.enemies.forEach(enemy => {
-      ctx.drawImage(enemy.sprite, startX, startY, encounterSettings.spriteSize, encounterSettings.spriteSize);
+      ctx.drawImage(
+        enemy.sprite,
+        startX,
+        startY,
+        encounterSettings.spriteSize,
+        encounterSettings.spriteSize
+      );
 
       startX += encounterSettings.spriteSpacing + encounterSettings.spriteSize;
       startY += encounterSettings.spriteSpacing;

@@ -29,6 +29,7 @@ import { settings } from './settings';
 // Demo data
 import { startingMaps, chooseStartingMap } from './locales/locales';
 import { people } from './people/people';
+import { enemies } from './enemies/enemies';
 import { Evelyn } from './people/evelyn';
 import { Jill } from './people/jill';
 import { John } from './people/john';
@@ -41,6 +42,7 @@ import { Tree } from './locales/decorative/tree';
 import { Dresser } from './locales/decorative/dresser';
 import { Rug } from './locales/decorative/rug';
 import { TestMenu } from './scenes/testmenu';
+import { Slime } from './enemies/slime';
 
 export {
   StartGame,
@@ -65,6 +67,7 @@ export {
   startingMaps,
   chooseStartingMap,
   people,
+  enemies,
   Evelyn,
   Jill,
   John,
@@ -79,4 +82,5 @@ export {
   Terrain,
   Menu,
   TestMenu,
+  Slime,
 };

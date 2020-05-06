@@ -498,18 +498,19 @@
    *
    *  Paradise/Enemy
    *  Declan Tyson
-   *  v0.0.95
+   *  v0.0.97
    *  06/05/2020
    *
    */
 
   class Enemy {
-    constructor(name, health, attack, defence, sprite) {
+    constructor(name, health, attack, defence, speed, sprite) {
       this.id = name;
       this.name = name;
       this.health = health;
       this.attack = attack;
       this.defence = defence;
+      this.speed = speed;
 
       let image = new Image();
       image.src = sprite;
@@ -528,14 +529,14 @@
    *
    *  Paradise/Enemies/Slime
    *  Declan Tyson
-   *  v0.0.96
+   *  v0.0.97
    *  06/05/2020
    *
    */
 
   class Slime extends Enemy {
     constructor() {
-      super('Slime', 20, 5, 2, '/img/Enemies/slime.png');
+      super('Slime', 20, 5, 2, 3, '/img/Enemies/slime.png');
       this.colour = colours.green;
     }
   }
@@ -557,7 +558,7 @@
    *
    *  Paradise/Scene-Encounter
    *  Declan Tyson
-   *  v0.0.96
+   *  v0.0.97
    *  06/05/2020
    *
    */
@@ -569,6 +570,7 @@
       this.worldMap = worldMap;
       this.enemyGroupOptions = enemyGroupOptions;
       this.enemies = [];
+      this.party = window.game.currentParty;
       this.actions.back = this.exit.bind(this);
 
       let background = new Image();
@@ -598,11 +600,29 @@
 
       ctx.drawImage(this.scenery, 0, 0, canvasProperties.width, canvasProperties.height);
 
+      this.drawParty(ctx);
       this.drawEnemies(ctx);
+    }
+
+    drawParty(ctx) {
+        const canvasProperties = settings.canvasProperties();
+        const encounterSettings = settings.get('encounter');
+
+        let startX = canvasProperties.width / 4 - encounterSettings.spriteSize - encounterSettings.spriteSpacing;
+        let startY = canvasProperties.height / 2;
+
+
+        this.party.forEach(member => {
+            ctx.drawImage(member.sprite, startX, startY, encounterSettings.spriteSize, encounterSettings.spriteSize);
+
+            startX += encounterSettings.spriteSpacing + encounterSettings.spriteSize;
+            startY += encounterSettings.spriteSpacing;
+        });
     }
 
     drawEnemies(ctx) {
       const canvasProperties = settings.canvasProperties();
+      // TODO: Have multiple settings for the enemies
       const encounterSettings = settings.get('encounter');
 
       let spaceOfEnemies =
@@ -2542,10 +2562,73 @@
 
   /*
    *
+   *  Paradise/Party Member
+   *  Declan Tyson
+   *  v0.0.97
+   *  06/05/2020
+   *
+   */
+
+  class PartyMember {
+    constructor(name, health, baseAttack, baseDefence, baseSpeed, sprite) {
+      this.id = name;
+      this.name = name;
+      this.health = health;
+      this.attack = baseAttack;
+      this.defence = baseDefence;
+      this.speed = baseSpeed;
+
+      this.experience = 0;
+      this.level = 1;
+
+      let image = new Image();
+      image.src = sprite;
+      this.sprite = image;
+    }
+
+    attack(target) {
+      let attackValue = this.attack - target.defence;
+      if (attackValue < 0) attackValue = 1;
+
+      target.health -= attackValue;
+    }
+  }
+
+  /*
+   *
+   *  Paradise/Party Members/Hero
+   *  Declan Tyson
+   *  v0.0.97
+   *  06/05/2020
+   *
+   */
+
+  class Hero extends PartyMember {
+    constructor() {
+      super('Hero', 100, 7, 6, 5, '/img/PartyMembers/hero.png');
+      this.colour = colours.gold;
+    }
+  }
+
+  /*
+   *
+   *  Paradise/Party Members
+   *  Declan Tyson
+   *  v0.0.97
+   *  06/05/2020
+   *
+   */
+
+  let partymembers = {
+      Hero
+  };
+
+  /*
+   *
    *  Paradise/Game
    *  Declan Tyson
-   *  v0.0.92
-   *  21/10/2019
+   *  v0.0.97
+   *  06/05/2020
    *
    */
 
@@ -2565,6 +2648,7 @@
     window.game = game;
     game.people = people;
     game.enemies = enemies;
+    game.partymembers = partymembers;
     game.locales = locales;
 
     if (!locale) {
@@ -2601,6 +2685,7 @@
       this.redraw = true;
       this.spritesLoaded = 0;
       this.loading = true;
+      this.currentParty = [];
 
       this.draw();
     }
@@ -2687,6 +2772,10 @@
         clearInterval(this.actionTimeoutCounterInterval);
         this.actionTimeout = settings.get('actionTimeoutLimit');
       }
+    }
+
+    addPartyMember(id) {
+      this.currentParty.push(new this.partymembers[id]());
     }
 
     onLoad() {
@@ -2865,6 +2954,7 @@
         worldMap = new WorldMap(player),
         start = new locale(player, people);
 
+      window.game.addPartyMember("Hero");
       window.game.setScene(worldMap);
       window.game.scene.setCurrentLocale(start, 'beginningOfGame');
       window.game.loading = true;

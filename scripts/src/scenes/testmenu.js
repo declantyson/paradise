@@ -54,6 +54,7 @@ class TestMenu extends Menu {
       worldMap = new WorldMap(player),
       start = new locale(player, people);
 
+    window.game.addPartyMember('Hero');
     window.game.setScene(worldMap);
     window.game.scene.setCurrentLocale(start, 'beginningOfGame');
     window.game.loading = true;
