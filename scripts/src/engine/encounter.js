@@ -2,7 +2,7 @@
  *
  *  Paradise/Scene-Encounter
  *  Declan Tyson
- *  v0.0.98
+ *  v0.0.99
  *  06/05/2020
  *
  */
@@ -10,7 +10,7 @@
 import { Scene } from './scene';
 import { settings } from '../settings';
 import { enemies } from '../enemies/enemies';
-import { colours } from '../constants';
+import { colours, actorType } from '../constants';
 
 class Encounter extends Scene {
   constructor(worldMap, enemyGroupOptions, scenery) {
@@ -24,6 +24,8 @@ class Encounter extends Scene {
     this.turnMeters = [];
     this.fullMeterValue = 100;
     this.currentTurn = null;
+    this.options = [];
+    this.selectedOption = null;
 
     let background = new Image();
     background.src = scenery;
@@ -55,6 +57,7 @@ class Encounter extends Scene {
       this.turnMeters.push({
         actor: member,
         fill: 0,
+        actorType: actorType.party
       });
     });
 
@@ -63,6 +66,7 @@ class Encounter extends Scene {
       this.turnMeters.push({
         actor: enemy,
         fill: 0,
+        actorType: actorType.enemy
       });
     });
 
@@ -79,6 +83,7 @@ class Encounter extends Scene {
       if (turnMeter.fill > this.fullMeterValue) {
         turnMeter.fill = this.fullMeterValue;
         this.currentTurn = turnMeter;
+        this.options = turnMeter.actor.actions;
       }
     });
   }
@@ -113,14 +118,23 @@ class Encounter extends Scene {
     ctx.globalAlpha = 1;
 
     if(this.currentTurn) {
-        ctx.font = fonts.small;
-        ctx.fillStyle = colours.white;
-        ctx.fillText(
-            this.currentTurn.actor.name,
-            encounterTextArea.x + encounterTextArea.optionsOffsetX,
-            encounterTextArea.y + encounterTextArea.optionHeight
-        );
+        if(this.currentTurn.actorType === actorType.party) {
+            ctx.font = fonts.small;
+            ctx.fillStyle = colours.white;
+            ctx.fillText(
+                this.currentTurn.actor.name,
+                encounterTextArea.x + encounterTextArea.optionsOffsetX,
+                encounterTextArea.y + encounterTextArea.optionHeight
+            );
+            this.drawActionOptions(ctx);
+        }
     }
+  }
+
+  drawActionOptions(ctx) {
+    this.options.forEach(option => {
+
+    })
   }
 
   drawParty(ctx) {

@@ -109,6 +109,17 @@ var Paradise = (function (exports) {
     A: 'xleir',
   };
 
+
+  const actions$1 = {
+    attack: "Attack",
+    defend: "Defend"
+  };
+
+  const actorType = {
+    party: "Party",
+    enemy: "Enemy"
+  };
+
   const relationships = {
     acquaintance: 'Acquaintace',
     wife: 'Wife',
@@ -589,7 +600,7 @@ var Paradise = (function (exports) {
    *
    *  Paradise/Scene-Encounter
    *  Declan Tyson
-   *  v0.0.98
+   *  v0.0.99
    *  06/05/2020
    *
    */
@@ -606,6 +617,8 @@ var Paradise = (function (exports) {
       this.turnMeters = [];
       this.fullMeterValue = 100;
       this.currentTurn = null;
+      this.options = [];
+      this.selectedOption = null;
 
       let background = new Image();
       background.src = scenery;
@@ -637,6 +650,7 @@ var Paradise = (function (exports) {
         this.turnMeters.push({
           actor: member,
           fill: 0,
+          actorType: actorType.party
         });
       });
 
@@ -645,6 +659,7 @@ var Paradise = (function (exports) {
         this.turnMeters.push({
           actor: enemy,
           fill: 0,
+          actorType: actorType.enemy
         });
       });
 
@@ -661,6 +676,7 @@ var Paradise = (function (exports) {
         if (turnMeter.fill > this.fullMeterValue) {
           turnMeter.fill = this.fullMeterValue;
           this.currentTurn = turnMeter;
+          this.options = turnMeter.actor.actions;
         }
       });
     }
@@ -695,14 +711,23 @@ var Paradise = (function (exports) {
       ctx.globalAlpha = 1;
 
       if(this.currentTurn) {
-          ctx.font = fonts.small;
-          ctx.fillStyle = colours.white;
-          ctx.fillText(
-              this.currentTurn.actor.name,
-              encounterTextArea.x + encounterTextArea.optionsOffsetX,
-              encounterTextArea.y + encounterTextArea.optionHeight
-          );
+          if(this.currentTurn.actorType === actorType.party) {
+              ctx.font = fonts.small;
+              ctx.fillStyle = colours.white;
+              ctx.fillText(
+                  this.currentTurn.actor.name,
+                  encounterTextArea.x + encounterTextArea.optionsOffsetX,
+                  encounterTextArea.y + encounterTextArea.optionHeight
+              );
+              this.drawActionOptions(ctx);
+          }
       }
+    }
+
+    drawActionOptions(ctx) {
+      this.options.forEach(option => {
+
+      });
     }
 
     drawParty(ctx) {
@@ -2723,9 +2748,13 @@ var Paradise = (function (exports) {
       this.id = name;
       this.name = name;
       this.health = health;
+      this.baseAttack = baseAttack;
       this.attack = baseAttack;
+      this.baseDefence = baseDefence;
       this.defence = baseDefence;
       this.speed = baseSpeed;
+
+      this.actions = [];
 
       this.experience = 0;
       this.level = 1;
@@ -2733,6 +2762,8 @@ var Paradise = (function (exports) {
       let image = new Image();
       image.src = sprite;
       this.sprite = image;
+
+      this.baseActions();
     }
 
     attack(target) {
@@ -2740,6 +2771,22 @@ var Paradise = (function (exports) {
       if (attackValue < 0) attackValue = 1;
 
       target.health -= attackValue;
+    }
+
+    defend() {
+      this.defence = this.baseDefence * 1.2;
+    }
+
+    baseActions() {
+        this.actions.push({
+          name: actions$1.attack,
+          callback: this.attack
+        });
+
+        this.actions.push({
+          name: actions$1.defend,
+          callback: this.defend
+        });
     }
   }
 

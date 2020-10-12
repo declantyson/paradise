@@ -45,6 +45,17 @@ export const posessivePronouns = {
   A: 'xleir',
 };
 
+
+export const actions = {
+  attack: "Attack",
+  defend: "Defend"
+};
+
+export const actorType = {
+  party: "Party",
+  enemy: "Enemy"
+};
+
 export const relationships = {
   acquaintance: 'Acquaintace',
   wife: 'Wife',
@@ -65,3 +76,4 @@ export const pairedRelationships = [
   relationships.husband,
   relationships.roommate,
 ];
+

@@ -20,6 +20,7 @@ app.get('/demo', (req,res) => {
     });
 });
 
-http.createServer(app).listen(9999);
+const DEMO_PORT = 44153;
+http.createServer(app).listen(DEMO_PORT);
 
-console.log("App running on 9999");
+console.log(`App running on ${DEMO_PORT}`);
