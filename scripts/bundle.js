@@ -3144,6 +3144,7 @@ var Paradise = (function (exports) {
   exports.Util = Util;
   exports.WorldMap = WorldMap;
   exports.Zenith = Zenith;
+  exports.actions = actions;
   exports.choosePeople = choosePeople;
   exports.chooseStartingMap = chooseStartingMap;
   exports.enemies = enemies;
@@ -3151,6 +3152,8 @@ var Paradise = (function (exports) {
   exports.settings = settings;
   exports.startingMaps = startingMaps;
   exports.terrains = terrains;
+
+  Object.defineProperty(exports, '__esModule', { value: true });
 
   return exports;
 

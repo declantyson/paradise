@@ -9,6 +9,7 @@
 
 // Engine
 import { StartGame, Renderer, Game } from './engine/game';
+import { actions } from './engine/inputs';
 import { Interaction } from './engine/interaction';
 import { ObjectInteraction } from './engine/objectinteraction';
 import { Item } from './engine/item';
@@ -46,6 +47,7 @@ import { Slime } from './enemies/slime';
 
 export {
   StartGame,
+  actions,
   Interaction,
   ObjectInteraction,
   Item,

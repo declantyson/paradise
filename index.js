@@ -3110,4 +3110,4 @@ class TestMenu extends Menu {
   }
 }
 
-export { Decorative, Dresser, Evelyn, Game, Inhabitance, Interaction, Interior, Item, Jill, John, Locale, Menu, Neil, ObjectInteraction, Pauline, Person, Petey, Player, Portrait, Quazar, Renderer, Rug, Scene, Slime, StartGame, Terrain, TestMenu, Tree, Util, WorldMap, Zenith, choosePeople, chooseStartingMap, enemies, people, settings, startingMaps, terrains };
+export { Decorative, Dresser, Evelyn, Game, Inhabitance, Interaction, Interior, Item, Jill, John, Locale, Menu, Neil, ObjectInteraction, Pauline, Person, Petey, Player, Portrait, Quazar, Renderer, Rug, Scene, Slime, StartGame, Terrain, TestMenu, Tree, Util, WorldMap, Zenith, actions, choosePeople, chooseStartingMap, enemies, people, settings, startingMaps, terrains };
