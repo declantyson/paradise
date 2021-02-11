@@ -1108,19 +1108,22 @@
       this.enter(entrance);
     }
 
+
     enter(entrance) {
       this.presentPeople = [];
 
-      if (typeof this.visitedLocales[entrance.locale.id] !== 'undefined') {
-        this.setCurrentLocale(this.visitedLocales[entrance.locale.id], entrance.entryPoint);
-        return;
+      this.visitedLocales[this.locale.id] = this.locale;
+
+      if (typeof this.visitedLocales[entrance.locale] !== 'undefined') {
+          this.setCurrentLocale(this.visitedLocales[entrance.locale], entrance.entryPoint);
+          return;
       }
 
-      let localeId = window.game.locales[entrance.locale.id],
-        locale = new localeId(this.locale.player, this.locale.people, entrance.locale);
+      let localeId = window.game.locales[entrance.locale];
+      let locale = new localeId(this.locale.player, this.locale.people, entrance.inhabitance);
 
       this.setCurrentLocale(locale, entrance.entryPoint);
-    }
+  }
 
     spawnPeople() {
       if (this.locale.inhabitance === undefined) return;
@@ -1240,11 +1243,18 @@
       this.terrainPaint(startX, startY, width, height, 'Wall');
       this.terrainPaint(doorway.x, doorway.y, 1, 1, 'Doorway');
       this.entrances[doorway.x][doorway.y] = {
-        locale: inhabitance,
+        locale: inhabitance.id,
         entryPoint: 'frontDoor',
+        inhabitance
       };
     }
 
+    addEntrance(x, y, locale, entryPoint) {
+      this.entrances[x][y] = {
+          locale,
+          entryPoint
+      };
+  }
     enterLocaleAt(entryPoint) {
       this.player.stepX = 0;
       this.player.stepY = 0;
@@ -1435,7 +1445,7 @@
       this.entryPoints.frontDoor = { x: 36, y: 36 };
 
       this.entrances[36][37] = {
-        locale: new Village(player, people),
+        locale: 'Village',
         entryPoint: 'townHall',
       };
 
@@ -2493,7 +2503,7 @@
       this.entryPoints.frontDoor = { x: 36, y: 36 };
 
       this.entrances[37][36] = {
-        locale: new Islands(player, people),
+        locale: 'Islands',
         entryPoint: 'groveStreet1',
       };
 
@@ -2518,7 +2528,7 @@
       this.entryPoints.frontDoor = { x: 26, y: 36 };
 
       this.entrances[25][36] = {
-        locale: new Islands(player, people),
+        locale: 'Islands',
         entryPoint: 'groveStreet2',
       };
 
@@ -2543,7 +2553,7 @@
       this.entryPoints.frontDoor = { x: 36, y: 36 };
 
       this.entrances[37][36] = {
-        locale: new Islands(player, people),
+        locale: 'Islands',
         entryPoint: 'groveStreet3',
       };
 
@@ -2568,7 +2578,7 @@
       this.entryPoints.frontDoor = { x: 26, y: 36 };
 
       this.entrances[25][36] = {
-        locale: new Islands(player, people),
+        locale: 'Islands',
         entryPoint: 'groveStreet4',
       };
 
@@ -2649,7 +2659,7 @@
       this.entryPoints.frontDoor = { x: 36, y: 36 };
 
       this.entrances[36][37] = {
-        locale: new Islands(player, people),
+        locale: 'Islands',
         entryPoint: 'ballManor',
       };
 

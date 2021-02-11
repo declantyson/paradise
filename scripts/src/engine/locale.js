@@ -68,11 +68,18 @@ class Locale {
     this.terrainPaint(startX, startY, width, height, 'Wall');
     this.terrainPaint(doorway.x, doorway.y, 1, 1, 'Doorway');
     this.entrances[doorway.x][doorway.y] = {
-      locale: inhabitance,
+      locale: inhabitance.id,
       entryPoint: 'frontDoor',
+      inhabitance
     };
   }
 
+  addEntrance(x, y, locale, entryPoint) {
+    this.entrances[x][y] = {
+        locale,
+        entryPoint
+    };
+}
   enterLocaleAt(entryPoint) {
     this.player.stepX = 0;
     this.player.stepY = 0;

@@ -18,7 +18,7 @@ class TownHall extends GroveStreetTemplate {
     this.entryPoints.frontDoor = { x: 36, y: 36 };
 
     this.entrances[36][37] = {
-      locale: new Village(player, people),
+      locale: 'Village',
       entryPoint: 'townHall',
     };
 

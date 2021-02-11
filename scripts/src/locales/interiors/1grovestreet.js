@@ -18,7 +18,7 @@ class GroveStreet1 extends GroveStreetTemplate {
     this.entryPoints.frontDoor = { x: 36, y: 36 };
 
     this.entrances[37][36] = {
-      locale: new Islands(player, people),
+      locale: 'Islands',
       entryPoint: 'groveStreet1',
     };
 
